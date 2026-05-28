@@ -1,15 +1,15 @@
 {
   "badge": "Season 1 · Now Live",
   "headline": {
-    "line1": "Train",
-    "line2Lead": "your ",
-    "line2Highlight": "edge.",
-    "line3": "Become elite."
+    "line1": "Jameye.",
+    "line2Lead": "The ",
+    "line2Highlight": "skill-based",
+    "line3": "prediction markets game."
   },
-  "body": "The forecasting game where skill compounds — predict real markets, build calibration, climb the leaderboard.",
+  "body": "The prediction markets game where skill compounds — predict real markets, compete for cash prizes and climb the global leaderboard.",
   "cta": {
     "placeholder": "Enter your email",
-    "submit": "Join waitlist",
+    "submit": "Get Early Access",
     "secondary": "Watch demo",
     "success": "You're on the list — we'll be in touch."
   },

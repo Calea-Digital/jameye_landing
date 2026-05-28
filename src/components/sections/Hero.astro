@@ -3,7 +3,7 @@ import { Icon } from 'astro-icon/components';
 import { t, type Locale } from '~/utils/i18n';
 import Ticker from '~/components/sections/Ticker.astro';
 // Inline the avatar SVG so we can drive the eyes + head with the cursor.
-import avatarRaw from '../../../public/avatar/01-open-market-trader.svg?raw';
+import avatarRaw from '../../../public/avatar/03-duel-customizable-fighter.svg?raw';
 
 export interface Props {
   locale: Locale;
@@ -79,6 +79,26 @@ const avatarSvg = avatarRaw
             <a href="#video" class="cta-ghost whitespace-nowrap">
               {hero.cta.secondary}
             </a>
+            <div class="flex items-center gap-2 sm:ml-1">
+              <a
+                href="#"
+                class="social-icon-btn social-icon-btn--discord"
+                aria-label="Join our Discord"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon name="tabler:brand-discord" class="w-5 h-5" />
+              </a>
+              <a
+                href="#"
+                class="social-icon-btn social-icon-btn--telegram"
+                aria-label="Join our Telegram"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon name="tabler:brand-telegram" class="w-5 h-5" />
+              </a>
+            </div>
           </div>
 
           <!-- Waitlist social proof -->
@@ -206,14 +226,14 @@ const avatarSvg = avatarRaw
     transform: translate(-50%, -50%);
     width: 240px; height: 240px;
   }
-  .hero-character { width: 170px; max-width: 70%; }
+  .hero-character { width: 144px; max-width: 62%; }
   @media (min-width: 768px) {
     .hero-rings { width: 420px; height: 420px; }
-    .hero-character { width: 250px; max-width: 78%; }
+    .hero-character { width: 210px; max-width: 68%; }
   }
   @media (min-width: 1024px) {
     .hero-rings { width: 480px; height: 480px; }
-    .hero-character { width: 300px; }
+    .hero-character { width: 252px; }
   }
 
   /* Tighter floating pills on mobile so they don't crowd the smaller stage. */
@@ -247,6 +267,34 @@ const avatarSvg = avatarRaw
   /* Eyes + head follow the cursor; easing handled in JS. */
   #hero-head, #hero-pupils { transition: transform 90ms linear; }
 
+  /* Hero social buttons — discord + telegram. */
+  .social-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--hairline-strong);
+    transition: color 150ms ease, background 150ms ease, border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+  }
+  .social-icon-btn:hover {
+    color: #ffffff;
+    transform: translateY(-1px);
+  }
+  .social-icon-btn--discord:hover {
+    background: rgba(88, 101, 242, 0.18);
+    border-color: rgba(88, 101, 242, 0.55);
+    box-shadow: 0 8px 24px -10px rgba(88, 101, 242, 0.55);
+  }
+  .social-icon-btn--telegram:hover {
+    background: rgba(36, 161, 222, 0.18);
+    border-color: rgba(36, 161, 222, 0.55);
+    box-shadow: 0 8px 24px -10px rgba(36, 161, 222, 0.55);
+  }
+
   /* Brier pill is now the avatar shuffle button. */
   .stat-float--btn {
     text-align: left;
@@ -270,7 +318,7 @@ const avatarSvg = avatarRaw
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const charWrap = document.querySelector('[data-hero-character]') as HTMLElement | null;
 
-  // Hero shuffle — first six avatars only (01–06).
+  // Hero shuffle — first six avatars only (01–06). Hero boots on avatar 03.
   const AVATARS = [
     '/avatar/01-open-market-trader.svg',
     '/avatar/02-edge-score-explorer.svg',
@@ -279,7 +327,7 @@ const avatarSvg = avatarRaw
     '/avatar/05-squad-row1-trader.svg',
     '/avatar/06-squad-row1-explorer.svg',
   ];
-  let avatarIndex = 0;
+  let avatarIndex = 2;
 
   // Tag the trader avatar's head + pupil groups so they can be driven precisely.
   const tagTrader = (svg: string) =>
@@ -316,9 +364,8 @@ const avatarSvg = avatarRaw
   captureTargets();
   normalizeAvatar();
 
-  const shuffleBtn = document.querySelector('[data-avatar-shuffle]');
-  shuffleBtn?.addEventListener('click', async () => {
-    avatarIndex = (avatarIndex + 1) % AVATARS.length;
+  const swapAvatar = async (nextIndex: number) => {
+    avatarIndex = ((nextIndex % AVATARS.length) + AVATARS.length) % AVATARS.length;
     try {
       const res = await fetch(AVATARS[avatarIndex]);
       const svg = tagTrader(await res.text());
@@ -336,7 +383,36 @@ const avatarSvg = avatarRaw
     } catch {
       /* keep current avatar on failure */
     }
+  };
+
+  // Auto-shuffle the avatar on a steady cadence. The shuffle button still
+  // works (manual click) and resets the timer so users aren't fighting it.
+  const AUTO_SHUFFLE_MS = 3500;
+  let autoTimer: number | undefined;
+  const startAutoShuffle = () => {
+    if (reduceMotion) return;
+    stopAutoShuffle();
+    autoTimer = window.setInterval(() => { void swapAvatar(avatarIndex + 1); }, AUTO_SHUFFLE_MS);
+  };
+  const stopAutoShuffle = () => {
+    if (autoTimer !== undefined) {
+      window.clearInterval(autoTimer);
+      autoTimer = undefined;
+    }
+  };
+
+  const shuffleBtn = document.querySelector('[data-avatar-shuffle]');
+  shuffleBtn?.addEventListener('click', () => {
+    void swapAvatar(avatarIndex + 1);
+    startAutoShuffle();
   });
+
+  // Pause auto-shuffle while the tab is hidden so we aren't burning fetches.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopAutoShuffle();
+    else startAutoShuffle();
+  });
+  startAutoShuffle();
 
   if (!reduceMotion && charWrap) {
     let targetX = 0, targetY = 0, curX = 0, curY = 0;
