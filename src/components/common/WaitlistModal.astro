@@ -39,11 +39,8 @@ const AVATARS = [
   { id: 'avatar_4', svg: av4, label: w.avatarLabels.avatar_4 },
 ];
 
-// Waitlist API — configured via env (see example.env).
-const env = import.meta.env;
-
 const CFG = {
-  apiBase: (env.PUBLIC_WAITLIST_API_BASE ?? 'http://localhost:8000').replace(/\/+$/, ''),
+  apiBase: 'https://waitlist.jameye.com',
 };
 ---
 

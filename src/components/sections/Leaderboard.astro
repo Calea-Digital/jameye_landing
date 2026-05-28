@@ -20,10 +20,8 @@ const L = t<{
   states: { loading: string; empty: string; error: string };
 }>(locale, 'leaderboard');
 
-const env = import.meta.env;
-
 const CFG = {
-  apiBase: (env.PUBLIC_WAITLIST_API_BASE ?? 'http://localhost:8000').replace(/\/+$/, ''),
+  apiBase: 'https://waitlist.jameye.com',
   avatars: {
     avatar_1: '/avatar/01-open-market-trader.svg',
     avatar_2: '/avatar/02-edge-score-explorer.svg',

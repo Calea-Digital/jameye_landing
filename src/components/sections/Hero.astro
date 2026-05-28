@@ -367,11 +367,10 @@ const avatarSvg = avatarRaw
   // Live waitlist count — pulled from the backend.
   const countEl = document.querySelector('[data-waitlist-count]') as HTMLElement | null;
   if (countEl) {
-    const apiBase = (import.meta.env.PUBLIC_WAITLIST_API_BASE ?? 'http://localhost:8000').replace(/\/+$/, '');
+    const apiBase = 'https://waitlist.jameye.com';
     let val = Number(countEl.textContent?.replace(/[^0-9]/g, '')) || 0;
     const render = () => { countEl.textContent = val.toLocaleString(); };
     const refresh = async () => {
-      if (!apiBase) return;
       try {
         const res = await fetch(`${apiBase}/api/waitlist/count`, { cache: 'no-store' });
         if (!res.ok) return;
