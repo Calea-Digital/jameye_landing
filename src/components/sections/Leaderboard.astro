@@ -21,21 +21,9 @@ const L = t<{
 }>(locale, 'leaderboard');
 
 const env = import.meta.env;
-function resolveCsv(raw?: string): string {
-  const v = (raw ?? '').trim();
-  if (!v) return '';
-  if (v.includes('output=csv') || v.includes('/gviz/')) return v;
-  const m = v.match(/\/spreadsheets\/d\/(?:e\/)?([a-zA-Z0-9-_]+)/);
-  const id = m ? m[1] : (/^[a-zA-Z0-9-_]{20,}$/.test(v) ? v : '');
-  return id ? `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv` : v;
-}
 
 const CFG = {
-  csv: resolveCsv(env.PUBLIC_WAITLIST_RESPONSES_CSV),
-  nicknameCol: env.PUBLIC_WAITLIST_CSV_NICKNAME_COL ?? 'Nickname',
-  referredCol: env.PUBLIC_WAITLIST_CSV_REFERRED_COL ?? 'Referred by',
-  timestampCol: env.PUBLIC_WAITLIST_CSV_TIMESTAMP_COL ?? 'Timestamp',
-  avatarCol: env.PUBLIC_WAITLIST_CSV_AVATAR_COL ?? 'Avatar',
+  apiBase: (env.PUBLIC_WAITLIST_API_BASE ?? 'http://localhost:8000').replace(/\/+$/, ''),
   avatars: {
     avatar_1: '/avatar/01-open-market-trader.svg',
     avatar_2: '/avatar/02-edge-score-explorer.svg',
@@ -159,23 +147,6 @@ const CFG = {
     const esc = (s) =>
       String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-    const parseCsv = (text) => {
-      const rows = []; let row = []; let val = ''; let q = false;
-      for (let i = 0; i < text.length; i++) {
-        const c = text[i];
-        if (q) {
-          if (c === '"') { if (text[i + 1] === '"') { val += '"'; i++; } else q = false; }
-          else val += c;
-        } else if (c === '"') q = true;
-        else if (c === ',') { row.push(val); val = ''; }
-        else if (c === '\n') { row.push(val); rows.push(row); row = []; val = ''; }
-        else if (c === '\r') { /* skip */ }
-        else val += c;
-      }
-      if (val.length || row.length) { row.push(val); rows.push(row); }
-      return rows;
-    };
-
     const parseTs = (s) => { const d = new Date(s); return isNaN(d.getTime()) ? 0 : d.getTime(); };
 
     const deltaHtml = (ch) => {
@@ -186,34 +157,31 @@ const CFG = {
     };
 
     const render = async () => {
-      if (!CFG.csv) { body.innerHTML = `<p class="lb-state">${esc(L.states.error)}</p>`; return; }
-      let rows;
+      if (!CFG.apiBase) { body.innerHTML = `<p class="lb-state">${esc(L.states.error)}</p>`; return; }
+      let entries;
       try {
-        const res = await fetch(CFG.csv, { cache: 'no-store' });
-        rows = parseCsv(await res.text());
+        const res = await fetch(`${CFG.apiBase}/api/waitlist/entries`, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`http_${res.status}`);
+        entries = await res.json();
       } catch {
         body.innerHTML = `<p class="lb-state">${esc(L.states.error)}</p>`;
         return;
       }
-      if (!rows || rows.length < 2) { body.innerHTML = `<p class="lb-state">${esc(L.states.empty)}</p>`; return; }
-
-      const header = rows[0].map((h) => h.trim().toLowerCase());
-      const ni = header.indexOf(String(CFG.nicknameCol).toLowerCase());
-      const ri = header.indexOf(String(CFG.referredCol).toLowerCase());
-      const ti = header.indexOf(String(CFG.timestampCol).toLowerCase());
-      const ai = header.indexOf(String(CFG.avatarCol).toLowerCase());
+      if (!Array.isArray(entries) || entries.length === 0) {
+        body.innerHTML = `<p class="lb-state">${esc(L.states.empty)}</p>`;
+        return;
+      }
 
       const cutoff = Date.now() - 7 * 24 * 3600 * 1000;
       const refs = new Map(); // lower nick -> { all, old }
       const bump = (k, ts) => { const o = refs.get(k) || { all: 0, old: 0 }; o.all++; if (ts && ts <= cutoff) o.old++; refs.set(k, o); };
 
-      const byNick = new Map(); // lower nick -> { nick, ts }
-      for (let r = 1; r < rows.length; r++) {
-        const row = rows[r];
-        const nick = (ni >= 0 ? row[ni] || '' : '').trim();
-        const ref = (ri >= 0 ? row[ri] || '' : '').trim().toLowerCase();
-        const ts = ti >= 0 ? parseTs(row[ti]) : 0;
-        const avatar = ai >= 0 ? (row[ai] || '').trim() : '';
+      const byNick = new Map(); // lower nick -> { nick, ts, avatar }
+      for (const row of entries) {
+        const nick = (row?.nickname || '').trim();
+        const ref = (row?.referred || '').trim().toLowerCase();
+        const ts = parseTs(row?.timestamp);
+        const avatar = (row?.avatar || '').trim();
         if (nick) {
           const k = nick.toLowerCase();
           const prev = byNick.get(k);

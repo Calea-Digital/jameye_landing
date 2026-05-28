@@ -364,28 +364,19 @@ const avatarSvg = avatarRaw
     requestAnimationFrame(tick);
   }
 
-  // Live waitlist count — actual signups read from the responses sheet.
+  // Live waitlist count — pulled from the backend.
   const countEl = document.querySelector('[data-waitlist-count]') as HTMLElement | null;
   if (countEl) {
-    const resolveCsv = (raw: string) => {
-      const v = (raw || '').trim();
-      if (!v) return '';
-      if (v.includes('output=csv') || v.includes('/gviz/')) return v;
-      const m = v.match(/\/spreadsheets\/d\/(?:e\/)?([a-zA-Z0-9-_]+)/);
-      const id = m ? m[1] : (/^[a-zA-Z0-9-_]{20,}$/.test(v) ? v : '');
-      return id ? `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv` : v;
-    };
-    const csv = resolveCsv(import.meta.env.PUBLIC_WAITLIST_RESPONSES_CSV || '');
+    const apiBase = (import.meta.env.PUBLIC_WAITLIST_API_BASE ?? 'http://localhost:8000').replace(/\/+$/, '');
     let val = Number(countEl.textContent?.replace(/[^0-9]/g, '')) || 0;
     const render = () => { countEl.textContent = val.toLocaleString(); };
     const refresh = async () => {
-      if (!csv) return;
+      if (!apiBase) return;
       try {
-        const res = await fetch(csv, { cache: 'no-store' });
-        const text = await res.text();
-        const rows = text.split(/\r?\n/).filter((l) => l.trim().length);
-        val = Math.max(0, rows.length - 1); // minus the header row
-        render();
+        const res = await fetch(`${apiBase}/api/waitlist/count`, { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (typeof data?.count === 'number') { val = data.count; render(); }
       } catch {
         /* keep whatever is shown */
       }
