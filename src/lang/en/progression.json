@@ -1,0 +1,15 @@
+{
+  "eyebrow": "05 · Climb the ranks",
+  "title":   { "lead": "Five tiers.", "ital": "One you." },
+  "sub":     "Every forecast moves your needle. Hit the top tier and your name lights up the global leaderboard.",
+  "cardTitle":     { "lead": "Your", "ital": "forecaster journey" },
+  "currentLabel":  "Currently",
+  "currentValue":  "2,140",
+  "tiers": [
+    { "name": "Rookie",          "range": "0 – 500",       "pct": "8% of forecasters"  },
+    { "name": "Trainee",         "range": "500 – 1,500",   "pct": "22% of forecasters" },
+    { "name": "Analyst",         "range": "1,500 – 2,800", "pct": "38% of forecasters" },
+    { "name": "Sharp",           "range": "2,800 – 3,800", "pct": "27% of forecasters" },
+    { "name": "Superforecaster", "range": "3,800+",        "pct": "5% of forecasters"  }
+  ]
+}

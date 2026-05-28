@@ -1,0 +1,269 @@
+---
+import { t, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const L = t<{
+  eyebrow: string;
+  title: { lead: string; ital: string };
+  sub: string;
+  cols: { rank: string; player: string; points: string; change: string };
+  perReferral: string;
+  newBadge: string;
+  pointsSuffix: string;
+  referralsOne: string;
+  referralsMany: string;
+  states: { loading: string; empty: string; error: string };
+}>(locale, 'leaderboard');
+
+const env = import.meta.env;
+function resolveCsv(raw?: string): string {
+  const v = (raw ?? '').trim();
+  if (!v) return '';
+  if (v.includes('output=csv') || v.includes('/gviz/')) return v;
+  const m = v.match(/\/spreadsheets\/d\/(?:e\/)?([a-zA-Z0-9-_]+)/);
+  const id = m ? m[1] : (/^[a-zA-Z0-9-_]{20,}$/.test(v) ? v : '');
+  return id ? `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv` : v;
+}
+
+const CFG = {
+  csv: resolveCsv(env.PUBLIC_WAITLIST_RESPONSES_CSV),
+  nicknameCol: env.PUBLIC_WAITLIST_CSV_NICKNAME_COL ?? 'Nickname',
+  referredCol: env.PUBLIC_WAITLIST_CSV_REFERRED_COL ?? 'Referred by',
+  timestampCol: env.PUBLIC_WAITLIST_CSV_TIMESTAMP_COL ?? 'Timestamp',
+  avatarCol: env.PUBLIC_WAITLIST_CSV_AVATAR_COL ?? 'Avatar',
+  avatars: {
+    avatar_1: '/avatar/01-open-market-trader.svg',
+    avatar_2: '/avatar/02-edge-score-explorer.svg',
+    avatar_3: '/avatar/03-duel-customizable-fighter.svg',
+    avatar_4: '/avatar/04-rapid-duel-fighter.svg',
+  },
+  pointsPerReferral: 5,
+  limit: 100,
+};
+---
+
+<section class="py-12 md:py-16">
+  <div class="max-w-[900px] mx-auto px-5 md:px-8 w-full">
+    <div class="section-head">
+      <span class="eyebrow">{L.eyebrow}</span>
+      <h2 class="section-title text-white">
+        {L.title.lead} <span class="ital ital-grad">{L.title.ital}</span>
+      </h2>
+      <p class="section-sub">{L.sub}</p>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-row lb-head">
+        <span class="lb-rank">{L.cols.rank}</span>
+        <span>{L.cols.player}</span>
+        <span class="lb-points">{L.cols.points}</span>
+        <span class="lb-change">{L.cols.change}</span>
+      </div>
+      <div data-lb-body>
+        <p class="lb-state">{L.states.loading}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .lb-card {
+    background: var(--glass-card-bg);
+    border: 1px solid var(--hairline);
+    border-radius: 18px;
+    overflow: hidden;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--shadow-soft-chrome);
+  }
+  .lb-row {
+    display: grid;
+    grid-template-columns: 1.75rem minmax(0, 1fr) auto 3rem;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 0.9rem;
+  }
+  @media (min-width: 640px) {
+    .lb-row { padding: 1rem 1.75rem; gap: 1rem; grid-template-columns: 3rem 1fr auto 5.5rem; }
+  }
+  .lb-row + .lb-row { border-top: 1px solid var(--hairline); }
+  .lb-head {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .lb-rank { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: rgba(255,255,255,0.55); }
+  .lb-points, .lb-change { text-align: right; }
+
+  .lb-entry .lb-rank { font-size: 0.95rem; font-weight: 600; color: #fff; }
+  .lb-entry.top1 .lb-rank { color: var(--prize-gold); }
+  .lb-entry.top2 .lb-rank { color: #cbd5e1; }
+  .lb-entry.top3 .lb-rank { color: var(--heat-orange); }
+
+  .lb-player { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
+  @media (min-width: 640px) { .lb-player { gap: 0.75rem; } }
+  .lb-avatar {
+    width: 30px; height: 30px; flex: none;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--hairline);
+    object-fit: contain;
+    padding: 2px;
+  }
+  @media (min-width: 640px) { .lb-avatar { width: 38px; height: 38px; } }
+  .lb-name {
+    font-weight: 500; color: #fff; letter-spacing: -0.01em;
+    min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .lb-sub {
+    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.4); margin-top: 0.15rem;
+  }
+  .lb-pts {
+    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    font-weight: 600; font-size: 0.9rem; color: #fff;
+  }
+  @media (min-width: 640px) { .lb-pts { font-size: 1.05rem; } }
+  .lb-pts span { font-size: 0.62rem; color: rgba(255,255,255,0.4); margin-left: 0.2rem; }
+  @media (min-width: 640px) { .lb-pts span { font-size: 0.7rem; } }
+
+  .lb-delta {
+    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    font-size: 0.8rem; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 0.2rem; justify-content: flex-end;
+  }
+  .lb-delta.up { color: var(--win-emerald); }
+  .lb-delta.down { color: var(--alert-rose); }
+  .lb-delta.flat { color: rgba(255,255,255,0.3); }
+  .lb-delta.new {
+    font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--brand-sky); border: 1px solid rgba(91,141,255,0.4);
+    border-radius: 9999px; padding: 0.15rem 0.45rem;
+  }
+
+  .lb-state { padding: 2.5rem 1.75rem; text-align: center; color: rgba(255,255,255,0.5); font-size: 0.95rem; }
+</style>
+
+<script define:vars={{ CFG, L }}>
+  const body = document.querySelector('[data-lb-body]');
+  if (body) {
+    const esc = (s) =>
+      String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    const parseCsv = (text) => {
+      const rows = []; let row = []; let val = ''; let q = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (q) {
+          if (c === '"') { if (text[i + 1] === '"') { val += '"'; i++; } else q = false; }
+          else val += c;
+        } else if (c === '"') q = true;
+        else if (c === ',') { row.push(val); val = ''; }
+        else if (c === '\n') { row.push(val); rows.push(row); row = []; val = ''; }
+        else if (c === '\r') { /* skip */ }
+        else val += c;
+      }
+      if (val.length || row.length) { row.push(val); rows.push(row); }
+      return rows;
+    };
+
+    const parseTs = (s) => { const d = new Date(s); return isNaN(d.getTime()) ? 0 : d.getTime(); };
+
+    const deltaHtml = (ch) => {
+      if (ch.type === 'new') return `<span class="lb-delta new">${esc(L.newBadge)}</span>`;
+      if (ch.type === 'up') return `<span class="lb-delta up">▲ ${ch.n}</span>`;
+      if (ch.type === 'down') return `<span class="lb-delta down">▼ ${ch.n}</span>`;
+      return `<span class="lb-delta flat">–</span>`;
+    };
+
+    const render = async () => {
+      if (!CFG.csv) { body.innerHTML = `<p class="lb-state">${esc(L.states.error)}</p>`; return; }
+      let rows;
+      try {
+        const res = await fetch(CFG.csv, { cache: 'no-store' });
+        rows = parseCsv(await res.text());
+      } catch {
+        body.innerHTML = `<p class="lb-state">${esc(L.states.error)}</p>`;
+        return;
+      }
+      if (!rows || rows.length < 2) { body.innerHTML = `<p class="lb-state">${esc(L.states.empty)}</p>`; return; }
+
+      const header = rows[0].map((h) => h.trim().toLowerCase());
+      const ni = header.indexOf(String(CFG.nicknameCol).toLowerCase());
+      const ri = header.indexOf(String(CFG.referredCol).toLowerCase());
+      const ti = header.indexOf(String(CFG.timestampCol).toLowerCase());
+      const ai = header.indexOf(String(CFG.avatarCol).toLowerCase());
+
+      const cutoff = Date.now() - 7 * 24 * 3600 * 1000;
+      const refs = new Map(); // lower nick -> { all, old }
+      const bump = (k, ts) => { const o = refs.get(k) || { all: 0, old: 0 }; o.all++; if (ts && ts <= cutoff) o.old++; refs.set(k, o); };
+
+      const byNick = new Map(); // lower nick -> { nick, ts }
+      for (let r = 1; r < rows.length; r++) {
+        const row = rows[r];
+        const nick = (ni >= 0 ? row[ni] || '' : '').trim();
+        const ref = (ri >= 0 ? row[ri] || '' : '').trim().toLowerCase();
+        const ts = ti >= 0 ? parseTs(row[ti]) : 0;
+        const avatar = ai >= 0 ? (row[ai] || '').trim() : '';
+        if (nick) {
+          const k = nick.toLowerCase();
+          const prev = byNick.get(k);
+          if (!prev || (ts && (!prev.ts || ts < prev.ts))) byNick.set(k, { nick, ts, avatar });
+        }
+        if (ref) bump(ref, ts);
+      }
+
+      const PTS = CFG.pointsPerReferral;
+      const list = [...byNick.entries()].map(([k, u]) => {
+        const rc = refs.get(k) || { all: 0, old: 0 };
+        return {
+          nick: u.nick, k, ts: u.ts, avatar: u.avatar,
+          referrals: rc.all,
+          pointsNow: rc.all * PTS,
+          pointsOld: rc.old * PTS,
+          existedOld: !!u.ts && u.ts <= cutoff,
+        };
+      });
+
+      const cmp = (key) => (a, b) => b[key] - a[key] || (a.ts || Infinity) - (b.ts || Infinity) || a.k.localeCompare(b.k);
+      const now = [...list].sort(cmp('pointsNow'));
+      now.forEach((u, i) => (u.posNow = i + 1));
+      const oldPos = new Map();
+      [...list].filter((u) => u.existedOld).sort(cmp('pointsOld')).forEach((u, i) => oldPos.set(u.k, i + 1));
+
+      now.forEach((u) => {
+        if (!u.existedOld) { u.change = { type: 'new' }; return; }
+        const op = oldPos.get(u.k);
+        const delta = (op ?? u.posNow) - u.posNow;
+        u.change = { type: delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat', n: Math.abs(delta) };
+      });
+
+      const top = now.slice(0, CFG.limit);
+      body.innerHTML = top.map((u) => {
+        const rankCls = u.posNow <= 3 ? ` top${u.posNow}` : '';
+        const avatarSrc = CFG.avatars[u.avatar] || CFG.avatars.avatar_1;
+        return `<div class="lb-row lb-entry${rankCls}">
+          <span class="lb-rank">${u.posNow}</span>
+          <span class="lb-player">
+            <img class="lb-avatar" src="${avatarSrc}" alt="" loading="lazy" />
+            <span class="lb-name">${esc(u.nick)}</span>
+          </span>
+          <span class="lb-points"><span class="lb-pts">${u.pointsNow.toLocaleString()}<span>${esc(L.pointsSuffix)}</span></span></span>
+          <span class="lb-change">${deltaHtml(u.change)}</span>
+        </div>`;
+      }).join('');
+    };
+
+    render();
+    window.addEventListener('waitlist:joined', () => setTimeout(render, 1500));
+  }
+</script>

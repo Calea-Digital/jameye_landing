@@ -1,0 +1,35 @@
+{
+  "badge": "Temporada 1 · En vivo",
+  "headline": {
+    "line1": "Entrena",
+    "line2Lead": "tu ",
+    "line2Highlight": "ventaja.",
+    "line3": "Sé de élite."
+  },
+  "body": "El juego de pronósticos donde la habilidad se acumula — predice mercados reales, gana calibración y escala la clasificación.",
+  "cta": {
+    "placeholder": "Escribe tu email",
+    "submit": "Unirme a la lista",
+    "secondary": "Ver demo",
+    "success": "Ya estás en la lista — te avisaremos."
+  },
+  "waitlist": {
+    "count": "…",
+    "copy": "personas ya en la lista de espera"
+  },
+  "stage": {
+    "avatarAlt": "Personaje Jameye — Open Market Trader",
+    "pills": [
+      { "k": "EDGE",   "v": "3,924",   "tone": "gold" },
+      { "k": "Brier",  "v": "0.142",   "tone": "sky" },
+      { "k": "Racha",  "v": "7 días",  "tone": "emerald" },
+      { "k": "Rank",   "v": "#1",      "tone": "magenta" }
+    ],
+    "xp": {
+      "level":   "Nivel 12",
+      "tier":    "Tier Sharp",
+      "current": "2,140",
+      "target":  "3,200 XP"
+    }
+  }
+}

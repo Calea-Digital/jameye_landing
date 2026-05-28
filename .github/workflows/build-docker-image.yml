@@ -1,0 +1,58 @@
+# This workflow will build the website's Docker image
+# and push it to a private docker registry when any changes are made in the main branch.
+#
+
+name: Build and Deploy Staging
+
+# Triggers
+on:
+  push:
+    branches:
+      - main
+
+env:
+  # Host (for docker login)
+  DOCKER_REGISTRY_HOST: europe-central2-docker.pkg.dev
+  # Full repo path where images & cache will live
+  DOCKER_REPOSITORY: europe-central2-docker.pkg.dev/kenomic/calea-websites
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: jameye-website
+            context: ./
+            dockerfile: ./Dockerfile
+            build-args: "" # no build args
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY_HOST }}
+          username: _json_key
+          password: ${{ secrets.GCP_ARTIFACT_JSON_KEY }}
+
+      - name: Build & push Docker image - ${{ matrix.name }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ${{ env.DOCKER_REPOSITORY }}/${{ matrix.name }}:latest
+          cache-from: type=registry,ref=${{ env.DOCKER_REPOSITORY }}/${{ matrix.name }}:buildcache
+          cache-to: type=registry,ref=${{ env.DOCKER_REPOSITORY }}/${{ matrix.name }}:buildcache,mode=max
+          build-args: ${{ matrix.build-args }}

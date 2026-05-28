@@ -1,0 +1,8 @@
+# robots.txt for https://mywebsite.com
+
+User-agent: *
+Disallow: /cdn-cgi/
+Allow: /
+
+# Sitemaps
+Sitemap: https://mywebsite.com/sitemap-index.xml 

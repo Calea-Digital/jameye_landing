@@ -1,0 +1,54 @@
+{
+  "eyebrow": "How it feels",
+  "title":   { "lead": "Don't take our word.", "ital": "Try it." },
+  "sub":     "One real calibration round. Move the slider, lock your forecast, and see how sharp you are — no signup.",
+
+  "speech": "Give it a try 👉",
+
+  "game": {
+    "tryLabel": "Try it now",
+    "roundLabel": "Round",
+    "ofLabel": "of",
+    "noSignup": "No signup",
+    "liveLabel": "Live",
+    "anchorNo": "← NO",
+    "anchorYes": "YES →",
+    "lock": "Lock my forecast",
+    "next": "Next question",
+    "waitlistMsg": "Want to keep playing? Join the waitlist for full access.",
+    "waitlistCta": "Join the waitlist",
+    "youLabel": "Your call",
+    "truthLabel": "Reality",
+    "edgeLabel": "EDGE",
+    "totalLabel": "EDGE earned",
+    "conf": {
+      "coin": "Coin flip",
+      "coinSub": "Total uncertainty",
+      "slight": "Slight lean",
+      "moderate": "Moderate",
+      "confident": "Confident",
+      "bold": "Bold call",
+      "yes": "YES",
+      "no": "NO",
+      "tilt": "Tilting",
+      "lean": "Leaning",
+      "strong": "Strong",
+      "near": "Near-certain"
+    },
+    "verdicts": {
+      "good": "🎯 Sharp call.",
+      "ok": "Not bad.",
+      "bad": "Ouch."
+    },
+    "reactions": {
+      "good": "Nailed it!",
+      "ok": "Decent.",
+      "bad": "Oof — try again!"
+    },
+    "questions": [
+      { "q": "Bitcoin above $100,000 at any point in 2024?", "truth": 100, "answer": "Yes — BTC broke <strong>$100K</strong> in December 2024." },
+      { "q": "OpenAI releases GPT-5 before Jan 1, 2025?", "truth": 0, "answer": "No — <strong>GPT-5</strong> did not ship before 2025." },
+      { "q": "Fed cuts interest rates at least once in 2024?", "truth": 100, "answer": "Yes — the Fed cut rates <strong>three times</strong> in late 2024." }
+    ]
+  }
+}

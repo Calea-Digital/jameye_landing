@@ -1,0 +1,54 @@
+{
+  "eyebrow": "Cómo se siente",
+  "title":   { "lead": "No nos creas.", "ital": "Pruébalo." },
+  "sub":     "Una ronda real de calibración. Mueve el slider, fija tu pronóstico y mira qué tan preciso eres — sin registro.",
+
+  "speech": "¡Prueba tú! 👉",
+
+  "game": {
+    "tryLabel": "Pruébalo ya",
+    "roundLabel": "Ronda",
+    "ofLabel": "de",
+    "noSignup": "Sin registro",
+    "liveLabel": "En vivo",
+    "anchorNo": "← NO",
+    "anchorYes": "SÍ →",
+    "lock": "Fijar mi pronóstico",
+    "next": "Siguiente pregunta",
+    "waitlistMsg": "¿Quieres seguir jugando? Únete a la lista para acceso completo.",
+    "waitlistCta": "Unirme a la lista",
+    "youLabel": "Tu apuesta",
+    "truthLabel": "Realidad",
+    "edgeLabel": "EDGE",
+    "totalLabel": "EDGE ganado",
+    "conf": {
+      "coin": "Cara o cruz",
+      "coinSub": "Incertidumbre total",
+      "slight": "Ligera inclinación",
+      "moderate": "Moderado",
+      "confident": "Seguro",
+      "bold": "Apuesta firme",
+      "yes": "SÍ",
+      "no": "NO",
+      "tilt": "Hacia",
+      "lean": "Inclinado a",
+      "strong": "Fuerte",
+      "near": "Casi seguro"
+    },
+    "verdicts": {
+      "good": "🎯 Gran tino.",
+      "ok": "Nada mal.",
+      "bad": "Ay."
+    },
+    "reactions": {
+      "good": "¡Clavado!",
+      "ok": "Decente.",
+      "bad": "Uf — ¡otra vez!"
+    },
+    "questions": [
+      { "q": "¿Bitcoin supera los $100.000 en algún momento de 2024?", "truth": 100, "answer": "Sí — BTC superó los <strong>$100K</strong> en diciembre de 2024." },
+      { "q": "¿OpenAI lanza GPT-5 antes del 1 de enero de 2025?", "truth": 0, "answer": "No — <strong>GPT-5</strong> no salió antes de 2025." },
+      { "q": "¿La Fed baja los tipos al menos una vez en 2024?", "truth": 100, "answer": "Sí — la Fed bajó tipos <strong>tres veces</strong> a finales de 2024." }
+    ]
+  }
+}

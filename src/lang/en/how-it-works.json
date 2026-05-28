@@ -1,0 +1,65 @@
+{
+  "eyebrow": "04 · Versus",
+  "title":   { "lead": "One market.", "ital": "Two sides." },
+  "sub":     "Real-money YES/NO across every active market. Sentiment moves; the line moves with it.",
+  "volumeLabel": "vol",
+  "tradersLabel": "traders",
+  "liveLabel": "Live",
+  "vsLabel": "VS",
+  "categories": [
+    {
+      "id": "sports",
+      "label": "Sports",
+      "question": "Who lands the knockout?",
+      "sideA": { "name": "Iron Mike",  "image": "/images/versus/red_boxing_glove.png",  "odds": 58 },
+      "sideB": { "name": "Cobra Kid",  "image": "/images/versus/blue_boxing_glove.png", "odds": 42 },
+      "volume": "$4.2M",
+      "traders": "1.8k"
+    },
+    {
+      "id": "politics",
+      "label": "Politics",
+      "question": "Next US President — 2028",
+      "sideA": { "name": "Trump", "icon": "tabler:flame", "odds": 52 },
+      "sideB": { "name": "Obama", "icon": "tabler:star",  "odds": 48 },
+      "volume": "$12.4M",
+      "traders": "3.2k"
+    },
+    {
+      "id": "crypto",
+      "label": "Crypto",
+      "question": "BTC closes above $200K this year?",
+      "sideA": { "name": "Yes", "icon": "tabler:trending-up",   "odds": 34 },
+      "sideB": { "name": "No",  "icon": "tabler:trending-down", "odds": 66 },
+      "volume": "$5.9M",
+      "traders": "4.8k"
+    },
+    {
+      "id": "climate",
+      "label": "Climate",
+      "question": "1.5°C breached before 2030?",
+      "sideA": { "name": "Breach", "icon": "tabler:flame",     "odds": 71 },
+      "sideB": { "name": "Hold",   "icon": "tabler:snowflake", "odds": 29 },
+      "volume": "$2.6M",
+      "traders": "1.1k"
+    },
+    {
+      "id": "economics",
+      "label": "Economics",
+      "question": "Will the Fed cut rates this quarter?",
+      "sideA": { "name": "Bull", "image": "/images/versus/bull.png", "odds": 59 },
+      "sideB": { "name": "Bear", "image": "/images/versus/bear.png", "odds": 41 },
+      "volume": "$8.7M",
+      "traders": "2.4k"
+    },
+    {
+      "id": "culture",
+      "label": "Culture",
+      "question": "Album of the Year — Grammys 2027",
+      "sideA": { "name": "Taylor", "icon": "tabler:music", "odds": 63 },
+      "sideB": { "name": "Drake",  "icon": "tabler:vinyl", "odds": 37 },
+      "volume": "$1.9M",
+      "traders": "0.9k"
+    }
+  ]
+}

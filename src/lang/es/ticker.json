@@ -1,0 +1,14 @@
+{
+  "items": [
+    { "q": "¿La Fed baja tipos en el Q3?",                   "v": 38, "dir": "up",      "delta": "+2.4%" },
+    { "q": "¿Bitcoin cierra sobre $120k a fin de año?",      "v": 62, "dir": "down",    "delta": "-1.8%" },
+    { "q": "¿Argentina gana la Copa América 2026?",          "v": 47, "dir": "up",      "delta": "+3.1%" },
+    { "q": "¿OpenAI anuncia GPT-6 antes del Q4?",            "v": 34, "dir": "down",    "delta": "-0.9%" },
+    { "q": "¿La coalición alemana aguanta hasta fin de año?", "v": 71, "dir": "up",      "delta": "+1.2%" },
+    { "q": "¿Apple Vision Pro 2 sale en 2026?",              "v": 58, "dir": "neutral", "delta": "0.0%"  },
+    { "q": "¿Tesla entrega 2.5M vehículos en 2026?",         "v": 29, "dir": "down",    "delta": "-2.7%" },
+    { "q": "¿Alto el fuego en Ucrania antes de agosto?",     "v": 22, "dir": "up",      "delta": "+4.6%" },
+    { "q": "¿S&P 500 sobre 7.000 a fin de año?",             "v": 53, "dir": "up",      "delta": "+1.5%" },
+    { "q": "¿Nvidia alcanza $5T de market cap este año?",    "v": 64, "dir": "up",      "delta": "+2.1%" }
+  ]
+}

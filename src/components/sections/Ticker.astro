@@ -1,0 +1,30 @@
+---
+import { t, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+type Dir = 'up' | 'down' | 'neutral';
+const data = t<{ items: { q: string; v: number; dir: Dir; delta: string }[] }>(locale, 'ticker');
+
+// Duplicate the run inline so the loop is seamless.
+const run = [...data.items, ...data.items];
+---
+
+<!-- v5 ticker band — sits under the hero. -->
+<div class="ticker-band">
+  <div class="ticker-track">
+    {
+      run.map((item) => (
+        <div class="ticker-item">
+          <span class="q">{item.q}</span>
+          <span class:list={['v', item.dir]}>{item.v}% {item.delta}</span>
+          <span class="sep">·</span>
+        </div>
+      ))
+    }
+  </div>
+</div>

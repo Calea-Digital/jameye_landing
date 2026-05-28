@@ -1,0 +1,94 @@
+---
+import type { ImageMetadata } from 'astro';
+
+import Favicons from '~/meta/Favicons.astro';
+import '~/styles/global.css';
+import BasicScripts from '~/components/common/BasicScripts.astro';
+import { SITE } from '~/config';
+import { SEO } from 'astro-seo';
+
+import importImage from '~/utils/importImage';
+
+import type { Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale?: Locale;
+  metadata?: {
+    title?: string;
+    useTitleTemplate?: boolean;
+    description?: string;
+    ogImagePath?: string;
+    canonicalUrl?: string;
+    pubDatetime?: Date;
+    modDatetime?: Date;
+    author?: string;
+    index?: boolean;
+    follow?: boolean;
+  };
+}
+
+const { metadata, locale = 'en' } = Astro.props;
+
+// Import the ogImage dynamically if it's provided
+let ogImage: ImageMetadata | undefined;
+if (metadata?.ogImagePath) {
+  ogImage = await importImage(metadata?.ogImagePath);
+}
+---
+
+<!doctype html>
+<html lang={locale} dir="ltr">
+  <head>
+    <!-- Common Metadata -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Favicons -->
+    <Favicons />
+
+    <!-- Fonts · Brand book §3.1 — Inter Tight (display @ 300), Space Grotesk (body),
+         JetBrains Mono (numerics, eyebrows), Instrument Serif (editorial italic flourish). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
+    />
+
+    <!-- SEO stuff -->
+    <!-- Uses SITE config by default -->
+    <SEO
+      title={metadata?.title || SITE().title}
+      titleTemplate={metadata?.useTitleTemplate ? `%s - ${SITE().title}` : undefined}
+      description={metadata?.description || SITE().description}
+      canonical={metadata?.canonicalUrl || Astro.url.href}
+      noindex={metadata?.index === false}
+      nofollow={metadata?.follow === false}
+      openGraph={{
+        basic: {
+          title: metadata?.title || SITE().title,
+          type: 'website',
+          image: ogImage?.src || SITE().ogImage,
+          url: metadata?.canonicalUrl || Astro.url.href,
+        },
+        optional: {
+          locale: SITE().locale,
+          siteName: SITE().title,
+          description: metadata?.description || SITE().description,
+        },
+      }}
+      twitter={{
+        card: 'summary_large_image',
+        site: SITE().twitter.site,
+        title: metadata?.title || SITE().title,
+        description: metadata?.description || SITE().description,
+        image: ogImage?.src || SITE().ogImage,
+      }}
+    />
+  </head>
+  <body class="bg-background text-foreground">
+    <slot />
+    <BasicScripts />
+  </body>
+</html>

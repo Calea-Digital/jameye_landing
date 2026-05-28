@@ -1,0 +1,47 @@
+{
+  "badge": "Season 1 · Closed beta",
+  "title": "Join the waitlist",
+  "subtitle": "Be first in when Season 1 opens. No spam — just your invite.",
+  "fields": {
+    "name": "Name",
+    "email": "Email",
+    "nickname": "Nickname",
+    "referred": "Referred by",
+    "avatar": "Choose your avatar"
+  },
+  "placeholders": {
+    "name": "Your name",
+    "email": "you@email.com",
+    "nickname": "Pick a handle (optional)",
+    "referred": "Their nickname (optional)"
+  },
+  "help": {
+    "name": "Only used to personalize your invite.",
+    "email": "Where we'll send your Season 1 invite. Must be unique.",
+    "nickname": "Your public handle on the leaderboard — others use it to refer you. Leave blank and we'll generate one. Must be unique.",
+    "referred": "The nickname of whoever invited you, so they get the credit.",
+    "avatar": "Pick the character you'll play as."
+  },
+  "status": {
+    "checking": "Checking…",
+    "emailOk": "Looks good",
+    "nickOk": "Available"
+  },
+  "avatarLabels": {
+    "avatar_1": "Trader",
+    "avatar_2": "Explorer",
+    "avatar_3": "Fighter",
+    "avatar_4": "Rapid"
+  },
+  "submit": "Join waitlist",
+  "submitting": "Joining…",
+  "success": "You're on the list — we'll be in touch.",
+  "close": "Close",
+  "errors": {
+    "name": "Please enter your name.",
+    "email": "Enter a valid email.",
+    "emailTaken": "That email is already on the list.",
+    "nicknameTaken": "That nickname is taken — try another.",
+    "generic": "Something went wrong. Please try again."
+  }
+}

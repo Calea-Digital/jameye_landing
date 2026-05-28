@@ -1,0 +1,15 @@
+{
+  "links": [
+    { "text": "Play", "href": "#hero" },
+    { "text": "Characters", "href": "#roster" },
+    { "text": "How it works", "href": "#how-it-works" },
+    { "text": "Leaderboard", "href": "/leaderboard/" }
+  ],
+  "cta": {
+    "primary": "Join waitlist"
+  },
+  "streakLabel": "7d",
+  "languageAriaLabel": "Change language",
+  "mobileMenuOpen": "Open menu",
+  "mobileMenuClose": "Close menu"
+}

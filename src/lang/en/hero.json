@@ -1,0 +1,35 @@
+{
+  "badge": "Season 1 · Now Live",
+  "headline": {
+    "line1": "Train",
+    "line2Lead": "your ",
+    "line2Highlight": "edge.",
+    "line3": "Become elite."
+  },
+  "body": "The forecasting game where skill compounds — predict real markets, build calibration, climb the leaderboard.",
+  "cta": {
+    "placeholder": "Enter your email",
+    "submit": "Join waitlist",
+    "secondary": "Watch demo",
+    "success": "You're on the list — we'll be in touch."
+  },
+  "waitlist": {
+    "count": "…",
+    "copy": "people already on the waitlist"
+  },
+  "stage": {
+    "avatarAlt": "Jameye character — Open Market Trader",
+    "pills": [
+      { "k": "EDGE",   "v": "3,924",   "tone": "gold" },
+      { "k": "Brier",  "v": "0.142",   "tone": "sky" },
+      { "k": "Streak", "v": "7 days",  "tone": "emerald" },
+      { "k": "Rank",   "v": "#1",      "tone": "magenta" }
+    ],
+    "xp": {
+      "level":   "Level 12",
+      "tier":    "Sharp Tier",
+      "current": "2,140",
+      "target":  "3,200 XP"
+    }
+  }
+}

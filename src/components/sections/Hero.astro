@@ -1,0 +1,398 @@
+---
+import { Icon } from 'astro-icon/components';
+import { t, type Locale } from '~/utils/i18n';
+import Ticker from '~/components/sections/Ticker.astro';
+// Inline the avatar SVG so we can drive the eyes + head with the cursor.
+import avatarRaw from '../../../public/avatar/01-open-market-trader.svg?raw';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const hero = t<{
+  badge: string;
+  headline: { line1: string; line2Lead: string; line2Highlight: string; line3: string };
+  body: string;
+  cta: { placeholder: string; submit: string; secondary: string; success: string };
+  waitlist: { count: string; copy: string };
+  stage: {
+    avatarAlt: string;
+    pills: { k: string; v: string; tone: 'gold' | 'sky' | 'emerald' | 'magenta' }[];
+    xp: { level: string; tier: string; current: string; target: string };
+  };
+}>(locale, 'hero');
+
+// Tag the head group + pupil group so the tracking script can address them.
+const avatarSvg = avatarRaw
+  .replace(
+    '</rect><g><path d="M30 48',
+    '</rect><g id="hero-head"><path d="M30 48'
+  )
+  .replace(
+    '<g><circle cx="50" cy="52" r="2.6" fill="#0a1330">',
+    '<g id="hero-pupils"><circle cx="50" cy="52" r="2.6" fill="#0a1330">'
+  );
+---
+
+<!-- v5 mockup — character stage hero with waitlist capture + bottom ticker. -->
+<section id="hero" class="hero-section relative pt-3 md:pt-5 overflow-hidden">
+  <div class="flex-1 w-full flex items-center">
+    <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+      <div class="grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-12 items-center">
+
+        <!-- LEFT -->
+        <div class="relative">
+          <span class="eyebrow hero-anim hero-anim--badge">
+            <span class="gold-dot"></span>
+            <span>{hero.badge}</span>
+          </span>
+
+          <h1 class="display-hero hero-title mt-6 text-white">
+            <span class="block overflow-hidden">
+              <span class="hero-word hero-word--w1">{hero.headline.line1}</span>
+            </span>
+            <span class="block overflow-hidden">
+              <span class="hero-word hero-word--w2">
+                {hero.headline.line2Lead}
+                <span class="grad-text">{hero.headline.line2Highlight}</span>
+              </span>
+            </span>
+            <span class="block overflow-hidden">
+              <span class="hero-word hero-word--w3 ital ital-grad">
+                {hero.headline.line3}
+              </span>
+            </span>
+          </h1>
+
+          <p class="mt-5 text-base md:text-lg text-white/65 leading-relaxed max-w-md hero-anim hero-anim--body">
+            {hero.body}
+          </p>
+
+          <!-- Waitlist CTAs -->
+          <div class="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 hero-anim hero-anim--cta">
+            <button type="button" class="cta-big whitespace-nowrap" data-open-waitlist>
+              {hero.cta.submit}
+              <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+            </button>
+            <a href="#video" class="cta-ghost whitespace-nowrap">
+              {hero.cta.secondary}
+            </a>
+          </div>
+
+          <!-- Waitlist social proof -->
+          <div class="mt-7 flex items-center gap-4 hero-anim hero-anim--trust">
+            <div class="flex">
+              <span class="trust-avi" style="background-image: var(--gradient-gold-orange);">M</span>
+              <span class="trust-avi" style="background-image: var(--gradient-violet-magenta);">K</span>
+              <span class="trust-avi" style="background-image: var(--gradient-emerald-teal);">M</span>
+              <span class="trust-avi" style="background-image: var(--gradient-indigo-violet);">D</span>
+              <span class="trust-avi" style="background-image: linear-gradient(140deg, #F43F5E, #D83BFF);">V</span>
+            </div>
+            <p class="text-sm text-white/65 leading-snug">
+              <strong class="text-white font-semibold num" data-waitlist-count>{hero.waitlist.count}</strong>
+              {hero.waitlist.copy}
+            </p>
+          </div>
+        </div>
+
+        <!-- RIGHT — character stage -->
+        <div class="relative h-[300px] md:h-[520px] lg:h-[580px]" data-hero-stage>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <!-- Rings -->
+            <div class="char-rings hero-rings">
+              <svg viewBox="0 0 480 480" aria-hidden="true">
+                <circle cx="240" cy="240" r="220" fill="none" stroke="rgba(126,59,255,0.15)" stroke-width="1" stroke-dasharray="2 6"/>
+                <circle cx="240" cy="240" r="180" fill="none" stroke="rgba(216,59,255,0.12)" stroke-width="1"/>
+                <circle cx="460" cy="240" r="4"   fill="#FACC15"/>
+                <circle cx="240" cy="60"  r="3"   fill="#5B8DFF"/>
+                <circle cx="60"  cy="240" r="3.5" fill="#D83BFF"/>
+                <circle cx="240" cy="420" r="3"   fill="#10B981"/>
+              </svg>
+            </div>
+
+            <!-- Sparkles -->
+            <span class="sparkle" style="top:8%;left:35%;animation-delay:0s;" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#FACC15"/></svg>
+            </span>
+            <span class="sparkle" style="top:30%;right:25%;animation-delay:1.2s;" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 16 16"><path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#D83BFF"/></svg>
+            </span>
+            <span class="sparkle" style="bottom:30%;right:40%;animation-delay:2s;" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 16 16"><path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#5B8DFF"/></svg>
+            </span>
+            <span class="sparkle" style="top:55%;left:18%;animation-delay:0.6s;" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 16 16"><path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#FF3BA8"/></svg>
+            </span>
+
+            <!-- Character — inline SVG so eyes + head can track the cursor. -->
+            <div
+              class="char-bounce relative z-10 hero-character"
+              style="filter: drop-shadow(0 30px 60px rgba(126,59,255,0.5));"
+              role="img"
+              aria-label={hero.stage.avatarAlt}
+              data-hero-character
+              set:html={avatarSvg}
+            />
+
+            <!-- Floating stat pills -->
+            <div class="stat-float" style="top:10%;left:2%;animation-delay:0s;">
+              <div class="k">{hero.stage.pills[0].k}</div>
+              <div class={`v ${hero.stage.pills[0].tone}`}>{hero.stage.pills[0].v}</div>
+            </div>
+            <button
+              type="button"
+              class="stat-float stat-float--btn"
+              style="top:20%;right:-3%;animation-delay:1.5s;"
+              data-avatar-shuffle
+              aria-label="Change avatar"
+            >
+              <div class="k">Avatar</div>
+              <div class="v sky" style="display:flex;align-items:center;gap:6px;">
+                <Icon name="tabler:arrows-shuffle" class="w-3.5 h-3.5" />
+                Shuffle
+              </div>
+            </button>
+            <div class="stat-float" style="bottom:24%;left:-2%;animation-delay:0.8s;">
+              <div class="k">{hero.stage.pills[2].k}</div>
+              <div class={`v ${hero.stage.pills[2].tone}`}>{hero.stage.pills[2].v}</div>
+            </div>
+            <div class="stat-float" style="bottom:10%;right:4%;animation-delay:2.2s;">
+              <div class="k">{hero.stage.pills[3].k}</div>
+              <div class={`v ${hero.stage.pills[3].tone}`}>{hero.stage.pills[3].v}</div>
+            </div>
+
+            <!-- XP bar -->
+            <div class="absolute left-1/2 -translate-x-1/2 z-10 w-[200px] md:w-[260px] lg:w-[300px] max-w-[78%]" style="bottom:-12px;">
+              <div class="h-2 rounded-full overflow-hidden relative border" style="background:rgba(255,255,255,0.08);border-color:var(--hairline);">
+                <div
+                  class="h-full rounded-full"
+                  style="width:0; background-image: var(--gradient-gold-orange); box-shadow: 0 0 12px rgba(250, 204, 21, 0.6); animation: xp-fill 2s cubic-bezier(0.2,0.85,0.2,1) 1.5s forwards;"
+                ></div>
+              </div>
+              <div class="flex justify-between mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-white/45">
+                <span>{hero.stage.xp.level} · <strong class="text-white font-semibold">{hero.stage.xp.tier}</strong></span>
+                <span class="num">{hero.stage.xp.current} / {hero.stage.xp.target}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Live markets ticker — pinned to the bottom of the hero viewport. -->
+  <div class="w-full mt-4 md:mt-6">
+    <Ticker locale={locale} />
+  </div>
+</section>
+
+<style>
+  @keyframes xp-fill { to { width: 68%; } }
+
+  /* Headline: thin editorial voice + room for descenders so 'edge.' is
+     never clipped by the line beneath it. */
+  .hero-title {
+    font-size: clamp(3.25rem, 12vw, 5.5rem);
+    line-height: 1.0;
+  }
+
+  /* Responsive stage — rings, character, stat-pills scale per breakpoint. */
+  .hero-rings {
+    inset: auto;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 240px; height: 240px;
+  }
+  .hero-character { width: 170px; max-width: 70%; }
+  @media (min-width: 768px) {
+    .hero-rings { width: 420px; height: 420px; }
+    .hero-character { width: 250px; max-width: 78%; }
+  }
+  @media (min-width: 1024px) {
+    .hero-rings { width: 480px; height: 480px; }
+    .hero-character { width: 300px; }
+  }
+
+  /* Tighter floating pills on mobile so they don't crowd the smaller stage. */
+  @media (max-width: 767px) {
+    .stat-float { padding: 0.45rem 0.65rem; border-radius: 0.7rem; }
+    .stat-float .k { font-size: 8px; margin-bottom: 2px; }
+    .stat-float .v { font-size: 13px; }
+  }
+  .hero-title .block { padding-bottom: 0.12em; }
+
+  .hero-word {
+    display: inline-block;
+    transform: translateY(110%);
+    animation: word-in 0.9s cubic-bezier(0.2, 0.85, 0.2, 1) forwards;
+  }
+  .hero-word--w1 { animation-delay: 0.1s; }
+  .hero-word--w2 { animation-delay: 0.2s; }
+  .hero-word--w3 { animation-delay: 0.35s; }
+  @keyframes word-in { to { transform: translateY(0); } }
+
+  .hero-anim {
+    opacity: 0;
+    animation: fade-in 0.8s ease-out forwards;
+  }
+  .hero-anim--badge { animation-delay: 0s; }
+  .hero-anim--body  { animation-delay: 0.9s; }
+  .hero-anim--cta   { animation-delay: 1.1s; }
+  .hero-anim--trust { animation-delay: 1.3s; }
+  @keyframes fade-in { to { opacity: 1; } }
+
+  /* Eyes + head follow the cursor; easing handled in JS. */
+  #hero-head, #hero-pupils { transition: transform 90ms linear; }
+
+  /* Brier pill is now the avatar shuffle button. */
+  .stat-float--btn {
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+  }
+  .stat-float--btn:hover {
+    border-color: var(--brand-sky);
+    transform: translateY(-2px);
+  }
+  .stat-float--btn:active { transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-word, .hero-anim { animation: none; opacity: 1; transform: none; }
+    #hero-head, #hero-pupils { transition: none; }
+  }
+</style>
+
+<script>
+  // ---- Avatar shuffle + cursor tracking (precise head/eyes when available). ----
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const charWrap = document.querySelector('[data-hero-character]') as HTMLElement | null;
+
+  // Hero shuffle — first six avatars only (01–06).
+  const AVATARS = [
+    '/avatar/01-open-market-trader.svg',
+    '/avatar/02-edge-score-explorer.svg',
+    '/avatar/03-duel-customizable-fighter.svg',
+    '/avatar/04-rapid-duel-fighter.svg',
+    '/avatar/05-squad-row1-trader.svg',
+    '/avatar/06-squad-row1-explorer.svg',
+  ];
+  let avatarIndex = 0;
+
+  // Tag the trader avatar's head + pupil groups so they can be driven precisely.
+  const tagTrader = (svg: string) =>
+    svg
+      .replace('</rect><g><path d="M30 48', '</rect><g id="hero-head"><path d="M30 48')
+      .replace('<g><circle cx="50" cy="52" r="2.6" fill="#0a1330">', '<g id="hero-pupils"><circle cx="50" cy="52" r="2.6" fill="#0a1330">');
+
+  let head: Element | null = null;
+  let pupils: Element | null = null;
+  let svgRoot: SVGElement | null = null;
+  const captureTargets = () => {
+    head = document.getElementById('hero-head');
+    pupils = document.getElementById('hero-pupils');
+    svgRoot = charWrap?.querySelector('svg') ?? null;
+  };
+
+  // Fit each avatar's real content to the frame so every one renders the
+  // same size, regardless of how the figure sits inside its own viewBox.
+  const normalizeAvatar = () => {
+    if (!svgRoot) return;
+    try {
+      const bb = (svgRoot as unknown as SVGGraphicsElement).getBBox();
+      const pad = 4;
+      svgRoot.setAttribute(
+        'viewBox',
+        `${(bb.x - pad).toFixed(1)} ${(bb.y - pad).toFixed(1)} ${(bb.width + pad * 2).toFixed(1)} ${(bb.height + pad * 2).toFixed(1)}`
+      );
+      svgRoot.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    } catch {
+      /* getBBox can throw before layout; ignore */
+    }
+  };
+
+  captureTargets();
+  normalizeAvatar();
+
+  const shuffleBtn = document.querySelector('[data-avatar-shuffle]');
+  shuffleBtn?.addEventListener('click', async () => {
+    avatarIndex = (avatarIndex + 1) % AVATARS.length;
+    try {
+      const res = await fetch(AVATARS[avatarIndex]);
+      const svg = tagTrader(await res.text());
+      if (charWrap) {
+        charWrap.innerHTML = svg;
+        if (!reduceMotion) {
+          charWrap.animate(
+            [{ transform: 'scale(0.85)', opacity: 0.4 }, { transform: 'scale(1)', opacity: 1 }],
+            { duration: 320, easing: 'cubic-bezier(0.2,0.85,0.2,1)' }
+          );
+        }
+      }
+      captureTargets();
+      normalizeAvatar();
+    } catch {
+      /* keep current avatar on failure */
+    }
+  });
+
+  if (!reduceMotion && charWrap) {
+    let targetX = 0, targetY = 0, curX = 0, curY = 0;
+    window.addEventListener('mousemove', (e) => {
+      const r = charWrap.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      targetX = Math.max(-1, Math.min(1, (e.clientX - cx) / (window.innerWidth / 2)));
+      targetY = Math.max(-1, Math.min(1, (e.clientY - cy) / (window.innerHeight / 2)));
+    });
+    const tick = () => {
+      curX += (targetX - curX) * 0.12;
+      curY += (targetY - curY) * 0.12;
+      if (head && pupils) {
+        // Precise: rotate the head at the neck (60,72) + dart pupils in-socket.
+        head.setAttribute('transform', `rotate(${(curX * 5).toFixed(2)} 60 72) translate(${(curX * 3).toFixed(2)} ${(curY * 2).toFixed(2)})`);
+        pupils.setAttribute('transform', `translate(${(curX * 2.4).toFixed(2)} ${(curY * 1.8).toFixed(2)})`);
+      } else if (svgRoot) {
+        // Fallback for other avatars: tilt the whole character toward the cursor.
+        svgRoot.style.transformOrigin = '50% 70%';
+        svgRoot.style.transform = `rotate(${(curX * 4).toFixed(2)}deg) translate(${(curX * 4).toFixed(2)}px, ${(curY * 3).toFixed(2)}px)`;
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  // Live waitlist count — actual signups read from the responses sheet.
+  const countEl = document.querySelector('[data-waitlist-count]') as HTMLElement | null;
+  if (countEl) {
+    const resolveCsv = (raw: string) => {
+      const v = (raw || '').trim();
+      if (!v) return '';
+      if (v.includes('output=csv') || v.includes('/gviz/')) return v;
+      const m = v.match(/\/spreadsheets\/d\/(?:e\/)?([a-zA-Z0-9-_]+)/);
+      const id = m ? m[1] : (/^[a-zA-Z0-9-_]{20,}$/.test(v) ? v : '');
+      return id ? `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv` : v;
+    };
+    const csv = resolveCsv(import.meta.env.PUBLIC_WAITLIST_RESPONSES_CSV || '');
+    let val = Number(countEl.textContent?.replace(/[^0-9]/g, '')) || 0;
+    const render = () => { countEl.textContent = val.toLocaleString(); };
+    const refresh = async () => {
+      if (!csv) return;
+      try {
+        const res = await fetch(csv, { cache: 'no-store' });
+        const text = await res.text();
+        const rows = text.split(/\r?\n/).filter((l) => l.trim().length);
+        val = Math.max(0, rows.length - 1); // minus the header row
+        render();
+      } catch {
+        /* keep whatever is shown */
+      }
+    };
+    refresh();
+    // Refresh when the page regains focus, plus an optimistic bump on signup.
+    window.addEventListener('focus', refresh);
+    window.addEventListener('waitlist:joined', () => { val += 1; render(); setTimeout(refresh, 1500); });
+  }
+</script>

@@ -1,0 +1,65 @@
+{
+  "eyebrow": "04 · Versus",
+  "title":   { "lead": "Un mercado.", "ital": "Dos bandos." },
+  "sub":     "SÍ o NO con dinero real en cada mercado activo. El sentimiento se mueve; la línea, con él.",
+  "volumeLabel": "vol",
+  "tradersLabel": "traders",
+  "liveLabel": "En vivo",
+  "vsLabel": "VS",
+  "categories": [
+    {
+      "id": "sports",
+      "label": "Deportes",
+      "question": "¿Quién da el K.O.?",
+      "sideA": { "name": "Iron Mike",  "image": "/images/versus/red_boxing_glove.png",  "odds": 58 },
+      "sideB": { "name": "Cobra Kid",  "image": "/images/versus/blue_boxing_glove.png", "odds": 42 },
+      "volume": "$4.2M",
+      "traders": "1.8k"
+    },
+    {
+      "id": "politics",
+      "label": "Política",
+      "question": "Próximo presidente de EE. UU. — 2028",
+      "sideA": { "name": "Trump", "icon": "tabler:flame", "odds": 52 },
+      "sideB": { "name": "Obama", "icon": "tabler:star",  "odds": 48 },
+      "volume": "$12.4M",
+      "traders": "3.2k"
+    },
+    {
+      "id": "crypto",
+      "label": "Cripto",
+      "question": "¿BTC cierra el año sobre $200K?",
+      "sideA": { "name": "Sí", "icon": "tabler:trending-up",   "odds": 34 },
+      "sideB": { "name": "No", "icon": "tabler:trending-down", "odds": 66 },
+      "volume": "$5.9M",
+      "traders": "4.8k"
+    },
+    {
+      "id": "climate",
+      "label": "Clima",
+      "question": "¿Se superan los 1,5°C antes de 2030?",
+      "sideA": { "name": "Supera",  "icon": "tabler:flame",     "odds": 71 },
+      "sideB": { "name": "Aguanta", "icon": "tabler:snowflake", "odds": 29 },
+      "volume": "$2.6M",
+      "traders": "1.1k"
+    },
+    {
+      "id": "economics",
+      "label": "Economía",
+      "question": "¿La Fed bajará tipos este trimestre?",
+      "sideA": { "name": "Bull", "image": "/images/versus/bull.png", "odds": 59 },
+      "sideB": { "name": "Bear", "image": "/images/versus/bear.png", "odds": 41 },
+      "volume": "$8.7M",
+      "traders": "2.4k"
+    },
+    {
+      "id": "culture",
+      "label": "Cultura",
+      "question": "Álbum del Año — Grammys 2027",
+      "sideA": { "name": "Taylor", "icon": "tabler:music", "odds": 63 },
+      "sideB": { "name": "Drake",  "icon": "tabler:vinyl", "odds": 37 },
+      "volume": "$1.9M",
+      "traders": "0.9k"
+    }
+  ]
+}

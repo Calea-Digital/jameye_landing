@@ -1,0 +1,15 @@
+{
+  "eyebrow": "05 · Sube de rango",
+  "title":   { "lead": "Cinco tiers.", "ital": "Un tú." },
+  "sub":     "Cada pronóstico mueve tu aguja. Llega al tier superior y tu nombre brilla en el ranking global.",
+  "cardTitle":     { "lead": "Tu", "ital": "viaje de forecaster" },
+  "currentLabel":  "Actualmente",
+  "currentValue":  "2,140",
+  "tiers": [
+    { "name": "Rookie",          "range": "0 – 500",       "pct": "8% de forecasters"  },
+    { "name": "Trainee",         "range": "500 – 1,500",   "pct": "22% de forecasters" },
+    { "name": "Analyst",         "range": "1,500 – 2,800", "pct": "38% de forecasters" },
+    { "name": "Sharp",           "range": "2,800 – 3,800", "pct": "27% de forecasters" },
+    { "name": "Superforecaster", "range": "3,800+",        "pct": "5% de forecasters"  }
+  ]
+}

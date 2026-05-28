@@ -1,0 +1,486 @@
+---
+import { Icon } from 'astro-icon/components';
+import { t, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const w = t<{
+  badge: string;
+  title: string;
+  subtitle: string;
+  fields: { name: string; email: string; nickname: string; referred: string; avatar: string };
+  placeholders: { name: string; email: string; nickname: string; referred: string };
+  help: { name: string; email: string; nickname: string; referred: string; avatar: string };
+  status: { checking: string; emailOk: string; nickOk: string };
+  avatarLabels: { avatar_1: string; avatar_2: string; avatar_3: string; avatar_4: string };
+  submit: string;
+  submitting: string;
+  success: string;
+  close: string;
+  errors: { name: string; email: string; emailTaken: string; nicknameTaken: string; generic: string };
+}>(locale, 'waitlist');
+
+// The four selectable avatars. The value submitted to the form is the id
+// ("avatar_1" … "avatar_4") so the team knows which to render per user.
+// Inlined so they can be normalized to a uniform size on open (getBBox).
+import av1 from '../../../public/avatar/01-open-market-trader.svg?raw';
+import av2 from '../../../public/avatar/02-edge-score-explorer.svg?raw';
+import av3 from '../../../public/avatar/03-duel-customizable-fighter.svg?raw';
+import av4 from '../../../public/avatar/04-rapid-duel-fighter.svg?raw';
+
+const AVATARS = [
+  { id: 'avatar_1', svg: av1, label: w.avatarLabels.avatar_1 },
+  { id: 'avatar_2', svg: av2, label: w.avatarLabels.avatar_2 },
+  { id: 'avatar_3', svg: av3, label: w.avatarLabels.avatar_3 },
+  { id: 'avatar_4', svg: av4, label: w.avatarLabels.avatar_4 },
+];
+
+// Google Forms integration — configured via env (see example.env).
+const env = import.meta.env;
+
+function resolveCsv(raw?: string): string {
+  const v = (raw ?? '').trim();
+  if (!v) return '';
+  if (v.includes('output=csv') || v.includes('/gviz/')) return v;
+  const m = v.match(/\/spreadsheets\/d\/(?:e\/)?([a-zA-Z0-9-_]+)/);
+  const id = m ? m[1] : (/^[a-zA-Z0-9-_]{20,}$/.test(v) ? v : '');
+  return id ? `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv` : v;
+}
+
+const CFG = {
+  action: env.PUBLIC_WAITLIST_FORM_ID
+    ? `https://docs.google.com/forms/d/e/${env.PUBLIC_WAITLIST_FORM_ID}/formResponse`
+    : '',
+  fields: {
+    name: env.PUBLIC_WAITLIST_ENTRY_NAME ?? '',
+    email: env.PUBLIC_WAITLIST_ENTRY_EMAIL ?? '',
+    nickname: env.PUBLIC_WAITLIST_ENTRY_NICKNAME ?? '',
+    referred: env.PUBLIC_WAITLIST_ENTRY_REFERRED ?? '',
+    avatar: env.PUBLIC_WAITLIST_ENTRY_AVATAR ?? '',
+  },
+  responsesCsv: resolveCsv(env.PUBLIC_WAITLIST_RESPONSES_CSV),
+  emailCol: env.PUBLIC_WAITLIST_CSV_EMAIL_COL ?? 'Email',
+  nicknameCol: env.PUBLIC_WAITLIST_CSV_NICKNAME_COL ?? 'Nickname',
+};
+---
+
+<div class="wl-overlay" data-waitlist-modal hidden>
+  <div class="wl-panel" role="dialog" aria-modal="true" aria-labelledby="wl-title">
+    <button type="button" class="wl-close" data-wl-close aria-label={w.close}>
+      <Icon name="tabler:x" class="w-4 h-4" />
+    </button>
+
+    <span class="eyebrow mb-4">
+      <span class="gold-dot"></span>
+      <span>{w.badge}</span>
+    </span>
+
+    <h2 id="wl-title" class="text-white" style="font-family: var(--font-sans); font-weight: 300; font-size: 2rem; letter-spacing: -0.03em; line-height: 1.05;">
+      {w.title}
+    </h2>
+    <p class="mt-3 text-sm text-white/60 leading-relaxed">{w.subtitle}</p>
+
+    <form class="mt-6 flex flex-col gap-4" data-wl-form novalidate>
+      <div class="wl-grid">
+      <div class="wl-field">
+        <label class="wl-label" for="wl-name">{w.fields.name}<span class="wl-req">*</span></label>
+        <input id="wl-name" class="waitlist-input w-full" type="text" name="name" required autocomplete="name" placeholder={w.placeholders.name} data-wl-name />
+        <p class="wl-help">{w.help.name}</p>
+      </div>
+
+      <div class="wl-field">
+        <label class="wl-label" for="wl-nickname">{w.fields.nickname}</label>
+        <input id="wl-nickname" class="waitlist-input w-full" type="text" name="nickname" autocomplete="off" placeholder={w.placeholders.nickname} data-wl-nickname />
+        <p class="wl-help">{w.help.nickname}</p>
+        <p class="wl-status hidden" data-wl-status-nick aria-live="polite"></p>
+      </div>
+
+      <div class="wl-field">
+        <label class="wl-label" for="wl-email">{w.fields.email}<span class="wl-req">*</span></label>
+        <input id="wl-email" class="waitlist-input w-full" type="email" name="email" required autocomplete="email" placeholder={w.placeholders.email} data-wl-email />
+        <p class="wl-help">{w.help.email}</p>
+        <p class="wl-status hidden" data-wl-status-email aria-live="polite"></p>
+      </div>
+
+      <div class="wl-field">
+        <label class="wl-label" for="wl-referred">{w.fields.referred}</label>
+        <input id="wl-referred" class="waitlist-input w-full" type="text" name="referred" autocomplete="off" placeholder={w.placeholders.referred} data-wl-referred />
+        <p class="wl-help">{w.help.referred}</p>
+      </div>
+      </div>
+
+      <div class="wl-field">
+        <label class="wl-label">{w.fields.avatar}</label>
+        <div class="wl-avatars" role="radiogroup" aria-label={w.fields.avatar}>
+          {AVATARS.map((a, i) => (
+            <button
+              type="button"
+              class:list={['wl-avatar', i === 0 && 'is-selected']}
+              data-avatar-opt={a.id}
+              role="radio"
+              aria-checked={i === 0 ? 'true' : 'false'}
+              title={a.label}
+              aria-label={a.label}
+            >
+              <span class="wl-avatar-art" set:html={a.svg} />
+            </button>
+          ))}
+        </div>
+        <input type="hidden" data-wl-avatar value="avatar_1" />
+        <p class="wl-help">{w.help.avatar}</p>
+      </div>
+
+      <p class="text-sm font-medium hidden" style="color: var(--alert-rose);" data-wl-error aria-live="polite"></p>
+
+      <button type="submit" class="btn-cta w-full mt-1" data-wl-submit>
+        <span data-wl-submit-label>{w.submit}</span>
+        <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+      </button>
+    </form>
+
+    <p class="mt-4 text-sm font-medium hidden" style="color: var(--win-emerald);" data-wl-success>
+      {w.success}
+    </p>
+  </div>
+</div>
+
+<style>
+  .wl-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 200ms ease;
+    overflow-y: auto;
+  }
+  .wl-overlay[hidden] { display: none; }
+  .wl-overlay.is-open { opacity: 1; }
+
+  .wl-panel {
+    position: relative;
+    width: 100%;
+    max-width: 42rem;
+    background: rgba(10, 12, 20, 0.96);
+    border: 1px solid var(--hairline-strong);
+    border-radius: 18px;
+    padding: 2rem;
+    box-shadow: var(--shadow-soft-chrome);
+    transform: translateY(12px) scale(0.98);
+    transition: transform 240ms cubic-bezier(0.2, 0.85, 0.2, 1);
+  }
+  .wl-overlay.is-open .wl-panel { transform: translateY(0) scale(1); }
+
+  .wl-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--hairline);
+    transition: color 150ms ease, background 150ms ease;
+  }
+  .wl-close:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+
+  .wl-grid { display: grid; grid-template-columns: 1fr; gap: 1rem 1.25rem; align-items: start; }
+  @media (min-width: 480px) {
+    .wl-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .wl-field { display: flex; flex-direction: column; gap: 0.4rem; }
+  /* The global .waitlist-input grows in the hero's row layout; keep it a
+     fixed height here so it never stretches to fill a taller grid cell. */
+  .wl-field .waitlist-input { flex: 0 0 auto; }
+  .wl-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .wl-req { color: var(--brand-sky); margin-left: 0.2em; }
+  .wl-help { font-size: 0.72rem; line-height: 1.4; color: rgba(255, 255, 255, 0.4); }
+
+  /* Live-validation feedback */
+  .waitlist-input.is-valid { border-color: var(--win-emerald) !important; }
+  .waitlist-input.is-invalid { border-color: var(--alert-rose) !important; }
+  .wl-status { font-size: 0.72rem; line-height: 1.4; display: flex; align-items: center; gap: 0.3rem; }
+  .wl-status.ok { color: var(--win-emerald); }
+  .wl-status.bad { color: var(--alert-rose); }
+  .wl-status.checking { color: rgba(255, 255, 255, 0.45); }
+
+  /* Avatar picker */
+  .wl-avatars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
+  .wl-avatar {
+    aspect-ratio: 1;
+    border-radius: 14px;
+    border: 2px solid var(--hairline);
+    background: rgba(255, 255, 255, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem;
+    cursor: pointer;
+    transition: border-color 150ms ease, transform 150ms ease, background 150ms ease;
+  }
+  .wl-avatar-art { display: block; width: 100%; height: 100%; }
+  .wl-avatar-art svg { width: 100%; height: 100%; display: block; }
+  .wl-avatar:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.06); }
+  .wl-avatar.is-selected {
+    border-color: var(--brand-purple);
+    background: rgba(126, 59, 255, 0.12);
+    box-shadow: 0 0 0 1px var(--brand-purple), 0 10px 24px -12px rgba(126, 59, 255, 0.6);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wl-overlay, .wl-panel, .wl-avatar { transition: none; }
+  }
+</style>
+
+<script define:vars={{ CFG, ERR: w.errors, STATUS: w.status, SUBMIT_LABEL: w.submit, SUBMITTING_LABEL: w.submitting }}>
+  const overlay = document.querySelector('[data-waitlist-modal]');
+  if (overlay) {
+    const $ = (s) => overlay.querySelector(s);
+    const form = $('[data-wl-form]');
+    const nameEl = $('[data-wl-name]');
+    const emailEl = $('[data-wl-email]');
+    const nickEl = $('[data-wl-nickname]');
+    const refEl = $('[data-wl-referred]');
+    const avatarEl = $('[data-wl-avatar]');
+    const statusEmail = $('[data-wl-status-email]');
+    const statusNick = $('[data-wl-status-nick]');
+    const errEl = $('[data-wl-error]');
+    const successEl = $('[data-wl-success]');
+    const submitBtn = $('[data-wl-submit]');
+    const submitLabel = $('[data-wl-submit-label]');
+    let lastFocused = null;
+
+    // ---- Avatar selection ----
+    overlay.querySelectorAll('[data-avatar-opt]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        overlay.querySelectorAll('[data-avatar-opt]').forEach((b) => {
+          b.classList.remove('is-selected');
+          b.setAttribute('aria-checked', 'false');
+        });
+        btn.classList.add('is-selected');
+        btn.setAttribute('aria-checked', 'true');
+        avatarEl.value = btn.getAttribute('data-avatar-opt');
+      });
+    });
+
+    // ---- CSV-backed "taken" sets (cached per modal open) ----
+    const parseCsv = (text) => {
+      const rows = []; let row = []; let val = ''; let q = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (q) {
+          if (c === '"') { if (text[i + 1] === '"') { val += '"'; i++; } else q = false; }
+          else val += c;
+        } else if (c === '"') q = true;
+        else if (c === ',') { row.push(val); val = ''; }
+        else if (c === '\n') { row.push(val); rows.push(row); row = []; val = ''; }
+        else if (c === '\r') { /* skip */ }
+        else val += c;
+      }
+      if (val.length || row.length) { row.push(val); rows.push(row); }
+      return rows;
+    };
+
+    const loadTaken = async () => {
+      if (!CFG.responsesCsv) return null;
+      try {
+        const res = await fetch(CFG.responsesCsv, { cache: 'no-store' });
+        const rows = parseCsv(await res.text());
+        if (!rows.length) return null;
+        const header = rows[0].map((h) => h.trim().toLowerCase());
+        const ei = header.indexOf(String(CFG.emailCol).toLowerCase());
+        const ni = header.indexOf(String(CFG.nicknameCol).toLowerCase());
+        const emails = new Set(); const nicks = new Set();
+        for (let r = 1; r < rows.length; r++) {
+          if (ei >= 0 && rows[r][ei]) emails.add(rows[r][ei].trim().toLowerCase());
+          if (ni >= 0 && rows[r][ni]) nicks.add(rows[r][ni].trim().toLowerCase());
+        }
+        return { emails, nicks };
+      } catch {
+        return null;
+      }
+    };
+
+    let takenPromise = null;
+    const getTaken = () => (takenPromise ??= loadTaken());
+
+    // ---- Live validation helpers ----
+    const emailValid = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+    const setStatus = (statusEl, inputEl, kind, msg) => {
+      inputEl.classList.remove('is-valid', 'is-invalid');
+      statusEl.classList.remove('ok', 'bad', 'checking', 'hidden');
+      if (kind === 'clear') { statusEl.classList.add('hidden'); statusEl.textContent = ''; return; }
+      if (kind === 'ok') inputEl.classList.add('is-valid');
+      if (kind === 'bad') inputEl.classList.add('is-invalid');
+      statusEl.classList.add(kind);
+      statusEl.textContent = msg;
+    };
+
+    const debounce = (fn, ms = 400) => {
+      let id; return (...a) => { clearTimeout(id); id = setTimeout(() => fn(...a), ms); };
+    };
+
+    const checkEmail = async () => {
+      const v = emailEl.value.trim();
+      if (!v) return setStatus(statusEmail, emailEl, 'clear');
+      if (!emailValid(v)) return setStatus(statusEmail, emailEl, 'bad', ERR.email);
+      setStatus(statusEmail, emailEl, 'checking', STATUS.checking);
+      const taken = await getTaken();
+      if (emailEl.value.trim() !== v) return; // value changed mid-check
+      if (taken && taken.emails.has(v.toLowerCase())) setStatus(statusEmail, emailEl, 'bad', ERR.emailTaken);
+      else setStatus(statusEmail, emailEl, 'ok', STATUS.emailOk);
+    };
+
+    const checkNick = async () => {
+      const v = nickEl.value.trim();
+      if (!v) return setStatus(statusNick, nickEl, 'clear'); // blank → auto-generated later
+      setStatus(statusNick, nickEl, 'checking', STATUS.checking);
+      const taken = await getTaken();
+      if (nickEl.value.trim() !== v) return;
+      if (taken && taken.nicks.has(v.toLowerCase())) setStatus(statusNick, nickEl, 'bad', ERR.nicknameTaken);
+      else setStatus(statusNick, nickEl, 'ok', STATUS.nickOk);
+    };
+
+    emailEl.addEventListener('input', debounce(checkEmail));
+    nickEl.addEventListener('input', debounce(checkNick));
+
+    // Fit each avatar thumbnail to its real content so they're all the same
+    // size. Runs on open because getBBox needs the modal to be visible.
+    let avatarsNormalized = false;
+    const normalizeAvatars = () => {
+      if (avatarsNormalized) return;
+      let ok = true;
+      overlay.querySelectorAll('[data-avatar-opt] svg').forEach((svg) => {
+        try {
+          const bb = svg.getBBox();
+          if (!bb.width || !bb.height) { ok = false; return; }
+          const pad = 4;
+          svg.setAttribute('viewBox', `${(bb.x - pad).toFixed(1)} ${(bb.y - pad).toFixed(1)} ${(bb.width + pad * 2).toFixed(1)} ${(bb.height + pad * 2).toFixed(1)}`);
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        } catch { ok = false; }
+      });
+      avatarsNormalized = ok;
+    };
+
+    // ---- Open / close ----
+    const open = () => {
+      lastFocused = document.activeElement;
+      overlay.hidden = false;
+      document.body.style.overflow = 'hidden';
+      takenPromise = null; // refresh the taken sets on each open
+      getTaken();
+      requestAnimationFrame(() => {
+        overlay.classList.add('is-open');
+        normalizeAvatars();
+        nameEl?.focus();
+      });
+    };
+    const close = () => {
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      setTimeout(() => { overlay.hidden = true; }, 220);
+      lastFocused?.focus?.();
+    };
+
+    document.addEventListener('click', (e) => {
+      const trigger = e.target?.closest?.('[data-open-waitlist]');
+      if (trigger) { e.preventDefault(); open(); }
+    });
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+    $('[data-wl-close]')?.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !overlay.hidden) close(); });
+
+    const showError = (msg) => { if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); } };
+    const clearError = () => errEl?.classList.add('hidden');
+
+    const slug = (s) =>
+      s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '');
+    const genNick = (name, takenNicks) => {
+      const base = (slug(name).slice(0, 12) || 'player');
+      for (let k = 0; k < 25; k++) {
+        const cand = base + Math.floor(100 + Math.random() * 900);
+        if (!takenNicks || !takenNicks.has(cand.toLowerCase())) return cand;
+      }
+      return base + String(Date.now()).slice(-5);
+    };
+
+    const submitToForm = async (data) => {
+      if (!CFG.action || !CFG.fields.email) return; // not configured → skip silently
+      const body = new URLSearchParams();
+      if (CFG.fields.name) body.append(CFG.fields.name, data.name);
+      body.append(CFG.fields.email, data.email);
+      if (CFG.fields.nickname) body.append(CFG.fields.nickname, data.nickname);
+      if (CFG.fields.referred && data.referred) body.append(CFG.fields.referred, data.referred);
+      if (CFG.fields.avatar && data.avatar) body.append(CFG.fields.avatar, data.avatar);
+      await fetch(CFG.action, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body,
+      });
+    };
+
+    // ---- Submit (final guard re-checks the same cached sets) ----
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearError();
+      const name = nameEl.value.trim();
+      const email = emailEl.value.trim();
+      const referred = refEl.value.trim();
+      const avatar = avatarEl.value || 'avatar_1';
+      let nickname = nickEl.value.trim();
+
+      if (!name) { showError(ERR.name); nameEl.focus(); return; }
+      if (!emailValid(email)) { showError(ERR.email); emailEl.focus(); return; }
+
+      submitBtn.disabled = true;
+      if (submitLabel) submitLabel.textContent = SUBMITTING_LABEL;
+
+      const taken = await getTaken();
+      const reenable = () => { submitBtn.disabled = false; if (submitLabel) submitLabel.textContent = SUBMIT_LABEL; };
+      if (taken && taken.emails.has(email.toLowerCase())) {
+        showError(ERR.emailTaken); setStatus(statusEmail, emailEl, 'bad', ERR.emailTaken); reenable(); emailEl.focus(); return;
+      }
+      if (nickname) {
+        if (taken && taken.nicks.has(nickname.toLowerCase())) {
+          showError(ERR.nicknameTaken); setStatus(statusNick, nickEl, 'bad', ERR.nicknameTaken); reenable(); nickEl.focus(); return;
+        }
+      } else {
+        nickname = genNick(name, taken ? taken.nicks : null);
+      }
+
+      try {
+        await submitToForm({ name, email, nickname, referred, avatar });
+      } catch {
+        showError(ERR.generic); reenable(); return;
+      }
+
+      form.classList.add('hidden');
+      successEl?.classList.remove('hidden');
+      window.dispatchEvent(new CustomEvent('waitlist:joined'));
+      setTimeout(close, 1900);
+    });
+  }
+</script>

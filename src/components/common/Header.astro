@@ -1,0 +1,221 @@
+---
+import Logo from '~/components/common/Logo.astro';
+import { t, SUPPORTED_LOCALES, LOCALE_LABELS, localePath, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const nav = t<{
+  links: { text: string; href: string; active?: boolean }[];
+  cta: { primary: string };
+  streakLabel: string;
+  languageAriaLabel: string;
+  mobileMenuOpen: string;
+  mobileMenuClose: string;
+}>(locale, 'nav');
+
+// Active state + cross-page anchor resolution (so anchors work from /leaderboard).
+const here = (Astro.url.pathname.replace(/\/+$/, '') || '/');
+const home = ((localePath(locale, '/') || '/').replace(/\/+$/, '') || '/');
+const onHome = here === home;
+const resolveHref = (href: string) => {
+  if (!href.startsWith('#')) return href;
+  return onHome ? href : `${home === '/' ? '' : home}/${href}`.replace(/\/{2,}/g, '/');
+};
+const isActive = (href: string) => {
+  if (href.startsWith('#')) return false; // anchor links are highlighted client-side via scroll-spy
+  const path = (href.split('#')[0] || '/').replace(/\/+$/, '') || '/';
+  return here === path;
+};
+---
+
+<!-- v5 mockup — sticky 64px glass header. -->
+<header id="header" class="sticky top-0 z-50 w-full glass-header h-16">
+  <div class="max-w-[1280px] mx-auto h-full px-5 md:px-8 flex items-center justify-between gap-6">
+    <a href={localePath(locale, '/')} class="flex items-center shrink-0">
+      <Logo size="md" />
+    </a>
+
+    <button
+      type="button"
+      class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/[0.04] text-white/75 order-3 ml-auto"
+      data-mobile-toggle
+      data-aria-open={nav.mobileMenuOpen}
+      data-aria-close={nav.mobileMenuClose}
+      aria-label={nav.mobileMenuOpen}
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <svg data-mobile-icon-open width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+      <svg data-mobile-icon-close class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <nav class="hidden md:flex items-center gap-7" aria-label="Main">
+      {
+        nav.links.map((link) => (
+          <a href={resolveHref(link.href)} class:list={['nav-link', isActive(link.href) && 'is-active']}>
+            {link.text}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-2.5 shrink-0">
+      <div
+        class="hidden sm:inline-flex items-center rounded-full border border-white/10 p-0.5"
+        role="group"
+        aria-label={nav.languageAriaLabel}
+      >
+        {
+          SUPPORTED_LOCALES.map((l) => {
+            const active = l === locale;
+            return (
+              <a
+                href={localePath(l, '/')}
+                class:list={[
+                  'inline-flex items-center justify-center px-2.5 py-1 rounded-full font-mono text-[10px] font-semibold uppercase tracking-[0.22em] transition-colors',
+                  active ? 'bg-white text-black' : 'text-white/55 hover:text-white',
+                ]}
+                aria-current={active ? 'true' : undefined}
+              >
+                {LOCALE_LABELS[l]}
+              </a>
+            );
+          })
+        }
+      </div>
+
+      <span class="streak-pill hidden md:inline-flex">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2c1 4 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 1-3s2 1 2 3c0 1 1 2 2 2s2-1 2-2c0-3-3-5-3-9z"/>
+        </svg>
+        <span>{nav.streakLabel}</span>
+      </span>
+
+      <button
+        type="button"
+        class="btn-primary hidden sm:inline-flex"
+        data-open-waitlist
+      >
+        {nav.cta.primary}
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu drawer -->
+  <div
+    id="mobile-menu"
+    class="md:hidden absolute left-0 right-0 top-16 px-4"
+    data-mobile-menu
+    hidden
+  >
+    <div class="rounded-2xl border border-white/10 bg-[#0a0c14]/95 backdrop-blur-xl p-3 shadow-[0_24px_56px_-12px_rgba(0,0,0,0.7)]">
+      <nav class="flex flex-col" aria-label="Mobile">
+        {
+          nav.links.map((link) => (
+            <a
+              href={resolveHref(link.href)}
+              class:list={['nav-link block py-3 px-3 rounded-lg hover:bg-white/[0.04]', isActive(link.href) && 'is-active']}
+              data-mobile-link
+            >
+              {link.text}
+            </a>
+          ))
+        }
+      </nav>
+      <div class="mt-2 pt-3 border-t border-white/8 flex items-center justify-between gap-3">
+        <div
+          class="inline-flex items-center rounded-full border border-white/10 p-0.5"
+          role="group"
+          aria-label={nav.languageAriaLabel}
+        >
+          {
+            SUPPORTED_LOCALES.map((l) => {
+              const active = l === locale;
+              return (
+                <a
+                  href={localePath(l, '/')}
+                  class:list={[
+                    'inline-flex items-center justify-center px-2.5 py-1 rounded-full font-mono text-[10px] font-semibold uppercase tracking-[0.22em] transition-colors',
+                    active ? 'bg-white text-black' : 'text-white/55 hover:text-white',
+                  ]}
+                  aria-current={active ? 'true' : undefined}
+                >
+                  {LOCALE_LABELS[l]}
+                </a>
+              );
+            })
+          }
+        </div>
+        <button type="button" class="btn-primary" data-open-waitlist data-mobile-link>
+          {nav.cta.primary}
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const SCROLL_THRESHOLD = 20;
+  const header = document.getElementById('header');
+  function handleScroll() {
+    if (!header) return;
+    if (window.scrollY > SCROLL_THRESHOLD) header.classList.add('scroll');
+    else header.classList.remove('scroll');
+  }
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  handleScroll();
+
+  // Scroll-spy — highlight the nav link whose section is currently in view.
+  const navLinks = Array.from(document.querySelectorAll('#header .nav-link'));
+  const spy = navLinks
+    .map((a) => {
+      const href = a.getAttribute('href') || '';
+      const hash = href.includes('#') ? href.slice(href.indexOf('#') + 1) : '';
+      const el = hash ? document.getElementById(hash) : null;
+      return el ? { a, el } : null;
+    })
+    .filter(Boolean);
+
+  function updateSpy() {
+    if (!spy.length) return;
+    let cur = spy[0];
+    for (const s of spy) {
+      if (s.el.getBoundingClientRect().top <= 140) cur = s;
+    }
+    navLinks.forEach((a) => {
+      const inSpy = spy.some((s) => s.a === a);
+      if (inSpy) a.classList.toggle('is-active', !!cur && cur.a === a);
+    });
+  }
+  window.addEventListener('scroll', updateSpy, { passive: true });
+  window.addEventListener('resize', updateSpy);
+  updateSpy();
+
+  // Mobile menu
+  const mToggle = document.querySelector('[data-mobile-toggle]') as HTMLButtonElement | null;
+  const mMenu = document.querySelector('[data-mobile-menu]') as HTMLElement | null;
+  const iOpen = document.querySelector('[data-mobile-icon-open]') as HTMLElement | null;
+  const iClose = document.querySelector('[data-mobile-icon-close]') as HTMLElement | null;
+  const setMobileOpen = (open: boolean) => {
+    if (!mMenu || !mToggle) return;
+    mMenu.hidden = !open;
+    mToggle.setAttribute('aria-expanded', String(open));
+    const lblOpen = mToggle.getAttribute('data-aria-open') || 'Open menu';
+    const lblClose = mToggle.getAttribute('data-aria-close') || 'Close menu';
+    mToggle.setAttribute('aria-label', open ? lblClose : lblOpen);
+    iOpen?.classList.toggle('hidden', open);
+    iClose?.classList.toggle('hidden', !open);
+  };
+  mToggle?.addEventListener('click', () => setMobileOpen(mMenu?.hidden ?? true));
+  document.querySelectorAll('[data-mobile-link]').forEach((a) => a.addEventListener('click', () => setMobileOpen(false)));
+  const mq = window.matchMedia('(min-width: 768px)');
+  mq.addEventListener('change', () => { if (mq.matches) setMobileOpen(false); });
+</script>

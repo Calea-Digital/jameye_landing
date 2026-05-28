@@ -1,0 +1,358 @@
+---
+import { Icon } from 'astro-icon/components';
+import { t, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+interface Side {
+  name: string;
+  image?: string;
+  icon?: string;
+  odds: number;
+}
+
+interface Category {
+  id: string;
+  label: string;
+  question: string;
+  sideA: Side;
+  sideB: Side;
+  volume: string;
+  traders: string;
+}
+
+const data = t<{
+  eyebrow: string;
+  title: { lead: string; ital: string };
+  sub: string;
+  volumeLabel: string;
+  tradersLabel: string;
+  liveLabel: string;
+  vsLabel: string;
+  categories: Category[];
+}>(locale, 'how-it-works');
+
+const INTERVAL_MS = 5000;
+
+const CHART_W = 320;
+const CHART_H = 140;
+const SERIES_N = 64;
+
+// Brand book §02 — Alert Rose for the NO/loss side, Brand Blue for the YES side.
+const SIDE_A_COLOR = '#f43f5e';
+const SIDE_B_COLOR = '#2962ff';
+
+function hashSeed(s: string): number {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function mulberry32(seed: number) {
+  return () => {
+    let t = (seed = (seed + 0x6d2b79f5) >>> 0);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function buildSeries(catId: string, finalOdds: number, n = SERIES_N): number[] {
+  const rng = mulberry32(hashSeed(catId));
+  const series: number[] = [];
+  let v = 30 + rng() * 40;
+  for (let i = 0; i < n; i++) {
+    v += (rng() - 0.5) * 12;
+    v = Math.max(15, Math.min(85, v));
+    const t = i / (n - 1);
+    const driftStart = 0.65;
+    const driftAmount = Math.max(0, (t - driftStart) / (1 - driftStart));
+    v = v * (1 - driftAmount * 0.85) + finalOdds * (driftAmount * 0.85);
+    series.push(v);
+  }
+  series[n - 1] = finalOdds;
+  return series;
+}
+
+function point(v: number, i: number, n: number) {
+  const x = (i / (n - 1)) * CHART_W;
+  const y = CHART_H - (v / 100) * CHART_H;
+  return { x, y };
+}
+
+function buildLine(series: number[]): string {
+  return series
+    .map((v, i) => {
+      const { x, y } = point(v, i, series.length);
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(' ');
+}
+
+const charts = data.categories.map((cat) => {
+  const seriesA = buildSeries(cat.id, cat.sideA.odds);
+  const seriesB = seriesA.map((v) => 100 - v);
+  const lastA = point(seriesA[seriesA.length - 1], seriesA.length - 1, seriesA.length);
+  const lastB = point(seriesB[seriesB.length - 1], seriesB.length - 1, seriesB.length);
+  return {
+    id: cat.id,
+    lineA: buildLine(seriesA),
+    lineB: buildLine(seriesB),
+    lastA,
+    lastB,
+  };
+});
+---
+
+<section id="how-it-works" class="py-12 md:py-16">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="section-head">
+      <span class="eyebrow">{data.eyebrow}</span>
+      <h2 class="section-title text-white">
+        {data.title.lead} <span class="ital ital-grad">{data.title.ital}</span>
+      </h2>
+      <p class="section-sub">{data.sub}</p>
+    </div>
+
+    <div
+      class="glass-card px-5 md:px-10 py-8 md:py-10 flex flex-col w-full"
+      data-pickaside
+      data-interval={INTERVAL_MS}
+    >
+      <div class="flex flex-wrap justify-center gap-2" role="tablist">
+        {
+          data.categories.map((cat, i) => (
+            <button
+              type="button"
+              role="tab"
+              data-tab={cat.id}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              aria-controls={`panel-${cat.id}`}
+              data-active={i === 0 ? 'true' : 'false'}
+              class="chip"
+            >
+              {cat.label}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="mt-6 md:mt-8 flex-1 flex items-center">
+        <div class="w-full relative">
+          {
+            data.categories.map((cat, i) => {
+              const chart = charts.find((c) => c.id === cat.id)!;
+              return (
+                <div
+                  id={`panel-${cat.id}`}
+                  data-panel={cat.id}
+                  role="tabpanel"
+                  aria-hidden={i === 0 ? 'false' : 'true'}
+                  class:list={[
+                    'transition-opacity duration-500 ease-out',
+                    i === 0
+                      ? 'opacity-100 relative'
+                      : 'opacity-0 absolute inset-0 pointer-events-none',
+                  ]}
+                >
+                  <div class="text-center max-w-2xl mx-auto">
+                    <h3 class="text-xl md:text-3xl lg:text-4xl font-light text-white leading-tight tracking-tight">
+                      {cat.question}
+                    </h3>
+                  </div>
+
+                  <div class="mt-6 md:mt-10 grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-8 lg:gap-12">
+                    <div class="flex flex-col items-center gap-3">
+                      <div class="w-24 h-24 sm:w-36 sm:h-36 md:w-56 md:h-56 lg:w-64 lg:h-64 flex items-center justify-center">
+                        {cat.sideA.image ? (
+                          <img
+                            src={cat.sideA.image}
+                            alt={cat.sideA.name}
+                            class="w-full h-full object-contain drop-shadow-[0_10px_28px_rgba(239,68,68,0.4)]"
+                          />
+                        ) : cat.sideA.icon ? (
+                          <div class="w-full h-full rounded-full bg-red-500/15 border-2 border-red-500/40 flex items-center justify-center">
+                            <Icon name={cat.sideA.icon} class="w-1/2 h-1/2 text-red-500" />
+                          </div>
+                        ) : null}
+                      </div>
+                      <div class="meta-label" style={`color:${SIDE_A_COLOR}`}>
+                        {cat.sideA.name}
+                      </div>
+                      <div class="num text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-none" style={`color:${SIDE_A_COLOR}`}>
+                        {cat.sideA.odds}%
+                      </div>
+                    </div>
+
+                    <div class="flex flex-col items-center w-24 sm:w-36 md:w-64 lg:w-72">
+                      <svg
+                        viewBox={`0 0 ${CHART_W} ${CHART_H}`}
+                        preserveAspectRatio="none"
+                        class="w-full h-20 sm:h-28 md:h-36 lg:h-40 overflow-visible"
+                        aria-hidden="true"
+                      >
+                        <g stroke="currentColor" class="text-border" stroke-width="1" stroke-dasharray="2 6" opacity="0.5">
+                          <line x1="0" y1={CHART_H * 0.5} x2={CHART_W} y2={CHART_H * 0.5} />
+                        </g>
+
+                        <polyline
+                          points={chart.lineB}
+                          fill="none"
+                          stroke={SIDE_B_COLOR}
+                          stroke-width="2.4"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          vector-effect="non-scaling-stroke"
+                          opacity="0.95"
+                        />
+                        <polyline
+                          points={chart.lineA}
+                          fill="none"
+                          stroke={SIDE_A_COLOR}
+                          stroke-width="2.4"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          vector-effect="non-scaling-stroke"
+                          opacity="0.95"
+                        />
+
+                        <circle
+                          cx={chart.lastB.x}
+                          cy={chart.lastB.y}
+                          r="4"
+                          fill={SIDE_B_COLOR}
+                          stroke="var(--card)"
+                          stroke-width="2"
+                          vector-effect="non-scaling-stroke"
+                        />
+                        <circle
+                          cx={chart.lastA.x}
+                          cy={chart.lastA.y}
+                          r="4"
+                          fill={SIDE_A_COLOR}
+                          stroke="var(--card)"
+                          stroke-width="2"
+                          vector-effect="non-scaling-stroke"
+                        />
+                      </svg>
+                      <div class="mt-3 meta-label">{data.vsLabel}</div>
+                    </div>
+
+                    <div class="flex flex-col items-center gap-3">
+                      <div class="w-24 h-24 sm:w-36 sm:h-36 md:w-56 md:h-56 lg:w-64 lg:h-64 flex items-center justify-center">
+                        {cat.sideB.image ? (
+                          <img
+                            src={cat.sideB.image}
+                            alt={cat.sideB.name}
+                            class="w-full h-full object-contain drop-shadow-[0_10px_28px_rgba(59,130,246,0.45)]"
+                          />
+                        ) : cat.sideB.icon ? (
+                          <div class="w-full h-full rounded-full bg-blue-500/15 border-2 border-blue-500/40 flex items-center justify-center">
+                            <Icon name={cat.sideB.icon} class="w-1/2 h-1/2 text-blue-500" />
+                          </div>
+                        ) : null}
+                      </div>
+                      <div class="meta-label" style={`color:${SIDE_B_COLOR}`}>
+                        {cat.sideB.name}
+                      </div>
+                      <div class="num text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-none" style={`color:${SIDE_B_COLOR}`}>
+                        {cat.sideB.odds}%
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-6 md:mt-8 flex items-center justify-center gap-4 md:gap-6 text-xs text-white/55">
+                    <span>
+                      <span class="num text-white">{cat.volume}</span> <span class="meta-label">{data.volumeLabel}</span>
+                    </span>
+                    <span class="w-1 h-1 rounded-full bg-white/20" />
+                    <span>
+                      <span class="num text-white">{cat.traders}</span> <span class="meta-label">{data.tradersLabel}</span>
+                    </span>
+                    <span class="w-1 h-1 rounded-full bg-white/20" />
+                    <span class="inline-flex items-center gap-2">
+                      <span class="live-dot" />
+                      <span class="meta-label">{data.liveLabel}</span>
+                    </span>
+                  </div>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  type PanelEl = HTMLElement;
+  type TabEl = HTMLButtonElement;
+
+  document.querySelectorAll<HTMLElement>('[data-pickaside]').forEach((root) => {
+    const interval = Number(root.dataset.interval ?? 5000);
+    const tabs = Array.from(root.querySelectorAll<TabEl>('[data-tab]'));
+    const panels = Array.from(root.querySelectorAll<PanelEl>('[data-panel]'));
+    if (!tabs.length || !panels.length) return;
+
+    let activeIdx = 0;
+    let timer: number | undefined;
+    let visible = false;
+
+    const setActive = (idx: number) => {
+      activeIdx = (idx + tabs.length) % tabs.length;
+      tabs.forEach((tab, i) => {
+        const active = i === activeIdx;
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        tab.dataset.active = active ? 'true' : 'false';
+      });
+      panels.forEach((panel, i) => {
+        const active = i === activeIdx;
+        panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+        panel.classList.toggle('opacity-100', active);
+        panel.classList.toggle('relative', active);
+        panel.classList.toggle('opacity-0', !active);
+        panel.classList.toggle('absolute', !active);
+        panel.classList.toggle('inset-0', !active);
+        panel.classList.toggle('pointer-events-none', !active);
+      });
+    };
+
+    const start = () => {
+      stop();
+      timer = window.setInterval(() => setActive(activeIdx + 1), interval);
+    };
+    const stop = () => {
+      if (timer !== undefined) {
+        window.clearInterval(timer);
+        timer = undefined;
+      }
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        setActive(i);
+        if (visible) start();
+      });
+    });
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          visible = entry.isIntersecting;
+          if (visible) start();
+          else stop();
+        });
+      },
+      { threshold: 0.25 }
+    );
+    io.observe(root);
+  });
+</script>

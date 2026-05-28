@@ -1,0 +1,67 @@
+---
+import { t, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const data = t<{
+  eyebrow: string;
+  title: { lead: string; ital: string };
+  side: string;
+  cards: {
+    avatar: string;
+    avatarAlt: string;
+    tone: 'indigo-violet' | 'violet-magenta' | 'magenta-pink' | 'emerald-teal' | 'gold-orange';
+    tag: string;
+    name: string;
+    role: string;
+  }[];
+}>(locale, 'roster');
+---
+
+<section id="roster" class="py-12 md:py-16">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10 mb-14">
+      <div class="max-w-[720px]">
+        <span class="eyebrow">{data.eyebrow}</span>
+        <h2 class="section-title text-white" style="margin-top:1rem; text-align:left;">
+          {data.title.lead}<br/><span class="ital ital-grad">{data.title.ital}</span>
+        </h2>
+      </div>
+      <p class="max-w-[320px] text-[15px] text-white/65 leading-relaxed">{data.side}</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {
+        data.cards.map((c) => (
+          <div class="roster-card" data-tone={c.tone} data-scroll>
+            <div class="bg-grad"></div>
+
+            <span class="star" style="top:12%;right:12%;animation-delay:0s;">
+              <svg width="14" height="14" viewBox="0 0 16 16"><path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#FACC15"/></svg>
+            </span>
+            <span class="star" style="top:30%;left:8%;animation-delay:1s;">
+              <svg width="10" height="10" viewBox="0 0 16 16"><path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#FFFFFF" fill-opacity="0.6"/></svg>
+            </span>
+            <span class="star" style="bottom:38%;right:14%;animation-delay:1.8s;">
+              <svg width="12" height="12" viewBox="0 0 16 16"><path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#FFFFFF" fill-opacity="0.7"/></svg>
+            </span>
+
+            <div class="char-wrap">
+              <img src={c.avatar} alt={c.avatarAlt} loading="lazy" />
+            </div>
+
+            <div class="info">
+              <span class="tag">{c.tag}</span>
+              <div class="name">{c.name}</div>
+              <div class="role">{c.role}</div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

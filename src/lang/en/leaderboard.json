@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "title": "Leaderboard — Jameye",
+    "description": "The Jameye referral leaderboard. Invite forecasters, earn points, climb the ranks."
+  },
+  "eyebrow": "Season 1 · Referrals",
+  "title": { "lead": "The", "ital": "leaderboard." },
+  "sub": "Climb by inviting forecasters — every referral is worth +5 points. Movement is shown versus last week.",
+  "cols": { "rank": "#", "player": "Player", "points": "Points", "change": "7d" },
+  "perReferral": "+5 pts / referral",
+  "newBadge": "NEW",
+  "pointsSuffix": "pts",
+  "referralsOne": "referral",
+  "referralsMany": "referrals",
+  "states": {
+    "loading": "Loading the leaderboard…",
+    "empty": "No signups yet — be the first to join.",
+    "error": "Couldn't load the leaderboard right now. Please try again later."
+  }
+}

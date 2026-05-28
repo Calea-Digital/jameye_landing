@@ -1,0 +1,78 @@
+---
+import { t, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const data = t<{
+  eyebrow: string;
+  title: { lead: string; ital: string };
+  sub: string;
+  cardTitle: { lead: string; ital: string };
+  currentLabel: string;
+  currentValue: string;
+  tiers: { name: string; range: string; pct: string }[];
+}>(locale, 'progression');
+
+const TIER_ICONS = [
+  // Rookie · circle
+  '<circle cx="12" cy="12" r="9"/>',
+  // Trainee · star
+  '<path d="M12 3l2 7h7l-5.5 4 2 7L12 17l-5.5 4 2-7L3 10h7z"/>',
+  // Analyst · chart up
+  '<path d="M3 17l6-6 4 4 8-8M14 7h7v7"/>',
+  // Sharp · medal
+  '<path d="M6 21V8a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v13M3 21h18M9 12h6M9 16h6"/>',
+  // Superforecaster · trophy star
+  '<path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/>',
+];
+---
+
+<section class="py-12 md:py-16">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="section-head">
+      <span class="eyebrow">{data.eyebrow}</span>
+      <h2 class="section-title text-white">
+        {data.title.lead} <span class="ital ital-grad">{data.title.ital}</span>
+      </h2>
+      <p class="section-sub">{data.sub}</p>
+    </div>
+
+    <div class="prog-card" data-scroll>
+      <div class="flex justify-between items-center flex-wrap gap-5 px-8 md:px-10 py-8 border-b border-white/8">
+        <h3 class="text-[1.6rem] font-medium tracking-tight text-white">
+          {data.cardTitle.lead} <span class="ital ital-lavender">{data.cardTitle.ital}</span>
+        </h3>
+        <div class="flex items-baseline gap-3">
+          <span class="meta-label">{data.currentLabel}</span>
+          <span class="num font-extrabold text-[2rem] grad-text-gold leading-none">{data.currentValue}</span>
+        </div>
+      </div>
+
+      <div class="prog-tiers">
+        {
+          data.tiers.map((tier, i) => (
+            <div class:list={['prog-tier', `t${i + 1}`]}>
+              <div class="tier-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true" set:html={TIER_ICONS[i]} />
+              </div>
+              <div class="tier-name">{tier.name}</div>
+              <div class="tier-range">{tier.range}</div>
+              <div class="tier-pct">{tier.pct}</div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="prog-line">
+        <div class="prog-track">
+          <div class="prog-fill"></div>
+          <div class="prog-marker"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

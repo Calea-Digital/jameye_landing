@@ -1,0 +1,15 @@
+{
+  "links": [
+    { "text": "Jugar", "href": "#hero" },
+    { "text": "Personajes", "href": "#roster" },
+    { "text": "Cómo funciona", "href": "#how-it-works" },
+    { "text": "Ranking", "href": "/es/leaderboard/" }
+  ],
+  "cta": {
+    "primary": "Unirme"
+  },
+  "streakLabel": "7d",
+  "languageAriaLabel": "Cambiar idioma",
+  "mobileMenuOpen": "Abrir menú",
+  "mobileMenuClose": "Cerrar menú"
+}

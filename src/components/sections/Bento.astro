@@ -1,0 +1,439 @@
+---
+import { Icon } from 'astro-icon/components';
+import { t, type Locale } from '~/utils/i18n';
+import avatarRawSrc from '../../../public/avatar/02-edge-score-explorer.svg?raw';
+
+// Tag the explorer's pupil group so its eyes can follow the cursor.
+const avatarRaw = avatarRawSrc.replace(
+  '<g><circle cx="50" cy="55" r="3" fill="#0a1330">',
+  '<g id="bento-pupils"><circle cx="50" cy="55" r="3" fill="#0a1330">'
+);
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+type Conf = {
+  coin: string; coinSub: string; slight: string; moderate: string; confident: string; bold: string;
+  yes: string; no: string; tilt: string; lean: string; strong: string; near: string;
+};
+
+const data = t<{
+  eyebrow: string;
+  title: { lead: string; ital: string };
+  sub: string;
+  speech: string;
+  game: {
+    tryLabel: string; roundLabel: string; ofLabel: string; noSignup: string; liveLabel: string;
+    anchorNo: string; anchorYes: string; lock: string; next: string;
+    waitlistMsg: string; waitlistCta: string;
+    youLabel: string; truthLabel: string; edgeLabel: string; totalLabel: string;
+    conf: Conf;
+    verdicts: { good: string; ok: string; bad: string };
+    reactions: { good: string; ok: string; bad: string };
+    questions: { q: string; truth: number; answer: string }[];
+  };
+}>(locale, 'bento');
+
+const g = data.game;
+---
+
+<section class="py-12 md:py-16">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+    <div class="section-head">
+      <span class="eyebrow">{data.eyebrow}</span>
+      <h2 class="section-title text-white">
+        {data.title.lead} <span class="ital ital-grad">{data.title.ital}</span>
+      </h2>
+      <p class="section-sub">{data.sub}</p>
+    </div>
+
+    <div class="grid lg:grid-cols-[0.8fr_1fr] gap-10 lg:gap-14 items-center max-w-[980px] mx-auto">
+
+      <!-- LEFT — speaking avatar -->
+      <div class="relative flex justify-center order-2 lg:order-1" data-scroll>
+        <div class="relative" style="width:260px;max-width:70%;">
+          <!-- Speech bubble -->
+          <div class="bento-speech" data-speech>{data.speech}</div>
+          <!-- EDGE earned badge -->
+          <div class="bento-edge" data-edge-badge>
+            <span class="lbl">{g.totalLabel}</span>
+            <span class="num val" data-edge-total>0</span>
+          </div>
+          <div style="filter: drop-shadow(0 30px 60px rgba(126,59,255,0.45));" data-bento-avatar set:html={avatarRaw} />
+        </div>
+      </div>
+
+      <!-- RIGHT — interactive forecast card -->
+      <div class="order-1 lg:order-2" data-scroll>
+        <div class="game-card" data-game>
+          <div class="flex items-center justify-between mb-4">
+            <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-white/45">
+              <strong class="text-prize-gold font-semibold" style="color:var(--prize-gold);">{g.tryLabel}</strong>
+              · {g.roundLabel} <span data-round>1</span> {g.ofLabel} {g.questions.length} · {g.noSignup}
+            </div>
+            <span class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em]" style="color:var(--win-emerald);">
+              <span class="live-dot"></span>{g.liveLabel}
+            </span>
+          </div>
+
+          <!-- Question + slider play state -->
+          <div data-play>
+            <p class="game-question" data-question>{g.questions[0].q}</p>
+
+            <div class="flex items-end justify-between mb-3">
+              <div>
+                <span class="num game-pct" data-pct>50</span><span class="num text-2xl text-white/40">%</span>
+              </div>
+              <div class="text-right font-mono text-[11px] uppercase tracking-[0.16em] text-white/60 leading-snug">
+                <strong class="block text-white text-xs mb-0.5" data-conf-bold>{g.conf.coin}</strong>
+                <span data-conf-sub>{g.conf.coinSub}</span>
+              </div>
+            </div>
+
+            <div class="game-slider-wrap">
+              <div class="game-rail"><div class="game-rail-grad"></div></div>
+              <input type="range" min="0" max="100" value="50" step="1" class="game-slider" data-slider aria-label="Probability" />
+            </div>
+
+            <div class="flex justify-between font-mono text-[10px] uppercase tracking-[0.16em] mt-1">
+              <span style="color:#ff7e92;">{g.anchorNo}</span>
+              <span style="color:var(--brand-sky);">{g.anchorYes}</span>
+            </div>
+
+            <button type="button" class="btn-cta w-full mt-5" data-lock>
+              <Icon name="tabler:lock" class="w-3.5 h-3.5" />
+              {g.lock}
+            </button>
+          </div>
+
+          <!-- Reveal state -->
+          <div data-reveal hidden>
+            <div class="font-mono text-[11px] uppercase tracking-[0.28em] mb-3" data-verdict></div>
+            <p class="ital text-lg leading-snug mb-4 text-white" data-answer></p>
+            <div class="grid grid-cols-3 gap-3 mb-5">
+              <div class="reveal-cell">
+                <div class="reveal-k">{g.youLabel}</div>
+                <div class="num reveal-v" style="color:var(--brand-sky);" data-rev-you>50%</div>
+              </div>
+              <div class="reveal-cell">
+                <div class="reveal-k">{g.truthLabel}</div>
+                <div class="num reveal-v" style="color:var(--prize-gold);" data-rev-truth>0%</div>
+              </div>
+              <div class="reveal-cell">
+                <div class="reveal-k">{g.edgeLabel}</div>
+                <div class="num reveal-v" style="color:var(--win-emerald);" data-rev-edge>+0</div>
+              </div>
+            </div>
+            <button type="button" class="btn-soft w-full justify-center" data-next>
+              <span>{g.next}</span>
+              <Icon name="tabler:arrow-right" class="w-3 h-3" />
+            </button>
+
+            <!-- Shown after the final round -->
+            <div data-final hidden>
+              <p class="text-sm text-white/70 text-center mb-3 mt-1">{g.waitlistMsg}</p>
+              <button type="button" class="btn-cta w-full" data-open-waitlist>
+                {g.waitlistCta}
+                <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .game-card {
+    background: rgba(12, 12, 18, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--hairline-strong);
+    border-radius: 24px;
+    padding: 1.6rem 1.75rem;
+    box-shadow: var(--shadow-soft-chrome);
+  }
+  .game-question {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 1.3rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: #fff;
+    min-height: 3.4rem;
+    margin-bottom: 1.25rem;
+  }
+  .game-pct {
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: #fff;
+    transition: color 200ms ease;
+  }
+
+  /* Slider */
+  .game-slider-wrap { position: relative; padding: 14px 0; }
+  .game-rail {
+    position: relative; height: 6px; border-radius: 3px; overflow: hidden;
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .game-rail-grad {
+    position: absolute; inset: 0; border-radius: 3px;
+    background: linear-gradient(90deg, rgba(244,63,94,0.35), rgba(255,255,255,0.05) 50%, rgba(91,141,255,0.35));
+  }
+  .game-slider {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    appearance: none; -webkit-appearance: none; background: transparent; outline: none;
+    cursor: grab; margin: 0;
+  }
+  .game-slider:active { cursor: grabbing; }
+  .game-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--brand-purple);
+    box-shadow: 0 6px 20px rgba(126,59,255,0.7), inset 0 1px 0 rgba(255,255,255,0.8);
+    cursor: grab; transition: transform 150ms ease;
+  }
+  .game-slider::-webkit-slider-thumb:hover { transform: scale(1.12); }
+  .game-slider::-moz-range-thumb {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--brand-purple);
+    box-shadow: 0 6px 20px rgba(126,59,255,0.7); cursor: grab;
+  }
+
+  /* Reveal cells */
+  .reveal-cell {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 0.75rem;
+    text-align: center;
+  }
+  .reveal-k {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.35rem;
+  }
+  .reveal-v { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+  [data-verdict].good { color: var(--win-emerald); }
+  [data-verdict].ok   { color: var(--prize-gold); }
+  [data-verdict].bad  { color: var(--alert-rose); }
+
+  /* Speech bubble */
+  .bento-speech {
+    position: absolute; top: -8px; right: -24px; z-index: 6;
+    background: #fff; color: #1a1230;
+    padding: 0.5rem 0.9rem; border-radius: 16px;
+    font-size: 13px; font-weight: 700; white-space: nowrap;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    animation: bento-bubble 4s ease-in-out infinite;
+  }
+  .bento-speech::after {
+    content: ''; position: absolute; bottom: -6px; left: 18px;
+    width: 14px; height: 14px; background: #fff;
+    transform: rotate(45deg); border-radius: 2px;
+  }
+  @keyframes bento-bubble {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+
+  /* EDGE earned badge */
+  .bento-edge {
+    position: absolute; bottom: 8%; left: -28px; z-index: 6;
+    display: inline-flex; flex-direction: column; align-items: center;
+    background: var(--gradient-emerald-teal); color: #06281f;
+    padding: 0.5rem 1rem; border-radius: 999px;
+    box-shadow: 0 14px 30px -14px rgba(16,185,129,0.7), inset 0 1px 0 rgba(255,255,255,0.5);
+    transform: rotate(-4deg);
+  }
+  .bento-edge .lbl { font-family: var(--font-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+  .bento-edge .val { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em; transition: transform 250ms cubic-bezier(0.2,0.85,0.2,1); }
+  .bento-edge .val.bump { transform: scale(1.35); }
+
+  #bento-pupils { transition: transform 90ms linear; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bento-speech { animation: none; }
+    #bento-pupils { transition: none; }
+  }
+</style>
+
+<script define:vars={{ G: g, SPEECH: data.speech }}>
+  // ---- Web Audio cues (ported from the v15 reference) ----
+  let actx = null;
+  const initAudio = () => {
+    if (!actx) {
+      try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch { /* unsupported */ }
+    }
+  };
+  const tone = (freq = 880, dur = 0.04, vol = 0.03, type = 'sine') => {
+    if (!actx) return;
+    try {
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.connect(gain); gain.connect(actx.destination);
+      osc.type = type; osc.frequency.value = freq;
+      gain.gain.setValueAtTime(vol, actx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
+      osc.start(); osc.stop(actx.currentTime + dur);
+    } catch { /* ignore */ }
+  };
+  const lockSound = () => { tone(660, 0.06, 0.04); setTimeout(() => tone(990, 0.12, 0.045), 50); };
+  const clickPop = () => { tone(1800, 0.04, 0.025, 'triangle'); setTimeout(() => tone(900, 0.06, 0.02), 30); };
+  const goodSound = () => [523, 659, 784, 1047].forEach((f, n) => setTimeout(() => tone(f, 0.15, 0.05), n * 80));
+  const okSound = () => tone(523, 0.15, 0.05);
+  const badSound = () => { tone(196, 0.25, 0.05, 'sawtooth'); setTimeout(() => tone(150, 0.3, 0.05, 'sawtooth'), 90); };
+
+  const root = document.querySelector('[data-game]');
+  if (root) {
+    const Q = G.questions;
+    let i = 0;
+    let total = 0;
+
+    const $ = (sel, ctx = root) => ctx.querySelector(sel);
+    const playEl = $('[data-play]');
+    const revealEl = $('[data-reveal]');
+    const slider = $('[data-slider]');
+    const pct = $('[data-pct]');
+    const confBold = $('[data-conf-bold]');
+    const confSub = $('[data-conf-sub]');
+    const question = $('[data-question]');
+    const roundEl = $('[data-round]');
+    const verdict = $('[data-verdict]');
+    const answer = $('[data-answer]');
+    const revYou = $('[data-rev-you]');
+    const revTruth = $('[data-rev-truth]');
+    const revEdge = $('[data-rev-edge]');
+    const nextBtn = $('[data-next]');
+    const finalBlock = $('[data-final]');
+    const edgeTotal = document.querySelector('[data-edge-total]');
+    const edgeVal = document.querySelector('.bento-edge .val');
+    const speech = document.querySelector('[data-speech]');
+
+    const confFor = (v) => {
+      const d = Math.abs(v - 50);
+      const dir = v > 50 ? G.conf.yes : G.conf.no;
+      if (d < 5)  return { b: G.conf.coin, s: G.conf.coinSub };
+      if (d < 15) return { b: G.conf.slight, s: `${G.conf.tilt} ${dir}` };
+      if (d < 30) return { b: G.conf.moderate, s: `${G.conf.lean} ${dir}` };
+      if (d < 45) return { b: G.conf.confident, s: `${G.conf.strong} ${dir}` };
+      return { b: G.conf.bold, s: `${G.conf.near} ${dir}` };
+    };
+
+    const tintFor = (v) => (Math.abs(v - 50) < 5 ? '#fff' : v > 50 ? 'var(--brand-sky)' : '#ff7e92');
+
+    let lastTick = 0, lastVal = 50;
+    slider.addEventListener('input', (e) => {
+      initAudio();
+      const v = parseInt(e.target.value, 10);
+      pct.textContent = String(v);
+      pct.style.color = tintFor(v);
+      const c = confFor(v);
+      confBold.textContent = c.b;
+      confSub.textContent = c.s;
+      const now = Date.now();
+      if (now - lastTick > 40 && Math.abs(v - lastVal) >= 2) {
+        tone(640 + v * 6, 0.02, 0.02);
+        lastTick = now; lastVal = v;
+      }
+    });
+
+    $('[data-lock]').addEventListener('click', () => {
+      initAudio();
+      lockSound();
+      const v = parseInt(slider.value, 10);
+      const q = Q[i];
+      const brier = Math.pow(v / 100 - q.truth / 100, 2);
+      const points = Math.round((1 - brier) * 100);
+      total += points;
+
+      let key = 'bad';
+      if (brier < 0.1) key = 'good';
+      else if (brier < 0.3) key = 'ok';
+
+      verdict.textContent = G.verdicts[key];
+      verdict.className = `font-mono text-[11px] uppercase tracking-[0.28em] mb-3 ${key}`;
+      answer.innerHTML = q.answer;
+      revYou.textContent = v + '%';
+      revTruth.textContent = q.truth + '%';
+      revEdge.textContent = '+' + points;
+      if (speech) speech.textContent = G.reactions[key];
+
+      setTimeout(() => (key === 'good' ? goodSound() : key === 'ok' ? okSound() : badSound()), 220);
+
+      // Count up the EDGE badge.
+      if (edgeTotal && edgeVal) {
+        const start = total - points;
+        const t0 = performance.now();
+        const step = (now) => {
+          const p = Math.min(1, (now - t0) / 700);
+          edgeTotal.textContent = String(Math.round(start + (total - start) * p));
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+        edgeVal.classList.add('bump');
+        setTimeout(() => edgeVal.classList.remove('bump'), 400);
+      }
+
+      // Last round → invite to the waitlist instead of "next".
+      const isLast = i === Q.length - 1;
+      nextBtn.hidden = isLast;
+      if (finalBlock) finalBlock.hidden = !isLast;
+
+      playEl.hidden = true;
+      revealEl.hidden = false;
+    });
+
+    nextBtn.addEventListener('click', () => {
+      initAudio();
+      clickPop();
+      i++;
+      roundEl.textContent = String(i + 1);
+      question.textContent = Q[i].q;
+      slider.value = '50';
+      pct.textContent = '50';
+      pct.style.color = '#fff';
+      confBold.textContent = G.conf.coin;
+      confSub.textContent = G.conf.coinSub;
+      if (speech) speech.textContent = SPEECH;
+      revealEl.hidden = true;
+      playEl.hidden = false;
+    });
+
+  }
+
+  // ---- Eyes follow the cursor (avatar stays put) ----
+  const bAvatar = document.querySelector('[data-bento-avatar] svg');
+  const bPupils = document.getElementById('bento-pupils');
+  if (bAvatar) {
+    try {
+      const bb = bAvatar.getBBox();
+      const pad = 4;
+      bAvatar.setAttribute('viewBox', `${(bb.x - pad).toFixed(1)} ${(bb.y - pad).toFixed(1)} ${(bb.width + pad * 2).toFixed(1)} ${(bb.height + pad * 2).toFixed(1)}`);
+      bAvatar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    } catch { /* ignore */ }
+  }
+  if (bPupils && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let tx = 0, ty = 0, cx = 0, cy = 0;
+    window.addEventListener('mousemove', (e) => {
+      const r = bAvatar.getBoundingClientRect();
+      const ox = r.left + r.width / 2;
+      const oy = r.top + r.height / 2;
+      tx = Math.max(-1, Math.min(1, (e.clientX - ox) / (window.innerWidth / 2)));
+      ty = Math.max(-1, Math.min(1, (e.clientY - oy) / (window.innerHeight / 2)));
+    });
+    const tick = () => {
+      cx += (tx - cx) * 0.12;
+      cy += (ty - cy) * 0.12;
+      bPupils.setAttribute('transform', `translate(${(cx * 2.6).toFixed(2)} ${(cy * 2).toFixed(2)})`);
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+</script>

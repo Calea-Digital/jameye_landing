@@ -1,0 +1,9 @@
+{
+  "title":     { "lead": "Find your", "ital": "edge." },
+  "body":      "Five questions. Sixty seconds. A real score that follows you everywhere. Start training your calibration today.",
+  "ghostWord": "edge.",
+  "cta": {
+    "primary":   "Start training free",
+    "secondary": "See methodology"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "title": "Clasificación — Jameye",
+    "description": "La clasificación de referidos de Jameye. Invita a forecasters, gana puntos y escala posiciones."
+  },
+  "eyebrow": "Temporada 1 · Referidos",
+  "title": { "lead": "La", "ital": "clasificación." },
+  "sub": "Escala invitando a forecasters — cada referido vale +5 puntos. El movimiento se muestra respecto a la semana pasada.",
+  "cols": { "rank": "#", "player": "Jugador", "points": "Puntos", "change": "7d" },
+  "perReferral": "+5 pts / referido",
+  "newBadge": "NUEVO",
+  "pointsSuffix": "pts",
+  "referralsOne": "referido",
+  "referralsMany": "referidos",
+  "states": {
+    "loading": "Cargando la clasificación…",
+    "empty": "Aún no hay registros — sé el primero en unirte.",
+    "error": "No se pudo cargar la clasificación ahora mismo. Inténtalo más tarde."
+  }
+}

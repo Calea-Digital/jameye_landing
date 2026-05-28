@@ -1,0 +1,52 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+.astro/
+
+# Environment variables
+.env
+.env.*
+!.env.template
+
+# Version control
+.git/
+.github/
+.gitignore
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+
+# Testing
+coverage/
+*.lcov
+.nyc_output/
+
+# Misc
+README.md
+LICENSE
+*.md
+!README.md
+
+# Docker related
+.dockerignore
+Dockerfile
+docker-compose*.yml
+
+# Development configs
+.prettierrc*
+.prettierignore
+.eslintrc*
+.eslintignore

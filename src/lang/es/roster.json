@@ -1,0 +1,39 @@
+{
+  "eyebrow": "02 · Elige tu fighter",
+  "title":   { "lead": "Cada forecaster", "ital": "tiene un estilo." },
+  "side":    "Tu personaje crece contigo. Desbloquea nuevos looks al subir de tier. Gana skins legendarias en los torneos.",
+  "cards": [
+    {
+      "avatar":    "/avatar/01-open-market-trader.svg",
+      "avatarAlt": "The Trader",
+      "tone":      "indigo-violet",
+      "tag":       "Mercados",
+      "name":      "The Trader",
+      "role":      "Especialista Open Forecast"
+    },
+    {
+      "avatar":    "/avatar/02-edge-score-explorer.svg",
+      "avatarAlt": "The Architect",
+      "tone":      "violet-magenta",
+      "tag":       "Builder",
+      "name":      "The Architect",
+      "role":      "Especialista EDGE Builder"
+    },
+    {
+      "avatar":    "/avatar/04-rapid-duel-fighter.svg",
+      "avatarAlt": "The Rapid",
+      "tone":      "magenta-pink",
+      "tag":       "Duelista",
+      "name":      "The Rapid",
+      "role":      "Especialista en duelos"
+    },
+    {
+      "avatar":    "/avatar/05-squad-row1-trader.svg",
+      "avatarAlt": "The Captain",
+      "tone":      "emerald-teal",
+      "tag":       "Squad",
+      "name":      "The Captain",
+      "role":      "Líder de Forecast Battles"
+    }
+  ]
+}

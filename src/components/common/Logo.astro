@@ -1,0 +1,23 @@
+---
+export interface Props {
+  class?: string;
+  variant?: 'default' | 'forDark';
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { class: className = '', size = 'md' } = Astro.props;
+
+// Brand book §01 — Inter Tight 800, tracking -0.04em, uppercase, pure white.
+const sizeMap: Record<'sm' | 'md' | 'lg', string> = {
+  sm: 'text-[15px]',
+  md: 'text-[20px]',
+  lg: 'text-[28px]',
+};
+---
+
+<span
+  class:list={['jameye-wordmark', sizeMap[size], className]}
+  aria-label="Jameye"
+>
+  JAMEYE<span class="reg">®</span>
+</span>
