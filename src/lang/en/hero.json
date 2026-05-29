@@ -4,9 +4,10 @@
     "line1": "Jameye.",
     "line2Lead": "The ",
     "line2Highlight": "skill-based",
-    "line3": "prediction markets game."
+    "line3Highlight": "prediction markets",
+    "line3End": " game."
   },
-  "body": "The prediction markets game where skill compounds — predict real markets, compete for cash prizes and climb the global leaderboard.",
+  "body": "Predict real-world events. Win cash tournaments. Climb the global leaderboard.",
   "cta": {
     "placeholder": "Enter your email",
     "submit": "Get Early Access",

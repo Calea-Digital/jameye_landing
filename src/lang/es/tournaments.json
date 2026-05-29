@@ -1,0 +1,30 @@
+{
+  "eyebrow": "06 · Torneos",
+  "title":   { "lead": "Cómo funcionan", "ital": "los torneos." },
+  "prize": {
+    "amount": "$100K",
+    "unit":   "USD",
+    "label":  "Premio Temporada 1"
+  },
+  "steps": [
+    {
+      "k": "01",
+      "title": "Pronostica",
+      "body":  "Predice eventos reales en deportes, política, cripto, clima y cultura — cada predicción se puntúa."
+    },
+    {
+      "k": "02",
+      "title": "Compite",
+      "body":  "Apuesta EDGE Points en torneos. Los pronósticos más afinados escalan más rápido que el consenso."
+    },
+    {
+      "k": "03",
+      "title": "Gana",
+      "body":  "Termina arriba y convierte tu ventaja en premios en efectivo — directo a tu billetera."
+    }
+  ],
+  "cta": {
+    "primary":   "Obtener acceso anticipado",
+    "secondary": "Ver las reglas"
+  }
+}

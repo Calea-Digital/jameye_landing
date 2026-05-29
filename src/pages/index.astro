@@ -7,6 +7,7 @@ import Bento from '~/components/sections/Bento.astro';
 import Roster from '~/components/sections/Roster.astro';
 import VideoShowcase from '~/components/sections/VideoShowcase.astro';
 import HowItWorks from '~/components/sections/HowItWorks.astro';
+import Tournaments from '~/components/sections/Tournaments.astro';
 import Progression from '~/components/sections/Progression.astro';
 import CtaFinal from '~/components/sections/CtaFinal.astro';
 import WaitlistModal from '~/components/common/WaitlistModal.astro';
@@ -24,6 +25,7 @@ const meta = t<{ title: string; description: string }>(locale, 'meta');
     <Roster locale={locale} />
     <HowItWorks locale={locale} />
     <Progression locale={locale} />
+    <Tournaments locale={locale} />
     <Bento locale={locale} />
     <CtaFinal locale={locale} />
   </main>

@@ -1,0 +1,136 @@
+---
+import { Icon } from 'astro-icon/components';
+import { t, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const data = t<{
+  eyebrow: string;
+  title: { lead: string; ital: string };
+  prize: { amount: string; unit: string; label: string };
+  steps: { k: string; title: string; body: string }[];
+  cta: { primary: string; secondary: string };
+}>(locale, 'tournaments');
+---
+
+<section id="tournaments" class="py-12 md:py-16">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+    <div class="section-head">
+      <span class="eyebrow">{data.eyebrow}</span>
+      <h2 class="section-title text-white">
+        {data.title.lead} <span class="ital-grad">{data.title.ital}</span>
+      </h2>
+    </div>
+
+    <div class="glass-card px-5 md:px-10 py-10 md:py-14 grid lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16 items-center">
+
+      <!-- LEFT — $100K prize pool, anchor for the eye. -->
+      <div class="text-center lg:text-left relative">
+        <span class="meta-label block text-white/55 mb-3">{data.prize.label}</span>
+        <div class="prize-figure">
+          <span class="prize-amount num grad-text-gold">{data.prize.amount}</span>
+          <span class="prize-unit num text-white/65">{data.prize.unit}</span>
+        </div>
+        <div class="prize-glow" aria-hidden="true"></div>
+      </div>
+
+      <!-- RIGHT — 3-step funnel. -->
+      <ol class="flex flex-col gap-5 md:gap-6">
+        {
+          data.steps.map((step) => (
+            <li class="tourney-step">
+              <span class="tourney-step__k num">{step.k}</span>
+              <div class="flex-1">
+                <h3 class="tourney-step__title text-white">{step.title}</h3>
+                <p class="tourney-step__body text-white/65">{step.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <!-- Section-closing CTA. -->
+    <div class="mt-10 md:mt-12 flex justify-center gap-3 md:gap-4 flex-wrap">
+      <button type="button" class="cta-big" data-open-waitlist>
+        {data.cta.primary}
+        <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+      </button>
+      <a href="#how-it-works" class="cta-ghost">{data.cta.secondary}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .prize-figure {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+  }
+  .prize-amount {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(5rem, 14vw, 11rem);
+    background-image: var(--gradient-gold-orange);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 12px 32px rgba(250, 204, 21, 0.25));
+  }
+  .prize-unit {
+    font-size: clamp(1.1rem, 1.8vw, 1.65rem);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+  .prize-glow {
+    position: absolute;
+    inset: auto 0 -30% 0;
+    height: 60%;
+    background: radial-gradient(60% 60% at 50% 50%, rgba(250, 204, 21, 0.18), transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .tourney-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .tourney-step:last-child { border-bottom: 0; }
+  .tourney-step__k {
+    flex-shrink: 0;
+    width: 2.75rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: rgba(255, 255, 255, 0.42);
+    padding-top: 0.45rem;
+  }
+  .tourney-step__title {
+    font-family: var(--font-sans);
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .tourney-step__body {
+    margin-top: 0.5rem;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    max-width: 32rem;
+  }
+
+  @media (max-width: 1023px) {
+    .tourney-step { gap: 0.9rem; }
+    .tourney-step__k { width: 2.25rem; padding-top: 0.35rem; }
+  }
+</style>

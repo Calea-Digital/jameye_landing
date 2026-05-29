@@ -4,9 +4,10 @@
     "line1": "Jameye.",
     "line2Lead": "El juego de ",
     "line2Highlight": "mercados de predicción",
-    "line3": "basado en habilidad."
+    "line3Highlight": "basado en habilidad",
+    "line3End": "."
   },
-  "body": "El juego de mercados de predicción donde la habilidad se acumula — predice mercados reales, compite por premios en efectivo y escala la clasificación global.",
+  "body": "Predice eventos del mundo real. Gana torneos en efectivo. Escala la clasificación global.",
   "cta": {
     "placeholder": "Escribe tu email",
     "submit": "Obtener acceso anticipado",

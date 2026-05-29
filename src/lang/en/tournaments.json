@@ -1,0 +1,30 @@
+{
+  "eyebrow": "06 · Tournaments",
+  "title":   { "lead": "How tournaments", "ital": "work." },
+  "prize": {
+    "amount": "$100K",
+    "unit":   "USD",
+    "label":  "Season 1 prize pool"
+  },
+  "steps": [
+    {
+      "k": "01",
+      "title": "Forecast",
+      "body":  "Predict real-world events across sports, politics, crypto, climate and culture — every call is scored."
+    },
+    {
+      "k": "02",
+      "title": "Compete",
+      "body":  "Stake EDGE Points in tournaments. Sharper forecasts climb faster than crowd consensus."
+    },
+    {
+      "k": "03",
+      "title": "Win",
+      "body":  "Finish on top and convert your edge into real cash payouts — straight to your wallet."
+    }
+  ],
+  "cta": {
+    "primary":   "Get Early Access",
+    "secondary": "See the rules"
+  }
+}
