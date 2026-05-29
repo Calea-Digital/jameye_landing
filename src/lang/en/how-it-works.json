@@ -21,7 +21,12 @@
       "label": "Forecasting",
       "headline": "You forecast — you don't bet.",
       "tagline": "Set your probability",
-      "body": "Instead of yes/no, you set how likely an outcome is. The slider is your conviction — bolder, sharper calls are worth more."
+      "body": "Instead of a flat yes/no, you set how likely an outcome is. The slider is your conviction — and bolder, sharper calls are worth more EDGE.",
+      "points": [
+        "Set a probability, not a coin-flip",
+        "Bolder calls earn — and risk — more",
+        "Move with the odds as news breaks"
+      ]
     },
     {
       "id": "edge",
@@ -29,7 +34,7 @@
       "label": "EDGE Score",
       "tagline": "Your skill, scored",
       "headline": "EDGE rewards skill, not luck.",
-      "body": "When reality lands, your forecast is scored against it. Sharper-than-the-crowd calls earn EDGE. Luck evens out — skill compounds, and EDGE is the proof."
+      "body": "When reality lands, your forecast is scored against it. Sharper-than-the-crowd calls earn EDGE — luck evens out over time, but skill compounds."
     },
     {
       "id": "tournaments",
@@ -37,12 +42,18 @@
       "label": "Tournaments",
       "tagline": "Win real cash",
       "headline": "The sharpest forecasters win.",
-      "body": "Your EDGE ranks you on the live board. Finish a season on top and turn that edge into real cash payouts."
+      "body": "Your EDGE is your rank on the live board. Finish a season on top and turn that edge into real cash payouts.",
+      "points": [
+        "Your EDGE is your rank",
+        "Climb the live season board",
+        "Cash out real USD payouts"
+      ]
     }
   ],
   "edge": {
     "label": "EDGE",
-    "tag": "skill score"
+    "tag": "skill score",
+    "caption": "EDGE measures how close your call landed to reality. One lucky call means little — a season of sharp ones is everything."
   },
   "demo": {
     "youLabel": "Your call",
@@ -53,14 +64,18 @@
     "edgeValue": "+88"
   },
   "forecast": {
+    "question": "Will the Fed cut rates this quarter?",
     "value": "72",
     "confBold": "Confident",
     "confSub": "Leaning YES",
     "anchorNo": "← NO",
-    "anchorYes": "YES →"
+    "anchorYes": "YES →",
+    "ladder": ["Coin", "Slight", "Moderate", "Confident", "Bold"],
+    "activeStep": 3
   },
   "tournaments": {
-    "prizeHint": "Season 1 · $100K prize pool",
+    "prizeAmount": "$100K",
+    "prizeHint": "Season 1 prize pool",
     "rows": [
       { "rank": "1",  "name": "vortex",  "edge": "3,910" },
       { "rank": "2",  "name": "halcyon", "edge": "3,740" },

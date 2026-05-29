@@ -4,14 +4,32 @@
     "description": "La clasificación de referidos de Jameye. Invita a forecasters, gana puntos y escala posiciones."
   },
   "eyebrow": "Temporada 1 · Referidos",
-  "title": { "lead": "La", "ital": "clasificación." },
-  "sub": "Escala invitando a forecasters — cada referido vale +5 puntos. El movimiento se muestra respecto a la semana pasada.",
+  "title": { "lead": "Invita amigos.", "ital": "Escala la tabla." },
+  "sub": "Invita a forecasters, escala la clasificación y desbloquea acceso anticipado exclusivo y ventajas de fundador. Cada referido vale +5 puntos.",
+  "perks": [
+    { "icon": "tabler:bolt", "label": "+5 pts / referido" },
+    { "icon": "tabler:ticket", "label": "Acceso anticipado exclusivo" },
+    { "icon": "tabler:crown", "label": "Ventajas de fundador" }
+  ],
+  "cta": { "primary": "Obtener acceso anticipado" },
   "cols": { "rank": "#", "player": "Jugador", "points": "Puntos", "change": "7d" },
   "perReferral": "+5 pts / referido",
   "newBadge": "NUEVO",
   "pointsSuffix": "pts",
   "referralsOne": "referido",
   "referralsMany": "referidos",
+  "search": {
+    "label": "Encuentra tu posición",
+    "placeholder": "Escribe tu apodo…",
+    "button": "Buscar",
+    "clear": "Limpiar",
+    "rankPrefix": "Posición #",
+    "jump": "Ir a mi posición",
+    "refLink": "Copiar enlace de referido",
+    "copied": "¡Copiado!",
+    "notFound": "No encontramos ese apodo. Asegúrate de haberte unido a la lista."
+  },
+  "pager": { "prev": "Ant", "next": "Sig", "page": "Página", "of": "de" },
   "states": {
     "loading": "Cargando la clasificación…",
     "empty": "Aún no hay registros — sé el primero en unirte.",

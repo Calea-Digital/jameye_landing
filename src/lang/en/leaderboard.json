@@ -4,14 +4,32 @@
     "description": "The Jameye referral leaderboard. Invite forecasters, earn points, climb the ranks."
   },
   "eyebrow": "Season 1 · Referrals",
-  "title": { "lead": "The", "ital": "leaderboard." },
-  "sub": "Climb by inviting forecasters — every referral is worth +5 points. Movement is shown versus last week.",
+  "title": { "lead": "Invite friends.", "ital": "Climb the board." },
+  "sub": "Invite forecasters, climb the leaderboard, and unlock exclusive early access and founder perks. Every referral is worth +5 points.",
+  "perks": [
+    { "icon": "tabler:bolt", "label": "+5 pts / referral" },
+    { "icon": "tabler:ticket", "label": "Exclusive early access" },
+    { "icon": "tabler:crown", "label": "Founder perks" }
+  ],
+  "cta": { "primary": "Get early access" },
   "cols": { "rank": "#", "player": "Player", "points": "Points", "change": "7d" },
   "perReferral": "+5 pts / referral",
   "newBadge": "NEW",
   "pointsSuffix": "pts",
   "referralsOne": "referral",
   "referralsMany": "referrals",
+  "search": {
+    "label": "Find your rank",
+    "placeholder": "Enter your nickname…",
+    "button": "Search",
+    "clear": "Clear",
+    "rankPrefix": "Ranked #",
+    "jump": "Jump to my spot",
+    "refLink": "Copy referral link",
+    "copied": "Copied!",
+    "notFound": "We couldn't find that nickname. Make sure you've joined the waitlist."
+  },
+  "pager": { "prev": "Prev", "next": "Next", "page": "Page", "of": "of" },
   "states": {
     "loading": "Loading the leaderboard…",
     "empty": "No signups yet — be the first to join.",

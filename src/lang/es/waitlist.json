@@ -1,24 +1,21 @@
 {
   "badge": "Temporada 1 · Beta cerrada",
   "title": "Únete a la lista",
-  "subtitle": "Entra el primero cuando abra la Temporada 1. Sin spam — solo tu invitación.",
+  "subtitle": "Entra el primero cuando abra la Temporada 1. Sin spam — solo tu invitación y tu enlace de referido.",
   "fields": {
-    "name": "Nombre",
     "email": "Email",
     "nickname": "Apodo",
     "referred": "Te invitó",
     "avatar": "Elige tu avatar"
   },
   "placeholders": {
-    "name": "Tu nombre",
     "email": "tu@email.com",
     "nickname": "Elige un apodo (opcional)",
     "referred": "Su apodo (opcional)"
   },
   "help": {
-    "name": "Solo se usa para personalizar tu invitación.",
     "email": "Donde te enviaremos tu invitación de la Temporada 1. Debe ser único.",
-    "nickname": "Tu apodo público en la clasificación — otros lo usan para invitarte. Déjalo vacío y generamos uno. Debe ser único.",
+    "nickname": "Tu apodo público en la clasificación. Déjalo vacío y te generamos uno único. Debe ser único.",
     "referred": "El apodo de quien te invitó, para que reciba el crédito.",
     "avatar": "Elige el personaje con el que jugarás."
   },
@@ -35,13 +32,22 @@
   },
   "submit": "Unirme a la lista",
   "submitting": "Enviando…",
-  "success": "Ya estás en la lista — te avisaremos.",
+  "generating": "Creando tu apodo…",
   "close": "Cerrar",
   "errors": {
-    "name": "Escribe tu nombre.",
     "email": "Introduce un email válido.",
     "emailTaken": "Ese email ya está en la lista.",
     "nicknameTaken": "Ese apodo ya está cogido — prueba otro.",
     "generic": "Algo salió mal. Inténtalo de nuevo."
+  },
+  "success": {
+    "title": "¡Ya estás en la lista!",
+    "sub": "Aquí tienes tu apodo y tu enlace de invitación personal.",
+    "handleLabel": "Tu apodo",
+    "linkLabel": "Tu enlace de referido",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "earn": "Compártelo — cada amigo que entre por tu enlace te sube en la clasificación.",
+    "done": "Listo"
   }
 }

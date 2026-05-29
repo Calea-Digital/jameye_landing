@@ -1,24 +1,21 @@
 {
   "badge": "Season 1 · Closed beta",
   "title": "Join the waitlist",
-  "subtitle": "Be first in when Season 1 opens. No spam — just your invite.",
+  "subtitle": "Be first in when Season 1 opens. No spam — just your invite and your referral link.",
   "fields": {
-    "name": "Name",
     "email": "Email",
     "nickname": "Nickname",
     "referred": "Referred by",
     "avatar": "Choose your avatar"
   },
   "placeholders": {
-    "name": "Your name",
     "email": "you@email.com",
     "nickname": "Pick a handle (optional)",
     "referred": "Their nickname (optional)"
   },
   "help": {
-    "name": "Only used to personalize your invite.",
     "email": "Where we'll send your Season 1 invite. Must be unique.",
-    "nickname": "Your public handle on the leaderboard — others use it to refer you. Leave blank and we'll generate one. Must be unique.",
+    "nickname": "Your public handle on the leaderboard. Leave it blank and we'll spin up a unique one for you. Must be unique.",
     "referred": "The nickname of whoever invited you, so they get the credit.",
     "avatar": "Pick the character you'll play as."
   },
@@ -35,13 +32,22 @@
   },
   "submit": "Join waitlist",
   "submitting": "Joining…",
-  "success": "You're on the list — we'll be in touch.",
+  "generating": "Creating your handle…",
   "close": "Close",
   "errors": {
-    "name": "Please enter your name.",
     "email": "Enter a valid email.",
     "emailTaken": "That email is already on the list.",
     "nicknameTaken": "That nickname is taken — try another.",
     "generic": "Something went wrong. Please try again."
+  },
+  "success": {
+    "title": "You're on the list!",
+    "sub": "Here's your handle and your personal invite link.",
+    "handleLabel": "Your handle",
+    "linkLabel": "Your referral link",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "earn": "Share it — every friend who joins through your link climbs you up the leaderboard.",
+    "done": "Done"
   }
 }

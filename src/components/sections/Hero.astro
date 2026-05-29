@@ -13,7 +13,7 @@ const { locale } = Astro.props;
 
 const hero = t<{
   badge: string;
-  headline: { line1: string; line2Lead: string; line2Highlight: string; line3Highlight: string; line3End: string };
+  headline: { line2Lead: string; line2Highlight: string; line3Highlight: string; line3End: string };
   body: string;
   cta: { placeholder: string; submit: string; secondary: string; success: string };
   waitlist: { count: string; copy: string };
@@ -50,9 +50,6 @@ const avatarSvg = avatarRaw
           </span>
 
           <h1 class="display-hero hero-title mt-6 text-white">
-            <span class="block overflow-hidden">
-              <span class="hero-word hero-word--w1">{hero.headline.line1}</span>
-            </span>
             <span class="block overflow-hidden">
               <span class="hero-word hero-word--w2">
                 {hero.headline.line2Lead}

@@ -21,7 +21,12 @@
       "label": "Pronóstico",
       "tagline": "Fija tu probabilidad",
       "headline": "Pronosticas — no apuestas.",
-      "body": "En vez de sí o no, fijas qué tan probable es un resultado. El slider es tu convicción — los aciertos más firmes y afinados valen más."
+      "body": "En vez de un sí o no plano, fijas qué tan probable es un resultado. El slider es tu convicción — y los aciertos más firmes y afinados valen más EDGE.",
+      "points": [
+        "Fija una probabilidad, no cara o cruz",
+        "Las apuestas firmes ganan — y arriesgan — más",
+        "Muévete con las odds según las noticias"
+      ]
     },
     {
       "id": "edge",
@@ -29,7 +34,7 @@
       "label": "Score EDGE",
       "tagline": "Tu habilidad, puntuada",
       "headline": "EDGE premia la habilidad, no la suerte.",
-      "body": "Cuando llega la realidad, tu pronóstico se puntúa contra ella. Los aciertos mejores que la multitud ganan EDGE. La suerte se equilibra — la habilidad se acumula, y EDGE es la prueba."
+      "body": "Cuando llega la realidad, tu pronóstico se puntúa contra ella. Los aciertos mejores que la multitud ganan EDGE — la suerte se equilibra con el tiempo, pero la habilidad se acumula."
     },
     {
       "id": "tournaments",
@@ -37,12 +42,18 @@
       "label": "Torneos",
       "tagline": "Gana dinero real",
       "headline": "Los más afinados ganan.",
-      "body": "Tu EDGE te clasifica en el ranking en vivo. Termina una temporada arriba y convierte esa ventaja en premios en efectivo."
+      "body": "Tu EDGE es tu posición en el ranking en vivo. Termina una temporada arriba y convierte esa ventaja en premios en efectivo.",
+      "points": [
+        "Tu EDGE es tu posición",
+        "Escala el ranking de la temporada",
+        "Cobra premios reales en USD"
+      ]
     }
   ],
   "edge": {
     "label": "EDGE",
-    "tag": "score de habilidad"
+    "tag": "score de habilidad",
+    "caption": "EDGE mide qué tan cerca de la realidad cayó tu apuesta. Un acierto con suerte importa poco — una temporada de aciertos afinados lo es todo."
   },
   "demo": {
     "youLabel": "Tu apuesta",
@@ -53,14 +64,18 @@
     "edgeValue": "+88"
   },
   "forecast": {
+    "question": "¿La Fed bajará tipos este trimestre?",
     "value": "72",
     "confBold": "Seguro",
     "confSub": "Inclinado a SÍ",
     "anchorNo": "← NO",
-    "anchorYes": "SÍ →"
+    "anchorYes": "SÍ →",
+    "ladder": ["Cara/cruz", "Ligero", "Moderado", "Seguro", "Firme"],
+    "activeStep": 3
   },
   "tournaments": {
-    "prizeHint": "Temporada 1 · Premio de $100K",
+    "prizeAmount": "$100K",
+    "prizeHint": "Premio Temporada 1",
     "rows": [
       { "rank": "1",  "name": "vortex",  "edge": "3,910" },
       { "rank": "2",  "name": "halcyon", "edge": "3,740" },

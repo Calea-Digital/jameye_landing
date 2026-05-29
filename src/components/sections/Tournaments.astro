@@ -30,7 +30,7 @@ const SPARKLES = [
 ---
 
 <section id="tournaments" class="py-10 md:py-12">
-  <div class="max-w-[1180px] mx-auto px-5 md:px-8 w-full">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
     <div class="tourney-stage" data-scroll>
       <!-- Flashy ambience -->
       <div class="tourney-stage__halo" aria-hidden="true"></div>
@@ -94,7 +94,7 @@ const SPARKLES = [
 
       <!-- CTA, inside the card. -->
       <div class="relative z-10 mt-7 flex justify-center gap-3 flex-wrap">
-        <button type="button" class="cta-big" data-open-waitlist>
+        <button type="button" class="cta-big cta-gold" data-open-waitlist>
           {data.cta.primary}
           <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
         </button>
@@ -141,6 +141,14 @@ const SPARKLES = [
     animation: sparkleFloat 4s ease-in-out infinite;
   }
   .tourney-spark svg { width: 100%; height: 100%; filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.8)); }
+
+  /* Golden CTA — matches the $100K gold theme. */
+  .cta-gold {
+    background-image: var(--gradient-gold-orange);
+    color: #1a1206;
+    border-color: rgba(250, 204, 21, 0.35);
+    box-shadow: 0 22px 48px -20px rgba(250, 204, 21, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  }
 
   .tourney-badge {
     display: inline-flex;
