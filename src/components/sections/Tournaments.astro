@@ -11,126 +11,272 @@ const { locale } = Astro.props;
 const data = t<{
   eyebrow: string;
   title: { lead: string; ital: string };
-  prize: { amount: string; unit: string; label: string };
+  badge: string;
+  prize: { label: string; amount: string; unit: string };
+  splits: { place: string; amount: string; tone: 'gold' | 'silver' | 'bronze' }[];
   steps: { k: string; title: string; body: string }[];
   cta: { primary: string; secondary: string };
 }>(locale, 'tournaments');
+
+// Deterministic sparkle positions so SSR + hydration stay identical.
+const SPARKLES = [
+  { top: '12%', left: '7%',  size: 10, delay: '0s'   },
+  { top: '18%', left: '90%', size: 14, delay: '0.6s' },
+  { top: '58%', left: '4%',  size: 12, delay: '1.2s' },
+  { top: '70%', left: '94%', size: 9,  delay: '1.8s' },
+  { top: '34%', left: '96%', size: 8,  delay: '2.4s' },
+  { top: '80%', left: '12%', size: 10, delay: '1s'   },
+];
 ---
 
-<section id="tournaments" class="py-12 md:py-16">
-  <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
-    <div class="section-head">
-      <span class="eyebrow">{data.eyebrow}</span>
-      <h2 class="section-title text-white">
-        {data.title.lead} <span class="ital-grad">{data.title.ital}</span>
-      </h2>
-    </div>
+<section id="tournaments" class="py-10 md:py-12">
+  <div class="max-w-[1180px] mx-auto px-5 md:px-8 w-full">
+    <div class="tourney-stage" data-scroll>
+      <!-- Flashy ambience -->
+      <div class="tourney-stage__halo" aria-hidden="true"></div>
+      {
+        SPARKLES.map((s) => (
+          <span
+            class="tourney-spark"
+            aria-hidden="true"
+            style={`top:${s.top};left:${s.left};width:${s.size}px;height:${s.size}px;animation-delay:${s.delay};`}
+          >
+            <svg viewBox="0 0 16 16"><path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#FACC15"/></svg>
+          </span>
+        ))
+      }
 
-    <div class="glass-card px-5 md:px-10 py-10 md:py-14 grid lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16 items-center">
+      <div class="relative z-10 text-center">
+        <span class="tourney-badge">
+          <span class="gold-dot"></span>
+          {data.badge}
+        </span>
 
-      <!-- LEFT — $100K prize pool, anchor for the eye. -->
-      <div class="text-center lg:text-left relative">
-        <span class="meta-label block text-white/55 mb-3">{data.prize.label}</span>
-        <div class="prize-figure">
-          <span class="prize-amount num grad-text-gold">{data.prize.amount}</span>
-          <span class="prize-unit num text-white/65">{data.prize.unit}</span>
+        <h2 class="tourney-heading text-white">
+          {data.title.lead} <span class="ital-gold">{data.title.ital}</span>
+        </h2>
+
+        <div class="tourney-prize">
+          <div class="tourney-prize__figure">
+            <span class="tourney-prize__amount num">{data.prize.amount}</span>
+          </div>
+          <span class="tourney-prize__unit num">{data.prize.label} · {data.prize.unit}</span>
         </div>
-        <div class="prize-glow" aria-hidden="true"></div>
+
+        <!-- Podium prize splits -->
+        <div class="tourney-splits">
+          {
+            data.splits.map((s) => (
+              <div class="tourney-split" data-tone={s.tone}>
+                <Icon name="tabler:trophy" class="tourney-split__cup" />
+                <span class="tourney-split__place">{s.place}</span>
+                <span class="tourney-split__amount num">{s.amount}</span>
+              </div>
+            ))
+          }
+        </div>
       </div>
 
-      <!-- RIGHT — 3-step funnel. -->
-      <ol class="flex flex-col gap-5 md:gap-6">
+      <!-- 3-step funnel -->
+      <ol class="tourney-steps">
         {
           data.steps.map((step) => (
             <li class="tourney-step">
               <span class="tourney-step__k num">{step.k}</span>
-              <div class="flex-1">
+              <div>
                 <h3 class="tourney-step__title text-white">{step.title}</h3>
-                <p class="tourney-step__body text-white/65">{step.body}</p>
+                <p class="tourney-step__body">{step.body}</p>
               </div>
             </li>
           ))
         }
       </ol>
-    </div>
 
-    <!-- Section-closing CTA. -->
-    <div class="mt-10 md:mt-12 flex justify-center gap-3 md:gap-4 flex-wrap">
-      <button type="button" class="cta-big" data-open-waitlist>
-        {data.cta.primary}
-        <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
-      </button>
-      <a href="#how-it-works" class="cta-ghost">{data.cta.secondary}</a>
+      <!-- CTA, inside the card. -->
+      <div class="relative z-10 mt-7 flex justify-center gap-3 flex-wrap">
+        <button type="button" class="cta-big" data-open-waitlist>
+          {data.cta.primary}
+          <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+        </button>
+        <a href="#how-it-works" class="cta-ghost">{data.cta.secondary}</a>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .prize-figure {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.55rem;
-    line-height: 0.9;
-    letter-spacing: -0.04em;
+  .tourney-stage {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-3xl);
+    padding: clamp(1.75rem, 3.5vw, 2.75rem) clamp(1.25rem, 4vw, 3rem);
+    background:
+      radial-gradient(120% 90% at 50% -10%, rgba(250, 204, 21, 0.14), transparent 60%),
+      linear-gradient(180deg, rgba(20, 16, 8, 0.85), rgba(10, 10, 14, 0.92));
+    border: 1px solid rgba(250, 204, 21, 0.25);
+    box-shadow: 0 40px 120px -40px rgba(250, 204, 21, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
-  .prize-amount {
+  /* Animated gold glow behind the prize. */
+  .tourney-stage__halo {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 70%;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(250, 204, 21, 0.28), transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+    animation: tourneyHalo 5s ease-in-out infinite;
+  }
+  @keyframes tourneyHalo {
+    0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+    50%      { opacity: 1;   transform: translateX(-50%) scale(1.08); }
+  }
+
+  .tourney-spark {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    animation: sparkleFloat 4s ease-in-out infinite;
+  }
+  .tourney-spark svg { width: 100%; height: 100%; filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.8)); }
+
+  .tourney-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.36rem 0.95rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(250, 204, 21, 0.4);
+    background: rgba(250, 204, 21, 0.1);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--prize-gold);
+  }
+
+  .tourney-heading {
     font-family: var(--font-sans);
     font-weight: 300;
-    font-size: clamp(5rem, 14vw, 11rem);
-    background-image: var(--gradient-gold-orange);
+    font-size: clamp(1.9rem, 4.4vw, 3.1rem);
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    margin-top: 0.9rem;
+  }
+
+  .tourney-prize { position: relative; z-index: 10; margin-top: 0.4rem; }
+  .tourney-prize__figure { line-height: 0.82; letter-spacing: -0.05em; }
+  .tourney-prize__amount {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: clamp(4.5rem, 14vw, 9.5rem);
+    background-image: linear-gradient(100deg, #fde68a 0%, #facc15 30%, #fb923c 55%, #facc15 80%, #fff7d6 100%);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 12px 32px rgba(250, 204, 21, 0.25));
+    filter: drop-shadow(0 16px 40px rgba(250, 204, 21, 0.45));
+    animation: prizeShimmer 4s linear infinite;
   }
-  .prize-unit {
-    font-size: clamp(1.1rem, 1.8vw, 1.65rem);
+  @keyframes prizeShimmer {
+    to { background-position: 200% center; }
+  }
+  .tourney-prize__unit {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: clamp(0.72rem, 1.3vw, 0.92rem);
     font-weight: 600;
-    letter-spacing: 0.08em;
-  }
-  .prize-glow {
-    position: absolute;
-    inset: auto 0 -30% 0;
-    height: 60%;
-    background: radial-gradient(60% 60% at 50% 50%, rgba(250, 204, 21, 0.18), transparent 70%);
-    pointer-events: none;
-    z-index: -1;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
   }
 
-  .tourney-step {
+  .tourney-splits {
+    position: relative;
+    z-index: 10;
     display: flex;
-    align-items: flex-start;
-    gap: 1.1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--hairline);
+    justify-content: center;
+    align-items: flex-end;
+    gap: clamp(0.5rem, 1.6vw, 1rem);
+    margin-top: 1.6rem;
+    flex-wrap: wrap;
   }
-  .tourney-step:last-child { border-bottom: 0; }
+  .tourney-split {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    min-width: 5.5rem;
+    padding: 0.7rem 1rem;
+    border-radius: 0.95rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--hairline);
+  }
+  .tourney-split__cup { width: 1.35rem; height: 1.35rem; }
+  .tourney-split__place {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .tourney-split__amount { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.03em; color: #fff; }
+  /* 1st place sits proudest. */
+  .tourney-split[data-tone="gold"] {
+    transform: translateY(-10px) scale(1.06);
+    background: rgba(250, 204, 21, 0.1);
+    border-color: rgba(250, 204, 21, 0.45);
+    box-shadow: 0 18px 44px -18px rgba(250, 204, 21, 0.7);
+  }
+  .tourney-split[data-tone="gold"]   .tourney-split__cup { color: #facc15; filter: drop-shadow(0 0 8px rgba(250,204,21,0.7)); }
+  .tourney-split[data-tone="silver"] .tourney-split__cup { color: #cbd5e1; }
+  .tourney-split[data-tone="bronze"] .tourney-split__cup { color: #fb923c; }
+
+  .tourney-steps {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 1.8rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .tourney-step { display: flex; gap: 0.75rem; align-items: flex-start; }
   .tourney-step__k {
     flex-shrink: 0;
-    width: 2.75rem;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    color: rgba(255, 255, 255, 0.42);
-    padding-top: 0.45rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--prize-gold);
+    padding-top: 0.15rem;
   }
   .tourney-step__title {
     font-family: var(--font-sans);
-    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
     font-weight: 400;
     letter-spacing: -0.02em;
-    line-height: 1.05;
+    margin-bottom: 0.25rem;
   }
   .tourney-step__body {
-    margin-top: 0.5rem;
-    font-size: 0.98rem;
-    line-height: 1.55;
-    max-width: 32rem;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: var(--ink-muted);
   }
 
-  @media (max-width: 1023px) {
-    .tourney-step { gap: 0.9rem; }
-    .tourney-step__k { width: 2.25rem; padding-top: 0.35rem; }
+  @media (max-width: 720px) {
+    .tourney-steps { grid-template-columns: 1fr; gap: 0.9rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tourney-stage__halo,
+    .tourney-spark,
+    .tourney-prize__amount { animation: none; }
   }
 </style>

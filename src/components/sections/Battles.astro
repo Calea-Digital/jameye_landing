@@ -1,0 +1,403 @@
+---
+import { Icon } from 'astro-icon/components';
+import { t, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+interface Mode {
+  id: 'duel' | 'open' | 'squad';
+  tone: 'indigo-violet' | 'violet-magenta' | 'magenta-pink' | 'emerald-teal' | 'gold-orange';
+  icon: string;
+  tag: string;
+  name: string;
+  body: string;
+  meta: string;
+  detail: any;
+}
+
+const data = t<{
+  eyebrow: string;
+  title: { lead: string; ital: string };
+  sub: string;
+  hint: string;
+  modes: Mode[];
+  cta: { primary: string };
+}>(locale, 'battles');
+
+// Avatar art per mode (presentation-only, kept out of the copy files).
+const DUEL_AVATARS = {
+  you: '/avatar/04-rapid-duel-fighter.svg',
+  rival: '/avatar/09-squad-row2-rival.svg',
+};
+const OPEN_AVATARS: Record<string, string> = {
+  '1': '/avatar/01-open-market-trader.svg',
+  '2': '/avatar/12-bonus-dj.svg',
+  '3': '/avatar/13-bonus-captain.svg',
+  '12': '/avatar/02-edge-score-explorer.svg',
+};
+const SQUAD_AVATARS = {
+  a: ['/avatar/02-edge-score-explorer.svg', '/avatar/05-squad-row1-trader.svg', '/avatar/11-bonus-scientist.svg'],
+  b: ['/avatar/09-squad-row2-rival.svg', '/avatar/13-bonus-captain.svg', '/avatar/19-bonus-anchor.svg'],
+};
+
+const widthFromPct = (v: string) => `${parseInt(v, 10)}%`;
+---
+
+<section id="battles" class="py-12 md:py-16">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+    <div class="section-head">
+      <span class="eyebrow">{data.eyebrow}</span>
+      <h2 class="section-title text-white">
+        {data.title.lead} <span class="ital-grad">{data.title.ital}</span>
+      </h2>
+      <p class="section-sub">{data.sub}</p>
+    </div>
+
+    <div data-battles>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
+        {
+          data.modes.map((mode, i) => (
+            <button
+              type="button"
+              class="battle-card"
+              data-tone={mode.tone}
+              data-battle-tab={mode.id}
+              data-active={i === 0 ? 'true' : 'false'}
+              aria-expanded={i === 0 ? 'true' : 'false'}
+              aria-controls={`battle-detail-${mode.id}`}
+            >
+              <div class="battle-card__glow" aria-hidden="true" />
+              <div class="flex items-center justify-between mb-6">
+                <span class="gradient-tile battle-card__icon" data-tone={mode.tone}>
+                  <Icon name={mode.icon} class="w-5 h-5" />
+                </span>
+                <span class="battle-card__tag">{mode.tag}</span>
+              </div>
+              <h3 class="battle-card__name text-white">{mode.name}</h3>
+              <p class="battle-card__body">{mode.body}</p>
+              <div class="battle-card__meta">
+                <span class="live-dot" />
+                <span class="meta-label">{mode.meta}</span>
+                <Icon name="tabler:chevron-down" class="battle-card__chevron" />
+              </div>
+            </button>
+          ))
+        }
+      </div>
+
+      <p class="battle-hint" data-battle-hint>
+        <Icon name="tabler:hand-finger" class="w-3.5 h-3.5" />
+        {data.hint}
+      </p>
+
+      <!-- Expanding detail panels -->
+      <div class="battle-detail-wrap">
+        {
+          data.modes.map((mode, i) => (
+            <div
+              id={`battle-detail-${mode.id}`}
+              class="battle-detail"
+              data-battle-panel={mode.id}
+              data-tone={mode.tone}
+              hidden={i !== 0}
+            >
+              <div class="battle-detail__intro">
+                <h4 class="battle-detail__headline text-white">{mode.detail.headline}</h4>
+                <p class="battle-detail__body">{mode.detail.body}</p>
+              </div>
+
+              <div class="battle-detail__viz">
+                {mode.id === 'duel' && (
+                  <div class="bd-duel">
+                    <div class="bd-market">
+                      <span class="live-dot" /> {mode.detail.market}
+                    </div>
+                    <div class="bd-duel__grid">
+                      <div class="bd-fighter bd-fighter--you">
+                        <img src={DUEL_AVATARS.you} alt="" loading="lazy" />
+                        <span class="bd-fighter__name">{mode.detail.you.name}</span>
+                        <div class="bd-bar"><span class="bd-bar__fill bd-bar__fill--you" style={`width:${widthFromPct(mode.detail.you.call)}`} /></div>
+                        <span class="bd-fighter__call num">{mode.detail.you.call}</span>
+                        <span class="bd-fighter__edge num is-win">{mode.detail.you.edge}</span>
+                      </div>
+                      <div class="bd-vs">VS</div>
+                      <div class="bd-fighter">
+                        <img src={DUEL_AVATARS.rival} alt="" loading="lazy" />
+                        <span class="bd-fighter__name">{mode.detail.rival.name}</span>
+                        <div class="bd-bar"><span class="bd-bar__fill bd-bar__fill--rival" style={`width:${widthFromPct(mode.detail.rival.call)}`} /></div>
+                        <span class="bd-fighter__call num">{mode.detail.rival.call}</span>
+                        <span class="bd-fighter__edge num">{mode.detail.rival.edge}</span>
+                      </div>
+                    </div>
+                    <div class="bd-result"><Icon name="tabler:trophy" class="w-4 h-4" />{mode.detail.result}</div>
+                  </div>
+                )}
+
+                {mode.id === 'open' && (
+                  <div class="bd-open">
+                    <ol class="bd-board">
+                      {mode.detail.rows.map((r: any) => (
+                        <li class:list={['bd-row', r.you && 'bd-row--you']}>
+                          <span class="bd-row__rank num">{r.rank}</span>
+                          <img class="bd-row__avi" src={OPEN_AVATARS[r.rank] ?? OPEN_AVATARS['1']} alt="" loading="lazy" />
+                          <span class="bd-row__name">{r.name}</span>
+                          <span class="bd-row__edge num">{r.edge}<small> EDGE</small></span>
+                        </li>
+                      ))}
+                    </ol>
+                    <div class="bd-more"><span class="live-dot" />{mode.detail.more}</div>
+                  </div>
+                )}
+
+                {mode.id === 'squad' && (
+                  <div class="bd-squad">
+                    <div class="bd-team bd-team--you">
+                      <div class="bd-team__avis">
+                        {SQUAD_AVATARS.a.map((a) => (<img src={a} alt="" loading="lazy" />))}
+                      </div>
+                      <div class="bd-team__meta">
+                        <span class="bd-team__name">{mode.detail.teamA.name}</span>
+                        <span class="bd-team__total num">{mode.detail.teamA.total} <small>{mode.detail.totalLabel}</small></span>
+                      </div>
+                    </div>
+                    <div class="bd-tug">
+                      <span class="bd-tug__fill" style="width:52%"></span>
+                      <span class="bd-tug__knob"></span>
+                    </div>
+                    <div class="bd-team">
+                      <div class="bd-team__avis">
+                        {SQUAD_AVATARS.b.map((a) => (<img src={a} alt="" loading="lazy" />))}
+                      </div>
+                      <div class="bd-team__meta">
+                        <span class="bd-team__name">{mode.detail.teamB.name}</span>
+                        <span class="bd-team__total num">{mode.detail.teamB.total} <small>{mode.detail.totalLabel}</small></span>
+                      </div>
+                    </div>
+                    <div class="bd-result"><Icon name="tabler:trophy" class="w-4 h-4" />{mode.detail.result}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="mt-10 md:mt-12 flex justify-center">
+      <button type="button" class="cta-big" data-open-waitlist>
+        {data.cta.primary}
+        <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .battle-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: 1.6rem 1.5rem;
+    border-radius: var(--radius-2xl);
+    background: var(--glass-card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--hairline);
+    transition: transform 400ms cubic-bezier(0.2, 0.85, 0.2, 1), border-color 300ms ease, box-shadow 300ms ease;
+  }
+  .battle-card:hover { transform: translateY(-6px); border-color: var(--hairline-strong); }
+  .battle-card[data-active="true"] {
+    border-color: var(--hairline-strong);
+    box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  .battle-card[data-active="true"] .battle-card__chevron { transform: rotate(180deg); }
+
+  .battle-card__glow {
+    position: absolute; top: -40%; right: -30%; width: 70%; height: 80%;
+    border-radius: 9999px; filter: blur(60px); opacity: 0.35; pointer-events: none;
+    transition: opacity 400ms ease;
+  }
+  .battle-card:hover .battle-card__glow,
+  .battle-card[data-active="true"] .battle-card__glow { opacity: 0.62; }
+  .battle-card[data-tone="indigo-violet"] .battle-card__glow { background: var(--gradient-indigo-violet); }
+  .battle-card[data-tone="violet-magenta"] .battle-card__glow { background: var(--gradient-violet-magenta); }
+  .battle-card[data-tone="magenta-pink"] .battle-card__glow { background: var(--gradient-magenta-pink); }
+  .battle-card[data-tone="emerald-teal"] .battle-card__glow { background: var(--gradient-emerald-teal); }
+  .battle-card[data-tone="gold-orange"] .battle-card__glow { background: var(--gradient-gold-orange); }
+
+  .battle-card__icon { width: 3rem; height: 3rem; border-radius: 0.85rem; }
+  .battle-card__icon svg { width: 1.4rem; height: 1.4rem; }
+  .battle-card__tag {
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.22em;
+    text-transform: uppercase; color: rgba(255, 255, 255, 0.78);
+    padding: 0.3rem 0.7rem; border-radius: 9999px; border: 1px solid var(--hairline-strong);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .battle-card__name {
+    position: relative; font-family: var(--font-sans); font-size: 1.65rem; font-weight: 500;
+    letter-spacing: -0.025em; line-height: 1.05; margin-bottom: 0.6rem;
+  }
+  .battle-card__body { position: relative; font-size: 0.92rem; line-height: 1.55; color: var(--ink-muted); flex: 1; }
+  .battle-card__meta {
+    position: relative; display: flex; align-items: center; gap: 0.55rem;
+    margin-top: 1.4rem; padding-top: 1.1rem; border-top: 1px solid var(--hairline);
+  }
+  .battle-card__chevron { width: 1rem; height: 1rem; margin-left: auto; color: var(--ink-faint); transition: transform 300ms ease; }
+
+  .battle-hint {
+    display: flex; align-items: center; justify-content: center; gap: 0.45rem;
+    margin-top: 1.25rem; font-family: var(--font-mono); font-size: 0.66rem; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint);
+    transition: opacity 300ms ease;
+  }
+
+  /* ---- Expanding detail ---- */
+  .battle-detail-wrap { margin-top: 1.25rem; }
+  .battle-detail {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    align-items: center;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border-radius: var(--radius-2xl);
+    background: var(--glass-panel-bg);
+    border: 1px solid var(--hairline-strong);
+    box-shadow: var(--shadow-soft-chrome);
+    animation: bdIn 420ms cubic-bezier(0.2, 0.85, 0.2, 1);
+  }
+  .battle-detail[hidden] { display: none; }
+  @keyframes bdIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .battle-detail__headline {
+    font-family: var(--font-sans); font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 400;
+    letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 0.75rem;
+  }
+  .battle-detail__body { font-size: 0.95rem; line-height: 1.6; color: var(--ink-muted); }
+
+  .battle-detail__viz {
+    border-radius: 1.25rem;
+    padding: clamp(1.1rem, 2.5vw, 1.6rem);
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--hairline);
+  }
+
+  /* Duel viz */
+  .bd-market {
+    display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1.1rem;
+    font-size: 0.85rem; color: var(--ink-muted);
+  }
+  .bd-duel__grid { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 0.75rem; }
+  .bd-fighter { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+  .bd-fighter img { width: clamp(48px, 9vw, 72px); height: clamp(48px, 9vw, 72px); object-fit: contain; filter: drop-shadow(0 8px 18px rgba(0,0,0,0.5)); }
+  .bd-fighter__name { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; color: #fff; }
+  .bd-bar { width: 100%; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden; }
+  .bd-bar__fill { display: block; height: 100%; border-radius: 3px; }
+  .bd-bar__fill--you { background: var(--brand-sky); }
+  .bd-bar__fill--rival { background: var(--alert-rose); }
+  .bd-fighter__call { font-size: 1.2rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+  .bd-fighter__edge { font-size: 0.74rem; font-weight: 700; color: var(--ink-faint); }
+  .bd-fighter__edge.is-win { color: var(--win-emerald); }
+  .bd-vs { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em; color: var(--ink-faint); }
+  .bd-result {
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--hairline);
+    font-size: 0.85rem; font-weight: 600; color: var(--win-emerald);
+  }
+  .bd-result svg { color: var(--prize-gold); }
+
+  /* Open arena viz */
+  .bd-board { display: flex; flex-direction: column; gap: 0.5rem; }
+  .bd-row {
+    display: grid; grid-template-columns: 1.75rem 2rem 1fr auto; align-items: center; gap: 0.7rem;
+    padding: 0.5rem 0.75rem; border-radius: 0.7rem; background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+  }
+  .bd-row--you {
+    background: rgba(216, 59, 255, 0.1);
+    border-color: rgba(216, 59, 255, 0.4);
+    box-shadow: 0 0 28px -12px rgba(216, 59, 255, 0.7);
+  }
+  .bd-row__rank { font-size: 0.78rem; font-weight: 700; color: var(--ink-faint); text-align: center; }
+  .bd-row__avi { width: 1.9rem; height: 1.9rem; object-fit: contain; }
+  .bd-row__name { font-family: var(--font-mono); font-size: 0.82rem; color: #fff; }
+  .bd-row__edge { font-size: 0.85rem; font-weight: 700; color: #fff; }
+  .bd-row__edge small { font-size: 0.6rem; color: var(--ink-faint); letter-spacing: 0.1em; }
+  .bd-more {
+    display: flex; align-items: center; gap: 0.5rem; margin-top: 0.85rem;
+    font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint);
+  }
+
+  /* Squad viz */
+  .bd-team { display: flex; align-items: center; gap: 1rem; padding: 0.6rem 0; }
+  .bd-team__avis { display: flex; }
+  .bd-team__avis img {
+    width: 2.6rem; height: 2.6rem; object-fit: contain; margin-left: -0.7rem;
+    background: rgba(255,255,255,0.04); border-radius: 9999px; padding: 2px;
+    border: 1px solid var(--hairline);
+  }
+  .bd-team__avis img:first-child { margin-left: 0; }
+  .bd-team__meta { display: flex; flex-direction: column; }
+  .bd-team__name { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .bd-team__total { font-size: 1.25rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+  .bd-team__total small { font-size: 0.55rem; color: var(--ink-faint); letter-spacing: 0.12em; text-transform: uppercase; }
+  .bd-team--you .bd-team__total { color: var(--win-emerald); }
+  .bd-tug { position: relative; height: 8px; border-radius: 4px; margin: 0.4rem 0; background: linear-gradient(90deg, var(--win-emerald), rgba(255,255,255,0.08) 50%, var(--alert-rose)); opacity: 0.5; }
+  .bd-tug__knob {
+    position: absolute; top: 50%; left: 52%; width: 16px; height: 16px; margin: -8px 0 0 -8px;
+    border-radius: 9999px; background: #fff; border: 3px solid var(--win-emerald); box-shadow: 0 0 16px rgba(16,185,129,0.7);
+  }
+  .bd-tug__fill { display: none; }
+
+  @media (max-width: 760px) {
+    .battle-detail { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .battle-detail { animation: none; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-battles]').forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-battle-tab]'));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-battle-panel]'));
+    const hint = root.querySelector<HTMLElement>('[data-battle-hint]');
+    if (!tabs.length || !panels.length) return;
+
+    let touched = false;
+
+    const select = (id: string) => {
+      tabs.forEach((t) => {
+        const active = t.dataset.battleTab === id;
+        t.dataset.active = active ? 'true' : 'false';
+        t.setAttribute('aria-expanded', active ? 'true' : 'false');
+      });
+      panels.forEach((p) => {
+        const active = p.dataset.battlePanel === id;
+        p.hidden = !active;
+        // Re-trigger the entrance animation on each switch.
+        if (active) {
+          p.style.animation = 'none';
+          void p.offsetWidth;
+          p.style.animation = '';
+        }
+      });
+      if (hint && !touched) {
+        touched = true;
+        hint.style.opacity = '0';
+      }
+    };
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => select(tab.dataset.battleTab!));
+    });
+  });
+</script>

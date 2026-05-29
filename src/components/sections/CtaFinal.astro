@@ -12,6 +12,7 @@ const data = t<{
   title: { lead: string; ital: string };
   body: string;
   ghostWord: string;
+  trust: string[];
   cta: { primary: string; secondary: string };
 }>(locale, 'cta-final');
 ---
@@ -42,6 +43,17 @@ const data = t<{
         </button>
         <a href="#how-it-works" class="cta-ghost">{data.cta.secondary}</a>
       </div>
+
+      <ul class="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2.5">
+        {
+          data.trust.map((item) => (
+            <li class="inline-flex items-center gap-2 text-[13px] text-white/55">
+              <Icon name="tabler:circle-check" class="w-4 h-4 text-win-emerald" />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
 </section>

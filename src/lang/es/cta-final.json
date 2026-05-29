@@ -1,9 +1,14 @@
 {
-  "title":     { "lead": "Encuentra tu", "ital": "ventaja." },
-  "body":      "Cinco preguntas. Sesenta segundos. Un score real que te sigue a todas partes. Empieza a entrenar tu calibración hoy.",
+  "title":     { "lead": "Reclama tu", "ital": "ventaja." },
+  "body":      "El acceso anticipado se abre por oleadas. Únete a la lista ahora para asegurar tu lugar, reservar tu nombre y adelantarte a los $100K de la Temporada 1.",
   "ghostWord": "edge.",
+  "trust": [
+    "Sin tarjeta",
+    "Gratis en beta",
+    "Tu nombre, reservado"
+  ],
   "cta": {
-    "primary":   "Entrenar gratis",
-    "secondary": "Ver metodología"
+    "primary":   "Obtener acceso anticipado",
+    "secondary": "Cómo funciona"
   }
 }

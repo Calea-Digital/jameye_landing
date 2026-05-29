@@ -1,0 +1,64 @@
+{
+  "eyebrow": "03 · Battles",
+  "title":   { "lead": "Challenge", "ital": "anyone." },
+  "sub":     "Go head-to-head, take on the world, or roll deep with a squad. Single or in teams — every battle is settled on EDGE.",
+  "hint":    "Tap a mode to see it in action",
+  "modes": [
+    {
+      "id":   "duel",
+      "tone": "indigo-violet",
+      "icon": "tabler:swords",
+      "tag":  "1v1",
+      "name": "Duels",
+      "body": "Challenge a friend head-to-head on the same markets. Sharpest forecast takes the win — and the bragging rights.",
+      "meta": "Friend vs friend",
+      "detail": {
+        "headline": "1v1 — the sharper call wins.",
+        "body": "Send a challenge, both forecast the same market, and when reality lands the closer call takes the pot.",
+        "market": "BTC closes above $200K this year?",
+        "callLabel": "Their call",
+        "you":   { "name": "you",     "call": "62%", "edge": "+88" },
+        "rival": { "name": "d_ramos", "call": "41%", "edge": "+54" },
+        "result": "You're sharper — duel won."
+      }
+    },
+    {
+      "id":   "open",
+      "tone": "magenta-pink",
+      "icon": "tabler:world",
+      "tag":  "Open",
+      "name": "Open Arena",
+      "body": "Take on anyone, anywhere. Drop into a live challenge and prove your edge against the whole field.",
+      "meta": "Free-for-all",
+      "detail": {
+        "headline": "Take on the whole field.",
+        "body": "Drop into a live challenge with thousands of forecasters. Every sharp call climbs you up the live board.",
+        "rows": [
+          { "rank": "1",  "name": "vortex",   "edge": "3,910" },
+          { "rank": "2",  "name": "halcyon",  "edge": "3,740" },
+          { "rank": "3",  "name": "m_okafor", "edge": "3,602" },
+          { "rank": "12", "name": "you",      "edge": "2,140", "you": true }
+        ],
+        "more": "+4,800 in the arena"
+      }
+    },
+    {
+      "id":   "squad",
+      "tone": "emerald-teal",
+      "icon": "tabler:users-group",
+      "tag":  "Teams",
+      "name": "Squad Battles",
+      "body": "Team up and forecast as a crew. Pool your edge and go to war with rival squads for the top of the board.",
+      "meta": "Up to 5 per squad",
+      "detail": {
+        "headline": "Forecast as a crew.",
+        "body": "Pool your squad's edge and battle a rival team. The squad with the higher combined EDGE takes the round.",
+        "totalLabel": "Squad EDGE",
+        "teamA": { "name": "Your squad", "total": "6,420" },
+        "teamB": { "name": "Night Owls", "total": "5,980" },
+        "result": "Your squad leads by 440 EDGE."
+      }
+    }
+  ],
+  "cta": { "primary": "Get early access" }
+}

@@ -1,11 +1,17 @@
 {
-  "eyebrow": "06 · Torneos",
-  "title":   { "lead": "Cómo funcionan", "ital": "los torneos." },
+  "eyebrow": "04 · Torneos",
+  "title":   { "lead": "Gana", "ital": "dinero real." },
+  "badge":   "Temporada 1 · En vivo",
   "prize": {
+    "label":  "Premio total",
     "amount": "$100K",
-    "unit":   "USD",
-    "label":  "Premio Temporada 1"
+    "unit":   "USD"
   },
+  "splits": [
+    { "place": "1º", "amount": "$50K", "tone": "gold"   },
+    { "place": "2º", "amount": "$30K", "tone": "silver" },
+    { "place": "3º", "amount": "$20K", "tone": "bronze" }
+  ],
   "steps": [
     {
       "k": "01",
@@ -15,7 +21,7 @@
     {
       "k": "02",
       "title": "Compite",
-      "body":  "Apuesta EDGE Points en torneos. Los pronósticos más afinados escalan más rápido que el consenso."
+      "body":  "Apuesta EDGE en torneos. Los pronósticos más afinados escalan más rápido que el consenso."
     },
     {
       "k": "03",

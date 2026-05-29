@@ -1,11 +1,72 @@
 {
-  "eyebrow": "04 · Versus",
-  "title":   { "lead": "Un mercado.", "ital": "Dos bandos." },
-  "sub":     "SÍ o NO en cada mercado activo. Juegas con EDGE Points — ganas dinero real si dominas el torneo.",
+  "eyebrow": "01 · Cómo funciona",
+  "title":   { "lead": "Habilidad,", "ital": "no suerte." },
+  "sub":     "Pronostica mercados reales, gana EDGE por aciertos afinados y deja que tu score de habilidad te lleve a los torneos. Toca cada pieza para profundizar.",
   "volumeLabel": "vol",
   "tradersLabel": "traders",
   "liveLabel": "En vivo",
   "vsLabel": "VS",
+  "concepts": [
+    {
+      "id": "markets",
+      "icon": "tabler:arrows-shuffle",
+      "label": "Mercados",
+      "tagline": "Dos bandos, odds en vivo",
+      "headline": "Cada mercado tiene dos bandos.",
+      "body": "Los eventos reales se vuelven mercados SÍ/NO — deportes, política, cripto, clima, cultura. Las odds se mueven mientras la multitud pronostica."
+    },
+    {
+      "id": "forecast",
+      "icon": "tabler:adjustments",
+      "label": "Pronóstico",
+      "tagline": "Fija tu probabilidad",
+      "headline": "Pronosticas — no apuestas.",
+      "body": "En vez de sí o no, fijas qué tan probable es un resultado. El slider es tu convicción — los aciertos más firmes y afinados valen más."
+    },
+    {
+      "id": "edge",
+      "icon": "tabler:bolt",
+      "label": "Score EDGE",
+      "tagline": "Tu habilidad, puntuada",
+      "headline": "EDGE premia la habilidad, no la suerte.",
+      "body": "Cuando llega la realidad, tu pronóstico se puntúa contra ella. Los aciertos mejores que la multitud ganan EDGE. La suerte se equilibra — la habilidad se acumula, y EDGE es la prueba."
+    },
+    {
+      "id": "tournaments",
+      "icon": "tabler:trophy",
+      "label": "Torneos",
+      "tagline": "Gana dinero real",
+      "headline": "Los más afinados ganan.",
+      "body": "Tu EDGE te clasifica en el ranking en vivo. Termina una temporada arriba y convierte esa ventaja en premios en efectivo."
+    }
+  ],
+  "edge": {
+    "label": "EDGE",
+    "tag": "score de habilidad"
+  },
+  "demo": {
+    "youLabel": "Tu apuesta",
+    "youValue": "72%",
+    "truthLabel": "Realidad",
+    "truthValue": "100%",
+    "edgeLabel": "EDGE ganado",
+    "edgeValue": "+88"
+  },
+  "forecast": {
+    "value": "72",
+    "confBold": "Seguro",
+    "confSub": "Inclinado a SÍ",
+    "anchorNo": "← NO",
+    "anchorYes": "SÍ →"
+  },
+  "tournaments": {
+    "prizeHint": "Temporada 1 · Premio de $100K",
+    "rows": [
+      { "rank": "1",  "name": "vortex",  "edge": "3,910" },
+      { "rank": "2",  "name": "halcyon", "edge": "3,740" },
+      { "rank": "12", "name": "tú",      "edge": "2,140", "you": true }
+    ]
+  },
   "categories": [
     {
       "id": "sports",

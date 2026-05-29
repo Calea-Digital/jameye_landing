@@ -1,11 +1,17 @@
 {
-  "eyebrow": "06 · Tournaments",
-  "title":   { "lead": "How tournaments", "ital": "work." },
+  "eyebrow": "04 · Tournaments",
+  "title":   { "lead": "Win", "ital": "real cash." },
+  "badge":   "Season 1 · Live now",
   "prize": {
+    "label":  "Total prize pool",
     "amount": "$100K",
-    "unit":   "USD",
-    "label":  "Season 1 prize pool"
+    "unit":   "USD"
   },
+  "splits": [
+    { "place": "1st", "amount": "$50K", "tone": "gold"   },
+    { "place": "2nd", "amount": "$30K", "tone": "silver" },
+    { "place": "3rd", "amount": "$20K", "tone": "bronze" }
+  ],
   "steps": [
     {
       "k": "01",
@@ -15,7 +21,7 @@
     {
       "k": "02",
       "title": "Compete",
-      "body":  "Stake EDGE Points in tournaments. Sharper forecasts climb faster than crowd consensus."
+      "body":  "Stake EDGE in tournaments. Sharper forecasts climb faster than crowd consensus."
     },
     {
       "k": "03",
@@ -24,7 +30,7 @@
     }
   ],
   "cta": {
-    "primary":   "Get Early Access",
+    "primary":   "Get early access",
     "secondary": "See the rules"
   }
 }

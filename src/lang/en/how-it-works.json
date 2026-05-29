@@ -1,11 +1,72 @@
 {
-  "eyebrow": "04 · Versus",
-  "title":   { "lead": "One market.", "ital": "Two sides." },
-  "sub":     "YES/NO across every active market. Play with EDGE Points — win real cash when you top the tournament.",
+  "eyebrow": "01 · How it works",
+  "title":   { "lead": "Skill,", "ital": "not luck." },
+  "sub":     "Forecast real-world markets, earn EDGE for sharp calls, and let your skill score carry you into the tournaments. Tap any piece to go deeper.",
   "volumeLabel": "vol",
   "tradersLabel": "traders",
   "liveLabel": "Live",
   "vsLabel": "VS",
+  "concepts": [
+    {
+      "id": "markets",
+      "icon": "tabler:arrows-shuffle",
+      "label": "Markets",
+      "tagline": "Two sides, live odds",
+      "headline": "Every market has two sides.",
+      "body": "Real-world events become YES/NO markets — sports, politics, crypto, climate, culture. Live odds move as the crowd forecasts."
+    },
+    {
+      "id": "forecast",
+      "icon": "tabler:adjustments",
+      "label": "Forecasting",
+      "headline": "You forecast — you don't bet.",
+      "tagline": "Set your probability",
+      "body": "Instead of yes/no, you set how likely an outcome is. The slider is your conviction — bolder, sharper calls are worth more."
+    },
+    {
+      "id": "edge",
+      "icon": "tabler:bolt",
+      "label": "EDGE Score",
+      "tagline": "Your skill, scored",
+      "headline": "EDGE rewards skill, not luck.",
+      "body": "When reality lands, your forecast is scored against it. Sharper-than-the-crowd calls earn EDGE. Luck evens out — skill compounds, and EDGE is the proof."
+    },
+    {
+      "id": "tournaments",
+      "icon": "tabler:trophy",
+      "label": "Tournaments",
+      "tagline": "Win real cash",
+      "headline": "The sharpest forecasters win.",
+      "body": "Your EDGE ranks you on the live board. Finish a season on top and turn that edge into real cash payouts."
+    }
+  ],
+  "edge": {
+    "label": "EDGE",
+    "tag": "skill score"
+  },
+  "demo": {
+    "youLabel": "Your call",
+    "youValue": "72%",
+    "truthLabel": "Reality",
+    "truthValue": "100%",
+    "edgeLabel": "EDGE earned",
+    "edgeValue": "+88"
+  },
+  "forecast": {
+    "value": "72",
+    "confBold": "Confident",
+    "confSub": "Leaning YES",
+    "anchorNo": "← NO",
+    "anchorYes": "YES →"
+  },
+  "tournaments": {
+    "prizeHint": "Season 1 · $100K prize pool",
+    "rows": [
+      { "rank": "1",  "name": "vortex",  "edge": "3,910" },
+      { "rank": "2",  "name": "halcyon", "edge": "3,740" },
+      { "rank": "12", "name": "you",     "edge": "2,140", "you": true }
+    ]
+  },
   "categories": [
     {
       "id": "sports",

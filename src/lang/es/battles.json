@@ -1,0 +1,64 @@
+{
+  "eyebrow": "03 · Batallas",
+  "title":   { "lead": "Reta a", "ital": "cualquiera." },
+  "sub":     "Mano a mano, contra el mundo o en escuadrón. Solo o en equipo — cada batalla se decide con EDGE.",
+  "hint":    "Toca un modo para verlo en acción",
+  "modes": [
+    {
+      "id":   "duel",
+      "tone": "indigo-violet",
+      "icon": "tabler:swords",
+      "tag":  "1v1",
+      "name": "Duelos",
+      "body": "Reta a un amigo cara a cara en los mismos mercados. El pronóstico más afinado gana — y se lleva la gloria.",
+      "meta": "Amigo contra amigo",
+      "detail": {
+        "headline": "1v1 — gana el más afinado.",
+        "body": "Envía un reto, ambos pronostican el mismo mercado y, cuando llega la realidad, la apuesta más cercana se lleva el bote.",
+        "market": "¿BTC cierra el año sobre $200K?",
+        "callLabel": "Su apuesta",
+        "you":   { "name": "tú",      "call": "62%", "edge": "+88" },
+        "rival": { "name": "d_ramos", "call": "41%", "edge": "+54" },
+        "result": "Eres más afinado — duelo ganado."
+      }
+    },
+    {
+      "id":   "open",
+      "tone": "magenta-pink",
+      "icon": "tabler:world",
+      "tag":  "Abierto",
+      "name": "Arena Abierta",
+      "body": "Enfréntate a quien sea, donde sea. Entra a un reto en vivo y demuestra tu ventaja contra todo el campo.",
+      "meta": "Todos contra todos",
+      "detail": {
+        "headline": "Enfréntate a todo el campo.",
+        "body": "Entra a un reto en vivo con miles de forecasters. Cada apuesta afinada te sube en el ranking en directo.",
+        "rows": [
+          { "rank": "1",  "name": "vortex",   "edge": "3,910" },
+          { "rank": "2",  "name": "halcyon",  "edge": "3,740" },
+          { "rank": "3",  "name": "m_okafor", "edge": "3,602" },
+          { "rank": "12", "name": "tú",       "edge": "2,140", "you": true }
+        ],
+        "more": "+4,800 en la arena"
+      }
+    },
+    {
+      "id":   "squad",
+      "tone": "emerald-teal",
+      "icon": "tabler:users-group",
+      "tag":  "Equipos",
+      "name": "Batallas de Escuadrón",
+      "body": "Únete en equipo y pronostica en grupo. Suma la ventaja de todos y enfréntate a escuadrones rivales por la cima.",
+      "meta": "Hasta 5 por escuadrón",
+      "detail": {
+        "headline": "Pronostica en equipo.",
+        "body": "Suma la ventaja de tu escuadrón y enfréntate a un equipo rival. El escuadrón con más EDGE combinado gana la ronda.",
+        "totalLabel": "EDGE del escuadrón",
+        "teamA": { "name": "Tu escuadrón", "total": "6,420" },
+        "teamB": { "name": "Night Owls",   "total": "5,980" },
+        "result": "Tu escuadrón lidera por 440 EDGE."
+      }
+    }
+  ],
+  "cta": { "primary": "Obtener acceso anticipado" }
+}

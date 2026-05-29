@@ -25,6 +25,15 @@ interface Category {
   traders: string;
 }
 
+interface Concept {
+  id: 'markets' | 'forecast' | 'edge' | 'tournaments';
+  icon: string;
+  label: string;
+  tagline: string;
+  headline: string;
+  body: string;
+}
+
 const data = t<{
   eyebrow: string;
   title: { lead: string; ital: string };
@@ -33,18 +42,33 @@ const data = t<{
   tradersLabel: string;
   liveLabel: string;
   vsLabel: string;
+  concepts: Concept[];
+  edge: { label: string; tag: string };
+  demo: {
+    youLabel: string; youValue: string;
+    truthLabel: string; truthValue: string;
+    edgeLabel: string; edgeValue: string;
+  };
+  forecast: { value: string; confBold: string; confSub: string; anchorNo: string; anchorYes: string };
+  tournaments: { prizeHint: string; rows: { rank: string; name: string; edge: string; you?: boolean }[] };
   categories: Category[];
 }>(locale, 'how-it-works');
 
-const INTERVAL_MS = 5000;
+// EDGE is the heart of the section — open on it by default.
+const DEFAULT = 'edge';
 
+const INTERVAL_MS = 5000;
 const CHART_W = 320;
 const CHART_H = 140;
 const SERIES_N = 64;
-
-// Brand book §02 — Alert Rose for the NO/loss side, Brand Blue for the YES side.
 const SIDE_A_COLOR = '#f43f5e';
 const SIDE_B_COLOR = '#2962ff';
+
+const LADDER_AVATARS: Record<string, string> = {
+  '1': '/avatar/01-open-market-trader.svg',
+  '2': '/avatar/12-bonus-dj.svg',
+  '12': '/avatar/02-edge-score-explorer.svg',
+};
 
 function hashSeed(s: string): number {
   let h = 2166136261 >>> 0;
@@ -54,7 +78,6 @@ function hashSeed(s: string): number {
   }
   return h >>> 0;
 }
-
 function mulberry32(seed: number) {
   return () => {
     let t = (seed = (seed + 0x6d2b79f5) >>> 0);
@@ -63,7 +86,6 @@ function mulberry32(seed: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-
 function buildSeries(catId: string, finalOdds: number, n = SERIES_N): number[] {
   const rng = mulberry32(hashSeed(catId));
   const series: number[] = [];
@@ -71,42 +93,33 @@ function buildSeries(catId: string, finalOdds: number, n = SERIES_N): number[] {
   for (let i = 0; i < n; i++) {
     v += (rng() - 0.5) * 12;
     v = Math.max(15, Math.min(85, v));
-    const t = i / (n - 1);
+    const tt = i / (n - 1);
     const driftStart = 0.65;
-    const driftAmount = Math.max(0, (t - driftStart) / (1 - driftStart));
+    const driftAmount = Math.max(0, (tt - driftStart) / (1 - driftStart));
     v = v * (1 - driftAmount * 0.85) + finalOdds * (driftAmount * 0.85);
     series.push(v);
   }
   series[n - 1] = finalOdds;
   return series;
 }
-
 function point(v: number, i: number, n: number) {
-  const x = (i / (n - 1)) * CHART_W;
-  const y = CHART_H - (v / 100) * CHART_H;
-  return { x, y };
+  return { x: (i / (n - 1)) * CHART_W, y: CHART_H - (v / 100) * CHART_H };
 }
-
 function buildLine(series: number[]): string {
-  return series
-    .map((v, i) => {
-      const { x, y } = point(v, i, series.length);
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    })
-    .join(' ');
+  return series.map((v, i) => {
+    const { x, y } = point(v, i, series.length);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
 }
-
 const charts = data.categories.map((cat) => {
   const seriesA = buildSeries(cat.id, cat.sideA.odds);
   const seriesB = seriesA.map((v) => 100 - v);
-  const lastA = point(seriesA[seriesA.length - 1], seriesA.length - 1, seriesA.length);
-  const lastB = point(seriesB[seriesB.length - 1], seriesB.length - 1, seriesB.length);
   return {
     id: cat.id,
     lineA: buildLine(seriesA),
     lineB: buildLine(seriesB),
-    lastA,
-    lastB,
+    lastA: point(seriesA[seriesA.length - 1], seriesA.length - 1, seriesA.length),
+    lastB: point(seriesB[seriesB.length - 1], seriesB.length - 1, seriesB.length),
   };
 });
 ---
@@ -121,185 +134,367 @@ const charts = data.categories.map((cat) => {
       <p class="section-sub">{data.sub}</p>
     </div>
 
-    <div
-      class="glass-card px-5 md:px-10 py-8 md:py-10 flex flex-col w-full"
-      data-pickaside
-      data-interval={INTERVAL_MS}
-    >
-      <div class="flex flex-wrap justify-center gap-2" role="tablist">
+    <div data-hiw>
+      <!-- Concept selector — EDGE Score is the centerpiece. -->
+      <div class="hiw-tabs">
         {
-          data.categories.map((cat, i) => (
+          data.concepts.map((c) => (
             <button
               type="button"
-              role="tab"
-              data-tab={cat.id}
-              aria-selected={i === 0 ? 'true' : 'false'}
-              aria-controls={`panel-${cat.id}`}
-              data-active={i === 0 ? 'true' : 'false'}
-              class="chip"
+              class="hiw-tab"
+              data-hiw-tab={c.id}
+              data-core={c.id === 'edge' ? 'true' : undefined}
+              data-active={c.id === DEFAULT ? 'true' : 'false'}
+              aria-expanded={c.id === DEFAULT ? 'true' : 'false'}
+              aria-controls={`hiw-panel-${c.id}`}
             >
-              {cat.label}
+              <span class="hiw-tab__icon"><Icon name={c.icon} class="w-5 h-5" /></span>
+              <span class="hiw-tab__text">
+                <span class="hiw-tab__label">{c.label}</span>
+                <span class="hiw-tab__tagline">{c.tagline}</span>
+              </span>
             </button>
           ))
         }
       </div>
 
-      <div class="mt-6 md:mt-8 flex-1 flex items-center">
-        <div class="w-full relative">
-          {
-            data.categories.map((cat, i) => {
-              const chart = charts.find((c) => c.id === cat.id)!;
-              return (
-                <div
-                  id={`panel-${cat.id}`}
-                  data-panel={cat.id}
-                  role="tabpanel"
-                  aria-hidden={i === 0 ? 'false' : 'true'}
-                  class:list={[
-                    'transition-opacity duration-500 ease-out',
-                    i === 0
-                      ? 'opacity-100 relative'
-                      : 'opacity-0 absolute inset-0 pointer-events-none',
-                  ]}
-                >
-                  <div class="text-center max-w-2xl mx-auto">
-                    <h3 class="text-xl md:text-3xl lg:text-4xl font-light text-white leading-tight tracking-tight">
-                      {cat.question}
-                    </h3>
-                  </div>
+      <!-- Deep-dive panels -->
+      <div class="hiw-panels">
+        {
+          data.concepts.map((c) => (
+            <div
+              id={`hiw-panel-${c.id}`}
+              class="hiw-panel"
+              data-hiw-panel={c.id}
+              hidden={c.id !== DEFAULT}
+            >
+              <div class="hiw-panel__intro">
+                <h3 class="hiw-panel__headline text-white">{c.headline}</h3>
+                <p class="hiw-panel__body">{c.body}</p>
+              </div>
 
-                  <div class="mt-6 md:mt-10 grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-8 lg:gap-12">
-                    <div class="flex flex-col items-center gap-3">
-                      <div class="w-24 h-24 sm:w-36 sm:h-36 md:w-56 md:h-56 lg:w-64 lg:h-64 flex items-center justify-center">
-                        {cat.sideA.image ? (
-                          <img
-                            src={cat.sideA.image}
-                            alt={cat.sideA.name}
-                            class="w-full h-full object-contain drop-shadow-[0_10px_28px_rgba(239,68,68,0.4)]"
-                          />
-                        ) : cat.sideA.icon ? (
-                          <div class="w-full h-full rounded-full bg-red-500/15 border-2 border-red-500/40 flex items-center justify-center">
-                            <Icon name={cat.sideA.icon} class="w-1/2 h-1/2 text-red-500" />
-                          </div>
-                        ) : null}
-                      </div>
-                      <div class="meta-label" style={`color:${SIDE_A_COLOR}`}>
-                        {cat.sideA.name}
-                      </div>
-                      <div class="num text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-none" style={`color:${SIDE_A_COLOR}`}>
-                        {cat.sideA.odds}%
-                      </div>
-                    </div>
-
-                    <div class="flex flex-col items-center w-24 sm:w-36 md:w-64 lg:w-72">
-                      <svg
-                        viewBox={`0 0 ${CHART_W} ${CHART_H}`}
-                        preserveAspectRatio="none"
-                        class="w-full h-20 sm:h-28 md:h-36 lg:h-40 overflow-visible"
-                        aria-hidden="true"
+              <!-- MARKETS — the versus visualization. -->
+              {c.id === 'markets' && (
+                <div class="hiw-markets" data-pickaside data-interval={INTERVAL_MS}>
+                  <div class="flex flex-wrap justify-center gap-2" role="tablist">
+                    {data.categories.map((cat, i) => (
+                      <button
+                        type="button"
+                        role="tab"
+                        data-tab={cat.id}
+                        aria-selected={i === 0 ? 'true' : 'false'}
+                        data-active={i === 0 ? 'true' : 'false'}
+                        class="chip"
                       >
-                        <g stroke="currentColor" class="text-border" stroke-width="1" stroke-dasharray="2 6" opacity="0.5">
-                          <line x1="0" y1={CHART_H * 0.5} x2={CHART_W} y2={CHART_H * 0.5} />
-                        </g>
-
-                        <polyline
-                          points={chart.lineB}
-                          fill="none"
-                          stroke={SIDE_B_COLOR}
-                          stroke-width="2.4"
-                          stroke-linejoin="round"
-                          stroke-linecap="round"
-                          vector-effect="non-scaling-stroke"
-                          opacity="0.95"
-                        />
-                        <polyline
-                          points={chart.lineA}
-                          fill="none"
-                          stroke={SIDE_A_COLOR}
-                          stroke-width="2.4"
-                          stroke-linejoin="round"
-                          stroke-linecap="round"
-                          vector-effect="non-scaling-stroke"
-                          opacity="0.95"
-                        />
-
-                        <circle
-                          cx={chart.lastB.x}
-                          cy={chart.lastB.y}
-                          r="4"
-                          fill={SIDE_B_COLOR}
-                          stroke="var(--card)"
-                          stroke-width="2"
-                          vector-effect="non-scaling-stroke"
-                        />
-                        <circle
-                          cx={chart.lastA.x}
-                          cy={chart.lastA.y}
-                          r="4"
-                          fill={SIDE_A_COLOR}
-                          stroke="var(--card)"
-                          stroke-width="2"
-                          vector-effect="non-scaling-stroke"
-                        />
-                      </svg>
-                      <div class="mt-3 meta-label">{data.vsLabel}</div>
-                    </div>
-
-                    <div class="flex flex-col items-center gap-3">
-                      <div class="w-24 h-24 sm:w-36 sm:h-36 md:w-56 md:h-56 lg:w-64 lg:h-64 flex items-center justify-center">
-                        {cat.sideB.image ? (
-                          <img
-                            src={cat.sideB.image}
-                            alt={cat.sideB.name}
-                            class="w-full h-full object-contain drop-shadow-[0_10px_28px_rgba(59,130,246,0.45)]"
-                          />
-                        ) : cat.sideB.icon ? (
-                          <div class="w-full h-full rounded-full bg-blue-500/15 border-2 border-blue-500/40 flex items-center justify-center">
-                            <Icon name={cat.sideB.icon} class="w-1/2 h-1/2 text-blue-500" />
-                          </div>
-                        ) : null}
-                      </div>
-                      <div class="meta-label" style={`color:${SIDE_B_COLOR}`}>
-                        {cat.sideB.name}
-                      </div>
-                      <div class="num text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-none" style={`color:${SIDE_B_COLOR}`}>
-                        {cat.sideB.odds}%
-                      </div>
-                    </div>
+                        {cat.label}
+                      </button>
+                    ))}
                   </div>
 
-                  <div class="mt-6 md:mt-8 flex items-center justify-center gap-4 md:gap-6 text-xs text-white/55">
-                    <span>
-                      <span class="num text-white">{cat.volume}</span> <span class="meta-label">{data.volumeLabel}</span>
-                    </span>
-                    <span class="w-1 h-1 rounded-full bg-white/20" />
-                    <span>
-                      <span class="num text-white">{cat.traders}</span> <span class="meta-label">{data.tradersLabel}</span>
-                    </span>
-                    <span class="w-1 h-1 rounded-full bg-white/20" />
-                    <span class="inline-flex items-center gap-2">
-                      <span class="live-dot" />
-                      <span class="meta-label">{data.liveLabel}</span>
-                    </span>
+                  <div class="mt-6 relative">
+                    {data.categories.map((cat, i) => {
+                      const chart = charts.find((ch) => ch.id === cat.id)!;
+                      return (
+                        <div
+                          data-panel={cat.id}
+                          role="tabpanel"
+                          aria-hidden={i === 0 ? 'false' : 'true'}
+                          class:list={['transition-opacity duration-500 ease-out', i === 0 ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 pointer-events-none']}
+                        >
+                          <p class="text-center text-lg md:text-2xl font-light text-white leading-tight tracking-tight mb-5">{cat.question}</p>
+                          <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-8">
+                            <div class="flex flex-col items-center gap-2">
+                              <div class="w-16 h-16 sm:w-24 sm:h-24 md:w-36 md:h-36 flex items-center justify-center">
+                                {cat.sideA.image ? (
+                                  <img src={cat.sideA.image} alt={cat.sideA.name} class="w-full h-full object-contain drop-shadow-[0_10px_28px_rgba(239,68,68,0.4)]" />
+                                ) : cat.sideA.icon ? (
+                                  <div class="w-full h-full rounded-full bg-red-500/15 border-2 border-red-500/40 flex items-center justify-center">
+                                    <Icon name={cat.sideA.icon} class="w-1/2 h-1/2 text-red-500" />
+                                  </div>
+                                ) : null}
+                              </div>
+                              <div class="meta-label" style={`color:${SIDE_A_COLOR}`}>{cat.sideA.name}</div>
+                              <div class="num text-2xl sm:text-4xl md:text-5xl font-extrabold leading-none" style={`color:${SIDE_A_COLOR}`}>{cat.sideA.odds}%</div>
+                            </div>
+
+                            <div class="flex flex-col items-center w-24 sm:w-36 md:w-56">
+                              <svg viewBox={`0 0 ${CHART_W} ${CHART_H}`} preserveAspectRatio="none" class="w-full h-16 sm:h-24 md:h-28 overflow-visible" aria-hidden="true">
+                                <g stroke="currentColor" class="text-border" stroke-width="1" stroke-dasharray="2 6" opacity="0.5">
+                                  <line x1="0" y1={CHART_H * 0.5} x2={CHART_W} y2={CHART_H * 0.5} />
+                                </g>
+                                <polyline points={chart.lineB} fill="none" stroke={SIDE_B_COLOR} stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity="0.95" />
+                                <polyline points={chart.lineA} fill="none" stroke={SIDE_A_COLOR} stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity="0.95" />
+                                <circle cx={chart.lastB.x} cy={chart.lastB.y} r="4" fill={SIDE_B_COLOR} stroke="var(--card)" stroke-width="2" vector-effect="non-scaling-stroke" />
+                                <circle cx={chart.lastA.x} cy={chart.lastA.y} r="4" fill={SIDE_A_COLOR} stroke="var(--card)" stroke-width="2" vector-effect="non-scaling-stroke" />
+                              </svg>
+                              <div class="mt-2 meta-label">{data.vsLabel}</div>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-2">
+                              <div class="w-16 h-16 sm:w-24 sm:h-24 md:w-36 md:h-36 flex items-center justify-center">
+                                {cat.sideB.image ? (
+                                  <img src={cat.sideB.image} alt={cat.sideB.name} class="w-full h-full object-contain drop-shadow-[0_10px_28px_rgba(59,130,246,0.45)]" />
+                                ) : cat.sideB.icon ? (
+                                  <div class="w-full h-full rounded-full bg-blue-500/15 border-2 border-blue-500/40 flex items-center justify-center">
+                                    <Icon name={cat.sideB.icon} class="w-1/2 h-1/2 text-blue-500" />
+                                  </div>
+                                ) : null}
+                              </div>
+                              <div class="meta-label" style={`color:${SIDE_B_COLOR}`}>{cat.sideB.name}</div>
+                              <div class="num text-2xl sm:text-4xl md:text-5xl font-extrabold leading-none" style={`color:${SIDE_B_COLOR}`}>{cat.sideB.odds}%</div>
+                            </div>
+                          </div>
+
+                          <div class="mt-5 flex items-center justify-center gap-4 text-xs text-white/55">
+                            <span><span class="num text-white">{cat.volume}</span> <span class="meta-label">{data.volumeLabel}</span></span>
+                            <span class="w-1 h-1 rounded-full bg-white/20" />
+                            <span><span class="num text-white">{cat.traders}</span> <span class="meta-label">{data.tradersLabel}</span></span>
+                            <span class="w-1 h-1 rounded-full bg-white/20" />
+                            <span class="inline-flex items-center gap-2"><span class="live-dot" /><span class="meta-label">{data.liveLabel}</span></span>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-              );
-            })
-          }
-        </div>
+              )}
+
+              <!-- FORECAST — the conviction slider. -->
+              {c.id === 'forecast' && (
+                <div class="hiw-fc">
+                  <div class="hiw-fc__head">
+                    <div class="flex items-baseline">
+                      <span class="num hiw-fc__pct">{data.forecast.value}</span>
+                      <span class="num text-2xl text-white/40">%</span>
+                    </div>
+                    <div class="text-right">
+                      <strong class="block text-white text-sm">{data.forecast.confBold}</strong>
+                      <span class="meta-label">{data.forecast.confSub}</span>
+                    </div>
+                  </div>
+                  <div class="hiw-fc__rail">
+                    <span class="hiw-fc__grad"></span>
+                    <span class="hiw-fc__thumb" style={`left:${data.forecast.value}%`}></span>
+                  </div>
+                  <div class="hiw-fc__anchors">
+                    <span style="color:#ff7e92;">{data.forecast.anchorNo}</span>
+                    <span style="color:var(--brand-sky);">{data.forecast.anchorYes}</span>
+                  </div>
+                </div>
+              )}
+
+              <!-- EDGE — the skill score, centerpiece of the section. -->
+              {c.id === 'edge' && (
+                <div class="hiw-edge">
+                  <div class="edge-core" aria-hidden="true">
+                    <span class="edge-core__ring"></span>
+                    <Icon name="tabler:bolt" class="edge-core__bolt" />
+                    <span class="edge-core__label">{data.edge.label}</span>
+                    <span class="edge-core__tag">{data.edge.tag}</span>
+                  </div>
+                  <div class="edge-demo__row">
+                    <div class="edge-demo__cell">
+                      <span class="edge-demo__k">{data.demo.youLabel}</span>
+                      <span class="num edge-demo__v" style="color:var(--brand-sky);">{data.demo.youValue}</span>
+                    </div>
+                    <Icon name="tabler:arrow-right" class="edge-demo__arrow" />
+                    <div class="edge-demo__cell">
+                      <span class="edge-demo__k">{data.demo.truthLabel}</span>
+                      <span class="num edge-demo__v" style="color:#fff;">{data.demo.truthValue}</span>
+                    </div>
+                    <Icon name="tabler:arrow-right" class="edge-demo__arrow" />
+                    <div class="edge-demo__cell edge-demo__cell--win">
+                      <span class="edge-demo__k">{data.demo.edgeLabel}</span>
+                      <span class="num edge-demo__v" style="color:var(--win-emerald);">{data.demo.edgeValue}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <!-- TOURNAMENTS — EDGE ranks you. -->
+              {c.id === 'tournaments' && (
+                <div class="hiw-tour">
+                  <div class="hiw-tour__prize">
+                    <Icon name="tabler:trophy" class="w-4 h-4" />
+                    {data.tournaments.prizeHint}
+                  </div>
+                  <ol class="hiw-board">
+                    {data.tournaments.rows.map((r) => (
+                      <li class:list={['hiw-row', r.you && 'hiw-row--you']}>
+                        <span class="hiw-row__rank num">{r.rank}</span>
+                        <img class="hiw-row__avi" src={LADDER_AVATARS[r.rank] ?? LADDER_AVATARS['1']} alt="" loading="lazy" />
+                        <span class="hiw-row__name">{r.name}</span>
+                        <span class="hiw-row__edge num">{r.edge}<small> EDGE</small></span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
+          ))
+        }
       </div>
     </div>
   </div>
 </section>
 
+<style>
+  /* ---- Concept selector ---- */
+  .hiw-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .hiw-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left;
+    padding: 0.9rem 1rem;
+    border-radius: 1rem;
+    background: var(--glass-card-bg);
+    border: 1px solid var(--hairline);
+    transition: transform 250ms ease, border-color 250ms ease, background 250ms ease;
+  }
+  .hiw-tab:hover { transform: translateY(-3px); border-color: var(--hairline-strong); }
+  .hiw-tab__icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 0.7rem;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--hairline);
+    color: rgba(255, 255, 255, 0.7); transition: all 250ms ease;
+  }
+  .hiw-tab__text { display: flex; flex-direction: column; min-width: 0; }
+  .hiw-tab__label { font-family: var(--font-sans); font-size: 1rem; font-weight: 500; color: #fff; letter-spacing: -0.01em; }
+  .hiw-tab__tagline { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-top: 0.1rem; }
+
+  .hiw-tab[data-active="true"] {
+    border-color: var(--hairline-strong);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .hiw-tab[data-active="true"] .hiw-tab__icon {
+    background-image: var(--gradient-brand-sweep);
+    border-color: transparent; color: #fff;
+    box-shadow: var(--shadow-brand-halo);
+  }
+  /* EDGE Score reads as the heart of the section. */
+  .hiw-tab[data-core] .hiw-tab__icon { color: var(--win-emerald); }
+  .hiw-tab[data-core][data-active="true"] {
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 32px -14px rgba(16, 185, 129, 0.7);
+  }
+  .hiw-tab[data-core][data-active="true"] .hiw-tab__icon {
+    background-image: var(--gradient-emerald-teal);
+    color: #06281f;
+    box-shadow: 0 0 22px -6px rgba(16, 185, 129, 0.8);
+  }
+
+  /* ---- Panels ---- */
+  .hiw-panel {
+    padding: clamp(1.5rem, 3.5vw, 2.5rem);
+    border-radius: var(--radius-2xl);
+    background: var(--glass-panel-bg);
+    border: 1px solid var(--hairline-strong);
+    box-shadow: var(--shadow-soft-chrome);
+    animation: hiwIn 420ms cubic-bezier(0.2, 0.85, 0.2, 1);
+  }
+  .hiw-panel[hidden] { display: none; }
+  @keyframes hiwIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  .hiw-panel__intro { text-align: center; max-width: 40rem; margin: 0 auto 1.75rem; }
+  .hiw-panel__headline { font-family: var(--font-sans); font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 400; letter-spacing: -0.025em; line-height: 1.08; margin-bottom: 0.75rem; }
+  .hiw-panel__body { font-size: 1rem; line-height: 1.6; color: var(--ink-muted); }
+
+  /* ---- EDGE viz (centerpiece) ---- */
+  .hiw-edge { display: flex; flex-direction: column; align-items: center; gap: 1.75rem; }
+  .edge-core {
+    position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: clamp(120px, 22vw, 168px); height: clamp(120px, 22vw, 168px); border-radius: 9999px;
+    background: radial-gradient(circle at 50% 38%, rgba(16, 185, 129, 0.3), rgba(10, 12, 20, 0.92) 72%);
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.06), 0 22px 60px -20px rgba(16, 185, 129, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+  .edge-core__ring { position: absolute; inset: -12px; border-radius: 9999px; border: 1px dashed rgba(16, 185, 129, 0.4); animation: edgeSpin 18s linear infinite; }
+  @keyframes edgeSpin { to { transform: rotate(360deg); } }
+  .edge-core__bolt { width: clamp(28px, 5vw, 38px); height: clamp(28px, 5vw, 38px); color: var(--win-emerald); filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.8)); margin-bottom: 0.2rem; }
+  .edge-core__label { font-family: var(--font-mono); font-size: clamp(0.85rem, 1.8vw, 1.05rem); font-weight: 700; letter-spacing: 0.2em; color: #fff; line-height: 1; }
+  .edge-core__tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255, 255, 255, 0.55); margin-top: 0.35rem; }
+
+  .edge-demo__row { display: inline-flex; align-items: stretch; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+  .edge-demo__cell {
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem; min-width: 7.5rem; padding: 1rem 1.4rem;
+    background: rgba(255, 255, 255, 0.035); border: 1px solid var(--hairline); border-radius: 1rem;
+  }
+  .edge-demo__cell--win { background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.35); box-shadow: 0 0 32px -12px rgba(16, 185, 129, 0.6); }
+  .edge-demo__k { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint); }
+  .edge-demo__v { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+  .edge-demo__arrow { width: 22px; height: 22px; color: var(--ink-faint); align-self: center; }
+
+  /* ---- Forecast viz ---- */
+  .hiw-fc { max-width: 30rem; margin: 0 auto; }
+  .hiw-fc__head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 0.75rem; }
+  .hiw-fc__pct { font-size: 3.2rem; font-weight: 700; letter-spacing: -0.04em; line-height: 1; color: var(--brand-sky); }
+  .hiw-fc__rail { position: relative; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); }
+  .hiw-fc__grad { position: absolute; inset: 0; border-radius: 4px; background: linear-gradient(90deg, rgba(244,63,94,0.4), rgba(255,255,255,0.05) 50%, rgba(91,141,255,0.45)); }
+  .hiw-fc__thumb {
+    position: absolute; top: 50%; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 9999px;
+    background: #fff; border: 3px solid var(--brand-purple); box-shadow: 0 6px 20px rgba(126,59,255,0.7);
+  }
+  .hiw-fc__anchors { display: flex; justify-content: space-between; margin-top: 0.6rem; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; }
+
+  /* ---- Tournaments viz ---- */
+  .hiw-tour { max-width: 30rem; margin: 0 auto; }
+  .hiw-tour__prize {
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 1.1rem;
+    font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--prize-gold);
+  }
+  .hiw-board { display: flex; flex-direction: column; gap: 0.5rem; }
+  .hiw-row { display: grid; grid-template-columns: 1.75rem 2rem 1fr auto; align-items: center; gap: 0.7rem; padding: 0.55rem 0.8rem; border-radius: 0.7rem; background: rgba(255, 255, 255, 0.03); border: 1px solid transparent; }
+  .hiw-row--you { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 0 28px -12px rgba(16, 185, 129, 0.7); }
+  .hiw-row__rank { font-size: 0.78rem; font-weight: 700; color: var(--ink-faint); text-align: center; }
+  .hiw-row__avi { width: 1.9rem; height: 1.9rem; object-fit: contain; }
+  .hiw-row__name { font-family: var(--font-mono); font-size: 0.82rem; color: #fff; }
+  .hiw-row__edge { font-size: 0.85rem; font-weight: 700; color: #fff; }
+  .hiw-row__edge small { font-size: 0.6rem; color: var(--ink-faint); letter-spacing: 0.1em; }
+
+  @media (max-width: 720px) {
+    .hiw-tabs { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hiw-panel { animation: none; }
+    .edge-core__ring { animation: none; }
+  }
+</style>
+
 <script>
-  type PanelEl = HTMLElement;
   type TabEl = HTMLButtonElement;
 
+  document.querySelectorAll<HTMLElement>('[data-hiw]').forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<TabEl>('[data-hiw-tab]'));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-hiw-panel]'));
+    if (!tabs.length || !panels.length) return;
+
+    const select = (id: string) => {
+      tabs.forEach((t) => {
+        const active = t.dataset.hiwTab === id;
+        t.dataset.active = active ? 'true' : 'false';
+        t.setAttribute('aria-expanded', active ? 'true' : 'false');
+      });
+      panels.forEach((p) => {
+        const active = p.dataset.hiwPanel === id;
+        p.hidden = !active;
+        if (active) { p.style.animation = 'none'; void p.offsetWidth; p.style.animation = ''; }
+      });
+    };
+
+    tabs.forEach((tab) => tab.addEventListener('click', () => select(tab.dataset.hiwTab!)));
+  });
+
+  // Versus auto-cycle inside the Markets panel.
   document.querySelectorAll<HTMLElement>('[data-pickaside]').forEach((root) => {
     const interval = Number(root.dataset.interval ?? 5000);
-    const tabs = Array.from(root.querySelectorAll<TabEl>('[data-tab]'));
-    const panels = Array.from(root.querySelectorAll<PanelEl>('[data-panel]'));
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-panel]'));
     if (!tabs.length || !panels.length) return;
 
     let activeIdx = 0;
@@ -324,35 +519,17 @@ const charts = data.categories.map((cat) => {
         panel.classList.toggle('pointer-events-none', !active);
       });
     };
+    const start = () => { stop(); timer = window.setInterval(() => setActive(activeIdx + 1), interval); };
+    const stop = () => { if (timer !== undefined) { window.clearInterval(timer); timer = undefined; } };
 
-    const start = () => {
-      stop();
-      timer = window.setInterval(() => setActive(activeIdx + 1), interval);
-    };
-    const stop = () => {
-      if (timer !== undefined) {
-        window.clearInterval(timer);
-        timer = undefined;
-      }
-    };
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => { setActive(i); if (visible) start(); }));
 
-    tabs.forEach((tab, i) => {
-      tab.addEventListener('click', () => {
-        setActive(i);
-        if (visible) start();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        visible = entry.isIntersecting;
+        if (visible) start(); else stop();
       });
-    });
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          visible = entry.isIntersecting;
-          if (visible) start();
-          else stop();
-        });
-      },
-      { threshold: 0.25 }
-    );
+    }, { threshold: 0.25 });
     io.observe(root);
   });
 </script>
