@@ -14,7 +14,7 @@
       "meta": "Friend vs friend",
       "detail": {
         "headline": "1v1 — the sharper call wins.",
-        "body": "Send a challenge, both forecast the same market, and when reality lands the closer call takes the pot.",
+        "body": "Send a challenge, both forecast the same market, and when reality lands the closer call takes the win.",
         "market": "BTC closes above $200K this year?",
         "callLabel": "Their call",
         "you":   { "name": "you",     "call": "62%", "edge": "+88" },
@@ -60,5 +60,50 @@
       }
     }
   ],
-  "cta": { "primary": "Get early access" }
+  "cta": { "primary": "Get early access" },
+  "squad": {
+    "title": "Squad Game",
+    "sub": "Your crew vs theirs. Combined Edge wins.",
+    "statusPill": "League offline · Preview mode",
+    "crewPick": "Your crew · pick a path",
+    "mysteryPill": "Mystery crew · same Edge band",
+    "caption": "Crew vs crew · any size · combined Edge wins",
+    "youLabel": "Captain · you",
+    "bandLabel": "Unranked band",
+    "sealedLabel": "Captain · sealed",
+    "modes": [
+      { "icon": "tabler:bolt", "label": "Get drafted" },
+      { "icon": "tabler:users-plus", "label": "Build a crew" },
+      { "icon": "tabler:briefcase", "label": "Bring my desk" }
+    ],
+    "crewLabel": "Crew",
+    "crewSizes": ["3", "5", "10", "Whole desk"],
+    "seasonLabel": "Season",
+    "seasons": ["7D", "14D", "30D"],
+    "cta": "Drop in the pool",
+    "footer": "Squad league offline · preview mode",
+    "edgeCard": {
+      "title": "Your Edge Band",
+      "orb": "UNRA",
+      "rank": "Unranked",
+      "edgeLabel": "EDGE —",
+      "stats": "Stats",
+      "progress": "30 EDGE to Sapling"
+    },
+    "seasonCard": {
+      "title": "Season ends in",
+      "units": ["D", "H", "M", "S"],
+      "caption": "Play a squad match this week to lock your spot on the season leaderboard."
+    },
+    "squadsCard": {
+      "title": "My Squads",
+      "demo": "Demo",
+      "viewAll": "View all squads",
+      "rows": [
+        { "initials": "TEC", "name": "The Edge Council", "edge": "412", "delta": "+18", "note": "vs Quant Cartel · Day 4/7", "status": "In match", "tone": "purple" },
+        { "initials": "STB", "name": "Stockholm Bears", "edge": "398", "delta": "", "note": "Seat 3/5 · 1 seat open", "status": "Recruiting", "tone": "yellow", "invite": "Invite" },
+        { "initials": "HHS", "name": "HHS Trading Desk", "edge": "4,218", "delta": "+64", "note": "vs Harvard · Day 3/7", "status": "Live showcase", "tone": "cyan" }
+      ]
+    }
+  }
 }

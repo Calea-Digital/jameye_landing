@@ -7,7 +7,7 @@ export interface Props {
   poster?: string;
 }
 
-const { locale, src = '/videos/jameye-explainer_fey.mp4', poster } = Astro.props;
+const { locale, src = '/videos/jameye-explainer-hq.mp4', poster } = Astro.props;
 
 const data = t<{ eyebrow: string; title: { lead: string; ital: string }; sub: string }>(locale, 'video');
 ---

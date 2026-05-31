@@ -32,8 +32,9 @@ const data = t<{
     youLabel: string; truthLabel: string; edgeLabel: string; totalLabel: string;
     conf: Conf;
     verdicts: { good: string; ok: string; bad: string };
+    teaserVerdict: string;
     reactions: { good: string; ok: string; bad: string };
-    questions: { q: string; truth: number; answer: string }[];
+    questions: { q: string; truth: number | null; answer: string; teaser?: boolean }[];
   };
 }>(locale, 'bento');
 
@@ -113,7 +114,7 @@ const g = data.game;
           <div data-reveal hidden>
             <div class="font-mono text-[11px] uppercase tracking-[0.28em] mb-3" data-verdict></div>
             <p class="text-lg leading-snug mb-4 text-white" data-answer></p>
-            <div class="grid grid-cols-3 gap-3 mb-5">
+            <div class="grid grid-cols-3 gap-3 mb-5" data-reveal-cells>
               <div class="reveal-cell">
                 <div class="reveal-k">{g.youLabel}</div>
                 <div class="num reveal-v" style="color:var(--brand-sky);" data-rev-you>50%</div>
@@ -311,6 +312,7 @@ const g = data.game;
     const revTruth = $('[data-rev-truth]');
     const revEdge = $('[data-rev-edge]');
     const nextBtn = $('[data-next]');
+    const revCells = $('[data-reveal-cells]');
     const finalBlock = $('[data-final]');
     const edgeTotal = document.querySelector('[data-edge-total]');
     const edgeVal = document.querySelector('.bento-edge .val');
@@ -349,6 +351,23 @@ const g = data.game;
       lockSound();
       const v = parseInt(slider.value, 10);
       const q = Q[i];
+
+      // Final question is an unresolved teaser — no score, just intrigue + waitlist.
+      if (q.teaser) {
+        clickPop();
+        verdict.textContent = G.teaserVerdict;
+        verdict.className = 'font-mono text-[11px] uppercase tracking-[0.28em] mb-3 ok';
+        answer.innerHTML = q.answer;
+        if (revCells) revCells.hidden = true;
+        nextBtn.hidden = true;
+        if (finalBlock) finalBlock.hidden = false;
+        if (speech) speech.textContent = SPEECH;
+        playEl.hidden = true;
+        revealEl.hidden = false;
+        return;
+      }
+      if (revCells) revCells.hidden = false;
+
       const brier = Math.pow(v / 100 - q.truth / 100, 2);
       const points = Math.round((1 - brier) * 100);
       total += points;

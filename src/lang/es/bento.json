@@ -40,6 +40,7 @@
       "ok": "Nada mal.",
       "bad": "Ay."
     },
+    "teaserVerdict": "🔒 Sigue abierto",
     "reactions": {
       "good": "¡Clavado!",
       "ok": "Decente.",
@@ -48,7 +49,7 @@
     "questions": [
       { "q": "¿Bitcoin supera los $100.000 en algún momento de 2024?", "truth": 100, "answer": "Sí — BTC superó los <strong>$100K</strong> en diciembre de 2024." },
       { "q": "¿OpenAI lanza GPT-5 antes del 1 de enero de 2025?", "truth": 0, "answer": "No — <strong>GPT-5</strong> no salió antes de 2025." },
-      { "q": "¿La Fed baja los tipos al menos una vez en 2024?", "truth": 100, "answer": "Sí — la Fed bajó tipos <strong>tres veces</strong> a finales de 2024." }
+      { "q": "¿Bitcoin llega a $250.000 antes de 2027?", "truth": null, "teaser": true, "answer": "Nadie lo sabe aún — este mercado <strong>sigue abierto</strong>. Únete a la lista para fijar pronósticos reales y construir tu Edge Score." }
     ]
   }
 }

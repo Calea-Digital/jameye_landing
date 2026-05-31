@@ -14,7 +14,7 @@
       "meta": "Amigo contra amigo",
       "detail": {
         "headline": "1v1 — gana el más afinado.",
-        "body": "Envía un reto, ambos pronostican el mismo mercado y, cuando llega la realidad, la apuesta más cercana se lleva el bote.",
+        "body": "Envía un reto, ambos pronostican el mismo mercado y, cuando llega la realidad, el pronóstico más cercano se lleva la victoria.",
         "market": "¿BTC cierra el año sobre $200K?",
         "callLabel": "Su apuesta",
         "you":   { "name": "tú",      "call": "62%", "edge": "+88" },
@@ -60,5 +60,50 @@
       }
     }
   ],
-  "cta": { "primary": "Obtener acceso anticipado" }
+  "cta": { "primary": "Obtener acceso anticipado" },
+  "squad": {
+    "title": "Squad Game",
+    "sub": "Tu crew contra el suyo. Gana el Edge combinado.",
+    "statusPill": "Liga offline · Modo preview",
+    "crewPick": "Tu crew · elige un camino",
+    "mysteryPill": "Crew misterioso · misma banda de Edge",
+    "caption": "Crew vs crew · cualquier tamaño · gana el Edge combinado",
+    "youLabel": "Capitán · tú",
+    "bandLabel": "Banda sin rango",
+    "sealedLabel": "Capitán · sellado",
+    "modes": [
+      { "icon": "tabler:bolt", "label": "Que me recluten" },
+      { "icon": "tabler:users-plus", "label": "Arma un crew" },
+      { "icon": "tabler:briefcase", "label": "Trae tu mesa" }
+    ],
+    "crewLabel": "Crew",
+    "crewSizes": ["3", "5", "10", "Mesa entera"],
+    "seasonLabel": "Temporada",
+    "seasons": ["7D", "14D", "30D"],
+    "cta": "Entra al pozo",
+    "footer": "Liga de squads offline · modo preview",
+    "edgeCard": {
+      "title": "Tu banda de Edge",
+      "orb": "UNRA",
+      "rank": "Sin rango",
+      "edgeLabel": "EDGE —",
+      "stats": "Stats",
+      "progress": "30 EDGE para Sapling"
+    },
+    "seasonCard": {
+      "title": "La temporada acaba en",
+      "units": ["D", "H", "M", "S"],
+      "caption": "Juega un partido de squad esta semana para asegurar tu lugar en el ranking de temporada."
+    },
+    "squadsCard": {
+      "title": "Mis Squads",
+      "demo": "Demo",
+      "viewAll": "Ver todos los squads",
+      "rows": [
+        { "initials": "TEC", "name": "The Edge Council", "edge": "412", "delta": "+18", "note": "vs Quant Cartel · Día 4/7", "status": "En partido", "tone": "purple" },
+        { "initials": "STB", "name": "Stockholm Bears", "edge": "398", "delta": "", "note": "Asiento 3/5 · 1 libre", "status": "Reclutando", "tone": "yellow", "invite": "Invitar" },
+        { "initials": "HHS", "name": "HHS Trading Desk", "edge": "4,218", "delta": "+64", "note": "vs Harvard · Día 3/7", "status": "Showcase en vivo", "tone": "cyan" }
+      ]
+    }
+  }
 }

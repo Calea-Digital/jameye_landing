@@ -1,11 +1,29 @@
 {
   "eyebrow": "01 · How it works",
-  "title":   { "lead": "Skill,", "ital": "not luck." },
+  "title":   { "lead": "Markets, Edge Score and", "ital": "Cash Tournaments." },
   "sub":     "Forecast real-world markets, earn EDGE for sharp calls, and let your skill score carry you into the tournaments. Tap any piece to go deeper.",
   "volumeLabel": "vol",
   "tradersLabel": "traders",
+  "liquidityLabel": "liquidity",
+  "yesLabel": "Yes",
+  "noLabel": "No",
   "liveLabel": "Live",
   "vsLabel": "VS",
+  "edgeJourney": {
+    "kicker": "Edge Score Builder · Season 1",
+    "title": { "lead": "Build your", "ital": "Edge Score." },
+    "sub": "Six chapters. Thirty calibrated forecasts. Earn your way onto the leaderboard — one resolution at a time.",
+    "startLabel": "Start",
+    "vaultBanner": "Certified Edge Score holders only",
+    "bossCaption": "Clear every chapter to certify your Edge Score and unlock the season leaderboard.",
+    "nodes": [
+      { "state": "locked", "star": 1 },
+      { "state": "locked", "star": 1 },
+      { "state": "locked", "star": 1 },
+      { "state": "active", "star": 1 },
+      { "state": "locked", "star": 1 }
+    ]
+  },
   "concepts": [
     {
       "id": "markets",
@@ -14,19 +32,6 @@
       "tagline": "Two sides, live odds",
       "headline": "Every market has two sides.",
       "body": "Real-world events become YES/NO markets — sports, politics, crypto, climate, culture. Live odds move as the crowd forecasts."
-    },
-    {
-      "id": "forecast",
-      "icon": "tabler:adjustments",
-      "label": "Forecasting",
-      "headline": "You forecast — you don't bet.",
-      "tagline": "Set your probability",
-      "body": "Instead of a flat yes/no, you set how likely an outcome is. The slider is your conviction — and bolder, sharper calls are worth more EDGE.",
-      "points": [
-        "Set a probability, not a coin-flip",
-        "Bolder calls earn — and risk — more",
-        "Move with the odds as news breaks"
-      ]
     },
     {
       "id": "edge",
@@ -42,11 +47,11 @@
       "label": "Tournaments",
       "tagline": "Win real cash",
       "headline": "The sharpest forecasters win.",
-      "body": "Your EDGE is your rank on the live board. Finish a season on top and turn that edge into real cash payouts.",
+      "body": "Tournaments run as live events — outrank the field while one is on and you win real cash. EDGE is never staked or cashed out; it only tracks how sharp you are.",
       "points": [
-        "Your EDGE is your rank",
-        "Climb the live season board",
-        "Cash out real USD payouts"
+        "Win by ranking higher during a live tournament",
+        "No staking, no buy-in, no converting EDGE",
+        "Cash prizes are independent of your Edge Score"
       ]
     }
   ],
@@ -87,8 +92,8 @@
       "id": "sports",
       "label": "Sports",
       "question": "Who lands the knockout?",
-      "sideA": { "name": "Iron Mike",  "image": "/images/versus/red_boxing_glove.png",  "odds": 58 },
-      "sideB": { "name": "Cobra Kid",  "image": "/images/versus/blue_boxing_glove.png", "odds": 42 },
+      "sideA": { "name": "Iron Mike",  "image": "/images/markets_images/jameye-boxing-glove-red.png",  "odds": 58 },
+      "sideB": { "name": "Cobra Kid",  "image": "/images/markets_images/jameye-boxing-glove-blue.png", "odds": 42 },
       "volume": "$4.2M",
       "traders": "1.8k"
     },
@@ -105,8 +110,8 @@
       "id": "crypto",
       "label": "Crypto",
       "question": "BTC closes above $200K this year?",
-      "sideA": { "name": "Yes", "icon": "tabler:trending-up",   "odds": 34 },
-      "sideB": { "name": "No",  "icon": "tabler:trending-down", "odds": 66 },
+      "sideA": { "name": "Yes", "image": "/images/markets_images/jameye-market-btc-200k-yes.png", "odds": 34 },
+      "sideB": { "name": "No",  "image": "/images/markets_images/jameye-market-btc-200k-no.png",  "odds": 66 },
       "volume": "$5.9M",
       "traders": "4.8k"
     },
@@ -114,8 +119,8 @@
       "id": "climate",
       "label": "Climate",
       "question": "1.5°C breached before 2030?",
-      "sideA": { "name": "Breach", "icon": "tabler:flame",     "odds": 71 },
-      "sideB": { "name": "Hold",   "icon": "tabler:snowflake", "odds": 29 },
+      "sideA": { "name": "Breach", "image": "/images/markets_images/jameye-market-1p5c-2030-yes.png", "odds": 71 },
+      "sideB": { "name": "Hold",   "image": "/images/markets_images/jameye-market-1p5c-2030-no.png",  "odds": 29 },
       "volume": "$2.6M",
       "traders": "1.1k"
     },
@@ -123,8 +128,8 @@
       "id": "economics",
       "label": "Economics",
       "question": "Will the Fed cut rates this quarter?",
-      "sideA": { "name": "Bull", "image": "/images/versus/bull.png", "odds": 59 },
-      "sideB": { "name": "Bear", "image": "/images/versus/bear.png", "odds": 41 },
+      "sideA": { "name": "Bull", "image": "/images/markets_images/jameye-bull-mascot.png", "odds": 59 },
+      "sideB": { "name": "Bear", "image": "/images/markets_images/jameye-bear-mascot.png", "odds": 41 },
       "volume": "$8.7M",
       "traders": "2.4k"
     },
@@ -132,8 +137,8 @@
       "id": "culture",
       "label": "Culture",
       "question": "Album of the Year — Grammys 2027",
-      "sideA": { "name": "Taylor", "icon": "tabler:music", "odds": 63 },
-      "sideB": { "name": "Drake",  "icon": "tabler:vinyl", "odds": 37 },
+      "sideA": { "name": "Taylor", "image": "/images/markets_images/jameye-market-grammys-2027-icon-popstar.png", "odds": 63 },
+      "sideB": { "name": "Drake",  "image": "/images/markets_images/jameye-market-grammys-2027-icon-rapper.png", "odds": 37 },
       "volume": "$1.9M",
       "traders": "0.9k"
     }

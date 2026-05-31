@@ -3,6 +3,7 @@
     { "text": "Jugar", "href": "#hero" },
     { "text": "Personajes", "href": "#roster" },
     { "text": "Cómo funciona", "href": "#how-it-works" },
+    { "text": "Torneos", "href": "#tournaments" },
     { "text": "Ranking", "href": "/es/leaderboard/" }
   ],
   "cta": {

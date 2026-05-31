@@ -263,19 +263,20 @@
   /* ---------- Wordmark ---------- */
   .jameye-wordmark {
     font-family: var(--font-sans);
-    font-weight: 800;
-    letter-spacing: -0.04em;
+    font-weight: 900;
+    letter-spacing: -0.03em;
     text-transform: uppercase;
     color: #ffffff;
     line-height: 1;
     display: inline-flex;
     align-items: baseline;
   }
+  /* ® sits as a compact superscript pinned to the cap-height top-right. */
   .jameye-wordmark .reg {
-    font-size: 0.4em;
-    transform: translateY(-0.85em);
-    margin-left: 0.06em;
-    opacity: 0.85;
+    font-size: 0.32em;
+    transform: translateY(-1.4em);
+    margin-left: 0.05em;
+    opacity: 0.9;
     font-weight: 700;
   }
 

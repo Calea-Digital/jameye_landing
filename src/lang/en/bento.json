@@ -40,6 +40,7 @@
       "ok": "Not bad.",
       "bad": "Ouch."
     },
+    "teaserVerdict": "🔒 Still live",
     "reactions": {
       "good": "Nailed it!",
       "ok": "Decent.",
@@ -48,7 +49,7 @@
     "questions": [
       { "q": "Bitcoin above $100,000 at any point in 2024?", "truth": 100, "answer": "Yes — BTC broke <strong>$100K</strong> in December 2024." },
       { "q": "OpenAI releases GPT-5 before Jan 1, 2025?", "truth": 0, "answer": "No — <strong>GPT-5</strong> did not ship before 2025." },
-      { "q": "Fed cuts interest rates at least once in 2024?", "truth": 100, "answer": "Yes — the Fed cut rates <strong>three times</strong> in late 2024." }
+      { "q": "Will Bitcoin hit $250,000 before 2027?", "truth": null, "teaser": true, "answer": "Nobody knows yet — this market is <strong>still live</strong>. Join the waitlist to lock real forecasts and build your Edge Score." }
     ]
   }
 }
