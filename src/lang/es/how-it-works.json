@@ -40,19 +40,6 @@
       "tagline": "Tu habilidad, puntuada",
       "headline": "EDGE premia la habilidad, no la suerte.",
       "body": "Cuando llega la realidad, tu pronóstico se puntúa contra ella. Los aciertos mejores que la multitud ganan EDGE — la suerte se equilibra con el tiempo, pero la habilidad se acumula."
-    },
-    {
-      "id": "tournaments",
-      "icon": "tabler:trophy",
-      "label": "Torneos",
-      "tagline": "Gana dinero real",
-      "headline": "Los más afinados ganan.",
-      "body": "Los torneos son eventos en vivo — supera al resto mientras uno está activo y ganas dinero real. El EDGE nunca se apuesta ni se canjea; solo refleja qué tan afinado eres.",
-      "points": [
-        "Gana posicionándote más alto durante un torneo en vivo",
-        "Sin apuestas, sin entrada, sin canjear EDGE",
-        "Los premios en efectivo son independientes de tu Edge Score"
-      ]
     }
   ],
   "edge": {

@@ -322,9 +322,16 @@ const widthFromPct = (v: string) => `${parseInt(v, 10)}%`;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--hairline);
+    /* Keep the card on a stable compositing layer so the backdrop-filter +
+       blurred glow don't re-rasterize (and flicker) when the hover transform
+       promotes/demotes the layer. */
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     transition: transform 400ms cubic-bezier(0.2, 0.85, 0.2, 1), border-color 300ms ease, box-shadow 300ms ease;
   }
-  .battle-card:hover { transform: translateY(-6px); border-color: var(--hairline-strong); }
+  .battle-card:hover { transform: translate3d(0, -6px, 0); border-color: var(--hairline-strong); }
   .battle-card[data-active="true"] {
     border-color: var(--hairline-strong);
     box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -334,6 +341,10 @@ const widthFromPct = (v: string) => `${parseInt(v, 10)}%`;
   .battle-card__glow {
     position: absolute; top: -40%; right: -30%; width: 70%; height: 80%;
     border-radius: 9999px; filter: blur(60px); opacity: 0.35; pointer-events: none;
+    transform: translateZ(0);
+    will-change: opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     transition: opacity 400ms ease;
   }
   .battle-card:hover .battle-card__glow,

@@ -581,21 +581,6 @@
   .gradient-tile[data-tone="gold-orange"]     { background-image: var(--gradient-gold-orange); }
   .gradient-tile[data-tone="brand-sweep"]     { background-image: var(--gradient-brand-sweep); }
 
-  /* ---------- Streak pill (header) ---------- */
-  .streak-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 0.75rem;
-    border-radius: 9999px;
-    background: rgba(250, 204, 21, 0.12);
-    border: 1px solid rgba(250, 204, 21, 0.3);
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: var(--prize-gold);
-  }
-
   /* ---------- Trust row (hero) ---------- */
   .trust-avi {
     width: 32px;

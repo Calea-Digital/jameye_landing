@@ -40,19 +40,6 @@
       "tagline": "Your skill, scored",
       "headline": "EDGE rewards skill, not luck.",
       "body": "When reality lands, your forecast is scored against it. Sharper-than-the-crowd calls earn EDGE — luck evens out over time, but skill compounds."
-    },
-    {
-      "id": "tournaments",
-      "icon": "tabler:trophy",
-      "label": "Tournaments",
-      "tagline": "Win real cash",
-      "headline": "The sharpest forecasters win.",
-      "body": "Tournaments run as live events — outrank the field while one is on and you win real cash. EDGE is never staked or cashed out; it only tracks how sharp you are.",
-      "points": [
-        "Win by ranking higher during a live tournament",
-        "No staking, no buy-in, no converting EDGE",
-        "Cash prizes are independent of your Edge Score"
-      ]
     }
   ],
   "edge": {
