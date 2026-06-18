@@ -1,0 +1,63 @@
+/**
+ * Edge Score Builder — standalone styles.
+ *
+ * Everything the ported components need that isn't a plain Tailwind utility:
+ *   • the `avatar-float` keyframe used by the player avatar
+ *   • the `.esb-glass` / `.esb-shadow-glow` / `.esb-brand-hairline` surfaces
+ *     (renamed from the app's `.glass` / `shadow-glow` / `.brand-hairline`
+ *     so they can't collide with your landing page's own classes)
+ *   • the `.esb-title-accent` gradient text
+ *
+ * Values are hard-coded to the app's DARK theme — the scene is designed for a
+ * dark/void background. Import this once:  import "./edge-score-builder.css";
+ *
+ * Fonts: the scene references "Inter Tight Variable" and "JetBrains Mono
+ * Variable" with system fallbacks. Load those families if you want a 1:1 match;
+ * otherwise the fallbacks (system-ui / monospace) kick in.
+ */
+
+@keyframes avatar-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*="avatar-float"] { animation: none !important; }
+}
+
+/* Translucent blurred glass slab — the canonical surface. */
+.esb-glass {
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Lilac bloom reserved for accent panels. */
+.esb-shadow-glow {
+  box-shadow: 0 0 34px -4px rgba(126, 59, 255, 0.5);
+}
+
+/* Brand-gradient hairline swept across a card's top edge. */
+.esb-brand-hairline {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(126, 59, 255, 0.55) 35%,
+    rgba(216, 59, 255, 0.6) 65%,
+    transparent 100%
+  );
+  opacity: 0.85;
+}
+
+/* Gradient accent for display titles — brand blue → lilac → magenta. */
+.esb-title-accent {
+  background-image: linear-gradient(
+    95deg,
+    rgb(41 98 255) 0%,
+    rgb(126 59 255) 55%,
+    rgb(216 59 255) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

@@ -2,6 +2,8 @@
 import { Icon } from 'astro-icon/components';
 import { t, type Locale } from '~/utils/i18n';
 import { getLiveMarkets, type LiveMarket } from '~/utils/polymarket';
+import EdgeSceneIsland from '~/components/edge-score-builder/EdgeSceneIsland';
+import '~/components/edge-score-builder/edge-score-builder.css';
 
 export interface Props {
   locale: Locale;
@@ -172,45 +174,8 @@ const charts = markets.map((mk) => {
   return { id: mk.id, line, area, last: pts[pts.length - 1] };
 });
 
-// ---- Edge Score journey: a winding level-path through the brand canvas. ----
-const JOURNEY_W = 1000;
-const JOURNEY_H = 300;
-// Track control points (viewBox units): START avatar, 5 lock nodes, then the
-// BOSS/vault terminal. The path runs through all of them as one S-curve.
-const journeyPts = [
-  { x: 72,  y: 215 }, // 0 — start avatar
-  { x: 220, y: 200 }, // 1 — lock
-  { x: 360, y: 108 }, // 2 — lock
-  { x: 515, y: 205 }, // 3 — lock
-  { x: 668, y: 100 }, // 4 — active lock
-  { x: 788, y: 205 }, // 5 — lock
-  { x: 858, y: 150 }, // 6 — boss / vault (kept inset so it never clips)
-];
-// Catmull-Rom → cubic bezier so the glowing path passes through every node.
-function smoothPath(pts: { x: number; y: number }[]): string {
-  if (pts.length < 2) return '';
-  let d = `M ${pts[0].x} ${pts[0].y}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[i - 1] ?? pts[i];
-    const p1 = pts[i];
-    const p2 = pts[i + 1];
-    const p3 = pts[i + 2] ?? p2;
-    const c1x = p1.x + (p2.x - p0.x) / 6;
-    const c1y = p1.y + (p2.y - p0.y) / 6;
-    const c2x = p2.x - (p3.x - p1.x) / 6;
-    const c2y = p2.y - (p3.y - p1.y) / 6;
-    d += ` C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${p2.x} ${p2.y}`;
-  }
-  return d;
-}
-const pct = (p: { x: number; y: number }) => ({ left: (p.x / JOURNEY_W) * 100, top: (p.y / JOURNEY_H) * 100 });
-const journeyPath = smoothPath(journeyPts);
-// The lit "progress" segment runs from start through the active (4th) lock.
-const progressPath = smoothPath(journeyPts.slice(0, 5));
-// Lock nodes sit on points 1..5; start avatar on 0, the vault on 6.
-const journeyNodes = (data.edgeJourney?.nodes ?? []).map((n, i) => ({ ...n, ...pct(journeyPts[i + 1]) }));
-const startPos = pct(journeyPts[0]);
-const bossPos = pct(journeyPts[journeyPts.length - 1]);
+// The "Build your Edge Score" visualization is the real app component
+// (LoopExpeditionScene), mounted as a client island below — see EdgeSceneIsland.
 ---
 
 <section id="how-it-works" class="py-12 md:py-16">
@@ -369,73 +334,9 @@ const bossPos = pct(journeyPts[journeyPts.length - 1]);
                     <p class="edge-journey__sub">{data.edgeJourney.sub}</p>
                   </div>
 
-                  <div class="edge-map">
-                    <svg class="edge-map__path" viewBox={`0 0 ${JOURNEY_W} ${JOURNEY_H}`} preserveAspectRatio="none" aria-hidden="true">
-                      <defs>
-                        <linearGradient id="edgePathGrad" x1="0" y1="0" x2="1" y2="0">
-                          <stop offset="0%" stop-color="#7e3bff" />
-                          <stop offset="100%" stop-color="#d83bff" />
-                        </linearGradient>
-                        <linearGradient id="edgeProgGrad" x1="0" y1="0" x2="1" y2="0">
-                          <stop offset="0%" stop-color="#7e3bff" />
-                          <stop offset="100%" stop-color="#d83bff" />
-                        </linearGradient>
-                        <linearGradient id="edgeFlowGrad" x1="0" y1="0" x2="1" y2="0">
-                          <stop offset="0%" stop-color="#a78bff" />
-                          <stop offset="55%" stop-color="#e879f9" />
-                          <stop offset="100%" stop-color="#f5d0fe" />
-                        </linearGradient>
-                        <filter id="edgeGlow" x="-20%" y="-80%" width="140%" height="260%">
-                          <feGaussianBlur stdDeviation="5" result="b" />
-                          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-                        </filter>
-                      </defs>
-                      <!-- Track: neon edge glow, dark band, dashed centre line. -->
-                      <path d={journeyPath} fill="none" stroke="url(#edgePathGrad)" stroke-width="34" stroke-linecap="round" opacity="0.32" filter="url(#edgeGlow)" />
-                      <path d={journeyPath} fill="none" stroke="#170d2b" stroke-width="24" stroke-linecap="round" />
-                      <path d={journeyPath} fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="2" stroke-dasharray="2 12" stroke-linecap="round" />
-                      <!-- Progress segment (start → active) reads brighter. -->
-                      <path d={progressPath} fill="none" stroke="url(#edgeProgGrad)" stroke-width="26" stroke-linecap="round" opacity="0.5" filter="url(#edgeGlow)" />
-                      <!-- Purple energy pulsing through the whole pipe. -->
-                      <path class="edge-map__flow" d={journeyPath} fill="none" stroke="url(#edgeFlowGrad)" stroke-width="7" stroke-linecap="round" stroke-dasharray="20 30" filter="url(#edgeGlow)" />
-                      <circle class="edge-map__packet" r="6" fill="#f0abfc" filter="url(#edgeGlow)">
-                        <animateMotion dur="2.6s" repeatCount="indefinite" path={journeyPath} />
-                      </circle>
-                      <circle class="edge-map__packet" r="5" fill="#c79cff" filter="url(#edgeGlow)">
-                        <animateMotion dur="2.6s" begin="1.3s" repeatCount="indefinite" path={journeyPath} />
-                      </circle>
-                    </svg>
-
-                    <!-- Start: small explorer + label. -->
-                    <div class="edge-start" style={`left:${startPos.left}%; top:${startPos.top}%;`}>
-                      <img class="edge-start__avi" src="/avatar/02-edge-score-explorer.svg" alt="" loading="lazy" />
-                      <span class="edge-start__label">{data.edgeJourney.startLabel}</span>
-                    </div>
-
-                    <!-- Five lock gates along the curve. -->
-                    {journeyNodes.map((n, i) => (
-                      <div
-                        class:list={['edge-lock', `edge-lock--${n.state}`]}
-                        style={`left:${n.left}%; top:${n.top}%; --d:${i * 0.1}s;`}
-                      >
-                        <span class="edge-lock__badge num">★{n.star}</span>
-                        <span class="edge-lock__tile"><Icon name="tabler:lock" class="w-5 h-5" /></span>
-                      </div>
-                    ))}
-
-                    <!-- Boss avatar guarding the certified vault. -->
-                    <div class="edge-vault" style={`left:${bossPos.left}%; top:${bossPos.top}%;`}>
-                      <div class="edge-vault__door">
-                        <span class="edge-vault__banner">{data.edgeJourney.vaultBanner}</span>
-                        <div class="edge-vault__rewards">
-                          <Icon name="tabler:cash-banknote" class="edge-vault__rw edge-vault__rw--cash" />
-                          <Icon name="tabler:trophy" class="edge-vault__rw edge-vault__rw--trophy" />
-                          <Icon name="tabler:cash-banknote" class="edge-vault__rw edge-vault__rw--cash" />
-                        </div>
-                        <span class="edge-vault__seal"><Icon name="tabler:lock" class="w-3.5 h-3.5" /></span>
-                      </div>
-                      <img class="edge-vault__boss" src="/avatar/09-squad-row2-rival.svg" alt="" loading="lazy" />
-                    </div>
+                  <!-- The exact app scene (LoopExpeditionScene) as a client island. -->
+                  <div class="edge-scene">
+                    <EdgeSceneIsland client:visible />
                   </div>
 
                   <p class="edge-journey__caption"><Icon name="tabler:rosette-discount-check" class="w-4 h-4" />{data.edgeJourney.bossCaption}</p>
@@ -668,101 +569,12 @@ const bossPos = pct(journeyPts[journeyPts.length - 1]);
     font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700;
     letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand-lavender);
   }
-  .edge-journey__kdot { width: 7px; height: 7px; border-radius: 9999px; background: var(--brand-magenta); box-shadow: 0 0 10px rgba(216, 59, 255, 0.9); }
+  .edge-journey__kdot { width: 7px; height: 7px; border-radius: 9999px; background: #7e3bff; box-shadow: 0 0 10px #7e3bff; }
   .edge-journey__title { font-family: var(--font-sans); font-size: clamp(1.9rem, 5vw, 3.1rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.02; }
   .edge-journey__sub { margin: 0.7rem 0 0; max-width: 33rem; font-size: 0.98rem; line-height: 1.55; color: var(--ink-muted); }
 
-  /* Path card surface */
-  .edge-map {
-    position: relative; width: 100%; margin: 1.5rem 0 0.5rem;
-    aspect-ratio: 1000 / 300; min-height: 230px;
-    border-radius: 1.4rem; overflow: visible;
-    background:
-      radial-gradient(80% 120% at 12% 90%, rgba(126, 59, 255, 0.16), transparent 60%),
-      radial-gradient(70% 120% at 92% 20%, rgba(216, 59, 255, 0.16), transparent 60%),
-      rgba(8, 6, 16, 0.55);
-    border: 1px solid var(--hairline);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 60px -30px rgba(0, 0, 0, 0.85);
-  }
-  .edge-map__path { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; overflow: visible; }
-  /* Gamified energy — fast travelling purple pulses. */
-  .edge-map__flow { animation: edgeFlow 1.1s linear infinite; }
-  @keyframes edgeFlow { to { stroke-dashoffset: -50; } }
-
-  /* Start avatar + label */
-  .edge-start { position: absolute; z-index: 3; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
-  .edge-start__avi { width: clamp(52px, 9vw, 80px); filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.55)); animation: edgeBob 4s ease-in-out infinite; }
-  .edge-start__label { font-family: var(--font-mono); font-size: 0.56rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted); }
-  @keyframes edgeBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-
-  /* Lock gates */
-  .edge-lock {
-    position: absolute; z-index: 4; transform: translate(-50%, -50%);
-    animation: edgePop 420ms cubic-bezier(0.2, 1.2, 0.4, 1) backwards; animation-delay: var(--d);
-  }
-  @keyframes edgePop { from { opacity: 0; transform: translate(-50%, -35%) scale(0.6); } }
-  .edge-lock__tile {
-    display: flex; align-items: center; justify-content: center;
-    width: clamp(2.5rem, 6vw, 3.3rem); height: clamp(2.5rem, 6vw, 3.3rem);
-    border-radius: 0.9rem; color: rgba(255, 255, 255, 0.4);
-    background: linear-gradient(180deg, rgba(60, 64, 82, 0.55), rgba(26, 28, 40, 0.9));
-    border: 1px solid var(--hairline-strong);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 6px 16px -6px rgba(0, 0, 0, 0.7);
-  }
-  .edge-lock__badge {
-    position: absolute; top: -7px; right: -9px; z-index: 1;
-    display: inline-flex; align-items: center; gap: 1px;
-    padding: 0.05rem 0.32rem; border-radius: 9999px;
-    font-size: 0.6rem; font-weight: 800; color: #fff;
-    background: var(--alert-rose); border: 1px solid rgba(255, 255, 255, 0.35);
-    box-shadow: 0 2px 8px -2px rgba(244, 63, 94, 0.8);
-  }
-  /* The single active gate is the focal point — amber, glowing. */
-  .edge-lock--active .edge-lock__tile {
-    color: #2a1602;
-    background: linear-gradient(180deg, #fbbf24, #f59e0b);
-    border-color: rgba(253, 224, 71, 0.7);
-    box-shadow: 0 0 0 5px rgba(251, 191, 36, 0.14), 0 0 30px -4px rgba(251, 191, 36, 0.95);
-    animation: edgeAmber 2.4s ease-in-out infinite;
-  }
-  @keyframes edgeAmber {
-    0%, 100% { box-shadow: 0 0 0 5px rgba(251, 191, 36, 0.14), 0 0 30px -4px rgba(251, 191, 36, 0.95); }
-    50%      { box-shadow: 0 0 0 9px rgba(251, 191, 36, 0.06), 0 0 40px 0 rgba(251, 191, 36, 1); }
-  }
-
-  /* Boss avatar + certified vault — boss stands in front of the door so the
-     whole group stays the width of the door and never clips the card edge. */
-  .edge-vault { position: absolute; z-index: 3; transform: translate(-50%, -50%); }
-  .edge-vault__door {
-    position: relative; width: clamp(82px, 13vw, 122px); height: clamp(76px, 12vw, 108px);
-    border-radius: 0.7rem 0.7rem 0.3rem 0.3rem;
-    background: linear-gradient(180deg, rgba(40, 14, 44, 0.95), rgba(14, 8, 20, 0.98));
-    border: 1px solid rgba(216, 59, 255, 0.4);
-    box-shadow: inset 0 0 24px rgba(216, 59, 255, 0.18), 0 14px 30px -14px rgba(0, 0, 0, 0.8);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; padding-top: 0.9rem;
-  }
-  .edge-vault__banner {
-    position: absolute; top: -0.55rem; left: 50%; transform: translateX(-50%);
-    width: 118%; text-align: center; padding: 0.18rem 0.2rem; border-radius: 0.3rem;
-    background: linear-gradient(90deg, #ff3ba8, #d83bff); color: #2a0316;
-    font-family: var(--font-mono); font-size: 0.42rem; font-weight: 800;
-    letter-spacing: 0.04em; text-transform: uppercase; line-height: 1.15;
-    box-shadow: 0 4px 12px -4px rgba(216, 59, 255, 0.8);
-  }
-  .edge-vault__rewards { display: flex; align-items: center; gap: 0.2rem; opacity: 0.92; }
-  .edge-vault__rw { width: 1.05rem; height: 1.05rem; }
-  .edge-vault__rw--cash { color: var(--win-emerald); }
-  .edge-vault__rw--trophy { color: var(--brand-magenta); }
-  .edge-vault__seal {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 1.4rem; height: 1.4rem; border-radius: 9999px; color: #fff;
-    background: rgba(0, 0, 0, 0.55); border: 1px solid var(--hairline-strong);
-  }
-  .edge-vault__boss {
-    position: absolute; left: 50%; bottom: -10px; z-index: 4;
-    width: clamp(88px, 15vw, 140px); transform: translateX(-50%);
-    filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.65)); animation: edgeBob 4.4s ease-in-out infinite 0.6s;
-  }
+  /* Scene wrapper — holds the real app component (LoopExpeditionScene). */
+  .edge-scene { margin: 1.5rem 0 0.5rem; }
 
   .edge-journey__caption {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
@@ -770,15 +582,6 @@ const bossPos = pct(journeyPts[journeyPts.length - 1]);
     font-size: 0.92rem; line-height: 1.5; color: var(--ink-muted);
   }
   .edge-journey__caption svg { color: var(--brand-lavender); flex: none; }
-
-  @media (max-width: 600px) {
-    .edge-map { min-height: 260px; }
-    .edge-vault__boss { width: 60px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .edge-map__flow, .edge-map__packet, .edge-start__avi, .edge-vault__boss, .edge-lock, .edge-lock--active .edge-lock__tile { animation: none; }
-  }
 
   /* ---- Split layout (forecast + tournaments) ---- */
   .hiw-split {

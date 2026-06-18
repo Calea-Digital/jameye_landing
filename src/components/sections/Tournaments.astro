@@ -11,7 +11,6 @@ const { locale } = Astro.props;
 const data = t<{
   eyebrow: string;
   title: { lead: string; ital: string };
-  badge: string;
   prize: { label: string; amount: string; unit: string };
   splits: { place: string; amount: string; tone: 'gold' | 'silver' | 'bronze' }[];
   steps: { k: string; title: string; body: string }[];
@@ -47,11 +46,6 @@ const SPARKLES = [
       }
 
       <div class="relative z-10 text-center">
-        <span class="tourney-badge">
-          <span class="gold-dot"></span>
-          {data.badge}
-        </span>
-
         <h2 class="tourney-heading text-white">
           {data.title.lead} <span class="ital-gold">{data.title.ital}</span>
         </h2>
@@ -148,22 +142,6 @@ const SPARKLES = [
     color: #1a1206;
     border-color: rgba(250, 204, 21, 0.35);
     box-shadow: 0 22px 48px -20px rgba(250, 204, 21, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.45);
-  }
-
-  .tourney-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.36rem 0.95rem;
-    border-radius: 9999px;
-    border: 1px solid rgba(250, 204, 21, 0.4);
-    background: rgba(250, 204, 21, 0.1);
-    font-family: var(--font-mono);
-    font-size: 0.64rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--prize-gold);
   }
 
   .tourney-heading {

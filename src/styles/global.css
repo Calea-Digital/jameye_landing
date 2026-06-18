@@ -101,6 +101,8 @@
   --font-body:      'Space Grotesk', 'Inter Tight', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono:      'JetBrains Mono', ui-monospace, monospace;
   --font-editorial: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  /* Brand wordmark — JAMEYE® is set in Archivo Black (matches the app). */
+  --font-logo:      'Archivo Black', 'Arial Black', sans-serif;
 
   /* Geometry */
   --radius: 1rem;
@@ -262,22 +264,23 @@
 @layer components {
   /* ---------- Wordmark ---------- */
   .jameye-wordmark {
-    font-family: var(--font-sans);
-    font-weight: 900;
-    letter-spacing: -0.03em;
+    font-family: var(--font-logo);
+    /* Archivo Black ships a single heavy weight — 400 is its natural black. */
+    font-weight: 400;
+    letter-spacing: -0.025em;
     text-transform: uppercase;
     color: #ffffff;
     line-height: 1;
-    display: inline-flex;
-    align-items: baseline;
   }
-  /* ® sits as a compact superscript pinned to the cap-height top-right. */
+  /* ® superscript — matches the app exactly: text-[9px] -top-3 ml-0.5 font-bold.
+     Sized/offset in em of the wordmark so it scales with `size`. */
   .jameye-wordmark .reg {
-    font-size: 0.32em;
-    transform: translateY(-1.4em);
-    margin-left: 0.05em;
-    opacity: 0.9;
+    font-size: 0.375em;        /* 9px at the 24px (md) wordmark — app's text-[9px] */
     font-weight: 700;
+    margin-left: 0.22em;       /* ≈ 2px at md — app's ml-0.5 (em is relative to the ®'s own 9px) */
+    vertical-align: baseline;
+    position: relative;
+    top: -1.35em;              /* ≈ -top-3 (-12px) at md — ® floats near the cap top */
   }
 
   /* ---------- Glass surfaces ---------- */

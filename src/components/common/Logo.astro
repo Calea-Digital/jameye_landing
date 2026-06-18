@@ -7,11 +7,13 @@ export interface Props {
 
 const { class: className = '', size = 'md' } = Astro.props;
 
-// Brand book §01 — Inter Tight 900 (heavy grotesque), tracking -0.03em, uppercase, pure white.
+// Brand wordmark — JAMEYE® in Archivo Black, tracking-tight, uppercase, white
+// (matches the app; see LOGO.md). Font loaded via the Layout's Google Fonts link.
+// md matches the app's top-bar size (text-2xl = 24px).
 const sizeMap: Record<'sm' | 'md' | 'lg', string> = {
-  sm: 'text-[15px]',
-  md: 'text-[20px]',
-  lg: 'text-[28px]',
+  sm: 'text-[18px]',
+  md: 'text-[24px]',
+  lg: 'text-[30px]',
 };
 ---
 
@@ -19,5 +21,5 @@ const sizeMap: Record<'sm' | 'md' | 'lg', string> = {
   class:list={['jameye-wordmark', sizeMap[size], className]}
   aria-label="Jameye"
 >
-  JAMEYE<span class="reg">®</span>
+  JAMEYE<sup class="reg">®</sup>
 </span>
