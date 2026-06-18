@@ -4,15 +4,13 @@
 
 These Terms of Service ("Terms") govern your use of the Jameye landing site at jameye.com (the "Site"), operated by True Edge AB ("we", "us"). They apply only to the Site. They do not govern the Jameye platform or any product accessed behind a login, which will have separate terms at launch.
 
-> **REVIEW NOTE (remove before publication):** Draft for legal review. These Terms make no statement about the nature, mechanics, or legal classification of the future Jameye platform. Do not add gameplay or product-classification language here.
-
 ## 1. Acceptance
 
 By accessing or using the Site, you agree to these Terms. If you do not agree, do not use the Site.
 
 ## 2. Eligibility
 
-You must be at least [18] years old to use the Site or join the waitlist. [Counsel: confirm age, see Privacy Policy Section 10.]
+You must be at least [18] years old to use the Site or join the waitlist.
 
 ## 3. The Site and the waitlist
 

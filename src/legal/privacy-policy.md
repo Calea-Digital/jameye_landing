@@ -4,8 +4,6 @@
 
 This Privacy Policy explains how True Edge AB processes personal data through the Jameye landing site at jameye.com (the "Site"). It applies only to this Site. It does not cover the Jameye platform or any product accessed behind a login (planned at staging.jameye.com / the production app), which handles authentication and gameplay and will have its own policy.
 
-> **REVIEW NOTE (remove before publication):** Draft for legal review. Bracketed values must be confirmed. Three items require backend/infra confirmation before publishing: (a) where waitlist data is stored and the retention period (Section 6); (b) that no separate legal/real name is collected; (c) that the public leaderboard endpoint does not expose raw email addresses.
-
 ## 1. Data controller
 
 **True Edge AB**
@@ -15,8 +13,6 @@ Contact for data protection matters: [PRIVACY EMAIL]
 True Edge AB is established in Sweden. Processing is subject to Regulation (EU) 2016/679 (GDPR) and the Swedish Data Protection Act (lag (2018:218)).
 
 [We have not appointed a Data Protection Officer, as the Article 37 GDPR criteria do not apply to the processing described here. / We have appointed a Data Protection Officer, contactable at [DPO EMAIL].]
-
-> **Counsel note (remove before publication):** GDPR Art. 13 requires identifiable contact details for the controller. We provide a contact email and the organisation number. A postal address is not included; confirm this is acceptable, noting some authorities and the German imprint rules expect one.
 
 ## 2. What data we collect
 
@@ -69,7 +65,7 @@ Cloudflare, Inc. is US-based and may process data outside the EEA. Where this oc
 
 ## 7. Retention
 
-[CONFIRM WITH BACKEND.] Waitlist entries (email, handle, referral, avatar) are retained until you withdraw consent or ask to be removed, or until [the platform launches / the waitlist is retired], whichever is earlier. Server and CDN logs containing IP data are retained for [RETENTION PERIOD, e.g. 90 days] for security, then deleted or anonymised.
+Waitlist entries (email, handle, referral, avatar) are retained until you withdraw consent or ask to be removed, or until [the platform launches / the waitlist is retired], whichever is earlier. Server and CDN logs containing IP data are retained for [RETENTION PERIOD, e.g. 90 days] for security, then deleted or anonymised.
 
 ## 8. Your rights
 
@@ -85,7 +81,7 @@ The Site currently sets no cookies and runs no trackers. See the Cookie Policy. 
 
 ## 10. Children
 
-The Site is not directed at children. We do not knowingly collect data from anyone under [18]. [Counsel: GDPR Art. 8 digital-consent age varies by member state (13 in Sweden, 16 in Germany); confirm threshold for an EU-wide audience.]
+The Site is not directed at children. We do not knowingly collect data from anyone under [18].
 
 ## 11. Changes
 

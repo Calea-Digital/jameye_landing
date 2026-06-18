@@ -4,8 +4,6 @@
 
 This Cookie Policy explains how True Edge AB uses cookies and similar technologies on the Jameye landing site at jameye.com (the "Site"). Read it alongside the Privacy Policy.
 
-> **REVIEW NOTE (remove before publication):** This policy describes the Site's **current** state. One item is unconfirmed: whether Cloudflare sets edge cookies (`__cf_bm`, `cf_clearance`). These are injected by Cloudflare, not by site code, so a source scan does not detect them. Confirm with a live browser check (DevTools → Application → Cookies on a first visit). If present, list them in Section 3 as strictly necessary.
-
 ## 1. Current position
 
 As of the date above, the Site:
