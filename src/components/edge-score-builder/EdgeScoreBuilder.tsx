@@ -22,15 +22,6 @@ export function EdgeScoreBuilder({ onStart }: { onStart?: () => void }) {
       <PageGlow />
 
       <header className="relative flex w-full flex-col items-center gap-3 px-1 pt-1 text-center sm:items-start sm:text-left">
-        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-white/70">
-          <span
-            aria-hidden
-            className="h-1.5 w-1.5 rounded-full"
-            style={{ backgroundColor: "#7e3bff", boxShadow: "0 0 10px #7e3bff" }}
-          />
-          Edge Score Builder · Season 1
-        </span>
-
         <h1 className="text-balance font-sans text-[34px] font-light leading-[0.96] tracking-[-0.025em] text-white sm:text-[44px] md:text-[56px] lg:text-[64px]">
           Build your <span className="esb-title-accent">Edge Score</span>.
         </h1>

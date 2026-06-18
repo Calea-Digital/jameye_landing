@@ -22,10 +22,6 @@ const battleData = { ...data.card, canJoin: true, orgs: data.orgs };
 
 <section id="battle-universities" class="py-12 md:py-16">
   <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
-    <div class="section-head">
-      <span class="eyebrow">{data.eyebrow}</span>
-    </div>
-
     <BattleIsland client:visible data={battleData} />
   </div>
 </section>

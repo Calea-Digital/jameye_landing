@@ -40,7 +40,7 @@ const isActive = (href: string) => {
 
     <button
       type="button"
-      class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/[0.04] text-white/75 order-3 ml-auto"
+      class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/[0.04] text-white/75 order-3 ml-auto"
       data-mobile-toggle
       data-aria-open={nav.mobileMenuOpen}
       data-aria-close={nav.mobileMenuClose}
@@ -56,7 +56,7 @@ const isActive = (href: string) => {
       </svg>
     </button>
 
-    <nav class="hidden md:flex items-center gap-7" aria-label="Main">
+    <nav class="hidden lg:flex items-center gap-7" aria-label="Main">
       {
         nav.links.map((link) => (
           <a href={resolveHref(link.href)} class:list={['nav-link', isActive(link.href) && 'is-active']}>
@@ -104,7 +104,7 @@ const isActive = (href: string) => {
   <!-- Mobile menu drawer -->
   <div
     id="mobile-menu"
-    class="md:hidden absolute left-0 right-0 top-16 px-4"
+    class="lg:hidden absolute left-0 right-0 top-16 px-4"
     data-mobile-menu
     hidden
   >
@@ -208,6 +208,6 @@ const isActive = (href: string) => {
   };
   mToggle?.addEventListener('click', () => setMobileOpen(mMenu?.hidden ?? true));
   document.querySelectorAll('[data-mobile-link]').forEach((a) => a.addEventListener('click', () => setMobileOpen(false)));
-  const mq = window.matchMedia('(min-width: 768px)');
+  const mq = window.matchMedia('(min-width: 1024px)');
   mq.addEventListener('change', () => { if (mq.matches) setMobileOpen(false); });
 </script>

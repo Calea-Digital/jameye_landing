@@ -218,6 +218,9 @@ const CFG = {
 
   .lb-player { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
   @media (min-width: 640px) { .lb-player { gap: 0.75rem; } }
+  /* Text column must be allowed to shrink + clip, or long nicknames overflow
+     the cell and collide with the points column on narrow screens. */
+  .lb-player > span { display: block; flex: 1 1 auto; min-width: 0; overflow: hidden; }
   .lb-avatar {
     width: 30px; height: 30px; flex: none;
     border-radius: 9999px;
@@ -228,12 +231,15 @@ const CFG = {
   }
   @media (min-width: 640px) { .lb-avatar { width: 38px; height: 38px; } }
   .lb-name {
+    display: block;
     font-weight: 500; color: #fff; letter-spacing: -0.01em;
-    min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .lb-sub {
+    display: block;
     font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em;
     color: rgba(255,255,255,0.4); margin-top: 0.15rem;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .lb-pts {
     font-family: var(--font-mono); font-variant-numeric: tabular-nums;

@@ -90,6 +90,37 @@ function pointOnPath(t: number): { x: number; y: number } {
   };
 }
 
+/** Vertical serpentine layout for narrow (mobile) viewports — the same
+ *  expedition, stacked top→bottom so it reads as a vertical climb instead of
+ *  a cramped horizontal scroll. x weaves within [28,72]% so the wide node
+ *  glyphs never clip the card edges. */
+function pointOnPathVertical(t: number): { x: number; y: number } {
+  return {
+    x: 50 + 22 * Math.sin(t * Math.PI * 2.1),
+    y: 15 + 76 * t,
+  };
+}
+
+/** Catmull-Rom → cubic-Bezier smooth path through the given points (in the
+ *  0–100 viewBox space). Used so the decorative track follows the vertical
+ *  node positions exactly. */
+function smoothPath(pts: { x: number; y: number }[]): string {
+  if (pts.length < 2) return "";
+  const d = [`M ${pts[0].x.toFixed(2)} ${pts[0].y.toFixed(2)}`];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] ?? pts[i];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[i + 2] ?? p2;
+    const c1x = p1.x + (p2.x - p0.x) / 6;
+    const c1y = p1.y + (p2.y - p0.y) / 6;
+    const c2x = p2.x - (p3.x - p1.x) / 6;
+    const c2y = p2.y - (p3.y - p1.y) / 6;
+    d.push(`C ${c1x.toFixed(2)} ${c1y.toFixed(2)} ${c2x.toFixed(2)} ${c2y.toFixed(2)} ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`);
+  }
+  return d.join(" ");
+}
+
 // ─── Boss vault hall backdrop ───────────────────────────────────────────────
 
 function BossDuelHallBackdrop() {
@@ -577,37 +608,82 @@ export function LoopExpeditionScene({
 }) {
   const n = loop.nodes.length;
 
+  // Narrow viewports lay the expedition out vertically (a top→bottom climb)
+  // instead of the horizontal track, so the wide node glyphs stop colliding.
+  const [isVertical, setIsVertical] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(max-width: 640px)");
+    const update = () => setIsVertical(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
   const positions = useMemo(() => {
     const out: { x: number; y: number }[] = [];
     for (let i = 0; i < n; i++) {
       const t = n === 1 ? 0.5 : i / (n - 1);
-      out.push(pointOnPath(t));
+      out.push(isVertical ? pointOnPathVertical(t) : pointOnPath(t));
     }
     return out;
-  }, [n]);
+  }, [n, isVertical]);
+
+  // Vertical track geometry, generated from the node positions so the
+  // decorative path threads through every node exactly.
+  const vMainPath = useMemo(() => (isVertical ? smoothPath(positions) : ""), [isVertical, positions]);
+  const vRailA = useMemo(() => (isVertical ? smoothPath(positions.map((p) => ({ x: p.x - 3, y: p.y }))) : ""), [isVertical, positions]);
+  const vRailB = useMemo(() => (isVertical ? smoothPath(positions.map((p) => ({ x: p.x + 3, y: p.y }))) : ""), [isVertical, positions]);
+
+  const mainPath = isVertical ? vMainPath : MAIN_PATH;
+  const upperRail = isVertical ? vRailA : UPPER_RAIL_PATH;
+  const lowerRail = isVertical ? vRailB : LOWER_RAIL_PATH;
+  // Horizontal gets a short dashed lead-in before the start node; vertical
+  // omits it — the start avatar rises above its node, so a lead-in from the
+  // top edge would poke out above its head.
+  const leadIn = isVertical ? "" : LEAD_IN_PATH;
 
   const handleStart = onStart ?? (() => {});
 
+  // Vertical mode needs a tall, content-driven height; horizontal keeps the
+  // original viewport-clamped band.
+  const heightClass = isVertical
+    ? "h-auto"
+    : "h-[clamp(200px,42svh,260px)] sm:h-[clamp(232px,36svh,300px)] md:h-[clamp(280px,38svh,380px)] lg:h-[clamp(300px,40svh,440px)]";
+
   return (
-    <div className="relative mx-auto mt-0 h-[clamp(200px,42svh,260px)] w-full max-w-full overflow-visible px-3 pb-12 pt-0 sm:h-[clamp(232px,36svh,300px)] sm:px-4 sm:pb-16 md:h-[clamp(280px,38svh,380px)] md:px-5 md:pb-14 lg:h-[clamp(300px,40svh,440px)]">
+    <div
+      className={`relative mx-auto mt-0 ${heightClass} w-full max-w-full overflow-visible px-3 pb-12 pt-0 sm:px-4 sm:pb-16 md:px-5 md:pb-14`}
+      style={isVertical ? { height: `${n * 142 + 28}px` } : undefined}
+    >
       <style dangerouslySetInnerHTML={{ __html: KEYFRAMES }} />
 
       {/* Atmospheric mists (arena brightness) */}
-      <div
-        className="pointer-events-none absolute inset-x-[-3%] top-[2%] h-[58%] rounded-[40%] opacity-80 blur-2xl"
-        style={{ background: "radial-gradient(ellipse at 68% 42%, rgba(216,59,255,0.28), transparent 34%), radial-gradient(ellipse at 20% 40%, rgba(126,59,255,0.22), transparent 38%)" }}
-        aria-hidden
-      />
-      <div
-        className="loop-journey-mist pointer-events-none absolute inset-x-[-4%] bottom-[12%] h-[36%] rounded-full blur-xl"
-        style={{ background: "linear-gradient(90deg, transparent 0%, rgba(91,141,255,0.10) 16%, rgba(126,59,255,0.18) 54%, rgba(216,59,255,0.10) 82%, transparent 100%)" }}
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-x-[6%] bottom-[3%] h-[34%] rounded-[50%] opacity-45 blur-xl"
-        style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(126,59,255,0.45), rgba(41,98,255,0.18) 42%, transparent 76%)" }}
-        aria-hidden
-      />
+      {isVertical ? (
+        <div
+          className="pointer-events-none absolute inset-y-[2%] left-1/2 w-[72%] -translate-x-1/2 rounded-[45%] opacity-70 blur-2xl"
+          style={{ background: "radial-gradient(ellipse at 50% 12%, rgba(216,59,255,0.26), transparent 30%), radial-gradient(ellipse at 50% 88%, rgba(126,59,255,0.24), transparent 36%)" }}
+          aria-hidden
+        />
+      ) : (
+        <>
+          <div
+            className="pointer-events-none absolute inset-x-[-3%] top-[2%] h-[58%] rounded-[40%] opacity-80 blur-2xl"
+            style={{ background: "radial-gradient(ellipse at 68% 42%, rgba(216,59,255,0.28), transparent 34%), radial-gradient(ellipse at 20% 40%, rgba(126,59,255,0.22), transparent 38%)" }}
+            aria-hidden
+          />
+          <div
+            className="loop-journey-mist pointer-events-none absolute inset-x-[-4%] bottom-[12%] h-[36%] rounded-full blur-xl"
+            style={{ background: "linear-gradient(90deg, transparent 0%, rgba(91,141,255,0.10) 16%, rgba(126,59,255,0.18) 54%, rgba(216,59,255,0.10) 82%, transparent 100%)" }}
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-x-[6%] bottom-[3%] h-[34%] rounded-[50%] opacity-45 blur-xl"
+            style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(126,59,255,0.45), rgba(41,98,255,0.18) 42%, transparent 76%)" }}
+            aria-hidden
+          />
+        </>
+      )}
 
       {/* Path */}
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden>
@@ -617,7 +693,7 @@ export function LoopExpeditionScene({
             <stop offset="48%" stopColor="#d83bff" stopOpacity="0.22" />
             <stop offset="100%" stopColor="#7e3bff" stopOpacity="0" />
           </linearGradient>
-          <linearGradient id="builderArenaGlow" x1="0%" x2="100%" y1="0%" y2="0%">
+          <linearGradient id="builderArenaGlow" x1="0%" x2={isVertical ? "0%" : "100%"} y1="0%" y2={isVertical ? "100%" : "0%"}>
             <stop offset="0%" stopColor="#2962ff" stopOpacity="0.0" />
             <stop offset="12%" stopColor="#2962ff" stopOpacity="0.9" />
             <stop offset="50%" stopColor="#7e3bff" stopOpacity="1" />
@@ -625,39 +701,45 @@ export function LoopExpeditionScene({
             <stop offset="100%" stopColor="#d83bff" stopOpacity="0.0" />
           </linearGradient>
         </defs>
-        <path d="M 4 72 C 18 50 31 45 45 56 S 70 68 96 36" stroke="url(#loopJourneySky)" strokeWidth="16" fill="none" strokeLinecap="round" opacity="0.42" />
-        <path d="M 6 88 C 22 76 38 73 50 78 C 66 84 80 74 94 64" stroke="#0a1330" strokeOpacity="0.22" strokeWidth="7" fill="none" strokeLinecap="round" />
-        <path d="M78 27 L89 18 L96 27 Z" fill="#1a0a35" opacity="0.42" />
-        <path d="M8 50 L17 36 L25 51 Z" fill="#1a0a35" opacity="0.34" />
+        {!isVertical && (
+          <>
+            <path d="M 4 72 C 18 50 31 45 45 56 S 70 68 96 36" stroke="url(#loopJourneySky)" strokeWidth="16" fill="none" strokeLinecap="round" opacity="0.42" />
+            <path d="M 6 88 C 22 76 38 73 50 78 C 66 84 80 74 94 64" stroke="#0a1330" strokeOpacity="0.22" strokeWidth="7" fill="none" strokeLinecap="round" />
+            <path d="M78 27 L89 18 L96 27 Z" fill="#1a0a35" opacity="0.42" />
+            <path d="M8 50 L17 36 L25 51 Z" fill="#1a0a35" opacity="0.34" />
+          </>
+        )}
 
         {/* outer brand glow halo */}
-        <path d={MAIN_PATH} stroke="#7e3bff" strokeOpacity="0.32" strokeWidth="18" fill="none" strokeLinecap="round" style={{ filter: "blur(2px)" }} />
+        <path d={mainPath} stroke="#7e3bff" strokeOpacity="0.32" strokeWidth="18" fill="none" strokeLinecap="round" style={{ filter: "blur(2px)" }} />
         {/* dark void base track */}
-        <path d={MAIN_PATH} stroke="#0a0716" strokeWidth="11" fill="none" strokeLinecap="round" />
+        <path d={mainPath} stroke="#0a0716" strokeWidth="11" fill="none" strokeLinecap="round" />
         {/* upper guard rail — soft lilac dashes */}
-        <path d={UPPER_RAIL_PATH} stroke="#c8b5ff" strokeOpacity="0.32" strokeWidth="1.2" strokeDasharray="2 3.5" fill="none" strokeLinecap="round" />
+        <path d={upperRail} stroke="#c8b5ff" strokeOpacity="0.32" strokeWidth="1.2" strokeDasharray="2 3.5" fill="none" strokeLinecap="round" />
         {/* lower guard rail — deep void shadow */}
-        <path d={LOWER_RAIL_PATH} stroke="#1a0a35" strokeOpacity="0.9" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+        <path d={lowerRail} stroke="#1a0a35" strokeOpacity="0.9" strokeWidth="2.4" fill="none" strokeLinecap="round" />
         {/* bright brand-gradient trace on top */}
-        <path d={MAIN_PATH} stroke="url(#builderArenaGlow)" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+        <path d={mainPath} stroke="url(#builderArenaGlow)" strokeWidth="2.5" fill="none" strokeLinecap="round" />
         {/* HUD circuit dashes */}
-        <path d={MAIN_PATH} stroke="#d83bff" strokeOpacity="0.72" strokeWidth="1" strokeDasharray="0.5 2.2" fill="none" strokeLinecap="round" />
+        <path d={mainPath} stroke="#d83bff" strokeOpacity="0.72" strokeWidth="1" strokeDasharray="0.5 2.2" fill="none" strokeLinecap="round" />
         {/* runway approach lights — magenta-tinged white cascade */}
-        <path d={MAIN_PATH} stroke="#f0d8ff" strokeOpacity="0.95" strokeWidth="1.6" strokeDasharray="1.5 6" fill="none" strokeLinecap="round" className="loop-path-arena-runway" style={{ filter: "drop-shadow(0 0 1.8px rgba(216, 59, 255, 0.95))" }} />
+        <path d={mainPath} stroke="#f0d8ff" strokeOpacity="0.95" strokeWidth="1.6" strokeDasharray="1.5 6" fill="none" strokeLinecap="round" className="loop-path-arena-runway" style={{ filter: "drop-shadow(0 0 1.8px rgba(216, 59, 255, 0.95))" }} />
         {/* comet — full-length brand streak */}
-        <path d={MAIN_PATH} stroke="#fff0ff" strokeWidth="2.4" strokeDasharray="4 96" fill="none" strokeLinecap="round" className="loop-path-comet" style={{ filter: "drop-shadow(0 0 5px rgba(216, 59, 255, 0.95))" }} />
+        <path d={mainPath} stroke="#fff0ff" strokeWidth="2.4" strokeDasharray="4 96" fill="none" strokeLinecap="round" className="loop-path-comet" style={{ filter: "drop-shadow(0 0 5px rgba(216, 59, 255, 0.95))" }} />
         {/* dashed lead-in */}
-        <path d={LEAD_IN_PATH} stroke="#d83bff" strokeOpacity="0.85" strokeWidth="1.4" strokeDasharray="2 2" fill="none" strokeLinecap="round" />
+        <path d={leadIn} stroke="#d83bff" strokeOpacity="0.85" strokeWidth="1.4" strokeDasharray="2 2" fill="none" strokeLinecap="round" />
 
         {/* distant spires + arcs */}
-        <g opacity="0.88">
-          <path d="M23 78 L28 68 L35 78 Z" fill="#1a0a35" stroke="rgba(255,255,255,0.18)" strokeWidth="0.8" />
-          <path d="M25 78 L30 71 L33 78 Z" fill="#2a1858" opacity="0.75" />
-          <path d="M72 33 L78 21 L87 33 Z" fill="#1a0a35" stroke="rgba(255,255,255,0.18)" strokeWidth="0.8" opacity="0.78" />
-          <path d="M75 33 L80 25 L84 33 Z" fill="#2a1858" opacity="0.65" />
-          <path d="M39 30 Q48 24 57 31" stroke="#d83bff" strokeWidth="1.1" strokeLinecap="round" strokeOpacity="0.42" fill="none" />
-          <path d="M14 65 Q22 60 30 64" stroke="#d83bff" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.32" fill="none" />
-        </g>
+        {!isVertical && (
+          <g opacity="0.88">
+            <path d="M23 78 L28 68 L35 78 Z" fill="#1a0a35" stroke="rgba(255,255,255,0.18)" strokeWidth="0.8" />
+            <path d="M25 78 L30 71 L33 78 Z" fill="#2a1858" opacity="0.75" />
+            <path d="M72 33 L78 21 L87 33 Z" fill="#1a0a35" stroke="rgba(255,255,255,0.18)" strokeWidth="0.8" opacity="0.78" />
+            <path d="M75 33 L80 25 L84 33 Z" fill="#2a1858" opacity="0.65" />
+            <path d="M39 30 Q48 24 57 31" stroke="#d83bff" strokeWidth="1.1" strokeLinecap="round" strokeOpacity="0.42" fill="none" />
+            <path d="M14 65 Q22 60 30 64" stroke="#d83bff" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.32" fill="none" />
+          </g>
+        )}
       </svg>
 
       {/* Nodes */}
@@ -667,7 +749,7 @@ export function LoopExpeditionScene({
           node={node}
           index={i}
           pos={positions[i]}
-          openAbove={i > 0 && positions[i].y > 50}
+          openAbove={!isVertical && i > 0 && positions[i].y > 50}
           onStart={handleStart}
         />
       ))}
