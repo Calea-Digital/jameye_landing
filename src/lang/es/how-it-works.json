@@ -21,6 +21,7 @@
       { "state": "locked", "star": 1 },
       { "state": "locked", "star": 1 },
       { "state": "active", "star": 1 },
+      { "state": "locked", "star": 1 },
       { "state": "locked", "star": 1 }
     ]
   },

@@ -1,7 +1,6 @@
 {
   "eyebrow": "04 · Torneos",
   "title":   { "lead": "Gana", "ital": "dinero real." },
-  "badge":   "Temporada 1 · En vivo",
   "prize": {
     "label":  "Premio total",
     "amount": "$100K",
