@@ -1,9 +1,9 @@
 {
   "signature": "Jameye® · v1 · 2026",
   "legal": [
-    { "text": "Metodología", "href": "#" },
-    { "text": "Términos",    "href": "#" },
-    { "text": "Privacidad",  "href": "#" },
-    { "text": "Contacto",    "href": "#" }
+    { "text": "Términos",   "href": "/es/terms" },
+    { "text": "Privacidad", "href": "/es/privacy" },
+    { "text": "Cookies",    "href": "/es/cookies" },
+    { "text": "Contacto",   "href": "#" }
   ]
 }

@@ -4,6 +4,7 @@ import type { ImageMetadata } from 'astro';
 import Favicons from '~/meta/Favicons.astro';
 import '~/styles/global.css';
 import BasicScripts from '~/components/common/BasicScripts.astro';
+import CookieConsent from '~/components/common/CookieConsent.astro';
 import { SITE } from '~/config';
 import { SEO } from 'astro-seo';
 
@@ -43,6 +44,39 @@ if (metadata?.ogImagePath) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Google Consent Mode v2 — MUST run before any analytics/ads tag.
+         Defaults every non-essential storage type to "denied"; the cookie
+         banner (CookieConsent.astro) flips them to "granted" on accept. On
+         repeat visits the stored choice is re-applied here so tags fire with
+         the right state immediately. See docs/data-and-cookies-inventory.md §9. -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = gtag;
+
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+      });
+
+      // Re-apply a previously saved choice so consent is correct before tags load.
+      try {
+        var m = document.cookie.split('; ').find(function (r) { return r.indexOf('jameye_consent=') === 0; });
+        if (m) {
+          var c = JSON.parse(decodeURIComponent(m.split('=').slice(1).join('=')));
+          gtag('consent', 'update', {
+            analytics_storage: c.analytics ? 'granted' : 'denied',
+            ad_storage: c.marketing ? 'granted' : 'denied',
+            ad_user_data: c.marketing ? 'granted' : 'denied',
+            ad_personalization: c.marketing ? 'granted' : 'denied',
+          });
+        }
+      } catch (e) { /* no stored consent yet */ }
+    </script>
 
     <!-- Favicons -->
     <Favicons />
@@ -89,6 +123,7 @@ if (metadata?.ogImagePath) {
   </head>
   <body class="bg-background text-foreground">
     <slot />
+    <CookieConsent locale={locale} />
     <BasicScripts />
   </body>
 </html>

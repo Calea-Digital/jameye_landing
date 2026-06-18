@@ -1,0 +1,144 @@
+---
+import { Icon } from 'astro-icon/components';
+
+export interface LegalSection {
+  h: string;
+  p: string;
+}
+
+export interface Props {
+  eyebrow: string;
+  title: string;
+  intro?: string;
+  updatedLabel: string;
+  updated: string;
+  placeholderNote?: string;
+  sections: LegalSection[];
+  /** Cookie Policy page renders a "Manage cookies" button that reopens the banner. */
+  manageCookiesLabel?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  intro,
+  updatedLabel,
+  updated,
+  placeholderNote,
+  sections,
+  manageCookiesLabel,
+} = Astro.props;
+---
+
+<section class="legal-wrap">
+  <div class="legal-inner">
+    <span class="eyebrow mb-4">
+      <span class="gold-dot"></span>
+      <span>{eyebrow}</span>
+    </span>
+
+    <h1 class="legal-title text-white">{title}</h1>
+    <p class="legal-updated">{updatedLabel}: {updated}</p>
+
+    {placeholderNote && <p class="legal-note">{placeholderNote}</p>}
+
+    <div class="legal-prose">
+      {intro && <p set:html={intro} />}
+      {
+        sections.map((s) => (
+          <>
+            <h2>{s.h}</h2>
+            <p set:html={s.p} />
+          </>
+        ))
+      }
+
+      {
+        manageCookiesLabel && (
+          <p>
+            <button type="button" class="cc-btn cc-btn--secondary" data-open-cookie-settings>
+              <Icon name="tabler:adjustments-horizontal" class="w-3.5 h-3.5" />
+              {manageCookiesLabel}
+            </button>
+          </p>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .legal-wrap {
+    padding: 4rem 0 6rem;
+  }
+  .legal-inner {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .legal-wrap { padding: 5.5rem 0 7rem; }
+    .legal-inner { padding: 0 2rem; }
+  }
+
+  .legal-title {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-top: 0.25rem;
+  }
+  .legal-updated {
+    margin-top: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .legal-note {
+    margin-top: 1.25rem;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--hairline-strong);
+    border-left: 3px solid var(--prize-gold);
+    border-radius: 0.6rem;
+    background: rgba(250, 204, 21, 0.05);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--ink-muted);
+  }
+
+  /* Long-form prose — brand-tuned, dark theme. */
+  .legal-prose {
+    margin-top: 2rem;
+    font-family: var(--font-sans);
+    color: var(--ink-muted);
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+  .legal-prose :global(h2) {
+    margin: 2.4rem 0 0.75rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .legal-prose :global(p) {
+    margin: 0 0 1rem;
+  }
+  .legal-prose :global(a) {
+    color: var(--brand-lavender);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .legal-prose :global(a:hover) { color: #fff; }
+  .legal-prose :global(strong) { color: #fff; font-weight: 600; }
+  .legal-prose :global(ul) {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+  .legal-prose :global(li) { margin: 0.35rem 0; }
+</style>

@@ -8,7 +8,9 @@ import react from '@astrojs/react';
 
 export default defineConfig({
   vite: {
-    plugins: [tailwindcss()],
+    // Cast: @tailwindcss/vite is typed against a newer Vite than the one Astro
+    // bundles, so the plugin types don't structurally match. Runtime is fine.
+    plugins: [/** @type {any} */ (tailwindcss())],
   },
 
   site: 'https://jameye.com',

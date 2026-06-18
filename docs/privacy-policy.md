@@ -1,0 +1,102 @@
+# Privacy Policy
+
+**Last updated: [DATE]**
+
+This Privacy Policy explains how True Edge AB processes personal data through the Jameye landing site at jameye.com (the "Site"). It applies only to this Site. It does not cover the Jameye platform or any product accessed behind a login (planned at staging.jameye.com / the production app), which handles authentication and gameplay and will have its own policy.
+
+> **REVIEW NOTE (remove before publication):** Draft for legal review. Bracketed values must be confirmed. Three items require backend/infra confirmation before publishing: (a) where waitlist data is stored and the retention period (Section 6); (b) that no separate legal/real name is collected (the legacy Google Forms "Name" field is retired); (c) that the public leaderboard endpoint does not expose raw email addresses.
+
+## 1. Data controller
+
+**True Edge AB**
+Organisation number (organisationsnummer): [ORG NUMBER]
+Registered address: [ADDRESS], Sweden
+Contact for data protection matters: [PRIVACY EMAIL]
+
+True Edge AB is established in Sweden. Processing is subject to Regulation (EU) 2016/679 (GDPR) and the Swedish Data Protection Act (lag (2018:218)).
+
+[We have not appointed a Data Protection Officer, as the Article 37 GDPR criteria do not apply to the processing described here. / We have appointed a Data Protection Officer, contactable at [DPO EMAIL].]
+
+## 2. What data we collect
+
+**Data you provide (waitlist form).** When you join the waitlist you provide:
+
+| Field | Required | Notes |
+|---|---|---|
+| Email address | Yes | Used to contact you and checked for uniqueness as you type. |
+| Nickname / handle | No | Pseudonymous. Auto-generated if left blank. Shown publicly, see Section 4. |
+| Referred-by nickname | No | Another user's handle, from a referral link (`?ref=`) or typed in. |
+| Avatar choice | No | Cosmetic, non-identifying. Shown publicly, see Section 4. |
+
+We do not collect a legal or real name through the Site. We collect no payment data and no special categories of data (Article 9 GDPR).
+
+**Data collected automatically.** When you visit the Site, your browser transmits technical data, including your IP address and user-agent, to:
+- our content delivery and security provider (Cloudflare) and our origin host, which process it to serve and protect the Site;
+- Google Fonts (`fonts.googleapis.com`, `fonts.gstatic.com`), which serves the Site's web fonts;
+- Polymarket's image host, which serves market thumbnail images shown on the Site.
+
+The Site currently sets no cookies and uses no analytics or advertising trackers. See the Cookie Policy.
+
+## 3. Purposes and lawful bases
+
+| Purpose | Data used | Lawful basis (GDPR) |
+|---|---|---|
+| Registering you on the waitlist and the uniqueness check | Email, nickname, referral, avatar | Consent, Art. 6(1)(a) |
+| Sending product updates and launch communications | Email | Consent, Art. 6(1)(a) |
+| Displaying your handle and avatar on the public leaderboard | Nickname, avatar, referral points | Consent, Art. 6(1)(a) |
+| Serving, delivering and securing the Site (incl. CDN/WAF, abuse prevention) | IP, user-agent, request metadata | Legitimate interests, Art. 6(1)(f) |
+| Complying with legal obligations | As required | Legal obligation, Art. 6(1)(c) |
+
+You may withdraw consent at any time (Section 7). Withdrawal does not affect processing before withdrawal. Our legitimate interest is in keeping the Site available, performant, and protected against abuse; we have assessed that this does not override your rights given the limited, low-sensitivity data involved.
+
+## 4. Public leaderboard
+
+The Site includes a public leaderboard at /leaderboard. If you join the waitlist, your chosen handle, avatar, referral points, and weekly movement are displayed publicly on that page. Your email address is not shown. If you do not want this information shown, do not join the waitlist, or contact us to be removed (Section 7).
+
+## 5. Recipients and processors
+
+We share personal data only with processors acting on our instructions under an Article 28 GDPR data processing agreement, except where a third party acts as an independent controller (noted below).
+
+| Recipient | Function | Role | Location |
+|---|---|---|---|
+| Cloudflare, Inc. | CDN, security/WAF, IP-level request handling | Processor | US (with EU data localization option) |
+| [ORIGIN HOST] | Static site hosting (nginx) | Processor | [REGION] |
+| [WAITLIST BACKEND / STORAGE — confirm: database and/or Google Sheets] | Stores waitlist entries | Processor | [REGION] |
+| Google LLC | Google Fonts (font delivery; receives IP) | Independent controller for fonts | US |
+| Polymarket | Market thumbnail images (receives IP) | Independent controller for image delivery | [REGION — likely US] |
+
+We do not sell personal data. We may disclose data where required by law or to enforce our rights.
+
+> **Hardening options (for counsel/dev, not a representation to users):** Google Fonts and Polymarket thumbnails transmit visitor IP to third parties at page load. A German court (LG München I, 3 O 17493/20) found embedding Google Fonts in a way that transmits IP without consent unlawful under GDPR; the ruling is contested but has driven widespread self-hosting. Self-hosting the fonts and proxying the thumbnails at build time removes both third-party transfers entirely. Recommended; decision for counsel.
+
+## 6. International transfers
+
+Google LLC, Cloudflare, Inc., and (likely) Polymarket are US-based or transfer data outside the EEA. Where this occurs, transfers rely on an adequacy decision under Article 45 GDPR (including the EU-US Data Privacy Framework where the recipient is certified), or, in its absence, the European Commission's Standard Contractual Clauses under Article 46 GDPR with supplementary measures where required. You may request details at [PRIVACY EMAIL].
+
+## 7. Retention
+
+[CONFIRM WITH BACKEND.] Waitlist entries (email, handle, referral, avatar) are retained until you withdraw consent or ask to be removed, or until [the platform launches / the waitlist is retired], whichever is earlier. Server and CDN logs containing IP data are retained for [RETENTION PERIOD, e.g. 90 days] for security, then deleted or anonymised.
+
+## 8. Your rights
+
+You have the right to: access; rectification; erasure; restriction; data portability; objection to processing based on legitimate interests; and withdrawal of consent at any time. Contact [PRIVACY EMAIL] to exercise any of these, or to be removed from the waitlist and leaderboard. To stop emails, use the unsubscribe link in any message.
+
+You may lodge a complaint with a supervisory authority. Our lead authority is the Swedish Authority for Privacy Protection (Integritetsskyddsmyndigheten, IMY), imy.se. You may also complain to the authority in your own EU member state.
+
+We respond within one month, extendable by two months for complex requests (Article 12 GDPR).
+
+## 9. Cookies
+
+The Site currently sets no cookies and runs no trackers. See the Cookie Policy. If analytics, advertising, or login are added in future, the Cookie Policy will be updated and a consent banner deployed before any non-essential cookie is set.
+
+## 10. Children
+
+The Site is not directed at children. We do not knowingly collect data from anyone under [18]. [Counsel: GDPR Art. 8 digital-consent age varies by member state (13 in Sweden, 16 in Germany); confirm threshold for an EU-wide audience.]
+
+## 11. Changes
+
+We may update this Policy. The current version, with its date, is always posted on the Site. Material changes are communicated where required by law.
+
+## 12. Contact
+
+[PRIVACY EMAIL], True Edge AB, [ADDRESS], Sweden.

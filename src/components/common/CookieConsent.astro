@@ -1,0 +1,395 @@
+---
+import { Icon } from 'astro-icon/components';
+import { t, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const c = t<{
+  title: string;
+  body: string;
+  policyText: string;
+  policyHref: string;
+  acceptAll: string;
+  rejectAll: string;
+  customize: string;
+  save: string;
+  close: string;
+  categories: {
+    necessary: { name: string; desc: string; always: string };
+    analytics: { name: string; desc: string };
+    marketing: { name: string; desc: string };
+  };
+}>(locale, 'cookies');
+---
+
+<!--
+  Cookie consent banner. Hidden by default (the inline consent bootstrap in
+  Layout.astro reveals it on first visit, when no `jameye_consent` cookie
+  exists). Accept/Reject/Save write the cookie and update Google Consent
+  Mode v2 so future GA4 / Google Ads / social pixel tags fire only with
+  consent. See docs/data-and-cookies-inventory.md §9.5.
+-->
+<div class="cc-banner" data-cookie-banner role="dialog" aria-modal="false" aria-labelledby="cc-title" aria-describedby="cc-body" hidden>
+  <div class="cc-inner">
+    <div class="cc-copy">
+      <span class="eyebrow mb-2">
+        <span class="gold-dot"></span>
+        <span id="cc-title">{c.title}</span>
+      </span>
+      <p id="cc-body" class="cc-body">
+        {c.body}
+        <a href={c.policyHref} class="cc-link">{c.policyText}</a>
+      </p>
+    </div>
+
+    <div class="cc-actions">
+      <button type="button" class="cc-btn cc-btn--ghost" data-cc-customize aria-expanded="false">
+        {c.customize}
+      </button>
+      <button type="button" class="cc-btn cc-btn--secondary" data-cc-reject>
+        {c.rejectAll}
+      </button>
+      <button type="button" class="btn-cta btn-cta-sm" data-cc-accept>
+        {c.acceptAll}
+        <Icon name="tabler:check" class="w-3.5 h-3.5" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Customize panel (per-category toggles) -->
+  <div class="cc-prefs" data-cc-prefs hidden>
+    <div class="cc-prefs-grid">
+      <div class="cc-cat">
+        <div class="cc-cat-head">
+          <span class="cc-cat-name">{c.categories.necessary.name}</span>
+          <span class="cc-cat-locked">{c.categories.necessary.always}</span>
+        </div>
+        <p class="cc-cat-desc">{c.categories.necessary.desc}</p>
+      </div>
+
+      <label class="cc-cat">
+        <div class="cc-cat-head">
+          <span class="cc-cat-name">{c.categories.analytics.name}</span>
+          <input type="checkbox" class="cc-switch" data-cc-toggle="analytics" />
+        </div>
+        <p class="cc-cat-desc">{c.categories.analytics.desc}</p>
+      </label>
+
+      <label class="cc-cat">
+        <div class="cc-cat-head">
+          <span class="cc-cat-name">{c.categories.marketing.name}</span>
+          <input type="checkbox" class="cc-switch" data-cc-toggle="marketing" />
+        </div>
+        <p class="cc-cat-desc">{c.categories.marketing.desc}</p>
+      </label>
+    </div>
+    <button type="button" class="cc-btn cc-btn--secondary cc-save" data-cc-save>{c.save}</button>
+  </div>
+</div>
+
+<style>
+  .cc-banner {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90; /* below the waitlist modal (z-index: 100) */
+    padding: 1rem;
+    background: var(--glass-panel-bg);
+    border-top: 1px solid var(--hairline-strong);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 -18px 48px -24px rgba(0, 0, 0, 0.85);
+    transform: translateY(110%);
+    transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .cc-banner.is-open {
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cc-banner { transition: none; }
+  }
+
+  .cc-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem 2rem;
+    flex-wrap: wrap;
+    padding: 0 0.25rem;
+  }
+  .cc-copy {
+    flex: 1 1 22rem;
+    min-width: 0;
+  }
+  .cc-body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+  }
+  .cc-link {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    white-space: nowrap;
+  }
+  .cc-link:hover { color: var(--brand-lavender); }
+
+  .cc-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .cc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.62rem 1.25rem;
+    border-radius: 9999px;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+  }
+  .cc-btn--secondary {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.04);
+    border: 2px solid var(--hairline-strong);
+  }
+  .cc-btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+  .cc-btn--ghost {
+    color: var(--ink-muted);
+    background: transparent;
+    border: 2px solid transparent;
+  }
+  .cc-btn--ghost:hover { color: #fff; }
+
+  /* ---------- Customize panel ---------- */
+  .cc-prefs {
+    max-width: 1280px;
+    margin: 1rem auto 0;
+    padding: 1rem 0.25rem 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .cc-prefs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .cc-cat {
+    display: block;
+    padding: 0.85rem 1rem;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid var(--hairline);
+    border-radius: 0.75rem;
+  }
+  label.cc-cat { cursor: pointer; }
+  .cc-cat-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .cc-cat-name {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .cc-cat-locked {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--win-emerald);
+  }
+  .cc-cat-desc {
+    margin: 0.4rem 0 0;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: var(--ink-faint);
+  }
+  .cc-save { margin-top: 1rem; }
+
+  /* Toggle switch (native checkbox restyled) */
+  .cc-switch {
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    width: 2.4rem;
+    height: 1.3rem;
+    flex: 0 0 auto;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--hairline-strong);
+    cursor: pointer;
+    transition: background 160ms ease;
+  }
+  .cc-switch::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0.18rem;
+    width: 0.95rem;
+    height: 0.95rem;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 160ms ease;
+  }
+  .cc-switch:checked {
+    background: var(--gradient-violet-magenta);
+    border-color: transparent;
+  }
+  .cc-switch:checked::after {
+    transform: translateY(-50%) translateX(1.05rem);
+  }
+  .cc-switch:focus-visible {
+    outline: 2px solid var(--brand-lavender);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 720px) {
+    .cc-actions { width: 100%; }
+    .cc-actions .cc-btn,
+    .cc-actions .btn-cta { flex: 1 1 auto; }
+    .cc-prefs-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  (() => {
+    const COOKIE_NAME = 'jameye_consent';
+    const VERSION = 1;
+    const MAX_AGE = 60 * 60 * 24 * 180; // 180 days, in seconds
+
+    const banner = document.querySelector<HTMLElement>('[data-cookie-banner]');
+    if (!banner) return;
+
+    const prefs = banner.querySelector<HTMLElement>('[data-cc-prefs]');
+    const customizeBtn = banner.querySelector<HTMLButtonElement>('[data-cc-customize]');
+    const toggles = Array.from(
+      banner.querySelectorAll<HTMLInputElement>('[data-cc-toggle]')
+    );
+
+    type Consent = { analytics: boolean; marketing: boolean };
+
+    const readCookie = (): (Consent & { v: number }) | null => {
+      const match = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith(COOKIE_NAME + '='));
+      if (!match) return null;
+      try {
+        return JSON.parse(decodeURIComponent(match.split('=').slice(1).join('=')));
+      } catch {
+        return null;
+      }
+    };
+
+    const writeCookie = (consent: Consent) => {
+      const payload = JSON.stringify({
+        v: VERSION,
+        necessary: true,
+        analytics: consent.analytics,
+        marketing: consent.marketing,
+        ts: Date.now(),
+      });
+      const secure = location.protocol === 'https:' ? '; Secure' : '';
+      document.cookie =
+        `${COOKIE_NAME}=${encodeURIComponent(payload)}; Max-Age=${MAX_AGE}; Path=/; SameSite=Lax${secure}`;
+    };
+
+    // Push consent state into Google Consent Mode v2. `gtag` is defined by the
+    // bootstrap in Layout.astro; guarded so this is a no-op until tags exist.
+    const applyConsent = (consent: Consent) => {
+      const gtag = (window as any).gtag;
+      if (typeof gtag === 'function') {
+        gtag('consent', 'update', {
+          analytics_storage: consent.analytics ? 'granted' : 'denied',
+          ad_storage: consent.marketing ? 'granted' : 'denied',
+          ad_user_data: consent.marketing ? 'granted' : 'denied',
+          ad_personalization: consent.marketing ? 'granted' : 'denied',
+        });
+      }
+      // Let any other script react (e.g. lazily inject pixels post-consent).
+      window.dispatchEvent(new CustomEvent('cookie-consent', { detail: consent }));
+    };
+
+    const openBanner = () => {
+      banner.hidden = false;
+      requestAnimationFrame(() => banner.classList.add('is-open'));
+    };
+    const closeBanner = () => {
+      banner.classList.remove('is-open');
+      setTimeout(() => { banner.hidden = true; }, 340);
+    };
+
+    const finish = (consent: Consent) => {
+      writeCookie(consent);
+      applyConsent(consent);
+      closeBanner();
+    };
+
+    // ---- Wire up controls ----
+    banner.querySelector('[data-cc-accept]')?.addEventListener('click', () =>
+      finish({ analytics: true, marketing: true })
+    );
+    banner.querySelector('[data-cc-reject]')?.addEventListener('click', () =>
+      finish({ analytics: false, marketing: false })
+    );
+    banner.querySelector('[data-cc-save]')?.addEventListener('click', () =>
+      finish({
+        analytics: !!toggles.find((t) => t.dataset.ccToggle === 'analytics')?.checked,
+        marketing: !!toggles.find((t) => t.dataset.ccToggle === 'marketing')?.checked,
+      })
+    );
+
+    customizeBtn?.addEventListener('click', () => {
+      if (!prefs) return;
+      const open = prefs.hidden;
+      prefs.hidden = !open;
+      customizeBtn.setAttribute('aria-expanded', String(open));
+    });
+
+    // ---- Reopen hook: any [data-open-cookie-settings] element (e.g. footer
+    //      "Cookie settings" link) reopens the banner with current choices. ----
+    const reopen = () => {
+      const saved = readCookie();
+      toggles.forEach((t) => {
+        const key = t.dataset.ccToggle as keyof Consent;
+        t.checked = saved ? !!saved[key] : false;
+      });
+      if (prefs) prefs.hidden = false;
+      customizeBtn?.setAttribute('aria-expanded', 'true');
+      openBanner();
+    };
+    (window as any).openCookieSettings = reopen;
+    document.addEventListener('click', (e) => {
+      if ((e.target as Element)?.closest?.('[data-open-cookie-settings]')) {
+        e.preventDefault();
+        reopen();
+      }
+    });
+
+    // ---- First visit: no stored choice → show the banner ----
+    if (!readCookie()) openBanner();
+  })();
+</script>
