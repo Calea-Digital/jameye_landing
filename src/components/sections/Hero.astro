@@ -2,7 +2,8 @@
 import { Icon } from 'astro-icon/components';
 import { t, type Locale } from '~/utils/i18n';
 import Ticker from '~/components/sections/Ticker.astro';
-// Inline the avatar SVG so we can drive the eyes + head with the cursor.
+// Inline the avatar SVG so the shared avatar-animation engine can drive the
+// head tilt + pupil slide + blink straight off the rendered markup.
 import avatarRaw from '../../../public/avatar/03-duel-customizable-fighter.svg?raw';
 
 export interface Props {
@@ -23,17 +24,6 @@ const hero = t<{
     xp: { level: string; tier: string; current: string; target: string };
   };
 }>(locale, 'hero');
-
-// Tag the head group + pupil group so the tracking script can address them.
-const avatarSvg = avatarRaw
-  .replace(
-    '</rect><g><path d="M30 48',
-    '</rect><g id="hero-head"><path d="M30 48'
-  )
-  .replace(
-    '<g><circle cx="50" cy="52" r="2.6" fill="#0a1330">',
-    '<g id="hero-pupils"><circle cx="50" cy="52" r="2.6" fill="#0a1330">'
-  );
 ---
 
 <!-- v5 mockup — character stage hero with waitlist capture + bottom ticker. -->
@@ -146,7 +136,7 @@ const avatarSvg = avatarRaw
               role="img"
               aria-label={hero.stage.avatarAlt}
             >
-              <div class="hero-character-layer is-active" data-hero-character data-hero-layer="a" set:html={avatarSvg} />
+              <div class="hero-character-layer is-active" data-hero-character data-hero-layer="a" set:html={avatarRaw} />
               <div class="hero-character-layer" data-hero-layer="b" />
             </div>
 
@@ -245,8 +235,8 @@ const avatarSvg = avatarRaw
   .hero-anim--trust { animation-delay: 1.3s; }
   @keyframes fade-in { to { opacity: 1; } }
 
-  /* Eyes + head follow the cursor; easing handled in JS. */
-  #hero-head, #hero-pupils { transition: transform 90ms linear; }
+  /* Head tilt + pupil slide + blink are driven by the shared avatar-animation
+     engine (rAF-eased SVG transforms); no per-part CSS transition needed. */
 
   /* Avatar crossfade — both layers stack; opacity drives the swap. */
   .hero-character { position: relative; }
@@ -312,16 +302,25 @@ const avatarSvg = avatarRaw
 
   @media (prefers-reduced-motion: reduce) {
     .hero-word, .hero-anim { animation: none; opacity: 1; transform: none; }
-    #hero-head, #hero-pupils { transition: none; }
   }
 </style>
 
 <script>
-  // ---- Avatar shuffle + cursor tracking (precise head/eyes when available). ----
+  // ---- Avatar shuffle + cursor tracking. ----
+  // The head tilt, pupil slide and blink are driven by the shared
+  // avatar-animation engine (same behaviour as the app): it auto-detects the
+  // head group, pupil group and eye whites from the SVG markup and eases them
+  // toward the cursor on one shared rAF loop. We just register each rendered
+  // avatar and unregister it when it's swapped out.
+  import { setupTracking } from '../../scripts/avatar-animation/setupTracking.js';
+  import { registerFighter, ensureFighterStyles } from '../../scripts/avatar-animation/fighterPointer.js';
+
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const layerA = document.querySelector('[data-hero-layer="a"]') as HTMLElement | null;
   const layerB = document.querySelector('[data-hero-layer="b"]') as HTMLElement | null;
   let charWrap: HTMLElement | null = layerA;
+
+  ensureFighterStyles();
 
   // Hero shuffle — first six avatars only (01–06). Hero boots on avatar 03.
   const AVATARS = [
@@ -334,42 +333,29 @@ const avatarSvg = avatarRaw
   ];
   let avatarIndex = 2;
 
-  // Tag the trader avatar's head + pupil groups so they can be driven precisely.
-  const tagTrader = (svg: string) =>
-    svg
-      .replace('</rect><g><path d="M30 48', '</rect><g id="hero-head"><path d="M30 48')
-      .replace('<g><circle cx="50" cy="52" r="2.6" fill="#0a1330">', '<g id="hero-pupils"><circle cx="50" cy="52" r="2.6" fill="#0a1330">');
-
-  let svgRoot: SVGElement | null = null;
-  // Cursor-tracking state lives at this scope so a freshly-swapped avatar can
-  // be snapped straight into the current lean instead of jumping on appear.
-  let targetX = 0, targetY = 0, curX = 0, curY = 0;
-
-  // Lean the whole figure toward the cursor — applied uniformly to every avatar
-  // so they all track the mouse the same smooth way. `snap` applies the lean
-  // instantly (transition disabled) so a freshly-swapped avatar enters already
-  // posed rather than sliding into place.
-  const setPose = (root: SVGElement | null, snap = false) => {
-    if (!root) return;
-    if (snap) root.style.transition = 'none';
-    root.style.transformOrigin = '50% 72%';
-    root.style.transform = `rotate(${(curX * 5).toFixed(2)}deg) translate(${(curX * 5).toFixed(2)}px, ${(curY * 3).toFixed(2)}px)`;
-    if (snap) {
-      void root.getBoundingClientRect(); // commit before re-enabling
-      root.style.transition = '';
-    }
+  // Per-layer cursor-tracking cleanups. Registering the engine tags the SVG
+  // (head/pupils/eyes) and joins the shared loop; the returned fn unregisters
+  // it. Both layers can track at once during a crossfade so the incoming
+  // avatar is already following the cursor as it fades in.
+  const cleanups = new Map<HTMLElement, () => void>();
+  const track = (layerEl: HTMLElement | null) => {
+    if (!layerEl) return;
+    cleanups.get(layerEl)?.();
+    cleanups.delete(layerEl);
+    if (!layerEl.querySelector('svg')) return;
+    const { head, eyes } = setupTracking(layerEl);
+    cleanups.set(layerEl, registerFighter({ wrapper: layerEl, head, eyes }));
   };
-
-  const captureTargets = () => {
-    svgRoot = charWrap?.querySelector('svg') ?? null;
-    // Snap the newly-active avatar into the current lean so it never jumps on
-    // appear before tracking takes over.
-    setPose(svgRoot, true);
+  const untrack = (layerEl: HTMLElement | null) => {
+    if (!layerEl) return;
+    cleanups.get(layerEl)?.();
+    cleanups.delete(layerEl);
   };
 
   // Fit each avatar's real content to the frame so every one renders the
   // same size, regardless of how the figure sits inside its own viewBox.
-  const normalizeAvatar = (root: SVGElement | null = svgRoot) => {
+  // (Head pivot is in content coords, so re-framing the viewBox is safe.)
+  const normalizeAvatar = (root: SVGElement | null) => {
     if (!root) return;
     try {
       const bb = (root as unknown as SVGGraphicsElement).getBBox();
@@ -384,8 +370,9 @@ const avatarSvg = avatarRaw
     }
   };
 
-  captureTargets();
-  normalizeAvatar();
+  // Boot tracking on the server-rendered avatar (layer A).
+  normalizeAvatar(layerA?.querySelector('svg') ?? null);
+  track(layerA);
 
   // Crossfade between the two stacked character layers — avoids the
   // hard `innerHTML` swap that made avatars pop into frame.
@@ -396,7 +383,7 @@ const avatarSvg = avatarRaw
     avatarIndex = ((nextIndex % AVATARS.length) + AVATARS.length) % AVATARS.length;
     try {
       const res = await fetch(AVATARS[avatarIndex]);
-      const svg = tagTrader(await res.text());
+      const svg = await res.text();
       const incoming = charWrap === layerA ? layerB : layerA;
       const outgoing = charWrap;
       incoming.innerHTML = svg;
@@ -404,20 +391,20 @@ const avatarSvg = avatarRaw
       // sits at the same size as the outgoing layer.
       const incomingSvg = incoming.querySelector('svg') as SVGElement | null;
       normalizeAvatar(incomingSvg);
-      // Pose the incoming avatar to match the cursor *before* it fades in, so
-      // the crossfade reveals it already leaning — no jump on appear.
-      setPose(incomingSvg, true);
+      // Start tracking the incoming avatar immediately so it's already leaning
+      // toward the cursor as the crossfade reveals it — no jump on appear.
+      track(incoming);
       // Trigger crossfade on the next frame so the browser commits the new
       // content before the opacity transition starts.
       requestAnimationFrame(() => {
         incoming.classList.add('is-active');
         outgoing?.classList.remove('is-active');
       });
-      // After the transition completes, mark the incoming layer as the
-      // active reference + reset cursor-tracking targets.
+      // After the transition completes, retire the outgoing avatar from the
+      // tracking loop and promote the incoming layer to active.
       window.setTimeout(() => {
+        untrack(outgoing);
         charWrap = incoming;
-        captureTargets();
         swapInFlight = false;
       }, reduceMotion ? 0 : 720);
     } catch {
@@ -453,24 +440,6 @@ const avatarSvg = avatarRaw
     else startAutoShuffle();
   });
   startAutoShuffle();
-
-  if (!reduceMotion && charWrap) {
-    window.addEventListener('mousemove', (e) => {
-      if (!charWrap) return;
-      const r = charWrap.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
-      targetX = Math.max(-1, Math.min(1, (e.clientX - cx) / (window.innerWidth / 2)));
-      targetY = Math.max(-1, Math.min(1, (e.clientY - cy) / (window.innerHeight / 2)));
-    });
-    const tick = () => {
-      curX += (targetX - curX) * 0.12;
-      curY += (targetY - curY) * 0.12;
-      setPose(svgRoot);
-      requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }
 
   // Live waitlist count — pulled from the backend.
   const countEl = document.querySelector('[data-waitlist-count]') as HTMLElement | null;
