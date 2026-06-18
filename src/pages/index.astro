@@ -4,6 +4,7 @@ import Header from '~/components/common/Header.astro';
 import Footer from '~/components/common/Footer.astro';
 import Hero from '~/components/sections/Hero.astro';
 import Roster from '~/components/sections/Roster.astro';
+import BattleUniversities from '~/components/sections/BattleUniversities.astro';
 import VideoShowcase from '~/components/sections/VideoShowcase.astro';
 import HowItWorks from '~/components/sections/HowItWorks.astro';
 import Tournaments from '~/components/sections/Tournaments.astro';
@@ -23,6 +24,7 @@ const meta = t<{ title: string; description: string }>(locale, 'meta');
     <HowItWorks locale={locale} />
     <Tournaments locale={locale} />
     <Roster locale={locale} />
+    <BattleUniversities locale={locale} />
     <CtaFinal locale={locale} />
   </main>
   <Footer locale={locale} />

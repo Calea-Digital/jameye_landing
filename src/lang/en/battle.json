@@ -1,0 +1,39 @@
+{
+  "eyebrow": "03 · Battle of Universities",
+  "card": {
+    "title": "Battle of Universities",
+    "subtitle": "Your campus is your squad",
+    "prizeLabel": "$50K",
+    "ctaLabel": "Join the battle"
+  },
+  "orgs": [
+    {
+      "name": "Harvard University",
+      "shortName": "Harvard",
+      "logo": "/images/universities/harvard.png",
+      "colorPrimary": "#a51c30",
+      "colorSecondary": "#1e1e1e",
+      "city": "Cambridge",
+      "country": "USA",
+      "avatars": [
+        "/avatar/05-squad-row1-trader.svg",
+        "/avatar/06-squad-row1-explorer.svg",
+        "/avatar/07-squad-row1-customizable.svg"
+      ]
+    },
+    {
+      "name": "Stockholm University",
+      "shortName": "Stockholm",
+      "logo": "/images/universities/stockholm.webp",
+      "colorPrimary": "#005595",
+      "colorSecondary": "#0a2342",
+      "city": "Stockholm",
+      "country": "Sweden",
+      "avatars": [
+        "/avatar/08-squad-row2-fighter.svg",
+        "/avatar/09-squad-row2-rival.svg",
+        "/avatar/10-squad-row2-rapid.svg"
+      ]
+    }
+  ]
+}

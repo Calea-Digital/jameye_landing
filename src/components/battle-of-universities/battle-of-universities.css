@@ -1,0 +1,49 @@
+/**
+ * Battle of Universities — standalone styles.
+ *
+ * Import this ONCE in your app:  import "./battle-of-universities.css";
+ *
+ * It provides everything the components need that isn't a plain Tailwind
+ * utility, all namespaced `bou-` / `--bou-` so nothing collides with your
+ * landing page:
+ *   • the display + mono font families (so the title and the uppercase mono
+ *     labels match the app — this was the usual cause of "it doesn't look the
+ *     same": the host app's `font-mono` wasn't JetBrains Mono)
+ *   • the `.bou-speed-lines` arena streak animation
+ *
+ * Fonts are pulled from Google Fonts. If your landing blocks third-party font
+ * CDNs, drop the @import and load "Inter Tight" + "JetBrains Mono" yourself,
+ * or change the families in the `--bou-*` vars below.
+ */
+
+/* Fonts (Inter Tight + JetBrains Mono) are already loaded by the landing's
+   Layout.astro <link>, so the upstream @import was removed to avoid a second,
+   render-blocking font request. The --bou-* vars below resolve to those. */
+:root {
+  --bou-display: "Inter Tight", system-ui, sans-serif;
+  --bou-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.bou-display {
+  font-family: var(--bou-display);
+}
+.bou-mono {
+  font-family: var(--bou-mono);
+}
+
+/* Drifting diagonal arena streaks (the app's `.speed-lines`). */
+@keyframes bou-speed-lines {
+  from { background-position: 0 0; }
+  to   { background-position: 64px 0; }
+}
+.bou-speed-lines {
+  background-image: repeating-linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.5) 0 1px,
+    transparent 1px 32px
+  );
+  animation: bou-speed-lines 2.8s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bou-speed-lines { animation: none; }
+}

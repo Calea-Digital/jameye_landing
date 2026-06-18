@@ -1,0 +1,31 @@
+---
+import { t, type Locale } from '~/utils/i18n';
+import BattleIsland from '~/components/battle-of-universities/BattleIsland';
+import '~/components/battle-of-universities/battle-of-universities.css';
+import type { BattleOrg } from '~/components/battle-of-universities/types';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const data = t<{
+  eyebrow: string;
+  card: { title: string; subtitle: string; prizeLabel: string; ctaLabel: string };
+  orgs: BattleOrg[];
+}>(locale, 'battle');
+
+// closesAt is injected client-side by BattleIsland (evergreen countdown).
+const battleData = { ...data.card, canJoin: true, orgs: data.orgs };
+---
+
+<section id="battle-universities" class="py-12 md:py-16">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+    <div class="section-head">
+      <span class="eyebrow">{data.eyebrow}</span>
+    </div>
+
+    <BattleIsland client:visible data={battleData} />
+  </div>
+</section>
