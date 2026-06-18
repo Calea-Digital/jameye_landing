@@ -470,8 +470,7 @@ const CFG = {
 
     // ---- Referral link + success view ----
     const referralLink = (nick) => {
-      const home = LOCALE === 'es' ? '/es/' : '/';
-      return `${location.origin}${home}?ref=${encodeURIComponent(nick)}`;
+      return `${location.origin}/en?ref=${encodeURIComponent(nick)}`;
     };
     const showSuccess = (nick) => {
       if (handleEl) handleEl.textContent = nick;

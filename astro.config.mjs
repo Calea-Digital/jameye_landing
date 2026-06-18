@@ -19,11 +19,21 @@ export default defineConfig({
   trailingSlash: 'ignore',
 
   i18n: {
-    locales: ['en', 'es'],
+    locales: ['en'],
     defaultLocale: 'en',
     routing: {
       prefixDefaultLocale: false,
     },
+  },
+
+  // All content lives under /en (see src/pages/en). Redirect the bare root and
+  // the legacy unprefixed routes to their /en equivalents.
+  redirects: {
+    '/': '/en',
+    '/leaderboard': '/en/leaderboard',
+    '/terms': '/en/terms',
+    '/privacy': '/en/privacy',
+    '/cookies': '/en/cookies',
   },
 
   integrations: [icon(), sitemap(), mdx(), react()],

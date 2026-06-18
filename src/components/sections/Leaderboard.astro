@@ -305,7 +305,7 @@ const CFG = {
       String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const parseTs = (s) => { const d = new Date(s); return isNaN(d.getTime()) ? 0 : d.getTime(); };
     const refLabel = (n) => (n === 1 ? L.referralsOne : L.referralsMany);
-    const referralLink = (nick) => `${location.origin}${LOCALE === 'es' ? '/es/' : '/'}?ref=${encodeURIComponent(nick)}`;
+    const referralLink = (nick) => `${location.origin}/en?ref=${encodeURIComponent(nick)}`;
 
     const deltaHtml = (ch) => {
       if (ch.type === 'new') return `<span class="lb-delta new">${esc(L.newBadge)}</span>`;

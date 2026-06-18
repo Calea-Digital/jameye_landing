@@ -12,16 +12,81 @@ const locale: Locale = 'en';
   metadata={{
     title: '404 — Not Found',
     description: 'Sorry, the page you are looking for does not exist.',
+    index: false,
   }}
 >
   <Header locale={locale} />
-  <section class="min-h-[60vh] flex items-center justify-center px-6">
-    <div class="text-center max-w-md">
-      <h1 class="text-6xl md:text-7xl font-semibold text-foreground tracking-tight">404</h1>
-      <p class="mt-4 text-xl font-medium text-foreground">Page not found</p>
-      <p class="mt-3 text-sm text-muted-foreground">Looks like you wandered off the leaderboard.</p>
-      <a href="/" class="btn-cta mt-8">Back to home</a>
-    </div>
-  </section>
+  <!-- Wrapped in <main> (z-index:1) so the content sits above the fixed
+       body::before / body::after background overlays — same as every other
+       page. Scoped styles keep the page self-contained even if the shared
+       Tailwind theme bundle fails to load. -->
+  <main id="top">
+    <section class="nf">
+      <div class="nf__inner">
+        <p class="nf__eyebrow">Error 404</p>
+        <h1 class="nf__code">404</h1>
+        <p class="nf__title">Page not found</p>
+        <p class="nf__sub">Looks like you wandered off the leaderboard.</p>
+        <a href="/en" class="nf__cta">Back to home</a>
+      </div>
+    </section>
+  </main>
   <Footer locale={locale} />
 </Layout>
+
+<style>
+  .nf {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+  .nf__inner {
+    max-width: 32rem;
+  }
+  .nf__eyebrow {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #ffffff9e;
+    margin: 0 0 1rem;
+  }
+  .nf__code {
+    font-size: clamp(4.5rem, 14vw, 7rem);
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0;
+  }
+  .nf__title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #fff;
+    margin: 1rem 0 0;
+  }
+  .nf__sub {
+    font-size: 0.875rem;
+    color: #ffffff9e;
+    margin: 0.75rem 0 0;
+  }
+  .nf__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    background: #fff;
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+  .nf__cta:hover {
+    opacity: 0.85;
+  }
+</style>

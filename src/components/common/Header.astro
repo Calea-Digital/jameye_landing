@@ -1,6 +1,6 @@
 ---
 import Logo from '~/components/common/Logo.astro';
-import { t, SUPPORTED_LOCALES, LOCALE_LABELS, localePath, type Locale } from '~/utils/i18n';
+import { t, localePath, type Locale } from '~/utils/i18n';
 
 export interface Props {
   locale: Locale;
@@ -22,7 +22,7 @@ const home = ((localePath(locale, '/') || '/').replace(/\/+$/, '') || '/');
 const onHome = here === home;
 const resolveHref = (href: string) => {
   if (!href.startsWith('#')) return href;
-  return onHome ? href : `${home === '/' ? '' : home}/${href}`.replace(/\/{2,}/g, '/');
+  return onHome ? href : `${home === '/' ? '' : home}${href}`;
 };
 const isActive = (href: string) => {
   if (href.startsWith('#')) return false; // anchor links are highlighted client-side via scroll-spy
@@ -67,30 +67,6 @@ const isActive = (href: string) => {
     </nav>
 
     <div class="flex items-center gap-2.5 shrink-0">
-      <div
-        class="hidden sm:inline-flex items-center rounded-full border border-white/10 p-0.5"
-        role="group"
-        aria-label={nav.languageAriaLabel}
-      >
-        {
-          SUPPORTED_LOCALES.map((l) => {
-            const active = l === locale;
-            return (
-              <a
-                href={localePath(l, '/')}
-                class:list={[
-                  'inline-flex items-center justify-center px-2.5 py-1 rounded-full font-mono text-[10px] font-semibold uppercase tracking-[0.22em] transition-colors',
-                  active ? 'bg-white text-black' : 'text-white/55 hover:text-white',
-                ]}
-                aria-current={active ? 'true' : undefined}
-              >
-                {LOCALE_LABELS[l]}
-              </a>
-            );
-          })
-        }
-      </div>
-
       <button
         type="button"
         class="btn-primary hidden sm:inline-flex"
@@ -122,30 +98,7 @@ const isActive = (href: string) => {
           ))
         }
       </nav>
-      <div class="mt-2 pt-3 border-t border-white/8 flex items-center justify-between gap-3">
-        <div
-          class="inline-flex items-center rounded-full border border-white/10 p-0.5"
-          role="group"
-          aria-label={nav.languageAriaLabel}
-        >
-          {
-            SUPPORTED_LOCALES.map((l) => {
-              const active = l === locale;
-              return (
-                <a
-                  href={localePath(l, '/')}
-                  class:list={[
-                    'inline-flex items-center justify-center px-2.5 py-1 rounded-full font-mono text-[10px] font-semibold uppercase tracking-[0.22em] transition-colors',
-                    active ? 'bg-white text-black' : 'text-white/55 hover:text-white',
-                  ]}
-                  aria-current={active ? 'true' : undefined}
-                >
-                  {LOCALE_LABELS[l]}
-                </a>
-              );
-            })
-          }
-        </div>
+      <div class="mt-2 pt-3 border-t border-white/8 flex items-center justify-end gap-3">
         <button type="button" class="btn-primary" data-open-waitlist data-mobile-link>
           {nav.cta.primary}
         </button>
