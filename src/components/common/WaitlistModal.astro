@@ -469,12 +469,17 @@ const CFG = {
     };
 
     // ---- Referral link + success view ----
-    const referralLink = (nick) => {
-      return `${location.origin}/en?ref=${encodeURIComponent(nick)}`;
+    // The backend is the source of truth for the referral link. We display
+    // whatever it returns (`referral_link`), falling back to a code- or
+    // nickname-based URL only until the backend ships those fields.
+    const referralLink = (resp, nick) => {
+      if (resp && resp.referral_link) return resp.referral_link;
+      const refKey = (resp && resp.referral_code) || nick;
+      return `${location.origin}/en?ref=${encodeURIComponent(refKey)}`;
     };
-    const showSuccess = (nick) => {
+    const showSuccess = (nick, resp) => {
       if (handleEl) handleEl.textContent = nick;
-      const link = referralLink(nick);
+      const link = referralLink(resp, nick);
       if (linkEl) linkEl.value = link;
       formView?.setAttribute('hidden', '');
       successEl?.removeAttribute('hidden');
@@ -522,13 +527,17 @@ const CFG = {
           name: nickname,
           email,
           nickname,
+          // `referred_by` is the new backend attribution key (a referral code
+          // captured from ?ref=). `referred` is kept for backwards-compat with
+          // the current nickname-based backend during the transition.
+          referred_by: referred || undefined,
           referred: referred || undefined,
           avatar,
         });
         const finalNick = (resp && resp.nickname) || nickname;
 
         window.dispatchEvent(new CustomEvent('waitlist:joined'));
-        showSuccess(finalNick);
+        showSuccess(finalNick, resp);
       } catch (err) {
         const code = err?.code;
         if (code === 'email_taken') {

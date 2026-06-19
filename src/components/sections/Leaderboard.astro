@@ -305,7 +305,13 @@ const CFG = {
       String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const parseTs = (s) => { const d = new Date(s); return isNaN(d.getTime()) ? 0 : d.getTime(); };
     const refLabel = (n) => (n === 1 ? L.referralsOne : L.referralsMany);
-    const referralLink = (nick) => `${location.origin}/en?ref=${encodeURIComponent(nick)}`;
+    // Prefer the backend-generated link/code; fall back to nickname only until
+    // the backend exposes those fields on /api/waitlist/entries.
+    const referralLink = (u) => {
+      if (u && u.link) return u.link;
+      const refKey = (u && (u.code || u.nick)) || '';
+      return `${location.origin}/en?ref=${encodeURIComponent(refKey)}`;
+    };
 
     const deltaHtml = (ch) => {
       if (ch.type === 'new') return `<span class="lb-delta new">${esc(L.newBadge)}</span>`;
@@ -387,21 +393,28 @@ const CFG = {
       const byNick = new Map();
       for (const row of entries) {
         const nick = (row?.nickname || '').trim();
-        const ref = (row?.referred || '').trim().toLowerCase();
         const ts = parseTs(row?.timestamp);
         const avatar = (row?.avatar || '').trim();
+        const code = (row?.referral_code || '').trim();
+        const link = (row?.referral_link || '').trim();
+        // Who referred this entry — prefer the backend referral code
+        // (`referred_by`), fall back to the legacy nickname field (`referred`).
+        const ref = (row?.referred_by || row?.referred || '').trim().toLowerCase();
         if (nick) {
           const k = nick.toLowerCase();
           const prev = byNick.get(k);
-          if (!prev || (ts && (!prev.ts || ts < prev.ts))) byNick.set(k, { nick, ts, avatar });
+          if (!prev || (ts && (!prev.ts || ts < prev.ts))) byNick.set(k, { nick, ts, avatar, code, link });
         }
         if (ref) bump(ref, ts);
       }
       const PTS = CFG.pointsPerReferral;
       const list = [...byNick.entries()].map(([k, u]) => {
-        const rc = refs.get(k) || { all: 0, old: 0 };
+        // Attribution key must match the bump key above: a player's referral
+        // code when the backend provides one, otherwise their nickname.
+        const ownerKey = (u.code || k).toLowerCase();
+        const rc = refs.get(ownerKey) || { all: 0, old: 0 };
         return {
-          nick: u.nick, k, ts: u.ts, avatar: u.avatar,
+          nick: u.nick, k, ts: u.ts, avatar: u.avatar, code: u.code, link: u.link,
           referrals: rc.all, pointsNow: rc.all * PTS, pointsOld: rc.old * PTS,
           existedOld: !!u.ts && u.ts <= cutoff,
         };
@@ -447,7 +460,7 @@ const CFG = {
       resultEl.querySelector('[data-lb-jump]')?.addEventListener('click', () => renderPage(true));
       const linkBtn = resultEl.querySelector('[data-lb-reflink]');
       linkBtn?.addEventListener('click', async () => {
-        const link = referralLink(u.nick);
+        const link = referralLink(u);
         try { await navigator.clipboard.writeText(link); } catch { /* clipboard unavailable */ }
         linkBtn.textContent = L.search.copied;
         linkBtn.classList.add('is-copied');
