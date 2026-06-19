@@ -5,8 +5,11 @@ import Footer from '~/components/common/Footer.astro';
 import Hero from '~/components/sections/Hero.astro';
 import Roster from '~/components/sections/Roster.astro';
 import BattleUniversities from '~/components/sections/BattleUniversities.astro';
-import VideoShowcase from '~/components/sections/VideoShowcase.astro';
+// import VideoShowcase from '~/components/sections/VideoShowcase.astro'; // Temporarily removed from landing — keep for potential reuse
 import HowItWorks from '~/components/sections/HowItWorks.astro';
+import Calibration from '~/components/sections/Calibration.astro';
+import TournamentFormats from '~/components/sections/TournamentFormats.astro';
+import WinCash from '~/components/sections/WinCash.astro';
 import Tournaments from '~/components/sections/Tournaments.astro';
 import CtaFinal from '~/components/sections/CtaFinal.astro';
 import WaitlistModal from '~/components/common/WaitlistModal.astro';
@@ -20,8 +23,10 @@ const meta = t<{ title: string; description: string }>(locale, 'meta');
   <Header locale={locale} />
   <main id="top">
     <Hero locale={locale} />
-    <VideoShowcase locale={locale} />
     <HowItWorks locale={locale} />
+    <Calibration locale={locale} />
+    <TournamentFormats locale={locale} />
+    <WinCash locale={locale} />
     <Tournaments locale={locale} />
     <Roster locale={locale} />
     <BattleUniversities locale={locale} />

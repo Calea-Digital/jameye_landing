@@ -1,0 +1,42 @@
+{
+  "title":   { "lead": "Win", "ital": "Real Cash" },
+  "body":    "Every tournament pays out a real cash prize pool — straight to the sharpest forecasters. No staking. Skill is the only stake.",
+  "steps": [
+    {
+      "n": "01",
+      "icon": "tabler:chart-arrows-vertical",
+      "tone": "emerald-blue",
+      "title": "Forecast",
+      "body": "Call real-world markets across sports, politics, crypto, macro and more. Every forecast sharpens your Edge Score."
+    },
+    {
+      "n": "02",
+      "icon": "tabler:swords",
+      "tone": "violet-magenta",
+      "title": "Compete",
+      "body": "Pick any tournament — weekly, monthly, ad hoc, or a topic you know cold. No staking — pure skill."
+    },
+    {
+      "n": "03",
+      "icon": "tabler:cash-banknote",
+      "tone": "gold-orange",
+      "title": "Win",
+      "body": "Finish near the top and win real cash, paid straight out — plus the leaderboard rank and the bragging rights."
+    }
+  ],
+  "fx": {
+    "markets": [
+      { "q": "Lakers reach the Finals?",        "pct": 71, "edge": 34 },
+      { "q": "Fed cuts rates this quarter?",     "pct": 38, "edge": 52 },
+      { "q": "BTC closes above $200K?",          "pct": 24, "edge": 28 },
+      { "q": "Album of the Year — pop?",         "pct": 63, "edge": 41 }
+    ],
+    "edgeLabel": "EDGE",
+    "tags": ["Weekly", "Monthly", "Ad Hoc", "Topic Arena"],
+    "enterLabel": "Enter tournament",
+    "prizeDisplay": "$100K",
+    "prizeAmount": 100,
+    "prizeLabel": "Prize pool",
+    "payoutNote": "Paid straight to your wallet"
+  }
+}

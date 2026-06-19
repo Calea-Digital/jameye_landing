@@ -1,0 +1,300 @@
+---
+import { Icon } from 'astro-icon/components';
+import { t, type Locale } from '~/utils/i18n';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+interface Step { n: string; icon: string; tone: string; title: string; body: string }
+
+const data = t<{
+  title: { lead: string; ital: string };
+  body: string;
+  steps: Step[];
+  fx: {
+    markets: { q: string; pct: number; edge: number }[];
+    edgeLabel: string;
+    tags: string[];
+    enterLabel: string;
+    prizeDisplay: string;
+    prizeAmount: number;
+    prizeLabel: string;
+    payoutNote: string;
+  };
+}>(locale, 'win-cash');
+
+const first = data.fx.markets[0];
+---
+
+<section id="win-cash" class="py-12 md:py-16">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+    <div class="section-head" data-scroll>
+      <h2 class="section-title text-white">
+        {data.title.lead} <span class="ital-gold">{data.title.ital}</span>
+      </h2>
+      <p class="section-sub">{data.body}</p>
+    </div>
+
+    <div
+      class="wc-flow"
+      data-wc
+      data-markets={JSON.stringify(data.fx.markets)}
+      data-prize={data.fx.prizeAmount}
+      data-prize-display={data.fx.prizeDisplay}
+      data-scroll
+    >
+      <!-- Connector rail (desktop) -->
+      <div class="wc-rail" aria-hidden="true"><span class="wc-rail__pulse"></span></div>
+
+      {
+        data.steps.map((s, i) => (
+          <article class="wc-step" data-step={i}>
+            <div class="wc-badge" data-tone={s.tone}>
+              <Icon name={s.icon} class="w-6 h-6" />
+              <span class="wc-badge__n num">{s.n}</span>
+            </div>
+
+            <div class="wc-stage">
+              {i === 0 && (
+                <div class="wc-fc" data-fc>
+                  <span class="wc-fc__q" data-fc-q>{first.q}</span>
+                  <div class="wc-fc__bar">
+                    <span class="wc-fc__fill" data-fc-fill style={`width:${first.pct}%`} />
+                    <span class="wc-fc__thumb" data-fc-thumb style={`left:${first.pct}%`} />
+                  </div>
+                  <div class="wc-fc__readout">
+                    <span class="wc-fc__pct"><span class="num" data-fc-pct>{first.pct}</span><small>%</small></span>
+                    <span class="wc-fc__edge">+<span class="num" data-fc-edge>{first.edge}</span> {data.fx.edgeLabel}</span>
+                  </div>
+                </div>
+              )}
+
+              {i === 1 && (
+                <div class="wc-cp" data-cp>
+                  <div class="wc-cp__tags">
+                    {data.fx.tags.map((tag, ti) => (
+                      <span class="wc-cp__tag" data-cp-tag data-active={ti === 0 ? 'true' : 'false'}>{tag}</span>
+                    ))}
+                  </div>
+                  <span class="wc-cp__enter">
+                    <Icon name="tabler:player-play-filled" class="w-3.5 h-3.5" />{data.fx.enterLabel}
+                  </span>
+                </div>
+              )}
+
+              {i === 2 && (
+                <div class="wc-win" data-win>
+                  <span class="wc-win__spark" aria-hidden="true" />
+                  <span class="wc-win__amount num" data-win-amount>$0</span>
+                  <span class="wc-win__label">{data.fx.prizeLabel}</span>
+                  <span class="wc-win__note"><Icon name="tabler:wallet" class="w-3.5 h-3.5" />{data.fx.payoutNote}</span>
+                </div>
+              )}
+            </div>
+
+            <h3 class="wc-step__title text-white">{s.title}</h3>
+            <p class="wc-step__body">{s.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .wc-flow {
+    position: relative;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.25rem, 4vw, 3rem);
+  }
+  .wc-step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+
+  /* Numbered icon badge */
+  .wc-badge {
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+    width: 3.5rem; height: 3.5rem; border-radius: 1rem; color: #fff; margin-bottom: 1.1rem;
+    border: 1px solid var(--hairline-strong); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  .wc-badge[data-tone="emerald-blue"]   { background-image: var(--gradient-emerald-blue); box-shadow: 0 0 28px -8px rgba(16, 185, 129, 0.8), inset 0 1px 0 rgba(255,255,255,0.25); }
+  .wc-badge[data-tone="violet-magenta"] { background-image: var(--gradient-violet-magenta); box-shadow: 0 0 28px -8px rgba(126, 59, 255, 0.8), inset 0 1px 0 rgba(255,255,255,0.25); }
+  .wc-badge[data-tone="gold-orange"]    { background-image: var(--gradient-gold-orange); box-shadow: 0 0 28px -8px rgba(250, 204, 21, 0.8), inset 0 1px 0 rgba(255,255,255,0.25); }
+  .wc-badge__n {
+    position: absolute; top: -0.5rem; right: -0.5rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.4rem; height: 1.4rem; border-radius: 9999px;
+    background: #0a0c14; border: 1px solid var(--hairline-strong);
+    font-size: 0.6rem; font-weight: 700; color: var(--ink-muted);
+  }
+
+  /* Connector rail behind the badges (desktop only) */
+  .wc-rail {
+    position: absolute; top: 1.75rem; left: 16.66%; right: 16.66%; height: 2px; z-index: 0;
+    background: linear-gradient(90deg, rgba(16,185,129,0.5), rgba(126,59,255,0.6), rgba(250,204,21,0.6));
+    background-size: 220% 100%; animation: wcRailFlow 6s linear infinite;
+    border-radius: 9999px; overflow: visible;
+  }
+  .wc-rail__pulse {
+    position: absolute; top: 50%; left: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px;
+    border-radius: 9999px; background: #fff;
+    box-shadow: 0 0 14px 2px rgba(255, 255, 255, 0.85);
+    animation: wcPulseTravel 6s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+  }
+  @keyframes wcRailFlow { to { background-position: 220% 0; } }
+  @keyframes wcPulseTravel {
+    0%   { left: 0%;   opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+  }
+
+  /* Stage — the animated mini-visual for each step */
+  .wc-stage {
+    width: 100%; min-height: 9.5rem; margin-bottom: 1.1rem;
+    display: flex; flex-direction: column; justify-content: center; gap: 0.7rem;
+    padding: clamp(1rem, 2.5vw, 1.4rem); border-radius: var(--radius-2xl);
+    background: rgba(0, 0, 0, 0.3); border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-soft-chrome); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  }
+
+  .wc-step__title { font-family: var(--font-sans); font-size: 1.3rem; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 0.45rem; }
+  .wc-step__body { font-size: 0.95rem; line-height: 1.6; color: var(--ink-muted); max-width: 22rem; }
+
+  /* ---- Forecast stage ---- */
+  .wc-fc__q { font-family: var(--font-sans); font-size: 0.98rem; font-weight: 500; color: #fff; line-height: 1.25; min-height: 2.4em; transition: opacity 280ms ease; }
+  .wc-fc__bar { position: relative; height: 8px; border-radius: 9999px; background: rgba(255, 255, 255, 0.1); }
+  .wc-fc__fill { position: absolute; inset: 0 auto 0 0; height: 100%; border-radius: 9999px; background-image: var(--gradient-brand-sweep); transition: width 620ms cubic-bezier(0.2, 0.85, 0.2, 1); }
+  .wc-fc__thumb {
+    position: absolute; top: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 9999px;
+    background: #fff; border: 3px solid var(--brand-purple); box-shadow: 0 4px 14px rgba(126, 59, 255, 0.7);
+    transition: left 620ms cubic-bezier(0.2, 0.85, 0.2, 1);
+  }
+  .wc-fc__readout { display: flex; align-items: baseline; justify-content: space-between; }
+  .wc-fc__pct { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--brand-sky); }
+  .wc-fc__pct small { font-size: 0.5em; font-weight: 700; opacity: 0.7; }
+  .wc-fc__edge {
+    font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--win-emerald); padding: 0.25rem 0.5rem; border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  /* ---- Compete stage ---- */
+  .wc-cp__tags { display: flex; flex-wrap: wrap; gap: 0.45rem; justify-content: center; }
+  .wc-cp__tag {
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 0.35rem 0.65rem; border-radius: 9999px; color: var(--ink-muted);
+    background: rgba(255, 255, 255, 0.04); border: 1px solid var(--hairline);
+    transition: all 300ms ease;
+  }
+  .wc-cp__tag[data-active="true"] {
+    color: #fff; background-image: var(--gradient-violet-magenta); border-color: transparent;
+    box-shadow: 0 0 20px -6px rgba(126, 59, 255, 0.85); transform: translateY(-1px);
+  }
+  .wc-cp__enter {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; margin: 0.3rem auto 0;
+    font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--brand-lavender);
+  }
+  .wc-cp__enter svg { animation: wcBlink 1.8s ease-in-out infinite; }
+  @keyframes wcBlink { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* ---- Win stage ---- */
+  .wc-win { position: relative; align-items: center; text-align: center; display: flex; flex-direction: column; gap: 0.35rem; }
+  .wc-win__spark {
+    position: absolute; top: -0.5rem; left: 50%; width: 140%; height: 140%; transform: translateX(-50%);
+    background: radial-gradient(60% 50% at 50% 20%, rgba(250, 204, 21, 0.22), transparent 70%);
+    pointer-events: none;
+  }
+  .wc-win__amount {
+    position: relative; font-family: var(--font-sans); font-weight: 800; font-size: clamp(2.4rem, 6vw, 3.2rem);
+    line-height: 1; letter-spacing: -0.04em;
+    background-image: var(--gradient-gold-orange); -webkit-background-clip: text; background-clip: text;
+    color: transparent; -webkit-text-fill-color: transparent; filter: drop-shadow(0 8px 20px rgba(250, 204, 21, 0.3));
+  }
+  .wc-win__label {
+    position: relative; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--prize-gold);
+  }
+  .wc-win__note { position: relative; display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.3rem; font-size: 0.78rem; color: var(--ink-muted); }
+  .wc-win__note svg { color: var(--prize-gold); }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 820px) {
+    .wc-flow { grid-template-columns: 1fr; gap: 1.5rem; max-width: 30rem; margin: 0 auto; }
+    .wc-rail { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wc-rail, .wc-rail__pulse, .wc-cp__enter svg { animation: none; }
+    .wc-fc__fill, .wc-fc__thumb, .wc-fc__q { transition: none; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-wc]').forEach((root) => {
+    const markets = JSON.parse(root.dataset.markets ?? '[]') as { q: string; pct: number; edge: number }[];
+    const prize = Number(root.dataset.prize ?? 100);
+    const prizeDisplay = root.dataset.prizeDisplay ?? `$${prize}K`;
+
+    const fcQ = root.querySelector<HTMLElement>('[data-fc-q]');
+    const fcFill = root.querySelector<HTMLElement>('[data-fc-fill]');
+    const fcThumb = root.querySelector<HTMLElement>('[data-fc-thumb]');
+    const fcPct = root.querySelector<HTMLElement>('[data-fc-pct]');
+    const fcEdge = root.querySelector<HTMLElement>('[data-fc-edge]');
+    const cpTags = Array.from(root.querySelectorAll<HTMLElement>('[data-cp-tag]'));
+    const winAmount = root.querySelector<HTMLElement>('[data-win-amount]');
+
+    let mIdx = 0;
+    let cpIdx = 0;
+    let fcTimer: number | undefined;
+    let cpTimer: number | undefined;
+    let counted = false;
+
+    const showMarket = (i: number) => {
+      const m = markets[i % markets.length];
+      if (!m) return;
+      if (fcQ) { fcQ.style.opacity = '0'; window.setTimeout(() => { fcQ.textContent = m.q; fcQ.style.opacity = '1'; }, 180); }
+      if (fcFill) fcFill.style.width = `${m.pct}%`;
+      if (fcThumb) fcThumb.style.left = `${m.pct}%`;
+      if (fcPct) fcPct.textContent = String(m.pct);
+      if (fcEdge) fcEdge.textContent = String(m.edge);
+    };
+
+    const cycleTag = (i: number) => {
+      cpTags.forEach((t, ti) => (t.dataset.active = ti === i % cpTags.length ? 'true' : 'false'));
+    };
+
+    const countUp = () => {
+      if (counted || !winAmount) return;
+      counted = true;
+      const dur = 1500;
+      let start = 0;
+      const tick = (ts: number) => {
+        if (!start) start = ts;
+        const p = Math.min(1, (ts - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const val = Math.round(eased * prize);
+        winAmount.textContent = val <= 0 ? '$0' : `$${val}K`;
+        if (p < 1) requestAnimationFrame(tick);
+        else winAmount.textContent = prizeDisplay;
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      if (fcTimer === undefined) fcTimer = window.setInterval(() => { mIdx += 1; showMarket(mIdx); }, 2600);
+      if (cpTimer === undefined) cpTimer = window.setInterval(() => { cpIdx += 1; cycleTag(cpIdx); }, 1500);
+      countUp();
+    };
+    const stop = () => {
+      if (fcTimer !== undefined) { window.clearInterval(fcTimer); fcTimer = undefined; }
+      if (cpTimer !== undefined) { window.clearInterval(cpTimer); cpTimer = undefined; }
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => { if (entry.isIntersecting) start(); else stop(); });
+    }, { threshold: 0.3 });
+    io.observe(root);
+  });
+</script>

@@ -1,0 +1,35 @@
+{
+  "title":   { "lead": "From launch, there's always a", "ital": "tournament running." },
+  "body":    "Broad fields or single-topic showdowns. From day one, enter any of them, compete on skill alone, and the sharpest forecasters take the cash and the top of the board.",
+  "cards": [
+    {
+      "icon": "tabler:bolt",
+      "tone": "emerald-blue",
+      "tag": "Weekly",
+      "title": "Sprint",
+      "body": "Fast weekly rounds with a fresh leaderboard every week."
+    },
+    {
+      "icon": "tabler:trophy",
+      "tone": "gold-orange",
+      "tag": "Monthly",
+      "title": "Championships",
+      "body": "The big monthly fields where reputations get made."
+    },
+    {
+      "icon": "tabler:bolt-filled",
+      "tone": "magenta-pink",
+      "tag": "Ad Hoc",
+      "title": "Breaking Events",
+      "body": "Tournaments that fire off around real-world moments as they happen."
+    },
+    {
+      "icon": "tabler:stack-2",
+      "tone": "violet-magenta",
+      "tag": "Topic Arenas",
+      "title": "Go Deep",
+      "body": "Crypto, politics, sports, macro — compete where you're strongest."
+    }
+  ],
+  "footer": "Every tournament carries a real cash prize pool · Compete on skill alone"
+}

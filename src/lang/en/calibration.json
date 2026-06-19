@@ -1,0 +1,38 @@
+{
+  "title":   { "lead": "One call can be luck.", "ital": "A season can't." },
+  "sub":     "A single forecast can go your way by chance. But Jameye scores every prediction on calibration — so over many resolutions, luck cancels out and skill compounds. The leaderboard ends up ranking the sharpest minds, not the luckiest.",
+  "cards": [
+    {
+      "icon": "tabler:target-arrow",
+      "tone": "emerald-blue",
+      "title": "Score on calibration",
+      "body": "Every prediction is graded by a proper scoring rule (Brier score). The only way to climb is to report what you truly believe, as accurately as you can. Bluffing and hedging both cost you."
+    },
+    {
+      "icon": "tabler:dice-5",
+      "tone": "violet-magenta",
+      "title": "Luck cancels out",
+      "body": "On one event, a 70% call can still lose. Across hundreds, the good breaks and bad breaks average away — leaving only your real edge."
+    },
+    {
+      "icon": "tabler:trending-up",
+      "tone": "gold-orange",
+      "title": "Skill compounds",
+      "body": "The more you forecast, the harder it gets for a lucky guesser to outrank a calibrated mind. Volume is the filter — and tournaments are built on volume."
+    }
+  ],
+  "sim": {
+    "title":   "Watch luck wash out.",
+    "sub":     "Drag to resolve more predictions. With only a few, lucky guesses crowd the field. Add resolutions and luck drains away — calibrated forecasters separate out and cluster at the top scores.",
+    "sliderLabel": "Predictions resolved",
+    "sliderEnds":  { "few": "A handful", "many": "Hundreds" },
+    "legend":  { "calibrated": "Calibrated forecaster", "random": "Lucky guesser" },
+    "axis":    { "worse": "Worse scores", "average": "Average", "better": "Better scores" },
+    "verdicts": {
+      "few":    "Too few to tell — the guesser looks just as sharp as the skilled forecaster.",
+      "some":   "Separation starting — skill is beginning to show through the noise.",
+      "many":   "A clear gap opens — calibration pulls ahead of pure luck.",
+      "settled":"Settled — skill owns the top scores, luck sits in the middle."
+    }
+  }
+}
