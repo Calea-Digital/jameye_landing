@@ -3,7 +3,9 @@
   "card": {
     "title": "Battle of Universities",
     "subtitle": "Your campus is your squad",
-    "prizeLabel": "$50K",
+    "prizeLabel": "Up to $100K",
+    "launchLabel": "Launch opens",
+    "launchValue": "Oct 1",
     "ctaLabel": "Join the battle"
   },
   "orgs": [

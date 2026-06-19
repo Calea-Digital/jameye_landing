@@ -1,0 +1,1013 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '~/layouts/Layout.astro';
+import Header from '~/components/common/Header.astro';
+import Footer from '~/components/common/Footer.astro';
+import WaitlistModal from '~/components/common/WaitlistModal.astro';
+import { t, localePath, type Locale } from '~/utils/i18n';
+
+const locale: Locale = 'en';
+const home = localePath(locale, '/');
+
+interface TitlePair { lead: string; ital: string }
+
+const data = t<{
+  meta: { title: string; description: string };
+  hero: {
+    eyebrow: string[];
+    title: string;
+    body: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    stats: { k: string; v: string; tone: string }[];
+  };
+  launch: { eyebrow: string; title: TitlePair; body: string };
+  how: { eyebrow: string; title: TitlePair; steps: { n: string; icon: string; tone: string; title: string; body: string }[] };
+  winning: {
+    eyebrow: string;
+    title: TitlePair;
+    body: string;
+    board: {
+      title: string;
+      live: string;
+      rows: { rank: string; name: string; flag?: string; score?: number; join?: boolean }[];
+      joinLabel: string;
+      youLabel: string;
+      youValue: number;
+      youMax: number;
+      prizeLabel: string;
+      prizeValue: string;
+    };
+  };
+  field: {
+    eyebrow: string;
+    title: TitlePair;
+    sub: string;
+    vs: string;
+    campuses: { name: string; logo: string; location: string; flag: string; color: string }[];
+    more: string;
+  };
+  dates: { eyebrow: string; title: TitlePair; items: { when: string; title: string; body: string; state: string }[] };
+  faq: { eyebrow: string; title: TitlePair; items: { q: string; a: string }[] };
+  finalCta: { eyebrow: string; title: TitlePair; body: string; ctaPrimary: string; ctaSecondary: string };
+}>(locale, 'bou');
+
+const meta = { ...data.meta, ogImagePath: undefined };
+---
+
+<Layout metadata={meta} locale={locale}>
+  <Header locale={locale} />
+
+  <main id="top" class="bou-page">
+    <!-- ===== Hero ===== -->
+    <section id="hero" class="bou-hero">
+      <div class="bou-wrap text-center">
+        <div class="eyebrow bou-hero__eyebrow" data-scroll>
+          <Icon name="tabler:sparkles" class="w-3.5 h-3.5" />
+          <span>{data.hero.eyebrow.join(' · ')}</span>
+        </div>
+
+        <h1 class="bou-hero__title display-hero text-white" data-scroll>
+          Battle of <span class="ital-grad">Universities</span>
+        </h1>
+
+        <p class="bou-hero__body" data-scroll>{data.hero.body}</p>
+
+        <div class="bou-hero__cta" data-scroll>
+          <button type="button" class="btn-cta" data-open-waitlist>
+            {data.hero.ctaPrimary}
+            <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+          </button>
+          <a href="#how-it-works" class="cta-ghost">{data.hero.ctaSecondary}</a>
+        </div>
+
+        <div class="bou-stats" data-scroll>
+          {
+            data.hero.stats.map((s) => (
+              <div class="bou-stat" data-tone={s.tone}>
+                <span class="bou-stat__k">{s.k}</span>
+                <span class="bou-stat__v num">{s.v}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== The launch event ===== -->
+    <section id="launch" class="bou-section">
+      <div class="bou-wrap">
+        <div class="bou-launch glass-card" data-scroll>
+          <h2 class="bou-launch__title text-white">
+            {data.launch.title.lead} <span class="ital-grad">{data.launch.title.ital}</span>
+          </h2>
+          <p class="bou-launch__body">{data.launch.body}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== How it works — five steps ===== -->
+    <section id="how-it-works" class="bou-section">
+      <div class="bou-wrap">
+        <div class="bou-head" data-scroll>
+          <h2 class="section-title text-white">
+            {data.how.title.lead} <span class="ital-grad">{data.how.title.ital}</span>
+          </h2>
+        </div>
+
+        <div class="bou-scrolly" data-scrolly>
+          <!-- Sticky stage (desktop) — big visual synced to the active step. -->
+          <div class="bou-scrolly__stage">
+            <div class="bou-stage" aria-hidden="true">
+              {
+                data.how.steps.map((step, i) => (
+                  <div class="bou-stage__layer" data-stage={i} data-active={i === 0 ? 'true' : 'false'} data-tone={step.tone}>
+                    <span class="bou-stage__glow"></span>
+                    <span class="bou-stage__n num">{step.n}</span>
+                    <span class="gradient-tile bou-stage__icon" data-tone={step.tone}>
+                      <Icon name={step.icon} class="w-7 h-7" />
+                    </span>
+                    <span class="bou-stage__title">{step.title}</span>
+                  </div>
+                ))
+              }
+            </div>
+            <div class="bou-stage__meter">
+              <span class="bou-stage__meterlabel num"><span data-step-cur>1</span> / {data.how.steps.length}</span>
+              <div class="bou-stage__segs">
+                {data.how.steps.map((_, i) => (
+                  <span class="bou-stage__seg" data-seg={i} data-active={i === 0 ? 'true' : 'false'}></span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <!-- Scrolling step panels — each activates as it hits the viewport center. -->
+          <ol class="bou-scrolly__steps">
+            {
+              data.how.steps.map((step, i) => (
+                <li class="bou-sstep" data-step-panel={i} data-active={i === 0 ? 'true' : 'false'}>
+                  <span class="gradient-tile bou-sstep__icon" data-tone={step.tone}>
+                    <Icon name={step.icon} class="w-5 h-5" />
+                  </span>
+                  <span class="bou-sstep__n num">{step.n}</span>
+                  <h3 class="bou-sstep__title text-white">{step.title}</h3>
+                  <p class="bou-sstep__body">{step.body}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== How winning works ===== -->
+    <section id="winning" class="bou-section">
+      <div class="bou-wrap">
+        <div class="bou-split">
+          <div class="bou-split__copy" data-scroll>
+            <h2 class="bou-split__title text-white">
+              {data.winning.title.lead} <span class="ital-grad">{data.winning.title.ital}</span>
+            </h2>
+            <p class="bou-split__body">{data.winning.body}</p>
+          </div>
+
+          <!-- Live campus board widget -->
+          <div class="bou-board" data-scroll data-board data-edge={data.winning.board.youValue} data-edge-max={data.winning.board.youMax}>
+            <header class="bou-board__head">
+              <span class="bou-board__title">{data.winning.board.title}</span>
+              <span class="bou-board__live"><span class="live-dot"></span>{data.winning.board.live}</span>
+            </header>
+
+            <ol class="bou-board__rows">
+              {
+                data.winning.board.rows.map((r) => (
+                  <li class:list={['bou-board__row', r.join && 'bou-board__row--join']}>
+                    <span class="bou-board__rank num">{r.rank}</span>
+                    <span class="bou-board__flag">{r.flag ?? ''}</span>
+                    <span class="bou-board__name">{r.name}</span>
+                    {r.join ? (
+                      <button type="button" class="bou-board__joinbtn" data-open-waitlist>{data.winning.board.joinLabel}</button>
+                    ) : (
+                      <span class="bou-board__score num" data-count={r.score}>0</span>
+                    )}
+                  </li>
+                ))
+              }
+            </ol>
+
+            <div class="bou-board__edge">
+              <div class="bou-board__edgehead">
+                <span class="bou-board__edgelabel">{data.winning.board.youLabel}</span>
+                <span class="bou-board__edgeval num">
+                  <span data-edge-num>0</span> / {data.winning.board.youMax}
+                </span>
+              </div>
+              <div class="bou-board__rail"><span class="bou-board__fill" data-edge-fill></span></div>
+            </div>
+
+            <div class="bou-board__prize">
+              <span class="bou-board__prizek"><Icon name="tabler:coin" class="w-3.5 h-3.5" />{data.winning.board.prizeLabel}</span>
+              <span class="bou-board__prizev">{data.winning.board.prizeValue}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== The field — campuses ===== -->
+    <section id="field" class="bou-section">
+      <div class="bou-wrap">
+        <div class="bou-head" data-scroll>
+          <h2 class="section-title text-white">
+            {data.field.title.lead} <span class="ital-grad">{data.field.title.ital}</span>
+          </h2>
+          <p class="section-sub">{data.field.sub}</p>
+        </div>
+
+        <div class="bou-field" data-scroll>
+          {
+            data.field.campuses.map((c, i) => (
+              <>
+                {i > 0 && <span class="bou-field__vs">{data.field.vs}</span>}
+                <article class="bou-crest" style={`--crest-color:${c.color}`}>
+                  <span class="bou-crest__glow"></span>
+                  <span class="bou-crest__flag">{c.flag}</span>
+                  <span class="bou-crest__logo">
+                    <img src={c.logo} alt={`${c.name} crest`} loading="lazy" />
+                  </span>
+                  <span class="bou-crest__name">{c.name}</span>
+                  <span class="bou-crest__loc">{c.location}</span>
+                </article>
+              </>
+            ))
+          }
+          <article class="bou-crest bou-crest--more">
+            <span class="bou-crest__plus"><Icon name="tabler:plus" class="w-6 h-6" /></span>
+            <span class="bou-crest__moretxt">{data.field.more}</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Key dates ===== -->
+    <section id="dates" class="bou-section">
+      <div class="bou-wrap">
+        <div class="bou-head" data-scroll>
+          <h2 class="section-title text-white">
+            {data.dates.title.lead} <span class="ital-grad">{data.dates.title.ital}</span>
+          </h2>
+        </div>
+
+        <ol class="bou-timeline">
+          <span class="bou-timeline__pulse" aria-hidden="true"></span>
+          {
+            data.dates.items.map((d, i) => (
+              <li class:list={['bou-tl', d.state === 'active' && 'bou-tl--active']} data-scroll style={`transition-delay:${i * 80}ms`}>
+                <span class="bou-tl__dot"></span>
+                <span class="bou-tl__when num">{d.when}</span>
+                <div class="bou-tl__content">
+                  <h3 class="bou-tl__title text-white">{d.title}</h3>
+                  <p class="bou-tl__body">{d.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section id="faq" class="bou-section">
+      <div class="bou-wrap">
+        <div class="bou-head" data-scroll>
+          <h2 class="section-title text-white">
+            {data.faq.title.lead} <span class="ital-grad">{data.faq.title.ital}</span>
+          </h2>
+        </div>
+
+        <div class="bou-faq" data-scroll>
+          {
+            data.faq.items.map((item, i) => (
+              <details class="bou-faq__item" open={i === 0}>
+                <summary class="bou-faq__q">
+                  <span>{item.q}</span>
+                  <Icon name="tabler:plus" class="bou-faq__icon w-4 h-4" />
+                </summary>
+                <div class="bou-faq__a">{item.a}</div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Final CTA ===== -->
+    <section id="claim" class="bou-final">
+      <span
+        aria-hidden="true"
+        class="bou-final__ghost"
+      >BOU</span>
+      <div class="bou-wrap text-center relative z-10">
+        <div class="eyebrow bou-final__eyebrow" data-scroll>
+          <Icon name="tabler:sparkles" class="w-3.5 h-3.5" />
+          <span>{data.finalCta.eyebrow}</span>
+        </div>
+        <h2 class="bou-final__title display-hero text-white" data-scroll>
+          {data.finalCta.title.lead} <span class="ital-grad">{data.finalCta.title.ital}</span>
+        </h2>
+        <p class="bou-final__body" data-scroll>{data.finalCta.body}</p>
+        <div class="bou-hero__cta" data-scroll>
+          <button type="button" class="cta-big" data-open-waitlist>
+            {data.finalCta.ctaPrimary}
+            <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+          </button>
+          <a href={home} class="cta-ghost">
+            <Icon name="tabler:arrow-left" class="w-3.5 h-3.5" />
+            {data.finalCta.ctaSecondary}
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer locale={locale} />
+
+  <WaitlistModal locale={locale} />
+</Layout>
+
+<style>
+  /* This page is content-dense — opt out of the global full-viewport section
+     rule (main > section { min-height: 100dvh }) so sections size naturally. */
+  main.bou-page > section {
+    min-height: 0;
+    display: block;
+  }
+
+  /* Match the navbar's container exactly (max-w-[1280px] · px-5 / md:px-8)
+     so every section's left/right edges line up with the logo and the CTA. */
+  .bou-wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-inline: 1.25rem;
+    width: 100%;
+  }
+  @media (min-width: 768px) { .bou-wrap { padding-inline: 2rem; } }
+
+  .bou-section { padding-block: clamp(3.5rem, 8vw, 6rem); }
+
+  /* ---- Section heads ---- */
+  .bou-head { text-align: center; margin-bottom: clamp(2rem, 5vw, 3.5rem); }
+  .bou-head .section-title { margin-top: 0.25rem; }
+
+  /* ===================== HERO ===================== */
+  .bou-hero {
+    position: relative;
+    padding-top: clamp(3rem, 8vw, 5.5rem);
+    padding-bottom: clamp(3rem, 7vw, 5rem);
+    overflow: hidden;
+  }
+  .bou-hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 120%;
+    pointer-events: none;
+    background:
+      radial-gradient(50% 45% at 50% 30%, rgba(126, 59, 255, 0.22), transparent 70%),
+      radial-gradient(40% 40% at 75% 60%, rgba(216, 59, 255, 0.14), transparent 70%),
+      radial-gradient(40% 40% at 25% 60%, rgba(41, 98, 255, 0.14), transparent 70%);
+    animation: bouBreathe 10s ease-in-out infinite;
+  }
+  /* Slowly rotating aurora sweep behind the headline. */
+  .bou-hero::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 90vw; height: 90vw;
+    max-width: 1100px; max-height: 1100px;
+    pointer-events: none;
+    background: conic-gradient(from 0deg, transparent 0%, rgba(126, 59, 255, 0.1) 18%, transparent 36%, rgba(216, 59, 255, 0.09) 55%, transparent 72%, rgba(41, 98, 255, 0.1) 88%, transparent 100%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: bouSpin 26s linear infinite;
+    opacity: 0.7;
+  }
+  @keyframes bouBreathe {
+    0%, 100% { transform: translateX(-50%) scale(1);    opacity: 0.85; }
+    50%      { transform: translateX(-50%) scale(1.08); opacity: 1; }
+  }
+  @keyframes bouSpin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+  .bou-hero__eyebrow { margin-bottom: 1.5rem; }
+  .bou-hero__title {
+    position: relative;
+    font-size: clamp(2.75rem, 9vw, 6.25rem);
+    line-height: 0.95;
+    margin: 0 auto;
+    max-width: 14ch;
+  }
+  /* Animated gradient flow on the big display accents. */
+  .bou-hero__title .ital-grad,
+  .bou-final__title .ital-grad {
+    background-image: var(--gradient-ital-sweep);
+    background-size: 220% auto;
+    animation: bouGradFlow 6s ease-in-out infinite;
+  }
+  @keyframes bouGradFlow {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+  .bou-hero__body {
+    margin: 1.75rem auto 0;
+    max-width: 40rem;
+    font-size: clamp(1rem, 1.4vw, 1.18rem);
+    line-height: 1.6;
+    color: var(--ink-muted);
+  }
+  .bou-hero__cta {
+    margin-top: 2.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.9rem;
+  }
+
+  /* ---- Hero stat tiles ---- */
+  .bou-stats {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    max-width: 60rem;
+    margin-inline: auto;
+  }
+  .bou-stat {
+    position: relative;
+    padding: 1.1rem 1rem;
+    border-radius: var(--radius-lg);
+    background: var(--glass-card-bg);
+    border: 1px solid var(--hairline);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    text-align: center;
+    overflow: hidden;
+    animation: bouFloat 6s ease-in-out infinite;
+    transition: transform 250ms ease, border-color 250ms ease;
+  }
+  .bou-stat:nth-child(2) { animation-delay: 0.8s; }
+  .bou-stat:nth-child(3) { animation-delay: 1.6s; }
+  .bou-stat:nth-child(4) { animation-delay: 2.4s; }
+  .bou-stat:hover { transform: translateY(-6px); border-color: var(--hairline-strong); }
+  @keyframes bouFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-7px); }
+  }
+  .bou-stat::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .bou-stat[data-tone="gold"]::before    { background-image: var(--gradient-gold-orange); }
+  .bou-stat[data-tone="sky"]::before      { background-image: var(--gradient-indigo-violet); }
+  .bou-stat[data-tone="violet"]::before   { background-image: var(--gradient-violet-magenta); }
+  .bou-stat[data-tone="emerald"]::before  { background-image: var(--gradient-emerald-teal); }
+  .bou-stat__k {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.5rem;
+  }
+  .bou-stat__v { display: block; font-size: clamp(0.95rem, 2vw, 1.2rem); font-weight: 700; letter-spacing: -0.01em; color: #fff; }
+  .bou-stat[data-tone="gold"] .bou-stat__v    { color: var(--prize-gold); }
+  .bou-stat[data-tone="sky"] .bou-stat__v     { color: var(--brand-sky); }
+  .bou-stat[data-tone="violet"] .bou-stat__v  { color: var(--brand-lavender); }
+  .bou-stat[data-tone="emerald"] .bou-stat__v { color: var(--win-emerald); }
+
+  @media (max-width: 640px) {
+    .bou-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ===================== LAUNCH ===================== */
+  .bou-launch {
+    padding: clamp(1.75rem, 4vw, 3.25rem);
+  }
+  .bou-launch__title {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    margin-bottom: 1.25rem;
+    max-width: 24ch;
+  }
+  .bou-launch__body { font-size: clamp(1rem, 1.4vw, 1.12rem); line-height: 1.7; color: var(--ink-muted); max-width: 70ch; }
+
+  /* ===================== STEPS — sticky scrollytelling ===================== */
+  .bou-scrolly {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  /* --- Left sticky stage --- */
+  .bou-scrolly__stage { position: sticky; top: 96px; align-self: start; }
+  .bou-stage {
+    position: relative;
+    height: clamp(20rem, 44vh, 28rem);
+    border-radius: var(--radius-3xl);
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(126, 59, 255, 0.12), transparent 60%),
+      rgba(0, 0, 0, 0.42);
+    border: 1px solid var(--hairline-strong);
+    box-shadow: var(--shadow-soft-chrome);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    overflow: hidden;
+  }
+  .bou-stage__layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+    transition: opacity 500ms ease, transform 600ms cubic-bezier(0.2, 0.85, 0.2, 1);
+    pointer-events: none;
+  }
+  .bou-stage__layer[data-active="true"] { opacity: 1; transform: none; }
+  .bou-stage__glow {
+    position: absolute; top: -28%; left: 50%; transform: translateX(-50%);
+    width: 85%; height: 85%; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, rgba(126, 59, 255, 0.4), transparent 70%);
+    transition: background 500ms ease;
+  }
+  .bou-stage__layer[data-tone="gold-orange"]   .bou-stage__glow { background: radial-gradient(circle, rgba(250, 204, 21, 0.32), transparent 70%); }
+  .bou-stage__layer[data-tone="emerald-teal"]  .bou-stage__glow { background: radial-gradient(circle, rgba(16, 185, 129, 0.32), transparent 70%); }
+  .bou-stage__layer[data-tone="magenta-pink"]  .bou-stage__glow { background: radial-gradient(circle, rgba(216, 59, 255, 0.34), transparent 70%); }
+  .bou-stage__n {
+    position: relative;
+    font-family: var(--font-sans); font-weight: 800; line-height: 1;
+    font-size: clamp(4rem, 11vw, 7rem); letter-spacing: -0.05em;
+    background-image: var(--gradient-brand-sweep); -webkit-background-clip: text; background-clip: text;
+    color: transparent; -webkit-text-fill-color: transparent;
+  }
+  .bou-stage__layer[data-tone="gold-orange"]  .bou-stage__n { background-image: var(--gradient-gold-orange); }
+  .bou-stage__layer[data-tone="emerald-teal"] .bou-stage__n { background-image: var(--gradient-emerald-teal); }
+  .bou-stage__layer[data-tone="magenta-pink"] .bou-stage__n { background-image: var(--gradient-magenta-pink); }
+  .bou-stage__icon { position: relative; width: 3.5rem; height: 3.5rem; border-radius: 1.1rem; }
+  .bou-stage__icon svg { width: 1.85rem; height: 1.85rem; }
+  .bou-stage__title { position: relative; font-family: var(--font-sans); font-size: clamp(1.25rem, 2.2vw, 1.6rem); font-weight: 500; letter-spacing: -0.02em; color: #fff; }
+
+  .bou-stage__meter { margin-top: 1.25rem; display: flex; align-items: center; gap: 1rem; }
+  .bou-stage__meterlabel { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.16em; color: var(--ink-muted); flex: none; }
+  .bou-stage__segs { display: flex; gap: 0.4rem; flex: 1; }
+  .bou-stage__seg { flex: 1; height: 4px; border-radius: 9999px; background: rgba(255, 255, 255, 0.1); transition: background 350ms ease; }
+  .bou-stage__seg[data-active="true"] { background-image: var(--gradient-brand-sweep); }
+
+  /* --- Right scrolling steps --- */
+  .bou-scrolly__steps { display: flex; flex-direction: column; }
+  .bou-sstep {
+    min-height: 58vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem 0;
+    margin-left: 0.5rem;
+    padding-left: clamp(1.25rem, 2.5vw, 2rem);
+    border-left: 2px solid var(--hairline);
+    opacity: 0.3;
+    transition: opacity 450ms ease, border-color 450ms ease;
+  }
+  .bou-sstep[data-active="true"] { opacity: 1; border-color: var(--brand-purple); }
+  .bou-sstep__icon { width: 2.75rem; height: 2.75rem; border-radius: 0.85rem; margin-bottom: 1rem; }
+  .bou-sstep__icon svg { width: 1.4rem; height: 1.4rem; }
+  .bou-sstep__n { display: block; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; color: var(--brand-lavender); margin-bottom: 0.5rem; }
+  .bou-sstep__title { font-family: var(--font-sans); font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 500; letter-spacing: -0.025em; margin-bottom: 0.65rem; }
+  .bou-sstep__body { font-size: clamp(0.95rem, 1.3vw, 1.1rem); line-height: 1.65; color: var(--ink-muted); max-width: 42ch; }
+
+  @media (max-width: 900px) {
+    .bou-scrolly { grid-template-columns: 1fr; }
+    .bou-scrolly__stage { display: none; }
+    .bou-scrolly__steps { gap: 1rem; }
+    .bou-sstep {
+      min-height: 0;
+      margin-left: 0;
+      padding: 1.6rem;
+      border-left: none;
+      border-radius: var(--radius-2xl);
+      background: var(--glass-card-bg);
+      border: 1px solid var(--hairline);
+      opacity: 1;
+    }
+    .bou-sstep[data-active="true"] { border-color: var(--hairline-strong); }
+  }
+
+  /* ===================== WINNING / BOARD ===================== */
+  .bou-split {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+  @media (max-width: 860px) { .bou-split { grid-template-columns: 1fr; } }
+  .bou-split__title {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    margin-bottom: 1.25rem;
+  }
+  .bou-split__body { font-size: 1rem; line-height: 1.7; color: var(--ink-muted); }
+
+  .bou-board {
+    border-radius: var(--radius-2xl);
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+    background:
+      radial-gradient(130% 90% at 50% -10%, rgba(126, 59, 255, 0.16), transparent 60%),
+      rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--hairline-strong);
+    box-shadow: var(--shadow-soft-chrome);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .bou-board__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; }
+  .bou-board__title { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted); }
+  .bou-board__live { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--win-emerald); }
+
+  .bou-board__rows { display: flex; flex-direction: column; gap: 0.5rem; }
+  .bou-board__row {
+    display: grid;
+    grid-template-columns: 1.5rem 1.5rem 1fr auto;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--hairline);
+  }
+  .bou-board__row--join {
+    background: rgba(126, 59, 255, 0.1);
+    border: 1px dashed rgba(126, 59, 255, 0.45);
+  }
+  .bou-board__rank { font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; color: var(--ink-faint); text-align: center; }
+  .bou-board__flag { font-size: 1.05rem; line-height: 1; text-align: center; }
+  .bou-board__name { font-family: var(--font-sans); font-size: 0.95rem; font-weight: 500; color: #fff; }
+  .bou-board__row--join .bou-board__name { color: var(--brand-lavender); }
+  .bou-board__score { font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; color: var(--brand-sky); font-variant-numeric: tabular-nums; }
+  .bou-board__joinbtn {
+    justify-self: end;
+    white-space: nowrap;
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #fff; padding: 0.4rem 0.95rem; border-radius: 9999px;
+    background-image: var(--gradient-brand-sweep); border: none;
+    box-shadow: var(--shadow-brand-halo);
+    transition: transform 150ms ease, filter 150ms ease;
+  }
+  .bou-board__joinbtn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+
+  .bou-board__edge { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--hairline); }
+  .bou-board__edgehead { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.6rem; }
+  .bou-board__edgelabel { font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-muted); }
+  .bou-board__edgeval { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; color: var(--win-emerald); font-variant-numeric: tabular-nums; }
+  .bou-board__rail { position: relative; height: 8px; border-radius: 9999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+  .bou-board__fill {
+    position: absolute; inset: 0 auto 0 0; width: 0;
+    border-radius: 9999px;
+    background-image: var(--gradient-emerald-teal);
+    transition: width 1400ms cubic-bezier(0.2, 0.85, 0.2, 1);
+  }
+
+  .bou-board__prize {
+    margin-top: 1.1rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+    padding: 0.8rem 1rem; border-radius: 0.8rem;
+    background: radial-gradient(120% 100% at 0% 50%, rgba(250, 204, 21, 0.14), transparent 70%);
+    border: 1px solid rgba(250, 204, 21, 0.28);
+  }
+  .bou-board__prizek { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--prize-gold); }
+  .bou-board__prizev { font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; color: #fff; }
+
+  /* ===================== FIELD / CRESTS ===================== */
+  .bou-field {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .bou-field__vs {
+    align-self: center;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    padding: 0 0.4rem;
+  }
+  .bou-crest {
+    position: relative;
+    flex: 1 1 220px;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border-radius: var(--radius-2xl);
+    background: var(--glass-card-bg);
+    border: 1px solid var(--hairline);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    overflow: hidden;
+    transition: transform 400ms cubic-bezier(0.2, 0.85, 0.2, 1), border-color 250ms ease;
+  }
+  .bou-crest:hover { transform: translateY(-6px); border-color: var(--hairline-strong); }
+  .bou-crest__glow {
+    position: absolute;
+    top: -40%; left: 50%; transform: translateX(-50%);
+    width: 80%; height: 80%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--crest-color) 45%, transparent), transparent 70%);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .bou-crest__flag { position: relative; font-size: 1.4rem; line-height: 1; margin-bottom: 0.85rem; }
+  .bou-crest__logo {
+    position: relative;
+    width: 6rem; height: 6rem;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.1rem;
+  }
+  .bou-crest__logo img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.5)); animation: bouFloat 5.5s ease-in-out infinite; }
+  .bou-crest:nth-of-type(3) .bou-crest__logo img { animation-delay: 1.2s; }
+  .bou-crest:hover .bou-crest__logo img { animation-play-state: paused; }
+  .bou-crest__name { position: relative; font-family: var(--font-sans); font-size: 1.4rem; font-weight: 500; letter-spacing: -0.02em; color: #fff; margin-bottom: 0.3rem; }
+  .bou-crest__loc { position: relative; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+
+  .bou-crest--more { justify-content: center; border-style: dashed; }
+  .bou-crest__plus {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 3.25rem; height: 3.25rem; border-radius: 9999px; margin-bottom: 1rem;
+    color: var(--brand-lavender);
+    background: rgba(126, 59, 255, 0.12); border: 1px solid rgba(126, 59, 255, 0.35);
+  }
+  .bou-crest__moretxt { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--ink-muted); line-height: 1.5; max-width: 12rem; }
+
+  @media (max-width: 640px) {
+    .bou-field__vs { width: 100%; padding: 0.25rem 0; }
+    .bou-crest { max-width: none; flex-basis: 100%; }
+  }
+
+  /* ===================== TIMELINE ===================== */
+  .bou-timeline {
+    position: relative;
+    max-width: 46rem;
+    margin: 0 auto;
+    padding-left: 2rem;
+  }
+  .bou-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.32rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: linear-gradient(180deg, var(--brand-purple), rgba(126, 59, 255, 0.15));
+  }
+  /* A light pulse travelling down the line. */
+  .bou-timeline__pulse {
+    position: absolute;
+    left: 0.32rem;
+    top: 0;
+    width: 8px; height: 8px;
+    margin-left: -3px;
+    border-radius: 9999px;
+    background: #fff;
+    box-shadow: 0 0 14px 3px rgba(126, 59, 255, 0.9);
+    z-index: 1;
+    animation: bouTlPulse 4.5s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+  }
+  @keyframes bouTlPulse {
+    0%   { top: 0%;   opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+  .bou-tl {
+    position: relative;
+    padding: 0 0 2rem 1.75rem;
+    display: grid;
+    grid-template-columns: auto;
+  }
+  .bou-tl:last-child { padding-bottom: 0; }
+  .bou-tl__dot {
+    position: absolute;
+    left: calc(-2rem + 0.32rem);
+    top: 0.35rem;
+    transform: translateX(-50%);
+    width: 0.85rem; height: 0.85rem;
+    border-radius: 9999px;
+    background: var(--bg-card);
+    border: 2px solid var(--hairline-strong);
+  }
+  .bou-tl--active .bou-tl__dot {
+    background: var(--brand-purple);
+    border-color: var(--brand-lavender);
+    box-shadow: 0 0 0 4px rgba(126, 59, 255, 0.18), 0 0 16px rgba(126, 59, 255, 0.7);
+    animation: brand-pulse 2.4s ease-in-out infinite;
+  }
+  .bou-tl__when {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brand-lavender);
+    margin-bottom: 0.4rem;
+  }
+  .bou-tl--active .bou-tl__when { color: var(--win-emerald); }
+  .bou-tl__title { font-family: var(--font-sans); font-size: 1.2rem; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+  .bou-tl__body { font-size: 0.92rem; line-height: 1.6; color: var(--ink-muted); max-width: 38rem; }
+
+  /* ===================== FAQ ===================== */
+  .bou-faq { display: flex; flex-direction: column; gap: 0.65rem; }
+  .bou-faq__item {
+    border-radius: var(--radius-lg);
+    background: var(--glass-card-bg);
+    border: 1px solid var(--hairline);
+    overflow: hidden;
+    transition: border-color 200ms ease, background 200ms ease;
+  }
+  .bou-faq__item[open] { border-color: var(--hairline-strong); background: rgba(255, 255, 255, 0.045); }
+  .bou-faq__q {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: 1.1rem 1.35rem;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    font-weight: 500;
+    color: #fff;
+  }
+  .bou-faq__q::-webkit-details-marker { display: none; }
+  .bou-faq__icon { flex: none; color: var(--brand-lavender); transition: transform 250ms ease; }
+  .bou-faq__item[open] .bou-faq__icon { transform: rotate(45deg); }
+  .bou-faq__a {
+    padding: 0 1.35rem 1.2rem;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--ink-muted);
+    max-width: 52rem;
+  }
+
+  /* ===================== FINAL CTA ===================== */
+  .bou-final {
+    position: relative;
+    text-align: center;
+    padding-block: clamp(4rem, 10vw, 7rem);
+    overflow: hidden;
+  }
+  .bou-final__ghost {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: clamp(12rem, 30vw, 28rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: rgba(255, 255, 255, 0.025);
+  }
+  .bou-final__eyebrow { margin-bottom: 1.5rem; }
+  .bou-final__title { font-size: clamp(3rem, 8vw, 6rem); }
+  .bou-final__body {
+    margin: 1.75rem auto 0;
+    max-width: 34rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--ink-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bou-board__fill { transition: none; }
+    .bou-hero::before,
+    .bou-hero::after,
+    .bou-hero__title .ital-grad,
+    .bou-final__title .ital-grad,
+    .bou-stat,
+    .bou-crest__logo img,
+    .bou-timeline__pulse,
+    .bou-tl--active .bou-tl__dot { animation: none !important; }
+    .bou-stage__layer,
+    .bou-sstep { transition: none; }
+  }
+</style>
+
+<script>
+  // ---- Scroll reveal (mirrors the home page) ----
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('[data-scroll]').forEach((el) => observer.observe(el));
+
+  // ---- Live campus board: count-up scores + Edge Score gauge ----
+  document.querySelectorAll<HTMLElement>('[data-board]').forEach((board) => {
+    let played = false;
+    const counters = Array.from(board.querySelectorAll<HTMLElement>('[data-count]'));
+    const edgeNum = board.querySelector<HTMLElement>('[data-edge-num]');
+    const edgeFill = board.querySelector<HTMLElement>('[data-edge-fill]');
+    const edgeTarget = Number(board.dataset.edge ?? 0);
+    const edgeMax = Number(board.dataset.edgeMax ?? 1000);
+
+    const animateNumber = (el: HTMLElement, target: number, dur = 1400) => {
+      let start = 0;
+      const tick = (ts: number) => {
+        if (!start) start = ts;
+        const p = Math.min(1, (ts - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = String(Math.round(eased * target));
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = String(target);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const play = () => {
+      if (played) return;
+      played = true;
+      counters.forEach((el) => animateNumber(el, Number(el.dataset.count ?? 0)));
+      if (edgeNum) animateNumber(edgeNum, edgeTarget);
+      if (edgeFill) requestAnimationFrame(() => { edgeFill.style.width = `${(edgeTarget / edgeMax) * 100}%`; });
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => { if (entry.isIntersecting) play(); });
+    }, { threshold: 0.35 });
+    io.observe(board);
+  });
+
+  // ---- Five steps: scroll-driven active step ----
+  document.querySelectorAll<HTMLElement>('[data-scrolly]').forEach((root) => {
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-step-panel]'));
+    const layers = Array.from(root.querySelectorAll<HTMLElement>('[data-stage]'));
+    const segs = Array.from(root.querySelectorAll<HTMLElement>('[data-seg]'));
+    const curEl = root.querySelector<HTMLElement>('[data-step-cur]');
+    if (!panels.length) return;
+
+    let active = 0;
+    const setActive = (idx: number) => {
+      if (idx === active) return;
+      active = idx;
+      panels.forEach((p, i) => (p.dataset.active = i === idx ? 'true' : 'false'));
+      layers.forEach((l, i) => (l.dataset.active = i === idx ? 'true' : 'false'));
+      segs.forEach((s, i) => (s.dataset.active = i <= idx ? 'true' : 'false'));
+      if (curEl) curEl.textContent = String(idx + 1);
+    };
+
+    // A thin band across the viewport centre — whichever panel crosses it wins.
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(Number(entry.target.getAttribute('data-step-panel')));
+        });
+      },
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+    );
+    panels.forEach((p) => io.observe(p));
+  });
+
+  // ---- FAQ: keep it a single-open accordion ----
+  const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>('.bou-faq__item'));
+  faqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (item.open) faqItems.filter((i) => i !== item).forEach((i) => (i.open = false));
+    });
+  });
+</script>

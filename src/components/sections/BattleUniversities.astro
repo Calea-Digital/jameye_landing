@@ -12,7 +12,7 @@ const { locale } = Astro.props;
 
 const data = t<{
   eyebrow: string;
-  card: { title: string; subtitle: string; prizeLabel: string; ctaLabel: string };
+  card: { title: string; subtitle: string; prizeLabel: string; launchLabel: string; launchValue: string; ctaLabel: string };
   orgs: BattleOrg[];
 }>(locale, 'battle');
 

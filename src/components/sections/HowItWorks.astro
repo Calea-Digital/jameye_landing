@@ -70,8 +70,8 @@ const data = t<{
   };
 }>(locale, 'how-it-works');
 
-// EDGE is the heart of the section — open on it by default.
-const DEFAULT = 'edge';
+// Markets open first — it's the entry point, then EDGE Score.
+const DEFAULT = 'markets';
 
 const INTERVAL_MS = 5000;
 const CHART_W = 320;
@@ -221,13 +221,6 @@ const charts = markets.map((mk) => {
               data-hiw-panel={c.id}
               hidden={c.id !== DEFAULT}
             >
-              {c.id === 'markets' && (
-                <div class="hiw-panel__intro">
-                  <h3 class="hiw-panel__headline text-white">{c.headline}</h3>
-                  <p class="hiw-panel__body">{c.body}</p>
-                </div>
-              )}
-
               <!-- MARKETS — a live Polymarket-style market card. -->
               {c.id === 'markets' && (
                 <div class="pm" data-pickaside data-interval={INTERVAL_MS}>

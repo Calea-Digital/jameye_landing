@@ -2,8 +2,8 @@
   "links": [
     { "text": "Play", "href": "#hero" },
     { "text": "Characters", "href": "#roster" },
-    { "text": "How it works", "href": "#how-it-works" },
-    { "text": "Tournaments", "href": "#tournaments" },
+    { "text": "How it works", "href": "#why-skill" },
+    { "text": "Tournaments", "href": "/en/bou" },
     { "text": "Leaderboard", "href": "/en/leaderboard" }
   ],
   "cta": {

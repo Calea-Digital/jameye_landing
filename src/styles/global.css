@@ -182,12 +182,19 @@
      bleeds between sections. Tall content (e.g. on short viewports) is
      allowed to grow rather than be clipped. */
   main > section {
-    /* Fill the viewport minus the 64px sticky header, so each module —
-       including the hero with its bottom ticker — fits without scrolling. */
-    min-height: calc(100dvh - 64px);
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+  /* Full-viewport modules on tablet/desktop. On phones the fixed 100dvh
+     leaves tall empty gaps when a module's content is short, so there we let
+     each section size to its own content (its py padding handles spacing). */
+  @media (min-width: 768px) {
+    main > section {
+      /* Fill the viewport minus the 64px sticky header, so each module —
+         including the hero with its bottom ticker — fits without scrolling. */
+      min-height: calc(100dvh - 64px);
+    }
   }
 
   body {
