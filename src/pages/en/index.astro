@@ -5,7 +5,7 @@ import Footer from '~/components/common/Footer.astro';
 import Hero from '~/components/sections/Hero.astro';
 import Roster from '~/components/sections/Roster.astro';
 import BattleUniversities from '~/components/sections/BattleUniversities.astro';
-// import VideoShowcase from '~/components/sections/VideoShowcase.astro'; // Temporarily removed from landing — keep for potential reuse
+import VideoShowcase from '~/components/sections/VideoShowcase.astro';
 import HowItWorks from '~/components/sections/HowItWorks.astro';
 import Calibration from '~/components/sections/Calibration.astro';
 import TournamentFormats from '~/components/sections/TournamentFormats.astro';
@@ -23,6 +23,7 @@ const meta = t<{ title: string; description: string }>(locale, 'meta');
   <Header locale={locale} />
   <main id="top">
     <Hero locale={locale} />
+    <VideoShowcase locale={locale} />
     <HowItWorks locale={locale} />
     <Calibration locale={locale} />
     <TournamentFormats locale={locale} />
