@@ -27,7 +27,7 @@
     "steps": [
       { "n": "01", "icon": "tabler:school", "tone": "indigo-violet", "title": "Join your campus", "body": "Reserve your handle and verify your university email. You forecast for the campus you're actually at, and your results count toward its average." },
       { "n": "02", "icon": "tabler:chart-candle", "tone": "violet-magenta", "title": "Forecast the markets", "body": "Call real-world events across sports, politics, crypto, macro and more — as many as you like through the event." },
-      { "n": "03", "icon": "tabler:bolt", "tone": "emerald-teal", "title": "Build your Edge Score", "body": "Every prediction is graded on calibration. Sharp, well-judged calls lift your score; hedging and bluffing don't." },
+      { "n": "03", "icon": "tabler:gauge", "tone": "brand-sweep", "title": "Build your Edge Score", "body": "Every prediction is graded on calibration. Sharp, well-judged calls lift your score; hedging and bluffing don't." },
       { "n": "04", "icon": "tabler:trending-up", "tone": "magenta-pink", "title": "Lift your campus", "body": "Your Edge Score counts toward your university's average. Sharper players raise the campus average — that's what the standings are built on." },
       { "n": "05", "icon": "tabler:trophy", "tone": "gold-orange", "title": "Win", "body": "The campus with the highest average Edge Score wins the title and the bragging rights. The top 25 forecasters inside that winning campus split the cash prize pool." }
     ]

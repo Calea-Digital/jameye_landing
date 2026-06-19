@@ -58,19 +58,10 @@ const hero = t<{
               {hero.cta.submit}
               <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
             </button>
-            <a href="#how-it-works" class="cta-ghost whitespace-nowrap">
+            <a href="#video" class="cta-ghost whitespace-nowrap">
               {hero.cta.secondary}
             </a>
             <div class="flex items-center gap-2 sm:ml-1">
-              <a
-                href="#"
-                class="social-icon-btn social-icon-btn--discord"
-                aria-label="Join our Discord"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon name="tabler:brand-discord" class="w-5 h-5" />
-              </a>
               <a
                 href="#"
                 class="social-icon-btn social-icon-btn--telegram"
@@ -260,7 +251,7 @@ const hero = t<{
     .hero-character-layer { transition: none; }
   }
 
-  /* Hero social buttons — discord + telegram. */
+  /* Hero social buttons — telegram. */
   .social-icon-btn {
     display: inline-flex;
     align-items: center;
@@ -276,11 +267,6 @@ const hero = t<{
   .social-icon-btn:hover {
     color: #ffffff;
     transform: translateY(-1px);
-  }
-  .social-icon-btn--discord:hover {
-    background: rgba(88, 101, 242, 0.18);
-    border-color: rgba(88, 101, 242, 0.55);
-    box-shadow: 0 8px 24px -10px rgba(88, 101, 242, 0.55);
   }
   .social-icon-btn--telegram:hover {
     background: rgba(36, 161, 222, 0.18);

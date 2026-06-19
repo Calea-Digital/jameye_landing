@@ -112,14 +112,30 @@ const first = data.fx.markets[0];
   .wc-step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
 
   /* Numbered icon badge */
+  /* Glass badge matching the site-wide .gradient-tile treatment: gradient ring
+     + glyph stroked in the brand gradient (defs in Layout.astro) + tone glow. */
   .wc-badge {
     position: relative; display: inline-flex; align-items: center; justify-content: center;
-    width: 3.5rem; height: 3.5rem; border-radius: 1rem; color: #fff; margin-bottom: 1.1rem;
-    border: 1px solid var(--hairline-strong); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    width: 3.5rem; height: 3.5rem; border-radius: 1.1rem; margin-bottom: 1.1rem;
+    /* Opaque page-background base (not translucent) so the connecting rail
+       line behind the steps is hidden where it crosses each badge. */
+    background:
+      radial-gradient(125% 125% at 28% 18%, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.015) 60%),
+      var(--background);
+    box-shadow: var(--tile-glow, 0 12px 30px -10px rgba(126, 59, 255, 0.6)), inset 0 1px 0 rgba(255, 255, 255, 0.10);
   }
-  .wc-badge[data-tone="emerald-blue"]   { background-image: var(--gradient-emerald-blue); box-shadow: 0 0 28px -8px rgba(16, 185, 129, 0.8), inset 0 1px 0 rgba(255,255,255,0.25); }
-  .wc-badge[data-tone="violet-magenta"] { background-image: var(--gradient-violet-magenta); box-shadow: 0 0 28px -8px rgba(126, 59, 255, 0.8), inset 0 1px 0 rgba(255,255,255,0.25); }
-  .wc-badge[data-tone="gold-orange"]    { background-image: var(--gradient-gold-orange); box-shadow: 0 0 28px -8px rgba(250, 204, 21, 0.8), inset 0 1px 0 rgba(255,255,255,0.25); }
+  .wc-badge::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.4px;
+    background: var(--tile-ring, var(--gradient-brand-sweep));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+  }
+  .wc-badge > svg { position: relative; z-index: 1; }
+  .wc-badge > svg, .wc-badge > svg * { stroke: var(--brand-lavender); stroke: var(--tile-stroke, url(#jam-grad-brand-sweep)); }
+  .wc-badge[data-tone="indigo-violet"]  { --tile-ring: var(--gradient-indigo-violet);  --tile-glow: 0 12px 30px -10px rgba(91, 141, 255, 0.55); --tile-stroke: url(#jam-grad-indigo-violet); }
+  .wc-badge[data-tone="violet-magenta"] { --tile-ring: var(--gradient-violet-magenta); --tile-glow: 0 12px 30px -10px rgba(126, 59, 255, 0.55); --tile-stroke: url(#jam-grad-violet-magenta); }
+  .wc-badge[data-tone="gold-orange"]    { --tile-ring: var(--gradient-gold-orange);    --tile-glow: 0 12px 30px -10px rgba(250, 204, 21, 0.5);  --tile-stroke: url(#jam-grad-gold-orange); }
   .wc-badge__n {
     position: absolute; top: -0.5rem; right: -0.5rem;
     display: inline-flex; align-items: center; justify-content: center;

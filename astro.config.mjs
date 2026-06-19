@@ -18,13 +18,11 @@ export default defineConfig({
   // /leaderboard and /leaderboard/), matching the nginx try_files fallback.
   trailingSlash: 'ignore',
 
-  i18n: {
-    locales: ['en'],
-    defaultLocale: 'en',
-    routing: {
-      prefixDefaultLocale: false,
-    },
-  },
+  // No Astro i18n routing: the single 'en' locale is just a physical folder
+  // (src/pages/en → /en/...) and localisation is handled by the custom helper
+  // in src/utils/i18n. Astro i18n with prefixDefaultLocale:false made the dev
+  // server 404 every /en route (it expects the default locale to be unprefixed)
+  // even though the build still emitted them.
 
   // All content lives under /en (see src/pages/en). Redirect the bare root and
   // the legacy unprefixed routes to their /en equivalents.

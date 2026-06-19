@@ -573,23 +573,51 @@
   }
 
   /* ---------- Gradient tile (icons in bento etc.) ---------- */
+  /* Glass tile with a gradient hairline ring; the glyph itself is stroked in
+     the brand gradient (stroke: url(#jam-grad-*), defs live in Layout.astro)
+     and the tile casts a soft tone-matched glow. Per-tone values come from
+     --tile-ring / --tile-glow / --tile-stroke set below. */
   .gradient-tile {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 2.25rem;
     height: 2.25rem;
-    border-radius: 0.625rem;
-    color: #ffffff;
-    box-shadow: var(--tile-inner-sheen);
+    border-radius: 0.8rem;
+    background:
+      radial-gradient(125% 125% at 28% 18%, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.015) 60%),
+      rgba(12, 10, 24, 0.55);
+    box-shadow:
+      var(--tile-glow, 0 12px 30px -10px rgba(126, 59, 255, 0.6)),
+      inset 0 1px 0 rgba(255, 255, 255, 0.10);
   }
-  .gradient-tile[data-tone="indigo-violet"]   { background-image: var(--gradient-indigo-violet); }
-  .gradient-tile[data-tone="violet-magenta"]  { background-image: var(--gradient-violet-magenta); }
-  .gradient-tile[data-tone="magenta-pink"]    { background-image: var(--gradient-magenta-pink); }
-  .gradient-tile[data-tone="emerald-blue"]    { background-image: var(--gradient-emerald-blue); }
-  .gradient-tile[data-tone="emerald-teal"]    { background-image: var(--gradient-emerald-teal); }
-  .gradient-tile[data-tone="gold-orange"]     { background-image: var(--gradient-gold-orange); }
-  .gradient-tile[data-tone="brand-sweep"]     { background-image: var(--gradient-brand-sweep); }
+  /* Gradient ring — a 1.4px gradient border that follows the rounded corners. */
+  .gradient-tile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: var(--tile-ring, var(--gradient-brand-sweep));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+  .gradient-tile > svg { position: relative; z-index: 1; }
+  /* Lavender fallback first, gradient stroke second (overrides where supported). */
+  .gradient-tile > svg,
+  .gradient-tile > svg * { stroke: var(--brand-lavender); stroke: var(--tile-stroke, url(#jam-grad-brand-sweep)); }
+
+  .gradient-tile[data-tone="indigo-violet"]   { --tile-ring: var(--gradient-indigo-violet);  --tile-glow: 0 12px 30px -10px rgba(91, 141, 255, 0.55);  --tile-stroke: url(#jam-grad-indigo-violet); }
+  .gradient-tile[data-tone="violet-magenta"]  { --tile-ring: var(--gradient-violet-magenta); --tile-glow: 0 12px 30px -10px rgba(126, 59, 255, 0.55);  --tile-stroke: url(#jam-grad-violet-magenta); }
+  .gradient-tile[data-tone="magenta-pink"]    { --tile-ring: var(--gradient-magenta-pink);   --tile-glow: 0 12px 30px -10px rgba(216, 59, 255, 0.55);  --tile-stroke: url(#jam-grad-magenta-pink); }
+  .gradient-tile[data-tone="emerald-blue"]    { --tile-ring: var(--gradient-emerald-blue);   --tile-glow: 0 12px 30px -10px rgba(16, 185, 129, 0.5);   --tile-stroke: url(#jam-grad-emerald-blue); }
+  .gradient-tile[data-tone="emerald-teal"]    { --tile-ring: var(--gradient-emerald-teal);   --tile-glow: 0 12px 30px -10px rgba(20, 184, 166, 0.5);   --tile-stroke: url(#jam-grad-emerald-teal); }
+  .gradient-tile[data-tone="gold-orange"]     { --tile-ring: var(--gradient-gold-orange);    --tile-glow: 0 12px 30px -10px rgba(250, 204, 21, 0.5);   --tile-stroke: url(#jam-grad-gold-orange); }
+  .gradient-tile[data-tone="brand-sweep"]     { --tile-ring: var(--gradient-brand-sweep);    --tile-glow: 0 12px 30px -10px rgba(126, 59, 255, 0.6);   --tile-stroke: url(#jam-grad-brand-sweep); }
 
   /* ---------- Trust row (hero) ---------- */
   .trust-avi {

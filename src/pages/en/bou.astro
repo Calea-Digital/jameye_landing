@@ -755,9 +755,7 @@ const meta = { ...data.meta, ogImagePath: undefined };
     padding: 0.9rem;
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
   }
-  .bou-crest__logo img { max-width: 100%; max-height: 100%; object-fit: contain; animation: bouFloat 5.5s ease-in-out infinite; }
-  .bou-crest:nth-of-type(3) .bou-crest__logo img { animation-delay: 1.2s; }
-  .bou-crest:hover .bou-crest__logo img { animation-play-state: paused; }
+  .bou-crest__logo img { width: 100%; height: 100%; object-fit: contain; object-position: center; margin: auto; }
   .bou-crest__name { position: relative; font-family: var(--font-sans); font-size: 1.4rem; font-weight: 500; letter-spacing: -0.02em; color: #fff; margin-bottom: 0.3rem; }
   .bou-crest__loc { position: relative; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
 
