@@ -10,7 +10,7 @@ import HowItWorks from '~/components/sections/HowItWorks.astro';
 import Calibration from '~/components/sections/Calibration.astro';
 import TournamentFormats from '~/components/sections/TournamentFormats.astro';
 import WinCash from '~/components/sections/WinCash.astro';
-import Tournaments from '~/components/sections/Tournaments.astro';
+// import Tournaments from '~/components/sections/Tournaments.astro'; // Temporarily hidden — superseded by WinCash; keep for potential reuse
 import CtaFinal from '~/components/sections/CtaFinal.astro';
 import WaitlistModal from '~/components/common/WaitlistModal.astro';
 import { t, type Locale } from '~/utils/i18n';
@@ -27,7 +27,6 @@ const meta = t<{ title: string; description: string }>(locale, 'meta');
     <Calibration locale={locale} />
     <TournamentFormats locale={locale} />
     <WinCash locale={locale} />
-    <Tournaments locale={locale} />
     <Roster locale={locale} />
     <BattleUniversities locale={locale} />
     <CtaFinal locale={locale} />

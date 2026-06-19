@@ -27,14 +27,13 @@ import { Crest } from "./Crest";
 import { SquadFighter } from "./SquadFighter";
 import {
   EventHeroCard,
-  HeroCountdown,
   HeroPanel,
   HeroStat,
   heroCtaClass,
 } from "./EventHeroCard";
 import { VsBadge } from "./VsBadge";
 import { countryToFlag } from "./country-flag";
-import { formatPrize, useNow } from "./format";
+import { formatPrize } from "./format";
 import type { BattleData, BattleOrg } from "./types";
 
 const ROSTER_LIMIT = 3;
@@ -87,8 +86,6 @@ export function BattleOfUniversities({
   data?: BattleData;
   onCta?: () => void;
 }) {
-  const now = useNow(1000);
-
   const roster = data.orgs ?? [];
   if (roster.length < 2) return null;
 
@@ -96,9 +93,8 @@ export function BattleOfUniversities({
   const canJoin = data.canJoin ?? true;
   const prizeLabel =
     data.prizeLabel ?? formatPrize(data.prizeCents ?? 0);
-  const remaining = data.closesAt
-    ? new Date(data.closesAt).getTime() - now
-    : 0;
+  const launchLabel = data.launchLabel ?? "Launch opens";
+  const launchValue = data.launchValue ?? "Oct 1";
   const ctaLabel = data.ctaLabel ?? (canJoin ? "Join the battle" : "View slate");
 
   return (
@@ -116,12 +112,7 @@ export function BattleOfUniversities({
       stats={
         <>
           <HeroStat label="Prize pool">{prizeLabel}</HeroStat>
-          <div className="flex items-center gap-3">
-            <span className="bou-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/60">
-              Season ends in
-            </span>
-            <HeroCountdown remainingMs={remaining} />
-          </div>
+          <HeroStat label={launchLabel}>{launchValue}</HeroStat>
         </>
       }
     >

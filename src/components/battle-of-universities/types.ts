@@ -33,6 +33,9 @@ export interface BattleData {
   prizeLabel?: string;
   /** Countdown target. Accepts a Date, epoch ms, or ISO string. */
   closesAt?: string | number | Date;
+  /** Launch-event stat — label + value shown next to the prize pool. */
+  launchLabel?: string;
+  launchValue?: string;
   /** Competing orgs. The first two flank the VS badge; any extras roll into a
    *  "+N more orgs in the battle" line. Needs at least 2 to render. */
   orgs: BattleOrg[];
