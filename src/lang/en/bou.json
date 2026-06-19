@@ -38,7 +38,6 @@
     "body": "Two leaderboards run side by side. The individual board ranks every player by Edge Score. The campus board ranks each university by the average Edge Score of its players — both on the same 1–1000 scale. The winning campus earns the title and the bragging rights. The cash goes to people: the top 25 forecasters inside the winning campus split the prize pool. And because scores build across many forecasts, a single lucky call won't carry you — over the event, luck averages out and the sharpest minds rise.",
     "board": {
       "title": "Campus board · avg Edge Score",
-      "live": "Live",
       "rows": [
         { "rank": "1", "name": "Stockholm", "flag": "🇸🇪", "score": 712 },
         { "rank": "2", "name": "Harvard", "flag": "🇺🇸", "score": 689 },

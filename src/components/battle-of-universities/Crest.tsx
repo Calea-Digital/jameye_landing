@@ -33,7 +33,8 @@ export function Crest({
         alt=""
         aria-hidden
         className={cn(
-          "shrink-0 rounded-full object-cover ring-1 ring-white/15",
+          // White disc behind the logo so dark/transparent crests stay legible.
+          "shrink-0 rounded-full bg-white object-contain p-1.5 ring-1 ring-white/15",
           sizeClass[size],
           className,
         )}

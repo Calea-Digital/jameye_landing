@@ -29,7 +29,6 @@ const data = t<{
     body: string;
     board: {
       title: string;
-      live: string;
       rows: { rank: string; name: string; flag?: string; score?: number; join?: boolean }[];
       joinLabel: string;
       youLabel: string;
@@ -176,7 +175,6 @@ const meta = { ...data.meta, ogImagePath: undefined };
           <div class="bou-board" data-scroll data-board data-edge={data.winning.board.youValue} data-edge-max={data.winning.board.youMax}>
             <header class="bou-board__head">
               <span class="bou-board__title">{data.winning.board.title}</span>
-              <span class="bou-board__live"><span class="live-dot"></span>{data.winning.board.live}</span>
             </header>
 
             <ol class="bou-board__rows">
@@ -648,7 +646,6 @@ const meta = { ...data.meta, ogImagePath: undefined };
   }
   .bou-board__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; }
   .bou-board__title { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted); }
-  .bou-board__live { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--win-emerald); }
 
   .bou-board__rows { display: flex; flex-direction: column; gap: 0.5rem; }
   .bou-board__row {
@@ -752,8 +749,13 @@ const meta = { ...data.meta, ogImagePath: undefined };
     width: 6rem; height: 6rem;
     display: flex; align-items: center; justify-content: center;
     margin-bottom: 1.1rem;
+    /* White disc behind the crest so dark/transparent logos stay legible. */
+    background: #fff;
+    border-radius: 9999px;
+    padding: 0.9rem;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
   }
-  .bou-crest__logo img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.5)); animation: bouFloat 5.5s ease-in-out infinite; }
+  .bou-crest__logo img { max-width: 100%; max-height: 100%; object-fit: contain; animation: bouFloat 5.5s ease-in-out infinite; }
   .bou-crest:nth-of-type(3) .bou-crest__logo img { animation-delay: 1.2s; }
   .bou-crest:hover .bou-crest__logo img { animation-play-state: paused; }
   .bou-crest__name { position: relative; font-family: var(--font-sans); font-size: 1.4rem; font-weight: 500; letter-spacing: -0.02em; color: #fff; margin-bottom: 0.3rem; }
@@ -829,7 +831,13 @@ const meta = { ...data.meta, ogImagePath: undefined };
     background: var(--brand-purple);
     border-color: var(--brand-lavender);
     box-shadow: 0 0 0 4px rgba(126, 59, 255, 0.18), 0 0 16px rgba(126, 59, 255, 0.7);
-    animation: brand-pulse 2.4s ease-in-out infinite;
+    /* Keep translateX(-50%) inside the keyframes so the pulse scale doesn't
+       clobber the centering transform (which would shift the dot off the line). */
+    animation: bouTlDotPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes bouTlDotPulse {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50%      { transform: translateX(-50%) scale(0.8); }
   }
   .bou-tl__when {
     display: inline-block;

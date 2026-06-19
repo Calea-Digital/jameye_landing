@@ -260,7 +260,9 @@ const charts = markets.map((mk) => {
                               <Icon name={iconFor(mk.label)} class="w-6 h-6" />
                             </span>
                             <div class="pm-card__headtext">
-                              <span class="pm-live"><span class="live-dot" />{data.liveLabel}{marketsAreLive ? ' · Polymarket' : ''}</span>
+                              {marketsAreLive && (
+                                <span class="pm-live"><span class="live-dot" />Polymarket</span>
+                              )}
                               <h4 class="pm-card__q">{mk.question}</h4>
                             </div>
                             <div class="pm-card__pct">

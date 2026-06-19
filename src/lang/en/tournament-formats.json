@@ -3,7 +3,7 @@
   "body":    "Broad fields or single-topic showdowns. From day one, enter any of them, compete on skill alone, and the sharpest forecasters take the cash and the top of the board.",
   "cards": [
     {
-      "icon": "tabler:bolt",
+      "icon": "tabler:run",
       "tone": "emerald-blue",
       "tag": "Weekly",
       "title": "Sprint",
@@ -17,14 +17,14 @@
       "body": "The big monthly fields where reputations get made."
     },
     {
-      "icon": "tabler:bolt-filled",
+      "icon": "tabler:broadcast",
       "tone": "magenta-pink",
       "tag": "Ad Hoc",
       "title": "Breaking Events",
       "body": "Tournaments that fire off around real-world moments as they happen."
     },
     {
-      "icon": "tabler:stack-2",
+      "icon": "tabler:target-arrow",
       "tone": "violet-magenta",
       "tag": "Topic Arenas",
       "title": "Go Deep",
