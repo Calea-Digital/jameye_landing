@@ -260,7 +260,9 @@ const charts = markets.map((mk) => {
                               <Icon name={iconFor(mk.label)} class="w-6 h-6" />
                             </span>
                             <div class="pm-card__headtext">
-                              <span class="pm-live"><span class="live-dot" />{data.liveLabel}{marketsAreLive ? ' · Polymarket' : ''}</span>
+                              {marketsAreLive && (
+                                <span class="pm-live"><span class="live-dot" />Polymarket</span>
+                              )}
                               <h4 class="pm-card__q">{mk.question}</h4>
                             </div>
                             <div class="pm-card__pct">
@@ -398,12 +400,27 @@ const charts = markets.map((mk) => {
     transition: transform 250ms ease, border-color 250ms ease, background 250ms ease;
   }
   .hiw-tab:hover { transform: translateY(-3px); border-color: var(--hairline-strong); }
+  /* Matches the site-wide .gradient-tile treatment: glass base, gradient ring,
+     glyph stroked in the brand gradient (defs in Layout.astro), tone glow. */
   .hiw-tab__icon {
+    position: relative;
     display: inline-flex; align-items: center; justify-content: center;
-    width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 0.7rem;
-    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--hairline);
-    color: rgba(255, 255, 255, 0.7); transition: all 250ms ease;
+    width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 0.75rem;
+    background:
+      radial-gradient(125% 125% at 28% 18%, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.015) 60%),
+      rgba(12, 10, 24, 0.55);
+    box-shadow: 0 10px 26px -12px rgba(126, 59, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+    transition: box-shadow 250ms ease;
   }
+  .hiw-tab__icon::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.3px;
+    background: var(--gradient-brand-sweep);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+  }
+  .hiw-tab__icon > svg { position: relative; z-index: 1; }
+  .hiw-tab__icon > svg, .hiw-tab__icon > svg * { stroke: var(--brand-lavender); stroke: url(#jam-grad-brand-sweep); }
   .hiw-tab__text { display: flex; flex-direction: column; min-width: 0; }
   .hiw-tab__label { font-family: var(--font-sans); font-size: 1rem; font-weight: 500; color: #fff; letter-spacing: -0.01em; }
   .hiw-tab__tagline { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-top: 0.1rem; }
@@ -412,21 +429,20 @@ const charts = markets.map((mk) => {
     border-color: var(--hairline-strong);
     background: rgba(255, 255, 255, 0.06);
   }
+  /* Active tab: brighten the glow (the gradient ring + glyph stay). */
   .hiw-tab[data-active="true"] .hiw-tab__icon {
-    background-image: var(--gradient-brand-sweep);
-    border-color: transparent; color: #fff;
-    box-shadow: var(--shadow-brand-halo);
+    box-shadow: 0 12px 30px -8px rgba(126, 59, 255, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   }
-  /* EDGE Score reads as the heart of the section. */
-  .hiw-tab[data-core] .hiw-tab__icon { color: var(--win-emerald); }
+  /* EDGE Score reads as the heart of the section — emerald gradient ring + glyph. */
+  .hiw-tab[data-core] .hiw-tab__icon::before { background: var(--gradient-emerald-teal); }
+  .hiw-tab[data-core] .hiw-tab__icon > svg,
+  .hiw-tab[data-core] .hiw-tab__icon > svg * { stroke: url(#jam-grad-emerald-teal); }
   .hiw-tab[data-core][data-active="true"] {
     border-color: rgba(16, 185, 129, 0.4);
     box-shadow: 0 0 32px -14px rgba(16, 185, 129, 0.7);
   }
   .hiw-tab[data-core][data-active="true"] .hiw-tab__icon {
-    background-image: var(--gradient-emerald-teal);
-    color: #06281f;
-    box-shadow: 0 0 22px -6px rgba(16, 185, 129, 0.8);
+    box-shadow: 0 12px 30px -8px rgba(16, 185, 129, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   }
 
   /* ---- Panels ---- */

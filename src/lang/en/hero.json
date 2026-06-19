@@ -1,5 +1,5 @@
 {
-  "badge": "Now Live",
+  "badge": "Early access",
   "headline": {
     "line2Lead": "The ",
     "line2Highlight": "skill-based",
@@ -10,7 +10,7 @@
   "cta": {
     "placeholder": "Enter your email",
     "submit": "Get Early Access",
-    "secondary": "Watch demo",
+    "secondary": "Watch video",
     "success": "You're on the list — we'll be in touch."
   },
   "waitlist": {

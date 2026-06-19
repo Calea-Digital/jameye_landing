@@ -3,8 +3,8 @@
   "body":    "Broad fields or single-topic showdowns. From day one, enter any of them, compete on skill alone, and the sharpest forecasters take the cash and the top of the board.",
   "cards": [
     {
-      "icon": "tabler:bolt",
-      "tone": "emerald-blue",
+      "icon": "tabler:clock-bolt",
+      "tone": "indigo-violet",
       "tag": "Weekly",
       "title": "Sprint",
       "body": "Fast weekly rounds with a fresh leaderboard every week."
@@ -17,7 +17,7 @@
       "body": "The big monthly fields where reputations get made."
     },
     {
-      "icon": "tabler:bolt-filled",
+      "icon": "tabler:radar",
       "tone": "magenta-pink",
       "tag": "Ad Hoc",
       "title": "Breaking Events",

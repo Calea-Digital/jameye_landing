@@ -4,12 +4,12 @@
   "cards": [
     {
       "icon": "tabler:target-arrow",
-      "tone": "emerald-blue",
+      "tone": "indigo-violet",
       "title": "Score on calibration",
       "body": "Every prediction is graded by a proper scoring rule (Brier score). The only way to climb is to report what you truly believe, as accurately as you can. Bluffing and hedging both cost you."
     },
     {
-      "icon": "tabler:dice-5",
+      "icon": "tabler:scale",
       "tone": "violet-magenta",
       "title": "Luck cancels out",
       "body": "On one event, a 70% call can still lose. Across hundreds, the good breaks and bad breaks average away — leaving only your real edge."
