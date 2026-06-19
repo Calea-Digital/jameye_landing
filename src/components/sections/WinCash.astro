@@ -156,6 +156,9 @@ const first = data.fx.markets[0];
     padding: clamp(1rem, 2.5vw, 1.4rem); border-radius: var(--radius-2xl);
     background: rgba(0, 0, 0, 0.3); border: 1px solid var(--hairline);
     box-shadow: var(--shadow-soft-chrome); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    /* Clip the decorative 140%-wide win glow to the card so it can't spill
+       past the viewport and cause a horizontal scroll on mobile. */
+    overflow: hidden;
   }
 
   .wc-step__title { font-family: var(--font-sans); font-size: 1.3rem; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 0.45rem; }

@@ -23,81 +23,12 @@
       let lastKnownScrollPosition = window.scrollY;
       let ticking = true;
 
-      // Close mobile menu when clicking on a menu item
-      attachEvent('#header nav a, #header nav button', 'click', function () {
-        const toggleMenu = document.querySelector('[data-aw-toggle-menu]');
-        if (toggleMenu && toggleMenu.classList.contains('expanded')) {
-          toggleMenu.classList.remove('expanded');
-          document.body.classList.remove('overflow-hidden');
-          document.body.style.removeProperty('position');
-          document.body.style.removeProperty('top');
-          document.body.style.removeProperty('width');
-          window.scrollTo(0, parseInt(document.body.dataset.scrollY || '0'));
-          document.getElementById('header')?.classList.remove('h-screen');
-          document.getElementById('header')?.classList.remove('expanded');
-          document.getElementById('header')?.classList.remove('bg-page');
-          document.querySelector('#header nav')?.classList.add('hidden');
-          document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
-        }
-      });
-
-      // Toggle mobile menu
-      attachEvent('[data-aw-toggle-menu]', 'click', function (_, elem) {
-        elem.classList.toggle('expanded');
-
-        if (elem.classList.contains('expanded')) {
-          // Save current scroll position and lock the body
-          document.body.dataset.scrollY = window.scrollY.toString();
-          document.body.style.position = 'fixed';
-          document.body.style.top = `-${window.scrollY}px`;
-          document.body.style.width = '100%';
-          document.body.classList.add('overflow-hidden');
-        } else {
-          // Restore scroll position
-          document.body.classList.remove('overflow-hidden');
-          document.body.style.removeProperty('position');
-          document.body.style.removeProperty('top');
-          document.body.style.removeProperty('width');
-          window.scrollTo(0, parseInt(document.body.dataset.scrollY || '0'));
-        }
-
-        document.getElementById('header')?.classList.toggle('h-screen');
-        document.getElementById('header')?.classList.toggle('expanded');
-        document.getElementById('header')?.classList.toggle('bg-page');
-
-        // Toggle visibility of navigation and actions
-        const navElement = document.querySelector('#header nav');
-        const actionsElement = document.querySelector('#header > div > div:last-child');
-
-        if (navElement) {
-          navElement.classList.toggle('hidden');
-        }
-
-        if (actionsElement) {
-          actionsElement.classList.toggle('hidden');
-        }
-      });
-
-      // Reset mobile menu when screen size changes
-      const screenSize = window.matchMedia('(max-width: 767px)');
-      screenSize.addEventListener('change', function (e) {
-        if (!e.matches) {
-          // If we're not in mobile view anymore
-          document.querySelector('[data-aw-toggle-menu]')?.classList.remove('expanded');
-          document.body.classList.remove('overflow-hidden');
-          document.body.style.removeProperty('position');
-          document.body.style.removeProperty('top');
-          document.body.style.removeProperty('width');
-          window.scrollTo(0, parseInt(document.body.dataset.scrollY || '0'));
-          document.getElementById('header')?.classList.remove('h-screen');
-          document.getElementById('header')?.classList.remove('expanded');
-          document.getElementById('header')?.classList.remove('bg-page');
-        } else {
-          // Only hide nav and actions when in mobile view
-          document.querySelector('#header nav')?.classList.add('hidden');
-          document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
-        }
-      });
+      // NOTE: The legacy AstroWind mobile-menu handlers (keyed on
+      // [data-aw-toggle-menu] / [data-aw-sticky-header]) were removed — the
+      // current Header.astro is self-contained (its own toggle, drawer and
+      // sticky-scroll script) and intentionally keeps the actions cluster
+      // visible on mobile. The old code hid `#header > div > div:last-child`
+      // below 768px, which broke the always-visible "Get early access" CTA.
 
       function applyHeaderStylesOnScroll() {
         const header = document.querySelector('#header[data-aw-sticky-header]');
@@ -135,12 +66,6 @@
       document.body.style.removeProperty('width');
       document.getElementById('header')?.classList.remove('h-screen');
       document.getElementById('header')?.classList.remove('expanded');
-
-      // Only hide nav and actions in mobile view
-      if (window.innerWidth < 768) {
-        document.querySelector('#header nav')?.classList.add('hidden');
-        document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
-      }
     };
 
     window.onload = onLoad;

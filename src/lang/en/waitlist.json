@@ -1,7 +1,7 @@
 {
-  "badge": "Season 1 · Closed beta",
+  "badge": "Closed beta",
   "title": "Join the waitlist",
-  "subtitle": "Be first in when Season 1 opens. No spam — just your invite and your referral link.",
+  "subtitle": "Be first in when early access opens. No spam — just your invite and your referral link.",
   "fields": {
     "email": "Email",
     "nickname": "Nickname",
@@ -14,7 +14,7 @@
     "referred": "Their nickname (optional)"
   },
   "help": {
-    "email": "Where we'll send your Season 1 invite. Must be unique.",
+    "email": "Where we'll send your invite. Must be unique.",
     "nickname": "Your public handle on the leaderboard. Leave it blank and we'll spin up a unique one for you. Must be unique.",
     "referred": "The nickname of whoever invited you, so they get the credit.",
     "avatar": "Pick the character you'll play as."

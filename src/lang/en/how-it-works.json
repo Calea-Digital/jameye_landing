@@ -10,7 +10,7 @@
   "liveLabel": "Live",
   "vsLabel": "VS",
   "edgeJourney": {
-    "kicker": "Edge Score Builder · Season 1",
+    "kicker": "Edge Score Builder",
     "title": { "lead": "Build your", "ital": "Edge Score." },
     "sub": "Six chapters. Thirty calibrated forecasts. Earn your way onto the leaderboard — one resolution at a time.",
     "startLabel": "Start",
@@ -68,7 +68,7 @@
   },
   "tournaments": {
     "prizeAmount": "$100K",
-    "prizeHint": "Season 1 prize pool",
+    "prizeHint": "Prize pool",
     "rows": [
       { "rank": "1",  "name": "vortex",  "edge": "3,910" },
       { "rank": "2",  "name": "halcyon", "edge": "3,740" },
