@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "Battle of Universities — Jameye",
+    "description": "Jameye launches with a campus showdown. Represent your university, forecast the real world, and out-think every other campus. Students only · opens 1 October. Up to $100K prize pool."
+  },
+  "hero": {
+    "eyebrow": ["Students only", "Opens 1 October"],
+    "title": "Battle of Universities",
+    "body": "Jameye launches with a campus showdown. Represent your university, forecast the real world, and out-think every other campus. The campus with the highest average Edge Score wins the title — and its top 25 forecasters win real cash.",
+    "ctaPrimary": "Reserve your handle",
+    "ctaSecondary": "How it works",
+    "stats": [
+      { "k": "Prize pool", "v": "Up to $100K", "tone": "gold" },
+      { "k": "Opens", "v": "1 October", "tone": "sky" },
+      { "k": "Who can join", "v": "Students only", "tone": "violet" },
+      { "k": "Scored on", "v": "Skill, not luck", "tone": "emerald" }
+    ]
+  },
+  "launch": {
+    "eyebrow": "The launch event",
+    "title": { "lead": "The first arena. Your campus", "ital": "is your squad." },
+    "body": "Battle of Universities is Jameye's headline launch event — the students-only arena that opens 1 October, a few weeks after Jameye's beta goes live for everyone in September. Every player joins the campus they're actually at — verified by a university email — and every forecast lifts your personal Edge Score. A campus is ranked by the average Edge Score of its players, so the title goes to the student body that forecasts sharpest, not the one that simply shows up in the biggest numbers. The winning campus takes the bragging rights; its top 25 forecasters take the cash."
+  },
+  "how": {
+    "eyebrow": "How it works",
+    "title": { "lead": "Five steps to the", "ital": "leaderboard." },
+    "steps": [
+      { "n": "01", "icon": "tabler:school", "tone": "indigo-violet", "title": "Join your campus", "body": "Reserve your handle and verify your university email. You forecast for the campus you're actually at, and your results count toward its average." },
+      { "n": "02", "icon": "tabler:chart-candle", "tone": "violet-magenta", "title": "Forecast the markets", "body": "Call real-world events across sports, politics, crypto, macro and more — as many as you like through the event." },
+      { "n": "03", "icon": "tabler:bolt", "tone": "emerald-teal", "title": "Build your Edge Score", "body": "Every prediction is graded on calibration. Sharp, well-judged calls lift your score; hedging and bluffing don't." },
+      { "n": "04", "icon": "tabler:trending-up", "tone": "magenta-pink", "title": "Lift your campus", "body": "Your Edge Score counts toward your university's average. Sharper players raise the campus average — that's what the standings are built on." },
+      { "n": "05", "icon": "tabler:trophy", "tone": "gold-orange", "title": "Win", "body": "The campus with the highest average Edge Score wins the title and the bragging rights. The top 25 forecasters inside that winning campus split the cash prize pool." }
+    ]
+  },
+  "winning": {
+    "eyebrow": "How winning works",
+    "title": { "lead": "Bragging rights for the campus.", "ital": "Cash for its sharpest." },
+    "body": "Two leaderboards run side by side. The individual board ranks every player by Edge Score. The campus board ranks each university by the average Edge Score of its players — both on the same 1–1000 scale. The winning campus earns the title and the bragging rights. The cash goes to people: the top 25 forecasters inside the winning campus split the prize pool. And because scores build across many forecasts, a single lucky call won't carry you — over the event, luck averages out and the sharpest minds rise.",
+    "board": {
+      "title": "Campus board · avg Edge Score",
+      "live": "Live",
+      "rows": [
+        { "rank": "1", "name": "Stockholm", "flag": "🇸🇪", "score": 712 },
+        { "rank": "2", "name": "Harvard", "flag": "🇺🇸", "score": 689 },
+        { "rank": "3", "name": "Your campus", "join": true }
+      ],
+      "joinLabel": "join",
+      "youLabel": "Your Edge Score",
+      "youValue": 643,
+      "youMax": 1000,
+      "prizeLabel": "Cash prize",
+      "prizeValue": "Top 25 · winning campus"
+    }
+  },
+  "field": {
+    "eyebrow": "The field",
+    "title": { "lead": "Campuses in the", "ital": "running." },
+    "sub": "Launch matchups confirmed so far — more universities are being added before 1 October.",
+    "vs": "VS",
+    "campuses": [
+      { "name": "Harvard", "logo": "/images/universities/harvard.png", "location": "Cambridge · USA", "flag": "🇺🇸", "color": "#a51c30" },
+      { "name": "Stockholm", "logo": "/images/universities/stockholm.webp", "location": "Stockholm · Sweden", "flag": "🇸🇪", "color": "#005595" }
+    ],
+    "more": "More campuses joining soon"
+  },
+  "dates": {
+    "eyebrow": "Key dates",
+    "title": { "lead": "From waitlist to", "ital": "kickoff." },
+    "items": [
+      { "when": "Now", "title": "Early access open", "body": "Join the waitlist, reserve your handle, and — if you're a student — line up the campus you'll represent.", "state": "active" },
+      { "when": "September", "title": "Jameye beta launches", "body": "The beta goes live for everyone. Anyone can register and play, with smaller open tournaments running for all forecasters — students or not.", "state": "upcoming" },
+      { "when": "1 October", "title": "Battle of Universities opens", "body": "The students-only event begins. Verify your university email, and your campus leaderboard starts counting.", "state": "upcoming" },
+      { "when": "Event close", "title": "Winners paid out", "body": "The winning campus takes the title; its top 25 forecasters share the cash prize pool.", "state": "upcoming" }
+    ]
+  },
+  "faq": {
+    "eyebrow": "Questions",
+    "title": { "lead": "Good to", "ital": "know." },
+    "items": [
+      { "q": "Who can join the Battle of Universities?", "a": "Students only. To forecast for a campus you need an active university email at that school, so every squad is made up of people actually there." },
+      { "q": "I'm not a student — can I play Jameye?", "a": "Yes. Jameye's beta launches for everyone in September, with smaller open tournaments running for all forecasters. Battle of Universities is the one event reserved for verified students — but the rest of the platform is open to you." },
+      { "q": "What does my campus get for winning?", "a": "The title and the bragging rights. The cash prize goes to individuals — specifically the top 25 forecasters in the winning campus." },
+      { "q": "How is the prize pool decided?", "a": "The pool reaches up to $100K and grows as more players join. It's paid to people, not campuses: the top 25 forecasters in the winning campus share it." },
+      { "q": "How do I actually win cash?", "a": "Your Edge Score (1–1000, calibration-based, not luck) sets your individual rank and counts toward your campus's average. The campus with the highest average wins the title — and the top 25 players inside that campus win the cash." },
+      { "q": "What does it cost to take part?", "a": "Early access is free during beta and reserves your handle. Event entry details will be confirmed closer to launch." },
+      { "q": "What happens after the Battle?", "a": "It's the first of many tournaments. Once Jameye is live, there's always a tournament running — weekly, monthly, ad hoc, and topic-specific." }
+    ]
+  },
+  "finalCta": {
+    "eyebrow": "Opens 1 October",
+    "title": { "lead": "Claim your", "ital": "campus." },
+    "body": "Reserve your handle now, pick the university you'll forecast for, and get a head start before the Battle opens.",
+    "ctaPrimary": "Reserve your handle",
+    "ctaSecondary": "Back to Jameye"
+  }
+}
