@@ -3,7 +3,6 @@
   "legal": [
     { "text": "Terms",   "href": "/en/terms" },
     { "text": "Privacy", "href": "/en/privacy" },
-    { "text": "Cookies", "href": "/en/cookies" },
-    { "text": "Contact", "href": "#" }
+    { "text": "Cookies", "href": "/en/cookies" }
   ]
 }

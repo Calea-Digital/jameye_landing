@@ -100,6 +100,9 @@
   --font-sans:      'Inter Tight', 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-body:      'Space Grotesk', 'Inter Tight', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono:      'JetBrains Mono', ui-monospace, monospace;
+  /* Aliases used by the ported app BoU promo band (matches the app's --j-font-* tokens). */
+  --j-font-display: var(--font-sans);
+  --j-font-mono:    var(--font-mono);
   --font-editorial: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   /* Brand wordmark — JAMEYE® is set in Archivo Black (matches the app). */
   --font-logo:      'Archivo Black', 'Arial Black', sans-serif;
