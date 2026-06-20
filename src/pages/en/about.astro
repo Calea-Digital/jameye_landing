@@ -1,0 +1,449 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '~/layouts/Layout.astro';
+import Header from '~/components/common/Header.astro';
+import Footer from '~/components/common/Footer.astro';
+import WaitlistModal from '~/components/common/WaitlistModal.astro';
+import { t, localePath, type Locale } from '~/utils/i18n';
+
+const locale: Locale = 'en';
+const home = localePath(locale, '/');
+
+interface TitlePair { lead: string; ital: string }
+interface IconLabel { icon: string; label: string }
+
+const data = t<{
+  meta: { title: string; description: string };
+  hero: { eyebrow: string; title: TitlePair; body: string; credentials: IconLabel[] };
+  research: {
+    eyebrow: string;
+    title: TitlePair;
+    body: string[];
+    people: string[];
+    stat: { value: string; label: string; detail: string };
+  };
+  edge: { eyebrow: string; lead: string; body: string; pull: string };
+  sport: { eyebrow: string; title: TitlePair; body: string; steps: IconLabel[] };
+  measure: {
+    eyebrow: string;
+    title: TitlePair;
+    cards: { icon: string; tone: string; n: string; title: string; body: string }[];
+    score: { label: string; title: string; body: string; window: string; windowLabel: string };
+  };
+  fair: { eyebrow: string; lines: string[]; body: string };
+  closing: {
+    ghostWord: string;
+    title: TitlePair;
+    body: string;
+    cta: { primary: string; secondary: string };
+  };
+}>(locale, 'about');
+
+const meta = { ...data.meta, ogImagePath: undefined };
+---
+
+<Layout metadata={meta} locale={locale}>
+  <Header locale={locale} />
+
+  <main id="top" class="about-page">
+    <!-- ───────────────────────── Hero / intro ───────────────────────── -->
+    <section class="py-20 md:py-28">
+      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+        <div class="max-w-[920px]" data-scroll>
+          <h1 class="display-hero text-white" style="font-size: clamp(2.75rem, 7vw, 5.5rem);">
+            {data.hero.title.lead}<br />
+            <span class="grad-text">{data.hero.title.ital}</span>
+          </h1>
+          <p class="mt-8 text-lg md:text-xl text-white/65 leading-relaxed max-w-[620px]">
+            {data.hero.body}
+          </p>
+
+          <ul class="mt-10 flex flex-wrap gap-2.5">
+            {
+              data.hero.credentials.map((c) => (
+                <li class="cred-pill">
+                  <Icon name={c.icon} class="w-4 h-4" />
+                  {c.label}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── The research ───────────────────────── -->
+    <section class="py-14 md:py-20">
+      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+        <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 items-start">
+          <div data-scroll>
+            <h2 class="section-title text-white !text-left !mt-0" style="font-size: clamp(2.1rem, 5vw, 3.5rem);">
+              {data.research.title.lead}<br />
+              <span class="grad-text">{data.research.title.ital}</span>
+            </h2>
+            {
+              data.research.body.map((p) => (
+                <p class="mt-5 text-base md:text-lg text-white/65 leading-relaxed max-w-[560px]">{p}</p>
+              ))
+            }
+
+            <div class="mt-8 flex flex-wrap gap-2.5">
+              {
+                data.research.people.map((person) => (
+                  <span class="person-tag">{person}</span>
+                ))
+              }
+            </div>
+          </div>
+
+          <!-- Big stat callout -->
+          <aside class="stat-callout" data-scroll>
+            <div class="stat-callout__value grad-text">{data.research.stat.value}</div>
+            <div class="stat-callout__label">{data.research.stat.label}</div>
+            <p class="stat-callout__detail">{data.research.stat.detail}</p>
+            <div class="stat-callout__bars" aria-hidden="true">
+              <div class="bar bar--pro"><span style="width:69%"></span><em>Analysts</em></div>
+              <div class="bar bar--super"><span style="width:100%"></span><em>Superforecasters</em></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── It wasn't luck ───────────────────────── -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+        <div class="max-w-[860px] mx-auto text-center" data-scroll>
+          <p class="text-2xl md:text-3xl text-white/80 font-light leading-snug">
+            <span class="text-white">{data.edge.lead}</span> {data.edge.body}
+          </p>
+          <blockquote class="pull-quote">
+            <span class="grad-text">{data.edge.pull}</span>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── Turned it into a sport ───────────────────────── -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+        <div class="max-w-[760px] mx-auto text-center mb-12" data-scroll>
+          <h2 class="section-title text-white !mt-0" style="font-size: clamp(2.25rem, 5.5vw, 4rem);">
+            {data.sport.title.lead} <span class="grad-text">{data.sport.title.ital}</span>
+          </h2>
+          <p class="section-sub">{data.sport.body}</p>
+        </div>
+
+        <ol class="sport-flow" data-scroll>
+          {
+            data.sport.steps.map((s, i) => (
+              <li class="sport-step">
+                <span class="gradient-tile" data-tone="brand-sweep">
+                  <Icon name={s.icon} class="w-5 h-5" />
+                </span>
+                <span class="sport-step__label">{s.label}</span>
+                {i < data.sport.steps.length - 1 && (
+                  <Icon name="tabler:chevron-right" class="sport-step__arrow w-4 h-4" />
+                )}
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── What we measure ───────────────────────── -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+        <div class="section-head" data-scroll>
+          <h2 class="section-title text-white !mt-0" style="font-size: clamp(2.25rem, 5.5vw, 4rem);">
+            {data.measure.title.lead} <span class="grad-text">{data.measure.title.ital}</span>
+          </h2>
+        </div>
+
+        <div class="measure-grid" data-scroll>
+          {
+            data.measure.cards.map((c) => (
+              <article class="measure-card">
+                <div class="measure-card__top">
+                  <span class="gradient-tile" data-tone={c.tone}>
+                    <Icon name={c.icon} class="w-5 h-5" />
+                  </span>
+                  <span class="measure-card__n num">{c.n}</span>
+                </div>
+                <h3 class="measure-card__title text-white">{c.title}</h3>
+                <p class="measure-card__body">{c.body}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <!-- Edge Score panel -->
+        <div class="score-panel" data-scroll>
+          <div class="score-panel__copy">
+            <span class="meta-label">{data.measure.score.label}</span>
+            <h3 class="score-panel__title text-white">{data.measure.score.title}</h3>
+            <p class="score-panel__body">{data.measure.score.body}</p>
+          </div>
+          <div class="score-panel__gauge" aria-hidden="true">
+            <span class="score-panel__window meta-label">{data.measure.score.windowLabel}</span>
+            <span class="score-panel__num grad-text">{data.measure.score.window}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── No house ───────────────────────── -->
+    <section class="py-20 md:py-28">
+      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full text-center" data-scroll>
+        <h2 class="display-hero text-white" style="font-size: clamp(2.5rem, 7vw, 5rem);">
+          {data.fair.lines.map((line) => (<span class="block">{line}</span>))}
+        </h2>
+        <p class="mt-8 text-lg md:text-2xl text-white/70 font-light max-w-[640px] mx-auto leading-snug">
+          {data.fair.body}
+        </p>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── Closing CTA ───────────────────────── -->
+    <section class="relative py-20 md:py-28 text-center overflow-hidden">
+      <span
+        aria-hidden="true"
+        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0"
+        style="font-size: clamp(14rem, 34vw, 32rem); line-height: 1; color: rgba(255,255,255,0.025); letter-spacing: -0.04em;"
+      >
+        {data.closing.ghostWord}
+      </span>
+
+      <div class="relative z-10 max-w-[880px] mx-auto px-5 md:px-8 w-full" data-scroll>
+        <h2 class="display-hero text-white" style="font-size: clamp(3rem, 8vw, 6.5rem);">
+          {data.closing.title.lead} <span class="grad-text">{data.closing.title.ital}</span>
+        </h2>
+        <p class="mt-7 text-lg md:text-xl text-white/65 leading-relaxed max-w-[520px] mx-auto">
+          {data.closing.body}
+        </p>
+        <div class="mt-11 flex justify-center gap-4 flex-wrap">
+          <button type="button" class="cta-big" data-open-waitlist>
+            {data.closing.cta.primary}
+            <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+          </button>
+          <a href={`${home}#why-skill`} class="cta-ghost">{data.closing.cta.secondary}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer locale={locale} />
+  <WaitlistModal locale={locale} />
+</Layout>
+
+<style>
+  /* Each story section fills the viewport (inherits the global
+     main > section full-height + vertical-centering rule) for a calm,
+     one-screen-per-chapter read with no divider lines between them. */
+
+  /* ---- Credential pills (hero) ---- */
+  .cred-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid var(--hairline-strong);
+    background: var(--glass-card-bg);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.78);
+  }
+  .cred-pill :global(svg) { color: var(--brand-lavender); }
+
+  /* ---- Research people tags ---- */
+  .person-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.32rem 0.85rem;
+    border-radius: 9999px;
+    border: 1px dashed var(--hairline-strong);
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+  }
+
+  /* ---- Stat callout ---- */
+  .stat-callout {
+    background: var(--glass-card-bg);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-soft-chrome);
+    padding: clamp(1.6rem, 3vw, 2.25rem);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .stat-callout__value {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(3.5rem, 8vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .stat-callout__label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--foreground);
+    margin-top: 0.75rem;
+  }
+  .stat-callout__detail {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--ink-muted);
+    margin-top: 0.6rem;
+  }
+  .stat-callout__bars {
+    margin-top: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .stat-callout__bars .bar {
+    position: relative;
+    height: 2.1rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+  }
+  .stat-callout__bars .bar span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: 0.5rem;
+    display: block;
+  }
+  .stat-callout__bars .bar--pro span { background: rgba(255, 255, 255, 0.16); }
+  .stat-callout__bars .bar--super span { background-image: var(--gradient-brand-sweep); }
+  .stat-callout__bars .bar em {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    z-index: 1;
+  }
+
+  /* ---- Pull quote ---- */
+  .pull-quote {
+    margin: 2.5rem auto 0;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(1.75rem, 4.5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  /* ---- Sport flow ---- */
+  .sport-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1.25rem;
+    max-width: 56rem;
+    margin: 0 auto;
+  }
+  .sport-step {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .sport-step__label {
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .sport-step__arrow { color: var(--ink-faint); margin-left: 0.4rem; }
+  @media (max-width: 640px) {
+    .sport-flow { flex-direction: column; align-items: flex-start; }
+    .sport-step__arrow { display: none; }
+  }
+
+  /* ---- Measure grid ---- */
+  .measure-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .measure-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: clamp(1.3rem, 2.5vw, 1.75rem);
+    border-radius: var(--radius-2xl);
+    background: var(--glass-card-bg);
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-soft-chrome);
+  }
+  .measure-card__top { display: flex; align-items: center; justify-content: space-between; }
+  .measure-card__n { font-size: 0.8rem; color: var(--ink-faint); letter-spacing: 0.1em; }
+  .measure-card__title { font-family: var(--font-sans); font-size: 1.35rem; font-weight: 500; letter-spacing: -0.02em; }
+  .measure-card__body { font-size: 0.92rem; line-height: 1.55; color: var(--ink-muted); }
+  @media (max-width: 720px) { .measure-grid { grid-template-columns: 1fr; } }
+
+  /* ---- Edge Score panel ---- */
+  .score-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: clamp(1.6rem, 3.5vw, 2.5rem);
+    border-radius: var(--radius-2xl);
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(126, 59, 255, 0.14), transparent 55%),
+      var(--glass-card-bg);
+    border: 1px solid var(--hairline-strong);
+    box-shadow: var(--shadow-soft-chrome);
+  }
+  .score-panel__copy { flex: 1 1 22rem; }
+  .score-panel__title {
+    font-family: var(--font-sans);
+    font-size: clamp(1.3rem, 3vw, 1.85rem);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-top: 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+  .score-panel__body { font-size: 0.95rem; line-height: 1.55; color: var(--ink-muted); max-width: 32rem; }
+  .score-panel__gauge {
+    flex: 0 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 1rem;
+  }
+  .score-panel__window { color: var(--ink-faint); margin-bottom: 0.4rem; }
+  .score-panel__num {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(2.75rem, 7vw, 4.25rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stat-callout__bars .bar span { transition: none; }
+  }
+</style>
