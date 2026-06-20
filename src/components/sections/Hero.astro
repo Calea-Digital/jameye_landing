@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { t, type Locale } from '~/utils/i18n';
+import { TELEGRAM_URL } from '~/config';
 import Ticker from '~/components/sections/Ticker.astro';
 // Inline the avatar SVG so the shared avatar-animation engine can drive the
 // head tilt + pupil slide + blink straight off the rendered markup.
@@ -63,7 +64,7 @@ const hero = t<{
             </a>
             <div class="flex items-center gap-2 sm:ml-1">
               <a
-                href="#"
+                href={TELEGRAM_URL}
                 class="social-icon-btn social-icon-btn--telegram"
                 aria-label="Join our Telegram"
                 target="_blank"

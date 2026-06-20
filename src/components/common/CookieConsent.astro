@@ -292,13 +292,30 @@ const c = t<{
 
     type Consent = { analytics: boolean; marketing: boolean };
 
+    const parse = (raw: string | null): (Consent & { v: number }) | null => {
+      if (!raw) return null;
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    };
+
+    // Read the stored choice from the cookie, falling back to localStorage.
+    // The cookie feeds Google Consent Mode; localStorage is the durable copy,
+    // since JS-set cookies are dropped early by some browsers (Safari ITP,
+    // strict privacy modes) — which is what made the banner reappear on every
+    // refresh.
     const readCookie = (): (Consent & { v: number }) | null => {
       const match = document.cookie
         .split('; ')
         .find((row) => row.startsWith(COOKIE_NAME + '='));
-      if (!match) return null;
+      const fromCookie = match
+        ? parse(decodeURIComponent(match.split('=').slice(1).join('=')))
+        : null;
+      if (fromCookie) return fromCookie;
       try {
-        return JSON.parse(decodeURIComponent(match.split('=').slice(1).join('=')));
+        return parse(localStorage.getItem(COOKIE_NAME));
       } catch {
         return null;
       }
@@ -315,6 +332,8 @@ const c = t<{
       const secure = location.protocol === 'https:' ? '; Secure' : '';
       document.cookie =
         `${COOKIE_NAME}=${encodeURIComponent(payload)}; Max-Age=${MAX_AGE}; Path=/; SameSite=Lax${secure}`;
+      // Durable mirror so the choice survives even if the cookie is purged.
+      try { localStorage.setItem(COOKIE_NAME, payload); } catch { /* storage blocked */ }
     };
 
     // Push consent state into Google Consent Mode v2. `gtag` is defined by the
@@ -389,7 +408,16 @@ const c = t<{
       }
     });
 
-    // ---- First visit: no stored choice → show the banner ----
-    if (!readCookie()) openBanner();
+    // ---- First visit only: with no stored choice, show the banner. On
+    //      return visits we re-apply the saved choice — and rewrite the cookie
+    //      from the durable copy if it was purged — so it never reappears. ----
+    const saved = readCookie();
+    if (!saved) {
+      openBanner();
+    } else {
+      const consent = { analytics: !!saved.analytics, marketing: !!saved.marketing };
+      applyConsent(consent);
+      writeCookie(consent);
+    }
   })();
 </script>

@@ -28,6 +28,7 @@ export default defineConfig({
   // the legacy unprefixed routes to their /en equivalents.
   redirects: {
     '/': '/en',
+    '/about': '/en/about',
     '/leaderboard': '/en/leaderboard',
     '/terms': '/en/terms',
     '/privacy': '/en/privacy',

@@ -14,6 +14,8 @@ type SiteConfig = {
 
 export const APP_URL = 'https://staging.jameye.com/login';
 
+export const TELEGRAM_URL = 'https://t.me/JameyeHQ';
+
 export const SITE = (): SiteConfig => {
   return {
     title: 'Jameye — The prediction market tournament',

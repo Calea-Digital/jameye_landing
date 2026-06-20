@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { t, type Locale } from '~/utils/i18n';
+import { TELEGRAM_URL } from '~/config';
 
 export interface Props {
   locale: Locale;
@@ -107,10 +108,21 @@ const CFG = {
 
         <p class="text-sm font-medium hidden" style="color: var(--alert-rose);" data-wl-error aria-live="polite"></p>
 
-        <button type="submit" class="btn-cta w-full mt-1" data-wl-submit>
-          <span data-wl-submit-label>{w.submit}</span>
-          <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
-        </button>
+        <div class="wl-submit-row mt-1">
+          <button type="submit" class="btn-cta wl-submit-btn" data-wl-submit>
+            <span data-wl-submit-label>{w.submit}</span>
+            <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+          </button>
+          <a
+            href={TELEGRAM_URL}
+            class="wl-telegram"
+            aria-label="Join our Telegram"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="tabler:brand-telegram" class="w-5 h-5" />
+          </a>
+        </div>
       </form>
     </div>
 
@@ -211,6 +223,29 @@ const CFG = {
     color: rgba(255, 255, 255, 0.55);
   }
   .wl-req { color: var(--brand-sky); margin-left: 0.2em; }
+
+  /* Submit row — primary CTA + Telegram shortcut sitting to its right. */
+  .wl-submit-row { display: flex; gap: 0.6rem; align-items: stretch; }
+  .wl-submit-btn { flex: 1 1 auto; }
+  .wl-telegram {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    border-radius: 9999px;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--hairline-strong);
+    transition: color 150ms ease, background 150ms ease, border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+  }
+  .wl-telegram:hover {
+    color: #fff;
+    transform: translateY(-1px);
+    background: rgba(36, 161, 222, 0.18);
+    border-color: rgba(36, 161, 222, 0.55);
+    box-shadow: 0 8px 24px -10px rgba(36, 161, 222, 0.55);
+  }
   .wl-help { font-size: 0.72rem; line-height: 1.4; color: rgba(255, 255, 255, 0.4); }
 
   /* Live-validation feedback */

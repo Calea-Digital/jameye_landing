@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "Our Story — Jameye",
+    "description": "Built in Stockholm by hedge fund quants, math Olympiads, MIT alumni and seasoned entrepreneurs. We turned a proven, trainable edge — forecasting — into a sport."
+  },
+  "hero": {
+    "eyebrow": "Our Story",
+    "title": { "lead": "Built in Stockholm.", "ital": "Engineered to find the sharpest minds." },
+    "body": "Jameye is built in Stockholm, Sweden by an international team of hedge fund quants, math Olympiads, MIT alumni and seasoned entrepreneurs.",
+    "credentials": [
+      { "icon": "tabler:chart-candle", "label": "Hedge fund quants" },
+      { "icon": "tabler:math-symbols", "label": "Math Olympiads" },
+      { "icon": "tabler:school", "label": "MIT alumni" },
+      { "icon": "tabler:rocket", "label": "Seasoned entrepreneurs" }
+    ]
+  },
+  "research": {
+    "eyebrow": "The Research",
+    "title": { "lead": "Forecasting is a skill.", "ital": "Science and years of research has proven it." },
+    "body": [
+      "In a four-year tournament funded by the US intelligence community, researchers recruited tens of thousands of ordinary people and asked them to predict the world's biggest geopolitical events.",
+      "The best of them — the superforecasters — were over 30% more accurate than intelligence analysts with access to classified information. Amateurs, working off the open internet, beat the professionals working off the world's most guarded secrets."
+    ],
+    "people": [
+      "A Brooklyn filmmaker",
+      "A retired pipe installer",
+      "A former ballroom dancer"
+    ],
+    "stat": {
+      "value": "30%+",
+      "label": "More accurate",
+      "detail": "Superforecasters vs. intelligence analysts with classified access"
+    }
+  },
+  "edge": {
+    "eyebrow": "The Edge",
+    "lead": "It wasn't luck.",
+    "body": "The strongest predictor of becoming a superforecaster was the commitment to constantly update beliefs and improve.",
+    "pull": "A measurable, repeatable, trainable edge."
+  },
+  "sport": {
+    "eyebrow": "What We Built",
+    "title": { "lead": "We turned that edge into", "ital": "a sport." },
+    "body": "Jameye is a skill-based prediction markets game in tournament form. You forecast real-world events, and when the round closes, the sharpest minds take the prize.",
+    "steps": [
+      { "icon": "tabler:swords", "label": "Enter tournaments" },
+      { "icon": "tabler:flame", "label": "Dominate" },
+      { "icon": "tabler:medal", "label": "Stack the bragging rights" },
+      { "icon": "tabler:cash", "label": "Win real cash" }
+    ]
+  },
+  "measure": {
+    "eyebrow": "What We Measure",
+    "title": { "lead": "Three things on every", "ital": "position you take." },
+    "cards": [
+      {
+        "icon": "tabler:clock-bolt",
+        "tone": "indigo-violet",
+        "n": "01",
+        "title": "How early",
+        "body": "How early you saw it before the rest of the field caught on."
+      },
+      {
+        "icon": "tabler:target-arrow",
+        "tone": "violet-magenta",
+        "n": "02",
+        "title": "Conviction",
+        "body": "How well the conviction you staked matched the outcome that landed."
+      },
+      {
+        "icon": "tabler:scale",
+        "tone": "magenta-pink",
+        "n": "03",
+        "title": "Calibration",
+        "body": "How honestly calibrated your probability was — no bluffing the odds."
+      }
+    ],
+    "score": {
+      "label": "Edge Score",
+      "title": "Your last 30 positions become a single, durable number.",
+      "body": "It says how good you actually are at reading the future. It doesn't reset with a lucky streak. It's your track record.",
+      "window": "Rolling 30",
+      "windowLabel": "Positions scored"
+    }
+  },
+  "fair": {
+    "eyebrow": "The Rules",
+    "lines": ["No house.", "No edge for the rich."],
+    "body": "Just you, the future, and a fair fight to call it first."
+  },
+  "closing": {
+    "ghostWord": "JAMEYE",
+    "title": { "lead": "May the", "ital": "sharpest mind win." },
+    "body": "Get early access and start building your Edge Score before the first season opens.",
+    "cta": { "primary": "Get early access", "secondary": "See how it works" }
+  }
+}
