@@ -16,18 +16,7 @@ const data = t<{
 ---
 
 <footer class="relative z-10 border-t border-white/8 py-8 text-center">
-  <div class="max-w-[1280px] mx-auto px-5 md:px-8 flex flex-col items-center gap-5">
-    <a
-      href={TELEGRAM_URL}
-      class="footer-telegram"
-      aria-label="Join our Telegram"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <Icon name="tabler:brand-telegram" class="w-4 h-4" />
-      <span>Telegram</span>
-    </a>
-
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
     <div class="meta-label flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
       <span>{data.signature}</span>
       <span class="opacity-40 hidden sm:inline">·</span>
@@ -42,33 +31,31 @@ const data = t<{
             </>
           ))
         }
+        <span class="opacity-30">·</span>
+        <a
+          href={TELEGRAM_URL}
+          class="footer-telegram"
+          aria-label="Join our Telegram"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="tabler:brand-telegram" class="w-4 h-4" />
+        </a>
       </span>
     </div>
   </div>
 </footer>
 
 <style>
+  /* Small inline Telegram glyph, sitting alongside the legal links. */
   .footer-telegram {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1.1rem;
-    border-radius: 9999px;
-    border: 1px solid var(--hairline-strong);
-    background: rgba(255, 255, 255, 0.04);
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.78);
-    transition: color 150ms ease, background 150ms ease, border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+    color: rgba(255, 255, 255, 0.65);
+    transition: color 150ms ease, transform 150ms ease;
   }
   .footer-telegram:hover {
     color: #fff;
     transform: translateY(-1px);
-    background: rgba(36, 161, 222, 0.18);
-    border-color: rgba(36, 161, 222, 0.55);
-    box-shadow: 0 8px 24px -10px rgba(36, 161, 222, 0.55);
   }
 </style>
