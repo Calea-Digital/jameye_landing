@@ -1,7 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { t, type Locale } from '~/utils/i18n';
-import { TELEGRAM_URL } from '~/config';
+import { TELEGRAM_URL, CONTACT_EMAIL } from '~/config';
 
 export interface Props {
   locale: Locale;
@@ -31,6 +31,13 @@ const data = t<{
             </>
           ))
         }
+        <span class="opacity-30">·</span>
+        <a
+          href={`mailto:${CONTACT_EMAIL}`}
+          class="text-white/65 hover:text-white transition-colors normal-case tracking-[0.16em]"
+        >
+          Contact
+        </a>
         <span class="opacity-30">·</span>
         <a
           href={TELEGRAM_URL}

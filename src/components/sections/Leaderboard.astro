@@ -13,6 +13,7 @@ const L = t<{
   title: { lead: string; ital: string };
   sub: string;
   perks: { icon: string; label: string }[];
+  prizes: { heading: string; sub: string; tiers: { place: string; amount: string; medal: string }[] };
   cta: { primary: string };
   cols: { rank: string; player: string; points: string; change: string };
   perReferral: string;
@@ -58,6 +59,23 @@ const CFG = {
             {p.label}
           </span>
         ))}
+      </div>
+
+      <!-- Prize tiers — top 100 reward + cash podium -->
+      <div class="lb-prizes">
+        <div class="lb-prizes__lead">
+          <Icon name="tabler:gift" class="w-4 h-4" />
+          <span><strong>{L.prizes.heading}</strong> {L.prizes.sub}</span>
+        </div>
+        <div class="lb-prizes__tiers">
+          {L.prizes.tiers.map((tier) => (
+            <span class="lb-prize">
+              <span class="lb-prize__medal">{tier.medal}</span>
+              <span class="lb-prize__place">{tier.place}</span>
+              <span class="lb-prize__amount">{tier.amount}</span>
+            </span>
+          ))}
+        </div>
       </div>
     </div>
 
@@ -109,6 +127,36 @@ const CFG = {
     color: rgba(255, 255, 255, 0.8); background: rgba(255, 255, 255, 0.04); border: 1px solid var(--hairline-strong);
   }
   .lb-perk svg { color: var(--prize-gold); }
+
+  /* ---- Prize tiers ---- */
+  .lb-prizes {
+    display: flex; flex-direction: column; align-items: center; gap: 0.9rem;
+    margin: 1.5rem auto 0; padding: 1.1rem 1.25rem; max-width: 32rem;
+    border-radius: 16px;
+    background: rgba(250, 204, 21, 0.05);
+    border: 1px solid rgba(250, 204, 21, 0.2);
+  }
+  .lb-prizes__lead {
+    display: inline-flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
+    font-size: 0.92rem; line-height: 1.4; color: var(--ink-muted); text-align: center;
+  }
+  .lb-prizes__lead svg { color: var(--prize-gold); flex: none; }
+  .lb-prizes__lead strong { color: #fff; font-weight: 600; }
+  .lb-prizes__tiers { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
+  .lb-prize {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.4rem 0.85rem; border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.04); border: 1px solid var(--hairline-strong);
+  }
+  .lb-prize__medal { font-size: 0.95rem; line-height: 1; }
+  .lb-prize__place {
+    font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.55);
+  }
+  .lb-prize__amount {
+    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    font-size: 0.92rem; font-weight: 700; color: var(--prize-gold);
+  }
 
   .lb-card {
     background: var(--glass-card-bg);
