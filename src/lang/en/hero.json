@@ -20,7 +20,7 @@
   "stage": {
     "avatarAlt": "Jameye character — Open Market Trader",
     "pills": [
-      { "k": "EDGE",   "v": "3,924",   "tone": "gold" },
+      { "k": "EDGE",   "v": "832",     "tone": "gold" },
       { "k": "Brier",  "v": "0.142",   "tone": "sky" },
       { "k": "Streak", "v": "7 days",  "tone": "emerald" },
       { "k": "Rank",   "v": "#1",      "tone": "magenta" }

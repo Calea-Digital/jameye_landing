@@ -11,6 +11,15 @@
     { "icon": "tabler:ticket", "label": "Exclusive early access" },
     { "icon": "tabler:crown", "label": "Founder perks" }
   ],
+  "prizes": {
+    "heading": "Top 100 earn an exclusive item",
+    "sub": "And the podium takes home cash.",
+    "tiers": [
+      { "place": "1st", "amount": "$2,000", "medal": "🥇" },
+      { "place": "2nd", "amount": "$1,000", "medal": "🥈" },
+      { "place": "3rd", "amount": "$500", "medal": "🥉" }
+    ]
+  },
   "cta": { "primary": "Get early access" },
   "cols": { "rank": "#", "player": "Player", "points": "Points", "change": "7d" },
   "perReferral": "+5 pts / referral",
