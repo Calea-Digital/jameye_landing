@@ -1,10 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#8a5cff"/>
-      <stop offset="100%" stop-color="#ff6fb7"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="url(#g)"/>
-  <path d="M40 14h6v26c0 6.6-5.4 12-12 12-5.3 0-9.9-3.4-11.4-8.3l5.7-1.8c.8 2.6 3.1 4.4 5.7 4.4 3.3 0 6-2.7 6-6V14z" fill="#ffffff"/>
+  <rect width="64" height="64" rx="14" fill="#000000"/>
+  <!-- JAMEYE "J" — Archivo Black glyph outline, white -->
+  <path transform="translate(14.4 51.31) scale(0.05714 -0.05714)" fill="#ffffff"
+    d="M308 -12Q170 -12 96.5 49.0Q23 110 23 239V248H230V240Q230 193 247.5 173.0Q265 153 301 153Q337 153 354.5 173.0Q372 193 372 240V688H593V239Q593 110 519.5 49.0Q446 -12 308 -12Z"/>
 </svg>
