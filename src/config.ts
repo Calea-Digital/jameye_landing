@@ -26,7 +26,9 @@ export const SITE = (): SiteConfig => {
     author: 'Jameye',
     siteUrl: 'https://jameye.com/',
     appUrl: APP_URL,
-    ogImage: '/src/assets/images/og-image.webp',
+    // Served from public/ so it has a stable, hashless URL. The Layout
+    // absolutises it (Open Graph/Twitter require absolute URLs) at render time.
+    ogImage: '/images/og-image.webp',
     locale: 'en_US',
     twitter: {
       site: '@jameye',
