@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Last updated: [DATE]**
+**Last updated: 24 June 2026**
 
 These Terms of Service ("Terms") govern your use of the Jameye landing site at jameye.com (the "Site"), operated by True Edge AB ("we", "us"). They apply only to the Site. They do not govern the Jameye platform or any product accessed behind a login, which will have separate terms at launch.
 
@@ -10,7 +10,7 @@ By accessing or using the Site, you agree to these Terms. If you do not agree, d
 
 ## 2. Eligibility
 
-You must be at least [18] years old to use the Site or join the waitlist.
+You must be at least 18 years old to use the Site or join the waitlist.
 
 ## 3. The Site and the waitlist
 
@@ -64,4 +64,4 @@ These Terms are governed by the laws of Sweden, and disputes are subject to the 
 
 ## 14. Contact
 
-True Edge AB (org. no. 559576-3128), Sweden. Email: [CONTACT EMAIL].
+True Edge AB (org. no. 559576-3128), Sweden. Email: hello@jameye.com.

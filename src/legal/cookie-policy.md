@@ -1,6 +1,6 @@
 # Cookie Policy
 
-**Last updated: [DATE]**
+**Last updated: 24 June 2026**
 
 This Cookie Policy explains how True Edge AB uses cookies and similar technologies on the Jameye landing site at jameye.com (the "Site"). Read it alongside the Privacy Policy.
 
@@ -23,13 +23,7 @@ Cookies are small text files placed on your device by a website. Similar technol
 
 ## 3. Cookies in use
 
-[If Cloudflare edge cookies are confirmed present, list here; otherwise state "None."]
-
-| Cookie | Provider | Category | Purpose | Duration |
-|---|---|---|---|---|
-| [`__cf_bm` — confirm] | Cloudflare | Strictly necessary (security) | Bot management / abuse prevention | ~30 minutes |
-
-If the table above reads "None," the Site sets no cookies at all.
+**None.** The Site sets no cookies at all.
 
 ## 4. Referral links (not a cookie)
 
@@ -45,4 +39,4 @@ You can block or delete cookies through your browser settings. Because the Site 
 
 ## 7. Contact
 
-[PRIVACY EMAIL], True Edge AB (org. no. 559576-3128), Sweden.
+hello@jameye.com, True Edge AB (org. no. 559576-3128), Sweden.

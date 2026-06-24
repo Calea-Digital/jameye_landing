@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: [DATE]**
+**Last updated: 24 June 2026**
 
 This Privacy Policy explains how True Edge AB processes personal data through the Jameye landing site at jameye.com (the "Site"). It applies only to this Site. It does not cover the Jameye platform or any product accessed behind a login (planned at staging.jameye.com / the production app), which handles authentication and gameplay and will have its own policy.
 
@@ -8,11 +8,11 @@ This Privacy Policy explains how True Edge AB processes personal data through th
 
 **True Edge AB**
 Organisation number (organisationsnummer): 559576-3128
-Contact for data protection matters: [PRIVACY EMAIL]
+Contact for data protection matters: hello@jameye.com
 
 True Edge AB is established in Sweden. Processing is subject to Regulation (EU) 2016/679 (GDPR) and the Swedish Data Protection Act (lag (2018:218)).
 
-[We have not appointed a Data Protection Officer, as the Article 37 GDPR criteria do not apply to the processing described here. / We have appointed a Data Protection Officer, contactable at [DPO EMAIL].]
+We have not appointed a Data Protection Officer, as the Article 37 GDPR criteria do not apply to the processing described here.
 
 ## 2. What data we collect
 
@@ -53,23 +53,21 @@ We share personal data only with processors acting on our instructions under an 
 
 | Recipient | Function | Role | Location |
 |---|---|---|---|
-| Cloudflare, Inc. | CDN, security/WAF, IP-level request handling | Processor | US (with EU data localization option) |
-| [ORIGIN HOST] | Static site hosting (nginx) | Processor | [REGION] |
-| [WAITLIST BACKEND / STORAGE — confirm location] | Stores waitlist entries | Processor | [REGION] |
+| Cloudflare, Inc. | CDN, security/WAF, IP-level request handling, static site hosting, and waitlist storage | Processor | Data localised in the EU; Cloudflare, Inc. is US-based — see Section 6 |
 
 We do not sell personal data. We may disclose data where required by law or to enforce our rights.
 
 ## 6. International transfers
 
-Cloudflare, Inc. is US-based and may process data outside the EEA. Where this occurs, transfers rely on an adequacy decision under Article 45 GDPR (including the EU-US Data Privacy Framework where the recipient is certified), or, in its absence, the European Commission's Standard Contractual Clauses under Article 46 GDPR with supplementary measures where required. You may request details at [PRIVACY EMAIL].
+Cloudflare, Inc. is US-based and may process data outside the EEA. Where this occurs, transfers rely on an adequacy decision under Article 45 GDPR (including the EU-US Data Privacy Framework where the recipient is certified), or, in its absence, the European Commission's Standard Contractual Clauses under Article 46 GDPR with supplementary measures where required. You may request details at hello@jameye.com.
 
 ## 7. Retention
 
-Waitlist entries (email, handle, referral, avatar) are retained until you withdraw consent or ask to be removed, or until [the platform launches / the waitlist is retired], whichever is earlier. Server and CDN logs containing IP data are retained for [RETENTION PERIOD, e.g. 90 days] for security, then deleted or anonymised.
+Waitlist entries (email, handle, referral, avatar) are retained until you withdraw consent or ask to be removed, or until the platform launches or the waitlist is retired, whichever is earlier. Server and CDN logs containing IP data are retained for 90 days for security, then deleted or anonymised.
 
 ## 8. Your rights
 
-You have the right to: access; rectification; erasure; restriction; data portability; objection to processing based on legitimate interests; and withdrawal of consent at any time. Contact [PRIVACY EMAIL] to exercise any of these, or to be removed from the waitlist and leaderboard. To stop emails, use the unsubscribe link in any message.
+You have the right to: access; rectification; erasure; restriction; data portability; objection to processing based on legitimate interests; and withdrawal of consent at any time. Contact hello@jameye.com to exercise any of these, or to be removed from the waitlist and leaderboard. To stop emails, use the unsubscribe link in any message.
 
 You may lodge a complaint with a supervisory authority. Our lead authority is the Swedish Authority for Privacy Protection (Integritetsskyddsmyndigheten, IMY), imy.se. You may also complain to the authority in your own EU member state.
 
@@ -81,7 +79,7 @@ The Site currently sets no cookies and runs no trackers. See the Cookie Policy. 
 
 ## 10. Children
 
-The Site is not directed at children. We do not knowingly collect data from anyone under [18].
+The Site is not directed at children. We do not knowingly collect data from anyone under 18.
 
 ## 11. Changes
 
@@ -89,4 +87,4 @@ We may update this Policy. The current version, with its date, is always posted 
 
 ## 12. Contact
 
-[PRIVACY EMAIL], True Edge AB (org. no. 559576-3128), Sweden.
+hello@jameye.com, True Edge AB (org. no. 559576-3128), Sweden.
