@@ -30,6 +30,13 @@
       "value": "30%+",
       "label": "More accurate",
       "detail": "Superforecasters vs. intelligence analysts with classified access"
+    },
+    "source": {
+      "lead": "Based on the research of",
+      "links": [
+        { "label": "Professor Philip Tetlock", "href": "https://mgmt.wharton.upenn.edu/profile/tetlock/" },
+        { "label": "the Good Judgment Project", "href": "https://goodjudgment.com/" }
+      ]
     }
   },
   "edge": {

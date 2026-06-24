@@ -21,6 +21,7 @@ const data = t<{
     body: string[];
     people: string[];
     stat: { value: string; label: string; detail: string };
+    source: { lead: string; links: { label: string; href: string }[] };
   };
   edge: { eyebrow: string; lead: string; body: string; pull: string };
   sport: { eyebrow: string; title: TitlePair; body: string; steps: IconLabel[] };
@@ -94,6 +95,18 @@ const meta = { ...data.meta, ogImagePath: undefined };
                 ))
               }
             </div>
+
+            <p class="research-source">
+              {data.research.source.lead}{' '}
+              {
+                data.research.source.links.map((link, i) => (
+                  <>
+                    {i > 0 && (i === data.research.source.links.length - 1 ? ' and ' : ', ')}
+                    <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+                  </>
+                ))
+              }.
+            </p>
           </div>
 
           <!-- Big stat callout -->
@@ -269,6 +282,26 @@ const meta = { ...data.meta, ogImagePath: undefined };
     font-family: var(--font-body);
     font-size: 0.82rem;
     color: var(--ink-muted);
+  }
+
+  /* ---- Research source attribution ---- */
+  .research-source {
+    margin-top: 1.5rem;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--ink-faint);
+    max-width: 560px;
+  }
+  .research-source a {
+    color: var(--ink-muted);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--hairline-strong);
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  }
+  .research-source a:hover {
+    color: #fff;
+    text-decoration-color: var(--brand-lavender);
   }
 
   /* ---- Stat callout ---- */
