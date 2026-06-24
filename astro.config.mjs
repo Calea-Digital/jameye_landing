@@ -24,10 +24,10 @@ export default defineConfig({
   // server 404 every /en route (it expects the default locale to be unprefixed)
   // even though the build still emitted them.
 
-  // All content lives under /en (see src/pages/en). Redirect the bare root and
-  // the legacy unprefixed routes to their /en equivalents.
+  // Content lives under /en (see src/pages/en). The bare root (src/pages/index)
+  // renders the homepage directly — NOT a redirect — so crawlers get real OG
+  // tags. The legacy unprefixed routes below still redirect to their /en homes.
   redirects: {
-    '/': '/en',
     '/about': '/en/about',
     '/leaderboard': '/en/leaderboard',
     '/terms': '/en/terms',

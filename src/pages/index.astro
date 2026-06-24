@@ -1,0 +1,12 @@
+---
+// Bare site root (https://jameye.com/). Renders the exact same homepage as /en
+// — NOT a redirect — so social/SEO crawlers that hit the root get the real page
+// (hero + Open Graph/Twitter tags) instead of the old "Redirecting to /en"
+// stub, which scrapers don't follow and which left every share card blank.
+// Canonical is pinned to /en (the core) so search engines consolidate there and
+// don't treat / and /en as duplicate content.
+import Home from '~/components/Home.astro';
+import { SITE } from '~/config';
+---
+
+<Home locale="en" canonicalUrl={new URL('/en', SITE().siteUrl).href} />
