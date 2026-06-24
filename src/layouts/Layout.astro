@@ -35,6 +35,12 @@ let ogImage: ImageMetadata | undefined;
 if (metadata?.ogImagePath) {
   ogImage = await importImage(metadata?.ogImagePath);
 }
+
+// Open Graph / Twitter crawlers require an absolute URL — a root-relative path
+// like "/images/og-image.webp" yields no preview. Resolve against the site
+// origin (Astro.site, falling back to the current request URL).
+const ogImageSrc = ogImage?.src || SITE().ogImage;
+const ogImageUrl = new URL(ogImageSrc, Astro.site ?? Astro.url).href;
 ---
 
 <!doctype html>
@@ -103,7 +109,7 @@ if (metadata?.ogImagePath) {
         basic: {
           title: metadata?.title || SITE().title,
           type: 'website',
-          image: ogImage?.src || SITE().ogImage,
+          image: ogImageUrl,
           url: metadata?.canonicalUrl || Astro.url.href,
         },
         optional: {
@@ -117,7 +123,7 @@ if (metadata?.ogImagePath) {
         site: SITE().twitter.site,
         title: metadata?.title || SITE().title,
         description: metadata?.description || SITE().description,
-        image: ogImage?.src || SITE().ogImage,
+        image: ogImageUrl,
       }}
     />
   </head>
