@@ -57,7 +57,7 @@
     "sub": "Launch matchups confirmed so far — more universities are being added before 1 October.",
     "vs": "VS",
     "campuses": [
-      { "name": "Harvard", "logo": "/images/universities/harvard.png", "location": "Cambridge · USA", "flag": "🇺🇸", "color": "#a51c30" },
+      { "name": "Harvard", "logo": "/images/universities/harvard.png", "location": "Boston · USA", "flag": "🇺🇸", "color": "#a51c30" },
       { "name": "Stockholm", "logo": "/images/universities/stockholm.webp", "location": "Stockholm · Sweden", "flag": "🇸🇪", "color": "#005595" }
     ],
     "more": "More campuses joining soon"
