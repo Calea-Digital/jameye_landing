@@ -39,8 +39,8 @@
     "board": {
       "title": "Campus board · avg Edge Score",
       "rows": [
-        { "rank": "1", "name": "Stockholm", "flag": "🇸🇪", "score": 712 },
-        { "rank": "2", "name": "Harvard", "flag": "🇺🇸", "score": 689 },
+        { "rank": "1", "name": "Sweden", "flag": "🇸🇪", "score": 712 },
+        { "rank": "2", "name": "USA", "flag": "🇺🇸", "score": 689 },
         { "rank": "3", "name": "Your campus", "join": true }
       ],
       "joinLabel": "join",
@@ -54,11 +54,11 @@
   "field": {
     "eyebrow": "The field",
     "title": { "lead": "Campuses in the", "ital": "running." },
-    "sub": "Launch matchups confirmed so far — more universities are being added before 1 October.",
+    "sub": "Launch matchups confirmed so far — more universities are being added.",
     "vs": "VS",
     "campuses": [
-      { "name": "Harvard", "logo": "/images/universities/harvard.png", "location": "Boston · USA", "flag": "🇺🇸", "color": "#a51c30" },
-      { "name": "Stockholm", "logo": "/images/universities/stockholm.webp", "location": "Stockholm · Sweden", "flag": "🇸🇪", "color": "#005595" }
+      { "name": "USA", "flag": "🇺🇸", "color": "#a51c30" },
+      { "name": "Sweden", "flag": "🇸🇪", "color": "#005595" }
     ],
     "more": "More campuses joining soon"
   },

@@ -4,6 +4,7 @@ import Layout from '~/layouts/Layout.astro';
 import Header from '~/components/common/Header.astro';
 import Footer from '~/components/common/Footer.astro';
 import WaitlistModal from '~/components/common/WaitlistModal.astro';
+import FlagIcon from '~/components/battle-of-universities/FlagIcon';
 import { t, localePath, type Locale } from '~/utils/i18n';
 
 const locale: Locale = 'en';
@@ -43,7 +44,7 @@ const data = t<{
     title: TitlePair;
     sub: string;
     vs: string;
-    campuses: { name: string; logo: string; location: string; flag: string; color: string }[];
+    campuses: { name: string; flag: string; color: string }[];
     more: string;
   };
   dates: { eyebrow: string; title: TitlePair; items: { when: string; title: string; body: string; state: string }[] };
@@ -230,12 +231,8 @@ const meta = { ...data.meta, ogImagePath: undefined };
                 {i > 0 && <span class="bou-field__vs">{data.field.vs}</span>}
                 <article class="bou-crest" style={`--crest-color:${c.color}`}>
                   <span class="bou-crest__glow"></span>
-                  <span class="bou-crest__flag">{c.flag}</span>
-                  <span class="bou-crest__logo">
-                    <img src={c.logo} alt={`${c.name} crest`} loading="lazy" />
-                  </span>
+                  <FlagIcon flag={c.flag} className="w-28 h-auto mb-[1.1rem] drop-shadow-[0_12px_28px_rgba(0,0,0,0.45)]" />
                   <span class="bou-crest__name">{c.name}</span>
-                  <span class="bou-crest__loc">{c.location}</span>
                 </article>
               </>
             ))
@@ -743,21 +740,7 @@ const meta = { ...data.meta, ogImagePath: undefined };
     opacity: 0.5;
     pointer-events: none;
   }
-  .bou-crest__flag { position: relative; font-size: 1.4rem; line-height: 1; margin-bottom: 0.85rem; }
-  .bou-crest__logo {
-    position: relative;
-    width: 6rem; height: 6rem;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 1.1rem;
-    /* White disc behind the crest so dark/transparent logos stay legible. */
-    background: #fff;
-    border-radius: 9999px;
-    padding: 0.9rem;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
-  }
-  .bou-crest__logo img { width: 100%; height: 100%; object-fit: contain; object-position: center; margin: auto; }
-  .bou-crest__name { position: relative; font-family: var(--font-sans); font-size: 1.4rem; font-weight: 500; letter-spacing: -0.02em; color: #fff; margin-bottom: 0.3rem; }
-  .bou-crest__loc { position: relative; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+  .bou-crest__name { position: relative; font-family: var(--font-sans); font-size: 1.4rem; font-weight: 500; letter-spacing: -0.02em; color: #fff; }
 
   .bou-crest--more { justify-content: center; border-style: dashed; }
   .bou-crest__plus {
@@ -920,7 +903,6 @@ const meta = { ...data.meta, ogImagePath: undefined };
     .bou-hero__title .ital-grad,
     .bou-final__title .ital-grad,
     .bou-stat,
-    .bou-crest__logo img,
     .bou-timeline__pulse,
     .bou-tl--active .bou-tl__dot { animation: none !important; }
     .bou-stage__layer,

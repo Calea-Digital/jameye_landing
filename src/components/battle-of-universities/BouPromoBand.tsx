@@ -88,28 +88,21 @@ export default function BouPromoBand({
 
         {/* Arena — two avatar clusters facing each other across a VS pill. */}
         <div className="mt-6 flex w-full flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-center sm:gap-4 md:gap-8">
-          {/* Left crew — Stockholm University, blue/violet-tinted halo */}
+          {/* Left crew — Sweden, blue/violet-tinted halo */}
           <div className="relative flex flex-1 flex-col items-center gap-3 rounded-2xl border border-white/15 bg-black/25 px-4 py-4 shadow-xl backdrop-blur-md">
             <div className="absolute inset-0 -z-0 rounded-2xl bg-[radial-gradient(ellipse_at_50%_60%,rgba(41,98,255,0.45),transparent_70%)]" />
-            {/* Brand medallion — Stockholms Universitet crest framed by the blue/violet gradient. */}
+            {/* Brand medallion — Sweden flag framed by the blue/violet gradient. */}
             <div
               className="relative flex h-[76px] w-[76px] items-center justify-center rounded-full p-[3px] shadow-[0_14px_34px_rgba(41,98,255,0.55)] sm:h-[88px] sm:w-[88px]"
               style={{ backgroundImage: 'linear-gradient(135deg, #2962ff 0%, #7e3bff 100%)' }}
             >
               <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white">
-                <img
-                  src="/images/universities/stockholm.webp"
-                  alt="Stockholm University crest"
-                  loading="lazy"
-                  decoding="async"
-                  className="h-[72%] w-[72%] object-contain"
-                />
+                <FlagIcon flag="🇸🇪" className="h-auto w-[64%]" />
               </div>
             </div>
             <div className="relative flex items-center gap-2">
-              <FlagIcon flag="🇸🇪" />
-              <span className="text-center text-[12px] font-semibold uppercase tracking-[0.16em] text-white [font-family:var(--j-font-mono)]">
-                Stockholm University
+              <span className="text-center text-[14px] font-semibold uppercase tracking-[0.18em] text-white [font-family:var(--j-font-mono)]">
+                Sweden
               </span>
             </div>
             <div className="relative flex items-end justify-center gap-1 sm:gap-2">
@@ -135,9 +128,6 @@ export default function BouPromoBand({
                 </div>
               ))}
             </div>
-            <div className="relative text-[9px] font-semibold uppercase tracking-[0.18em] text-white/75 [font-family:var(--j-font-mono)]">
-              Stockholm · Sweden
-            </div>
           </div>
 
           {/* VS disc — editorial glass token with a soft pulsing halo. */}
@@ -154,28 +144,21 @@ export default function BouPromoBand({
             </span>
           </div>
 
-          {/* Right crew — Harvard, magenta/pink-tinted halo */}
+          {/* Right crew — USA, magenta/pink-tinted halo */}
           <div className="relative flex flex-1 flex-col items-center gap-3 rounded-2xl border border-white/15 bg-black/25 px-4 py-4 shadow-xl backdrop-blur-md">
             <div className="absolute inset-0 -z-0 rounded-2xl bg-[radial-gradient(ellipse_at_50%_60%,rgba(216,59,255,0.45),transparent_70%)]" />
-            {/* Brand medallion — Harvard shield framed by the magenta/pink gradient. */}
+            {/* Brand medallion — USA flag framed by the magenta/pink gradient. */}
             <div
               className="relative flex h-[76px] w-[76px] items-center justify-center rounded-full p-[3px] shadow-[0_14px_34px_rgba(216,59,255,0.55)] sm:h-[88px] sm:w-[88px]"
               style={{ backgroundImage: 'linear-gradient(135deg, #d83bff 0%, #ff3ba8 100%)' }}
             >
               <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white">
-                <img
-                  src={`${assetBase}/universities/harvard.svg`}
-                  alt="Harvard University coat of arms"
-                  loading="lazy"
-                  decoding="async"
-                  className="h-[72%] w-[72%] object-contain"
-                />
+                <FlagIcon flag="🇺🇸" className="h-auto w-[64%]" />
               </div>
             </div>
             <div className="relative flex items-center gap-2">
-              <FlagIcon flag="🇺🇸" />
-              <span className="text-[12px] font-semibold uppercase tracking-[0.2em] text-white [font-family:var(--j-font-mono)]">
-                Harvard
+              <span className="text-[14px] font-semibold uppercase tracking-[0.18em] text-white [font-family:var(--j-font-mono)]">
+                USA
               </span>
             </div>
             <div className="relative flex items-end justify-center gap-1 sm:gap-2">
@@ -198,9 +181,6 @@ export default function BouPromoBand({
                   />
                 </div>
               ))}
-            </div>
-            <div className="relative text-[9px] font-semibold uppercase tracking-[0.18em] text-white/75 [font-family:var(--j-font-mono)]">
-              Boston · USA
             </div>
           </div>
         </div>
