@@ -24,8 +24,8 @@ const w = t<{
   close: string;
   errors: { email: string; emailTaken: string; nicknameTaken: string; generic: string };
   success: {
-    title: string; sub: string; handleLabel: string; linkLabel: string;
-    copy: string; copied: string; earn: string; done: string;
+    title: string; sub: string; handleLabel: string; positionLabel: string; linkLabel: string;
+    copy: string; copied: string; earn: string; positionNote: string; done: string;
   };
 }>(locale, 'waitlist');
 
@@ -132,9 +132,17 @@ const CFG = {
       <h2 class="wl-success__title text-white">{w.success.title}</h2>
       <p class="wl-success__sub">{w.success.sub}</p>
 
-      <div class="wl-handle">
-        <span class="wl-handle__k">{w.success.handleLabel}</span>
-        <span class="wl-handle__v" data-wl-handle>—</span>
+      <div class="wl-cards">
+        <div class="wl-handle">
+          <span class="wl-handle__k">{w.success.handleLabel}</span>
+          <span class="wl-handle__v" data-wl-handle>—</span>
+        </div>
+        <!-- Position is resolved from the live waitlist count after signup, so
+             it stays hidden if that call fails rather than showing a stale "—". -->
+        <div class="wl-handle wl-handle--pos" data-wl-position-card hidden>
+          <span class="wl-handle__k">{w.success.positionLabel}</span>
+          <span class="wl-handle__v" data-wl-position>—</span>
+        </div>
       </div>
 
       <label class="wl-label mt-1 block">{w.success.linkLabel}</label>
@@ -145,7 +153,7 @@ const CFG = {
           <span data-wl-copy-label>{w.success.copy}</span>
         </button>
       </div>
-      <p class="wl-help mt-2">{w.success.earn}</p>
+      <p class="wl-help mt-2" data-wl-earn>{w.success.earn}</p>
 
       <button type="button" class="btn-soft w-full justify-center mt-5" data-wl-close>{w.success.done}</button>
     </div>
@@ -295,13 +303,28 @@ const CFG = {
   .wl-success__title { font-family: var(--font-sans); font-weight: 300; font-size: 2rem; letter-spacing: -0.03em; line-height: 1.05; }
   .wl-success__sub { margin-top: 0.6rem; font-size: 0.9rem; color: rgba(255, 255, 255, 0.6); }
 
+  .wl-cards {
+    display: grid; grid-template-columns: 1fr; gap: 0.75rem;
+    margin: 1.5rem auto 1.25rem; max-width: 26rem;
+  }
+  /* Handle + position sit side by side once there's room; the handle keeps the
+     full width on its own when the position couldn't be resolved. */
+  @media (min-width: 480px) {
+    .wl-cards { grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }
+  }
   .wl-handle {
-    display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
-    margin: 1.5rem auto 1.25rem; padding: 1rem 1.5rem; max-width: 22rem;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.35rem;
+    padding: 1rem 1.25rem; min-width: 0;
     border-radius: 14px; background: rgba(126, 59, 255, 0.1); border: 1px solid rgba(126, 59, 255, 0.35);
   }
+  .wl-handle[hidden] { display: none; }
+  .wl-handle--pos { background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.35); }
+  .wl-handle--pos .wl-handle__v { font-variant-numeric: tabular-nums; }
   .wl-handle__k { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint); }
-  .wl-handle__v { font-family: var(--font-sans); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; color: #fff; }
+  .wl-handle__v {
+    font-family: var(--font-sans); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; color: #fff;
+    text-align: center; overflow-wrap: anywhere;
+  }
 
   .wl-linkrow { display: flex; gap: 0.5rem; margin-top: 0.4rem; }
   .wl-linkinput {
@@ -316,7 +339,7 @@ const CFG = {
   }
 </style>
 
-<script define:vars={{ CFG, ERR: w.errors, STATUS: w.status, SUBMIT_LABEL: w.submit, SUBMITTING_LABEL: w.submitting, GENERATING_LABEL: w.generating, COPY_LABEL: w.success.copy, COPIED_LABEL: w.success.copied, LOCALE: locale }}>
+<script define:vars={{ CFG, ERR: w.errors, STATUS: w.status, SUBMIT_LABEL: w.submit, SUBMITTING_LABEL: w.submitting, GENERATING_LABEL: w.generating, COPY_LABEL: w.success.copy, COPIED_LABEL: w.success.copied, POSITION_NOTE: w.success.positionNote, LOCALE: locale }}>
   const overlay = document.querySelector('[data-waitlist-modal]');
   if (overlay) {
     const $ = (s) => overlay.querySelector(s);
@@ -331,6 +354,9 @@ const CFG = {
     const errEl = $('[data-wl-error]');
     const successEl = $('[data-wl-success]');
     const handleEl = $('[data-wl-handle]');
+    const positionCard = $('[data-wl-position-card]');
+    const positionEl = $('[data-wl-position]');
+    const earnEl = $('[data-wl-earn]');
     const linkEl = $('[data-wl-link]');
     const copyBtn = $('[data-wl-copy]');
     const copyLabel = $('[data-wl-copy-label]');
@@ -518,6 +544,33 @@ const CFG = {
       if (linkEl) linkEl.value = link;
       formView?.setAttribute('hidden', '');
       successEl?.removeAttribute('hidden');
+      showPosition(resp);
+    };
+
+    // ---- Waitlist position ----
+    // A fresh signup has no referrals yet, so they sit last on the leaderboard
+    // — which makes the post-signup total their position. Prefer a `position`
+    // straight from the signup response if the backend ever starts sending one,
+    // otherwise derive it from the live count. Silent no-op on failure: the
+    // generic "share it" copy stays and the position card never appears.
+    const fetchCount = async () => {
+      if (!CFG.apiBase) return null;
+      try {
+        const res = await fetch(`${CFG.apiBase}/api/waitlist/count`, { cache: 'no-store' });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return typeof data?.count === 'number' ? data.count : null;
+      } catch {
+        return null;
+      }
+    };
+    const showPosition = async (resp) => {
+      const pos = typeof resp?.position === 'number' ? resp.position : await fetchCount();
+      if (!pos || pos < 1) return;
+      const n = pos.toLocaleString(LOCALE);
+      if (positionEl) positionEl.textContent = `#${n}`;
+      positionCard?.removeAttribute('hidden');
+      if (earnEl) earnEl.textContent = POSITION_NOTE.replace('{n}', n);
     };
 
     copyBtn?.addEventListener('click', async () => {

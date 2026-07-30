@@ -93,8 +93,8 @@ export function BattleOfUniversities({
   const canJoin = data.canJoin ?? true;
   const prizeLabel =
     data.prizeLabel ?? formatPrize(data.prizeCents ?? 0);
-  const launchLabel = data.launchLabel ?? "Launch opens";
-  const launchValue = data.launchValue ?? "Oct 1";
+  const launchLabel = data.launchLabel ?? "Launch";
+  const launchValue = data.launchValue ?? "Coming soon";
   const ctaLabel = data.ctaLabel ?? (canJoin ? "Join the battle" : "View slate");
 
   return (

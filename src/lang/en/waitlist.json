@@ -44,10 +44,12 @@
     "title": "You're on the list!",
     "sub": "Here's your handle and your personal invite link.",
     "handleLabel": "Your handle",
+    "positionLabel": "Your position",
     "linkLabel": "Your referral link",
     "copy": "Copy",
     "copied": "Copied!",
     "earn": "Share it — every friend who joins through your link climbs you up the leaderboard.",
+    "positionNote": "You're currently #{n} on the waitlist — invite more friends through your link to climb it.",
     "done": "Done"
   }
 }
