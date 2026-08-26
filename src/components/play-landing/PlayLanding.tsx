@@ -106,24 +106,72 @@ function Reveal({
 /** Served from /public so the 11 MB clip is not run through the bundler. */
 const HERO_VIDEO = "/video/hero-video.mp4";
 
+/* ---------------- hero intro ---------------- */
+
+/** Wordmark pops in over the video, holds, then fades to reveal the hero. */
+const INTRO_HOLD_MS = 1000; // wordmark on screen for ~1s
+const INTRO_FADE_MS = 350; // quick fade-out; hero reveal starts as it ends
+
+function HeroIntro({ onDone }: { onDone: () => void }) {
+  const [leaving, setLeaving] = useState(false);
+
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      onDone();
+      return;
+    }
+    const t1 = window.setTimeout(() => setLeaving(true), INTRO_HOLD_MS);
+    const t2 = window.setTimeout(onDone, INTRO_HOLD_MS + INTRO_FADE_MS);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+  }, [onDone]);
+
+  return (
+    <div
+      aria-hidden="true"
+      className={`pointer-events-none absolute inset-0 z-30 flex items-center justify-center px-4 ${
+        leaving ? "animate-intro-out" : ""
+      }`}
+    >
+      <span
+        className={`jameye-wordmark whitespace-nowrap text-[clamp(3.6rem,17vw,15rem)] drop-shadow-[0_12px_50px_rgba(5,6,15,0.7)] ${
+          leaving ? "animate-intro-mark-out" : "animate-intro-mark-in"
+        }`}
+      >
+        JAMEYE<sup className="reg">®</sup>
+      </span>
+    </div>
+  );
+}
+
 /* ---------------- page ---------------- */
 
 export function PlayLanding() {
+  const [introDone, setIntroDone] = useState(false);
+  const finishIntro = React.useCallback(() => setIntroDone(true), []);
+
   return (
     <main className="play-landing relative h-screen snap-y snap-mandatory overflow-y-scroll overflow-x-hidden scroll-smooth">
       {/* ---------------- HERO ---------------- */}
-      <Section>
+      <Section gate={introDone}>
         <GradientCard
           videoBackground={HERO_VIDEO}
           layout="split"
+          decor={introDone ? null : <HeroIntro onDone={finishIntro} />}
           left={
             <>
               <Heading text="EXPLORE THE GLOBAL FORECASTING CHAMPIONSHIP!" className="lg:text-left" />
-              <Body
-                delay={0.5}
-                className="mx-auto text-center lg:mx-0 lg:text-left"
-                text="Predict anything from the next World Cup winner to tomorrow's biggest news. Challenge forecasters around the globe."
-              />
+              {/* Held back with the heading until the JAMEYE® intro has cleared. */}
+              <Reveal delay={0.5}>
+                <Body
+                  delay={0.5}
+                  className="mx-auto text-center lg:mx-0 lg:text-left"
+                  text="Predict anything from the next World Cup winner to tomorrow's biggest news. Challenge forecasters around the globe."
+                />
+              </Reveal>
 
             </>
           }
@@ -279,7 +327,11 @@ export function PlayLanding() {
       </Section>
 
       {/* ---------------- STICKY BOTTOM PLAY BAR ---------------- */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/20 bg-white/10 px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md sm:px-4 sm:py-5">
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-50 border-t border-white/20 bg-white/10 px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md transition-opacity duration-500 sm:px-4 sm:py-5 ${
+          introDone ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      >
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-4">
           <div className="min-w-0">
             <p className="whitespace-normal font-display text-sm font-black uppercase leading-tight tracking-wide text-white sm:text-xl">
@@ -304,14 +356,23 @@ export function PlayLanding() {
 
 // ---- building blocks ----------------------------------------------------
 
-function Section({ children, className }: { children: React.ReactNode; className?: string }) {
+function Section({
+  children,
+  className,
+  gate = true,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  /** When false, the section's reveal animations are held back (used by the hero intro). */
+  gate?: boolean;
+}) {
   const { ref, inView } = useInView<HTMLElement>(0.35);
   return (
     <section
       ref={ref}
       className={`relative flex min-h-[100svh] w-full snap-start flex-col items-center justify-center text-center ${className ?? ""}`}
     >
-      <InViewContext.Provider value={inView}>{children}</InViewContext.Provider>
+      <InViewContext.Provider value={inView && gate}>{children}</InViewContext.Provider>
     </section>
   );
 }

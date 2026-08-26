@@ -945,3 +945,36 @@
 @media (prefers-reduced-motion: reduce) {
   .tap-hand-bob { animation: none; }
 }
+
+/* ---- Hero intro: JAMEYE® wordmark over the video, then reveal ---- */
+@keyframes intro-bg-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@utility animate-intro-bg-in {
+  animation: intro-bg-in 0.5s ease-out both;
+}
+@keyframes intro-mark-in {
+  0% { opacity: 0; transform: scale(0.9); filter: blur(10px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+@utility animate-intro-mark-in {
+  animation: intro-mark-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes intro-mark-out {
+  0% { opacity: 1; transform: scale(1); filter: blur(0); }
+  100% { opacity: 0; transform: scale(1.08); filter: blur(8px); }
+}
+@utility animate-intro-mark-out {
+  animation: intro-mark-out 0.35s cubic-bezier(0.55, 0, 0.85, 0.35) both;
+}
+@keyframes intro-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@utility animate-intro-out {
+  animation: intro-out 0.35s ease-in both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-intro-bg-in, .animate-intro-mark-in, .animate-intro-mark-out, .animate-intro-out { animation: none !important; }
+}
