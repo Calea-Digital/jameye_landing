@@ -8,7 +8,7 @@ import customizable from "./assets/avatars/03-duel-customizable-fighter.svg?url"
 import rapidFighter from "./assets/avatars/04-rapid-duel-fighter.svg?url";
 import squadRival from "./assets/avatars/09-squad-row2-rival.svg?url";
 
-import { TapHand } from "./TapHand";
+import { SwipeCue } from "./SwipeCue";
 import { Button } from "./Button";
 import { CARDS, Card, type MarketCard } from "./MarketMosaic";
 
@@ -246,25 +246,10 @@ function SceneSubscribe({ onComplete }: { onComplete: () => void }) {
             </motion.div>
           </AnimatePresence>
 
-          {/* swipe cue hand */}
-          <motion.div
-            aria-hidden="true"
-            className="pointer-events-none absolute right-2 top-1/2 z-20 -translate-y-1/2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-          >
-            <motion.div
-              animate={{
-                x: [0, -28, 0],
-                rotate: [0, -8, 0],
-                scale: [0.96, 1.04, 0.96],
-              }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <TapHand delay={0} noBob className="scale-60 -rotate-90" />
-            </motion.div>
-          </motion.div>
+          {/* swipe cue */}
+          <div className="pointer-events-none absolute inset-x-0 -bottom-1 z-20 flex justify-center">
+            <SwipeCue className="translate-y-1/2 scale-90 sm:scale-100" />
+          </div>
         </div>
       </div>
 

@@ -19,6 +19,8 @@ import { MarketOrbit } from "./MarketOrbit";
 import { MarketReel } from "./MarketReel";
 
 import { PhoneStory } from "./PhoneStory";
+import { WaitlistLeaderboard } from "./WaitlistLeaderboard";
+import { LandingFooter } from "./LandingFooter";
 
 
 /* ---------------- reveal plumbing ---------------- */
@@ -236,7 +238,7 @@ export function PlayLanding() {
                 src={customizable}
                 alt=""
                 aria-hidden="true"
-                className="h-20 w-auto animate-avatar-cheer drop-shadow-[0_8px_24px_rgba(236,72,153,0.3)] sm:h-40"
+                className="h-16 w-auto animate-avatar-cheer drop-shadow-[0_8px_24px_rgba(236,72,153,0.3)] sm:h-40"
               />
             </Reveal>
           </div>
@@ -245,12 +247,12 @@ export function PlayLanding() {
             delay={0.6}
             text="FIQ — Forecasting IQ measures how accurate you are at predicting. Jameye scores your results across multiple predictions to make your FIQ robust, reliable, and globally recognized"
           />
-          <Reveal variant="pop" delay={0.8} className="mt-4 flex justify-center sm:mt-8">
-            <div className="origin-center scale-[0.72] -my-8 sm:scale-100 sm:my-0">
+          <Reveal variant="pop" delay={0.8} className="mt-2 flex justify-center sm:mt-8">
+            <div className="origin-center scale-[0.62] -my-12 sm:scale-100 sm:my-0">
               <FiqRing />
             </div>
           </Reveal>
-          <Reveal delay={1} className="mt-4 flex justify-center sm:mt-6">
+          <Reveal delay={1} className="mt-3 flex justify-center sm:mt-6">
             <FiqLeaderboard />
           </Reveal>
 
@@ -275,7 +277,7 @@ export function PlayLanding() {
       {/* ---------------- NOT GAMBLING ---------------- */}
       <Section>
         <GradientCard
-          badge="+18 ONLY"
+          badge="Skill, not luck"
           gradient="bg-gradient-to-br from-[#06B6D4] via-[#6366F1] to-[#A855F7]"
           layout="split"
           left={
@@ -323,8 +325,37 @@ export function PlayLanding() {
             ))}
           </div>
           <Heading text="Your forecasting journey starts now" delay={0.45} />
+          <Body
+            delay={0.6}
+            text="Secure your spot, invite your rivals and climb the waitlist leaderboard before launch."
+          />
+          <Reveal variant="pop" delay={0.8} className="mt-6 flex justify-center sm:mt-8">
+            <button
+              type="button"
+              data-open-waitlist
+              className="tactical-cta px-8 py-3.5 text-base sm:px-12 sm:py-5 sm:text-xl"
+            >
+              <span className="tactical-cta-inner font-extrabold">JOIN THE WAITLIST</span>
+            </button>
+          </Reveal>
         </GradientCard>
       </Section>
+
+      {/* ---------------- WAITLIST LEADERBOARD ---------------- */}
+      <Section>
+        <GradientCard
+          badge="Waitlist leaderboard"
+          gradient="bg-gradient-to-br from-[#6366F1] via-[#8B5CF6] to-[#EC4899]"
+        >
+          <Heading text="Invite friends. Climb the board." />
+          <Body delay={0.4} text="Every referral is worth +5 points. Top spots unlock early access, founder perks and cash." />
+          <Reveal delay={0.6} className="mt-5 w-full sm:mt-8">
+            <WaitlistLeaderboard />
+          </Reveal>
+        </GradientCard>
+      </Section>
+
+      <LandingFooter />
 
       {/* ---------------- STICKY BOTTOM PLAY BAR ---------------- */}
       <div
@@ -334,17 +365,18 @@ export function PlayLanding() {
       >
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-4">
           <div className="min-w-0">
-            <p className="whitespace-normal font-display text-sm font-black uppercase leading-tight tracking-wide text-white sm:text-xl">
-              JOIN THE CHAMPIONCHIP!
+            <p className="truncate font-display text-[0.8rem] font-black uppercase leading-tight tracking-wide text-white sm:text-xl">
+              JOIN THE CHAMPIONSHIP!
             </p>
-            <p className="text-xs text-white/80 sm:text-sm">
-              Free to play. No download required.
+            <p className="truncate text-[0.68rem] text-white/80 sm:text-sm">
+              <span className="sm:hidden">Free to play · No download</span>
+              <span className="hidden sm:inline">Free to play. No download required.</span>
             </p>
           </div>
           <button
             type="button"
             data-open-waitlist
-            className="tactical-cta shrink-0 justify-center px-5 py-2.5 text-sm sm:px-9 sm:py-4 sm:text-base"
+            className="tactical-cta shrink-0 justify-center px-4 py-2.5 text-[0.8rem] sm:px-9 sm:py-4 sm:text-base"
           >
             <span className="tactical-cta-inner font-extrabold">JOIN THE WAITLIST</span>
           </button>

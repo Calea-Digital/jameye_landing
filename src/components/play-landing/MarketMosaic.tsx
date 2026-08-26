@@ -264,10 +264,61 @@ export function Card({ card, pick = null }: { card: MarketCard; pick?: number | 
   );
 }
 
+
+/* ---------------- scroll parallax ----------------
+   Columns drift up/down as the page scrolls past the mosaic. Driven by the
+   `.play-landing` scroll container (the page body itself never scrolls) and
+   written straight to the DOM from a rAF so React never re-renders. */
+const PARALLAX_DIRS = [1, -1, 1, -1, 1, -1, 1];
+
+function useMosaicParallax(
+  rootRef: React.RefObject<HTMLElement | null>,
+  colsRef: React.MutableRefObject<(HTMLElement | null)[]>,
+  amplitude: number,
+) {
+  React.useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const scroller = (root.closest(".play-landing") as HTMLElement | null) ?? window;
+
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const vh = window.innerHeight || 1;
+      const r = root.getBoundingClientRect();
+      // 0 when the mosaic is centred in the viewport, ±1 one viewport away.
+      const progress = Math.max(-1.5, Math.min(1.5, (r.top + r.height / 2 - vh / 2) / vh));
+      colsRef.current.forEach((col, i) => {
+        if (!col) return;
+        const dir = PARALLAX_DIRS[i % PARALLAX_DIRS.length];
+        const factor = 0.7 + ((i * 37) % 5) * 0.15; // 0.7 … 1.3 — uneven speeds
+        col.style.transform = `translate3d(0, ${(progress * amplitude * dir * factor).toFixed(1)}px, 0)`;
+      });
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    scroller.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      scroller.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, [rootRef, colsRef, amplitude]);
+}
+
 /** Fixed-size, non-overlapping 1 · 2 · 3 · 2 · 1 mosaic. */
 export function MarketMosaic() {
   const mobileScrollRef = React.useRef<HTMLDivElement>(null);
   const [activeColumn, setActiveColumn] = React.useState(2);
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const mobileColRefs = React.useRef<(HTMLElement | null)[]>([]);
+  const desktopColRefs = React.useRef<(HTMLElement | null)[]>([]);
+  useMosaicParallax(rootRef, mobileColRefs, 34);
+  useMosaicParallax(rootRef, desktopColRefs, 150);
 
   const mobileColumns: { cards: MarketCard[]; offset: string }[] = [
     { cards: [CARDS[0]], offset: "pt-8" },
@@ -332,7 +383,7 @@ export function MarketMosaic() {
 
 
   return (
-    <div className="mt-4 w-full min-w-0 px-1 pb-2 sm:mt-8 sm:pb-12">
+    <div ref={rootRef} className="mt-4 w-full min-w-0 px-1 pb-2 sm:mt-8 sm:pb-12">
       {/* Mobile: horizontally scrollable columns, snap to each column */}
       <div
         ref={mobileScrollRef}
@@ -351,14 +402,21 @@ export function MarketMosaic() {
               key={index}
               data-mosaic-col
               data-index={index}
-              className={`flex shrink-0 snap-center flex-col gap-2.5 transition-opacity duration-300 ${column.offset} ${
+              className={`flex shrink-0 snap-center flex-col transition-opacity duration-300 ${column.offset} ${
                 index === activeColumn ? "" : "opacity-70"
               }`}
               style={{ width: "var(--mcol)" }}
             >
-              {column.cards.map((card) => (
-                <Card key={card.title} card={card} />
-              ))}
+              <div
+                ref={(el) => {
+                  mobileColRefs.current[index] = el;
+                }}
+                className="flex flex-col gap-2.5 will-change-transform"
+              >
+                {column.cards.map((card) => (
+                  <Card key={card.title} card={card} />
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -384,7 +442,13 @@ export function MarketMosaic() {
           style={{ transform: "scale(0.5)" }}
         >
           {desktopColumns.map((column, index) => (
-            <div key={index} className={`flex w-[402px] shrink-0 flex-col gap-5 ${column.offset}`}>
+            <div
+              key={index}
+              ref={(el) => {
+                desktopColRefs.current[index] = el;
+              }}
+              className={`flex w-[402px] shrink-0 flex-col gap-5 will-change-transform ${column.offset}`}
+            >
               {column.cards.map((card, cardIndex) => (
                 <Card key={`${index}-${cardIndex}-${card.title}`} card={card} />
               ))}

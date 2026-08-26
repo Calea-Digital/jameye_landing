@@ -19,7 +19,7 @@ export function FiqLeaderboard() {
             key={p.id}
             layout
             transition={{ type: "spring", stiffness: 320, damping: 30 }}
-            className={`relative flex items-center gap-2.5 overflow-hidden rounded-2xl border px-2.5 py-1.5 sm:gap-3 sm:px-3 sm:py-2 ${
+            className={`relative flex items-center gap-2.5 overflow-hidden rounded-xl border px-2.5 py-1 sm:gap-3 sm:rounded-2xl sm:px-3 sm:py-2 ${
               isYou
                 ? "border-[#EC4899]/70 bg-white/10"
                 : "border-white/15 bg-white/5"
@@ -32,12 +32,12 @@ export function FiqLeaderboard() {
               transition={{ duration: 0.9, ease: "easeOut" }}
             />
             <span className="relative w-5 text-sm font-black text-white/70">{i + 1}</span>
-            <img src={p.avatar} alt="" aria-hidden="true" className="relative h-7 w-auto sm:h-9" />
+            <img src={p.avatar} alt="" aria-hidden="true" className="relative h-6 w-auto sm:h-9" />
             <span className="relative flex-1 text-xs font-black uppercase tracking-widest text-white">
               {p.name}
             </span>
             <span
-              className="relative text-lg font-black text-white"
+              className="relative text-base font-black text-white sm:text-lg"
               style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "-0.02em" }}
             >
               {p.fiq}
