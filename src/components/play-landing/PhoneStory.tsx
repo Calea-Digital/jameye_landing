@@ -1,0 +1,473 @@
+import { AnimatePresence, motion } from "framer-motion";
+import { Fragment, useEffect, useRef, useState } from "react";
+
+import { Explosion } from "./Explosion";
+
+import explorer from "./assets/avatars/02-edge-score-explorer.svg?url";
+import customizable from "./assets/avatars/03-duel-customizable-fighter.svg?url";
+import rapidFighter from "./assets/avatars/04-rapid-duel-fighter.svg?url";
+import squadRival from "./assets/avatars/09-squad-row2-rival.svg?url";
+
+import { TapHand } from "./TapHand";
+import { Button } from "./Button";
+import { CARDS, Card, type MarketCard } from "./MarketMosaic";
+
+const SCENES = [7600, 6000, 5400, 6200];
+
+const STORY_TITLES = [
+  "Where will Enzo Fernandez transfer?",
+  "Pro Football: 2027 Champion",
+];
+
+const STORY_CARDS: MarketCard[] = STORY_TITLES.map(
+  (t) => CARDS.find((c) => c.title === t)!,
+).filter(Boolean);
+
+function StepLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -6 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="inline-flex w-fit max-w-full items-center justify-center self-center whitespace-nowrap rounded-full bg-white/20 px-2.5 py-1 text-center text-[0.65rem] font-bold uppercase leading-tight tracking-wider text-white backdrop-blur-sm sm:px-3 sm:text-xs"
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ---------------- scene 1 : subscribe ---------------- */
+
+const TIERS = [
+  {
+    price: "Free",
+    plan: "Free",
+    tag: "Try it",
+    accent: "#22C55E",
+    perks: ["2 500 JCoins / month", "1 free forecast / day", "Global leaderboard"],
+  },
+  {
+    price: "$4.90",
+    plan: "Starter",
+    tag: "Entry pass",
+    accent: "#6366F1",
+    perks: ["2 500 JCoins / month", "Daily forecasts", "Global leaderboard"],
+  },
+  {
+    price: "$9.90",
+    plan: "Pro",
+    tag: "Full access",
+    accent: "#EC4899",
+    perks: [
+      "2 500 JCoins / month",
+      "All game modes + Rapid Fire",
+      "Cash prizes, merch & partner drops",
+    ],
+  },
+];
+
+function SceneSubscribe({ onComplete }: { onComplete: () => void }) {
+  const [tier, setTier] = useState(0);
+  const [locked, setLocked] = useState(false);
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+  const didSwipe = useRef(false);
+
+  const changeTier = (next: number) => {
+    if (locked) return;
+    setLocked(true);
+    setTier(next);
+    setTimeout(() => setLocked(false), 420);
+  };
+
+  const handleNext = () => {
+    if (locked) return;
+    if (tier >= TIERS.length - 1) {
+      setLocked(true);
+      onComplete();
+      return;
+    }
+    changeTier(tier + 1);
+  };
+
+  const handlePrev = () => {
+    if (locked || tier <= 0) return;
+    changeTier(tier - 1);
+  };
+
+  const wheelAccum = useRef(0);
+  const handlersRef = useRef({ handleNext, handlePrev, locked, tier });
+  handlersRef.current = { handleNext, handlePrev, locked, tier };
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      const { handleNext: next, handlePrev: prev, locked: isLocked } =
+        handlersRef.current;
+      if (isLocked) return;
+      const modeScale = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1;
+      const delta = (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * modeScale;
+      wheelAccum.current += delta;
+      if (Math.abs(wheelAccum.current) < 60) return;
+      const dir = wheelAccum.current;
+      wheelAccum.current = 0;
+      if (dir > 0) next();
+      else prev();
+    };
+    // passive: never block the page from scrolling
+    el.addEventListener("wheel", onWheel, { passive: true });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    pointerStart.current = { x: e.clientX, y: e.clientY };
+    didSwipe.current = false;
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (pointerStart.current == null || locked) return;
+    const deltaX = pointerStart.current.x - e.clientX;
+    const deltaY = pointerStart.current.y - e.clientY;
+    const delta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
+    pointerStart.current = null;
+    if (Math.abs(delta) < 36) return;
+    didSwipe.current = true;
+    if (delta > 0) handleNext();
+    else handlePrev();
+  };
+
+  const handleSurfaceClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (didSwipe.current) {
+      didSwipe.current = false;
+      return;
+    }
+    if ((e.target as HTMLElement).closest("button")) return;
+    handleNext();
+  };
+
+
+  const t = TIERS[tier];
+
+  return (
+    <div
+      ref={rootRef}
+      className="flex h-full cursor-pointer touch-pan-y flex-col items-center justify-between gap-2 overflow-hidden px-5 py-1"
+      onClick={handleSurfaceClick}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={() => {
+        pointerStart.current = null;
+      }}
+    >
+
+      <StepLabel>01 — Join</StepLabel>
+
+      <div className="flex w-full min-h-0 flex-1 flex-col justify-center gap-3">
+        <div className="flex justify-center gap-1.5">
+          {TIERS.map((x, i) => (
+            <span
+              key={x.plan}
+              className={`h-[3px] w-8 transition-all duration-300 ${
+                i === tier ? "bg-[#EC4899]" : "bg-white/20"
+              }`}
+            />
+          ))}
+        </div>
+
+        <div className="relative w-full">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={t.plan}
+              initial={{ opacity: 0, y: 18, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -14, scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 210, damping: 20 }}
+              className="relative w-full overflow-hidden rounded-[1.35rem] border border-white/15 bg-[#090A18] p-4 text-left shadow-[0_30px_75px_-30px_rgba(0,0,0,0.9)]"
+            >
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -inset-[28%] opacity-35"
+                style={{
+                  backgroundImage: `linear-gradient(90deg,${t.accent},#6366F1)`,
+                  transform: "rotate(-18deg) scale(1.18)",
+                }}
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(5,7,20,0.14)_0%,rgba(7,8,22,0.55)_46%,rgba(5,5,17,0.94)_100%)]"
+              />
+              <div className="relative">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-[0.58rem] font-bold uppercase tracking-[0.2em] text-white/50">
+                      Jameye membership
+                    </p>
+                    <p className="mt-1 font-heavy text-[1.05rem] uppercase leading-none tracking-[0.06em] text-white">
+                      {t.plan}
+                    </p>
+                  </div>
+                  <span
+                    className="shrink-0 skew-x-[-12deg] px-2.5 py-1 text-[0.55rem] font-bold uppercase tracking-[0.16em] text-white"
+                    style={{ backgroundColor: t.accent }}
+                  >
+                    <span className="block skew-x-[12deg] whitespace-nowrap">
+                      {t.tag}
+                    </span>
+                  </span>
+                </div>
+
+                <p className="mt-3 font-heavy text-[2.2rem] leading-none text-white">
+                  {t.price}
+                  {t.price !== "Free" && (
+                    <span className="ml-1.5 align-middle text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/55">
+                      / mo
+                    </span>
+                  )}
+                </p>
+
+                <div className="mt-3.5 space-y-2">
+                  {t.perks.map((p, i) => (
+                    <motion.p
+                      key={p}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.25 + i * 0.16 }}
+                      className="flex items-start gap-2 text-[0.74rem] font-semibold leading-snug text-white/80"
+                    >
+                      <span
+                        className="mt-[0.42rem] h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ backgroundColor: t.accent }}
+                      />
+                      <span className="min-w-0">{p}</span>
+                    </motion.p>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* swipe cue hand */}
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute right-2 top-1/2 z-20 -translate-y-1/2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+          >
+            <motion.div
+              animate={{
+                x: [0, -28, 0],
+                rotate: [0, -8, 0],
+                scale: [0.96, 1.04, 0.96],
+              }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <TapHand delay={0} noBob className="scale-60 -rotate-90" />
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+
+      <motion.div
+        initial={{ y: 18, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.6, type: "spring", stiffness: 200, damping: 18 }}
+        className="pb-1"
+      >
+        <Button
+          type="button"
+          variant="tactical"
+          className="h-auto px-8 py-3 text-[0.9rem]"
+          disabled={locked}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleNext();
+          }}
+        >
+          {tier === TIERS.length - 1 ? "Continue" : "Next plan"}
+        </Button>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ---------------- scene 2 : market cards ---------------- */
+
+function SceneMarkets({ onDone }: { onDone: () => void }) {
+  const [index, setIndex] = useState(0);
+  const [picked, setPicked] = useState(false);
+
+  const handleTap = () => {
+    if (!picked) {
+      setPicked(true);
+      return;
+    }
+    if (index < STORY_CARDS.length - 1) {
+      setIndex((i) => i + 1);
+      setPicked(false);
+      return;
+    }
+    onDone();
+  };
+
+  const card = STORY_CARDS[index];
+
+  return (
+    <div
+      className="flex h-full cursor-pointer flex-col justify-center gap-3 overflow-hidden px-4"
+      onClick={handleTap}
+    >
+      <StepLabel>02 — Forecast</StepLabel>
+      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={index}
+            initial={{ x: 250, rotate: 9, opacity: 0 }}
+            animate={{ x: 0, rotate: 0, opacity: 1 }}
+            exit={{ y: 90, opacity: 0, transition: { duration: 0.4 } }}
+            transition={{ duration: 0.85, ease: [0.22, 0.68, 0.16, 1] }}
+            className="w-full"
+          >
+            <Card
+              card={card}
+              pick={picked ? index % (card.outcomes?.length ?? 1) : null}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
+
+
+/* ---------------- scene 3 : duel + explosion ---------------- */
+
+const BOOM = 2.3;
+
+function SceneDuel() {
+  return (
+    <div className="relative flex h-full flex-col px-5 py-2">
+      <StepLabel>03 — Compete</StepLabel>
+
+      <div className="relative mt-6 flex-1">
+        <div className="relative flex w-full items-end justify-between pt-10">
+          <motion.img
+            src={rapidFighter}
+            alt=""
+            aria-hidden="true"
+            initial={{ x: -60, opacity: 0 }}
+            animate={{ x: [-60, 0, 16, 0, -140], opacity: [0, 1, 1, 1, 0] }}
+            transition={{ times: [0, 0.2, 0.42, 0.52, 0.72], duration: 4.8 }}
+            className="h-24 w-auto drop-shadow-[0_10px_26px_rgba(236,72,153,0.5)]"
+          />
+          <motion.span
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: [0, 1, 1, 0], opacity: [0, 1, 1, 0] }}
+            transition={{ times: [0, 0.12, 0.44, 0.5], duration: 4.8 }}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 skew-x-[-12deg] bg-gradient-to-r from-[#EC4899] to-[#6366F1] px-3 py-1 font-heavy text-[0.75rem] tracking-[0.2em] text-white"
+          >
+            <span className="block">VS</span>
+          </motion.span>
+          <motion.img
+            src={squadRival}
+            alt=""
+            aria-hidden="true"
+            initial={{ x: 60, opacity: 0 }}
+            animate={{ x: [60, 0, -16, 0, 140], opacity: [0, 1, 1, 1, 0] }}
+            transition={{ times: [0, 0.2, 0.42, 0.52, 0.72], duration: 4.8 }}
+            className="h-24 w-auto -scale-x-100 drop-shadow-[0_10px_26px_rgba(99,102,241,0.5)]"
+          />
+        </div>
+
+        <Explosion delay={BOOM} />
+
+        {/* winner */}
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0, y: 24 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          transition={{ delay: 3.05, type: "spring", stiffness: 190, damping: 15 }}
+          className="absolute inset-x-0 top-0 bottom-0 z-20 flex flex-col items-center justify-center gap-3"
+        >
+          <img
+            src={customizable}
+            alt=""
+            aria-hidden="true"
+            className="h-28 w-auto drop-shadow-[0_12px_30px_rgba(236,72,153,0.55)]"
+          />
+          <span className="skew-x-[-12deg] bg-gradient-to-r from-[#EC4899] to-[#6366F1] px-4 py-1.5 font-heavy text-[0.72rem] tracking-[0.22em] text-white shadow-[0_10px_28px_-10px_rgba(236,72,153,0.8)]">
+            <span className="block skew-x-[12deg] text-center leading-tight">
+              YOU ARE THE<br />WINNER!
+            </span>
+          </span>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- scene 4 : podium ---------------- */
+
+import { PrizePodium } from "./PrizePodium";
+
+function ScenePodium() {
+  return (
+    <div className="relative flex h-full flex-col items-center px-4 py-2">
+      <StepLabel>04 — Win</StepLabel>
+      <PrizePodium className="mt-1 h-full" />
+    </div>
+  );
+}
+
+/* ---------------- phone shell ---------------- */
+
+export function PhoneStory({ className }: { className?: string }) {
+  const [scene, setScene] = useState(0);
+  const next = () => setScene((s) => (s + 1) % SCENES.length);
+
+  return (
+    <div className={`relative mx-auto -mt-6 w-[min(340px,88vw)] shrink-0 sm:mt-0 sm:w-[372px] ${className ?? ""}`}>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-8 rounded-[3.5rem] bg-[radial-gradient(circle_at_50%_30%,rgba(236,72,153,0.35),rgba(99,102,241,0.18)_55%,transparent_75%)] blur-2xl"
+      />
+      <div className="relative rounded-[2.75rem] border border-white/20 bg-[#05060F] p-2.5 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)]">
+        <div className="relative h-[430px] overflow-hidden sm:h-[680px] rounded-[2.25rem] bg-[#070818]">
+          <div aria-hidden="true" className="tactical-grid" />
+          <div aria-hidden="true" className="tactical-top-line" />
+          <div className="absolute left-1/2 top-2.5 z-20 h-4 w-20 -translate-x-1/2 rounded-full bg-black/85" />
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={scene}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.01 }}
+              transition={{ duration: 0.35 }}
+              className="absolute inset-0 pt-9 pb-7"
+              onClick={scene === 2 || scene === 3 ? next : undefined}
+              style={scene === 2 || scene === 3 ? { cursor: "pointer" } : undefined}
+            >
+              {scene === 0 ? <SceneSubscribe onComplete={next} /> : null}
+              {scene === 1 ? <SceneMarkets onDone={next} /> : null}
+              {scene === 2 ? <SceneDuel /> : null}
+              {scene === 3 ? <ScenePodium /> : null}
+            </motion.div>
+          </AnimatePresence>
+
+
+          <div className="absolute inset-x-0 bottom-3.5 z-20 flex justify-center gap-1.5">
+            {SCENES.map((_, i) => (
+              <span
+                key={i}
+                className={`h-[3px] transition-all duration-300 ${
+                  i === scene ? "w-6 bg-[#EC4899]" : "w-2 bg-white/25"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
