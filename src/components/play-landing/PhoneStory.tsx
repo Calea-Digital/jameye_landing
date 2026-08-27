@@ -8,7 +8,6 @@ import customizable from "./assets/avatars/03-duel-customizable-fighter.svg?url"
 import rapidFighter from "./assets/avatars/04-rapid-duel-fighter.svg?url";
 import squadRival from "./assets/avatars/09-squad-row2-rival.svg?url";
 
-import { SwipeCue } from "./SwipeCue";
 import { Button } from "./Button";
 import { CARDS, Card, type MarketCard } from "./MarketMosaic";
 
@@ -246,10 +245,6 @@ function SceneSubscribe({ onComplete }: { onComplete: () => void }) {
             </motion.div>
           </AnimatePresence>
 
-          {/* swipe cue */}
-          <div className="pointer-events-none absolute inset-x-0 -bottom-1 z-20 flex justify-center">
-            <SwipeCue className="translate-y-1/2 scale-90 sm:scale-100" />
-          </div>
         </div>
       </div>
 
@@ -262,7 +257,7 @@ function SceneSubscribe({ onComplete }: { onComplete: () => void }) {
         <Button
           type="button"
           variant="tactical"
-          className="h-auto px-8 py-3 text-[0.9rem]"
+          className="cta-blink h-auto px-8 py-3 text-[0.9rem]"
           disabled={locked}
           onClick={(e) => {
             e.stopPropagation();

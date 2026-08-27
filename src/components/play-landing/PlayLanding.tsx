@@ -115,11 +115,11 @@ const HERO_VIDEO = "/video/hero-video.mp4";
  * away first, then the gradient dissolves to reveal the video underneath, and
  * only then does the hero copy rise in.
  */
-const INTRO_MARK_IN_MS = 700; // wordmark fades/scales in
-const INTRO_HOLD_MS = 900; // wordmark holds
-const INTRO_MARK_OUT_MS = 600; // wordmark fades out (gradient still up)
-const INTRO_BG_OUT_MS = 1100; // gradient dissolves → video
-const INTRO_REVEAL_LEAD_MS = 450; // hero copy starts rising this long before the dissolve ends
+const INTRO_MARK_IN_MS = 500; // wordmark fades in
+const INTRO_HOLD_MS = 120; // brief beat at full opacity
+const INTRO_MARK_OUT_MS = 0; // wordmark and gradient leave together
+const INTRO_BG_OUT_MS = 350; // quick cut to the video
+const INTRO_REVEAL_LEAD_MS = 350; // hero copy starts the moment the cut begins
 
 type IntroPhase = "in" | "hold" | "markOut" | "bgOut";
 
@@ -206,7 +206,7 @@ export function PlayLanding() {
             </>
           }
           right={
-            <Reveal delay={0.6} className="w-full">
+            <Reveal delay={0.3} className="w-full">
               <MarketReel />
             </Reveal>
           }
@@ -230,7 +230,7 @@ export function PlayLanding() {
             </div>
           }
           right={
-            <Reveal delay={0.8} className="w-full lg:hidden">
+            <Reveal delay={0.25} className="w-full lg:hidden">
               <div className="w-full min-w-0">
                 <MarketMosaic />
               </div>
@@ -243,7 +243,7 @@ export function PlayLanding() {
               delay={0.45}
               text="Politics, sports, tech, culture — hundreds of live markets waiting for your call."
             />
-            <Reveal delay={0.8} className="w-full">
+            <Reveal delay={0.25} className="w-full">
               <MarketMosaic />
             </Reveal>
           </div>
@@ -261,7 +261,7 @@ export function PlayLanding() {
         >
           {/* Avatar studying its score + live FIQ meter */}
           <div className="mt-2 flex items-end justify-center sm:mt-3">
-            <Reveal variant="pop" delay={0.3}>
+            <Reveal variant="pop" delay={0.1}>
               <img
                 src={customizable}
                 alt=""
@@ -270,17 +270,17 @@ export function PlayLanding() {
               />
             </Reveal>
           </div>
-          <Heading text="BUILD YOUR FIQ" delay={0.35} />
+          <Heading text="BUILD YOUR FIQ" delay={0.2} />
           <Body
             delay={0.6}
             text="FIQ — Forecasting IQ measures how accurate you are at predicting. Jameye scores your results across multiple predictions to make your FIQ robust, reliable, and globally recognized"
           />
-          <Reveal variant="pop" delay={0.8} className="mt-2 flex justify-center sm:mt-8">
+          <Reveal variant="pop" delay={0.3} className="mt-2 flex justify-center sm:mt-8">
             <div className="origin-center scale-[0.62] -my-12 sm:scale-100 sm:my-0">
               <FiqRing />
             </div>
           </Reveal>
-          <Reveal delay={1} className="mt-3 flex justify-center sm:mt-6">
+          <Reveal delay={0.4} className="mt-3 flex justify-center sm:mt-6">
             <FiqLeaderboard />
           </Reveal>
 
@@ -322,7 +322,7 @@ export function PlayLanding() {
             </>
           }
           right={
-            <Reveal delay={0.9} className="flex w-full justify-center lg:justify-end">
+            <Reveal delay={0.25} className="flex w-full justify-center lg:justify-end">
               <PhoneStory />
             </Reveal>
           }
@@ -337,9 +337,9 @@ export function PlayLanding() {
         >
           <div className="mt-4 flex items-end justify-center gap-1.5 sm:gap-6">
             {[
-              { src: squadTrader, h: "h-16 sm:h-28", act: "animate-avatar-think", d: 0.1 },
-              { src: customizable, h: "h-24 sm:h-40", act: "animate-avatar-cheer", d: 0.25 },
-              { src: squadRival, h: "h-16 sm:h-28", act: "animate-avatar-punch", d: 0.4 },
+              { src: squadTrader, h: "h-16 sm:h-28", act: "animate-avatar-think", d: 0.05 },
+              { src: customizable, h: "h-24 sm:h-40", act: "animate-avatar-cheer", d: 0.15 },
+              { src: squadRival, h: "h-16 sm:h-28", act: "animate-avatar-punch", d: 0.25 },
             ].map((a, i) => (
               <Reveal key={i} variant="pop" delay={a.d}>
                 <img
@@ -352,12 +352,12 @@ export function PlayLanding() {
               </Reveal>
             ))}
           </div>
-          <Heading text="Your forecasting journey starts now" delay={0.45} />
+          <Heading text="Your forecasting journey starts now" delay={0.25} />
           <Body
             delay={0.6}
             text="Secure your spot, invite your rivals and climb the waitlist leaderboard before launch."
           />
-          <Reveal variant="pop" delay={0.8} className="mt-6 flex justify-center sm:mt-8">
+          <Reveal variant="pop" delay={0.4} className="mt-6 flex justify-center sm:mt-8">
             <button
               type="button"
               data-open-waitlist
@@ -377,7 +377,7 @@ export function PlayLanding() {
         >
           <Heading text="Invite friends. Climb the board." />
           <Body delay={0.4} text="Every referral is worth +5 points. Top spots unlock early access, founder perks and cash." />
-          <Reveal delay={0.6} className="mt-5 w-full sm:mt-8">
+          <Reveal delay={0.3} className="mt-5 w-full sm:mt-8">
             <WaitlistLeaderboard />
           </Reveal>
         </GradientCard>
@@ -581,7 +581,7 @@ function GradientCard({
 }
 
 
-function Heading({ text, delay = 0.15, className }: { text: string; delay?: number; className?: string }) {
+function Heading({ text, delay = 0.1, className }: { text: string; delay?: number; className?: string }) {
   const inView = useSectionInView();
   return (
     <h2
@@ -642,10 +642,18 @@ function ModeCarousel() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const COUNT = 3;
+    const ARM_MS = 800; // page must rest on the section this long before wheel steps cards
     let lockedUntil = 0;
     let wheelAccum = 0;
+    let settledAt = 0;
 
     const settled = () => Math.abs(section.getBoundingClientRect().top) < 40;
+    // Track when the page came to rest on this section, so the inertia of the
+    // scroll that *brought* us here can't flip straight to the second card.
+    const onScroll = () => {
+      settledAt = settled() ? settledAt || performance.now() : 0;
+    };
+    onScroll();
     const leaveSection = (dir: 1 | -1) => {
       const sib = dir === 1 ? section.nextElementSibling : section.previousElementSibling;
       const target = sib instanceof HTMLElement ? sib : null;
@@ -666,6 +674,14 @@ function ModeCarousel() {
 
     const onWheel = (e: WheelEvent) => {
       if (!settled()) return;
+      const now = performance.now();
+      if (!settledAt) settledAt = now;
+      if (now - settledAt < ARM_MS) {
+        // Arming: absorb leftover inertia, hold the page on this section.
+        e.preventDefault();
+        wheelAccum = 0;
+        return;
+      }
       const modeScale = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1;
       const dy = e.deltaY * modeScale;
       if (Math.abs(dy) < Math.abs(e.deltaX)) return; // horizontal → native carousel scroll
@@ -685,7 +701,7 @@ function ModeCarousel() {
         return;
       }
       wheelAccum += dy;
-      if (Math.abs(wheelAccum) < 24) return;
+      if (Math.abs(wheelAccum) < 60) return; // a deliberate notch, not a stray tick
       wheelAccum = 0;
       step(dir);
     };
@@ -718,12 +734,14 @@ function ModeCarousel() {
       touchX = null;
     };
 
+    scroller.addEventListener("scroll", onScroll, { passive: true });
     scroller.addEventListener("wheel", onWheel, { passive: false });
     section.addEventListener("touchstart", onTouchStart, { passive: true });
     section.addEventListener("touchmove", onTouchMove, { passive: false });
     section.addEventListener("touchend", onTouchEnd, { passive: true });
     section.addEventListener("touchcancel", onTouchEnd, { passive: true });
     return () => {
+      scroller.removeEventListener("scroll", onScroll);
       scroller.removeEventListener("wheel", onWheel);
       section.removeEventListener("touchstart", onTouchStart);
       section.removeEventListener("touchmove", onTouchMove);
@@ -789,10 +807,10 @@ function ModeCarousel() {
               })}
             </div>
             <h3 className="font-heavy mt-4 text-lg uppercase leading-tight tracking-tight text-white sm:mt-5 sm:text-2xl">
-              <AnimatedText text={card.title} delay={0.45} />
+              <AnimatedText text={card.title} delay={0.25} />
             </h3>
             <p className="mx-auto mt-3 max-w-lg text-[0.875rem] font-medium leading-relaxed text-white/90 sm:mt-4 sm:text-lg">
-              <AnimatedText text={card.body} delay={0.65} step={0.02} />
+              <AnimatedText text={card.body} delay={0.35} step={0.015} />
             </p>
           </div>
         ))}

@@ -159,7 +159,7 @@ export const CARDS: MarketCard[] = [
 
 export function Card({ card, pick = null }: { card: MarketCard; pick?: number | null }) {
   return (
-    <div className="relative flex min-h-[260px] w-full flex-col overflow-hidden rounded-[1.25rem] border border-white/55 bg-white/45 p-2 pb-2.5 text-left shadow-[0_10px_30px_-10px_rgba(0,0,0,0.35)] backdrop-blur-md sm:h-[400px] sm:min-h-0 sm:rounded-[2rem] sm:p-3 sm:pb-4">
+    <div className="relative flex w-full flex-col overflow-hidden rounded-[1.25rem] border border-white/55 bg-white/45 p-2 pb-2.5 text-left shadow-[0_10px_30px_-10px_rgba(0,0,0,0.35)] backdrop-blur-md sm:h-[400px] sm:min-h-0 sm:rounded-[2rem] sm:p-3 sm:pb-4">
       {/* Large, fixed image area like the game-section cards */}
       <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl ring-1 ring-black/10 sm:aspect-auto sm:min-h-[140px] sm:flex-1 sm:shrink">
         {card.image ? (
@@ -312,62 +312,19 @@ function useMosaicParallax(
 
 /** Fixed-size, non-overlapping 1 · 2 · 3 · 2 · 1 mosaic. */
 export function MarketMosaic() {
-  const mobileScrollRef = React.useRef<HTMLDivElement>(null);
-  const [activeColumn, setActiveColumn] = React.useState(2);
   const rootRef = React.useRef<HTMLDivElement>(null);
   const mobileColRefs = React.useRef<(HTMLElement | null)[]>([]);
   const desktopColRefs = React.useRef<(HTMLElement | null)[]>([]);
-  useMosaicParallax(rootRef, mobileColRefs, 34);
+  useMosaicParallax(rootRef, mobileColRefs, 18);
   useMosaicParallax(rootRef, desktopColRefs, 150);
 
+  /* Mobile: static 2×2 grid — a multi-outcome card on top of a binary one in
+     each column so both columns end up the same height and nothing is clipped
+     or needs a side scroll. */
   const mobileColumns: { cards: MarketCard[]; offset: string }[] = [
-    { cards: [CARDS[0]], offset: "pt-8" },
-    { cards: [CARDS[1], CARDS[4]], offset: "pt-4" },
-    { cards: [CARDS[2], CARDS[6], CARDS[10]], offset: "pt-0" },
-    { cards: [CARDS[3], CARDS[7]], offset: "pt-4" },
-    { cards: [CARDS[8]], offset: "pt-8" },
+    { cards: [CARDS[0], CARDS[2]], offset: "pt-3" },
+    { cards: [CARDS[1], CARDS[3]], offset: "pt-0" },
   ];
-
-  React.useEffect(() => {
-    const center = () => {
-      const el = mobileScrollRef.current;
-      if (!el) return;
-      const mid = el.querySelector<HTMLElement>('[data-index="2"]');
-      if (!mid) return;
-      const elRect = el.getBoundingClientRect();
-      const midRect = mid.getBoundingClientRect();
-      el.scrollLeft += midRect.left - elRect.left - (elRect.width - midRect.width) / 2;
-    };
-    const raf = requestAnimationFrame(() => requestAnimationFrame(center));
-    const t = window.setTimeout(center, 300);
-    window.addEventListener("resize", center);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.clearTimeout(t);
-      window.removeEventListener("resize", center);
-    };
-  }, []);
-
-  React.useEffect(() => {
-    const el = mobileScrollRef.current;
-    if (!el) return;
-    const cols = el.querySelectorAll("[data-mosaic-col]");
-    if (!cols.length) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]) {
-          const idx = Number(visible[0].target.getAttribute("data-index"));
-          if (!Number.isNaN(idx)) setActiveColumn(idx);
-        }
-      },
-      { root: el, threshold: 0.55 }
-    );
-    cols.forEach((c) => io.observe(c));
-    return () => io.disconnect();
-  }, []);
 
   /* Desktop: organic staggered mosaic — 7 columns, uneven counts + offsets. */
   const desktopColumns: { cards: MarketCard[]; offset: string }[] = [
@@ -384,53 +341,21 @@ export function MarketMosaic() {
 
   return (
     <div ref={rootRef} className="mt-4 w-full min-w-0 px-1 pb-2 sm:mt-8 sm:pb-12">
-      {/* Mobile: horizontally scrollable columns, snap to each column */}
-      <div
-        ref={mobileScrollRef}
-        className="relative -mx-5 max-h-[46svh] overflow-y-hidden overflow-x-auto scrollbar-hide sm:mx-0 sm:max-h-none sm:hidden snap-x snap-mandatory"
-        style={{ ["--mcol" as string]: "min(268px, 72vw)" }}
-      >
-        <div
-          className="flex w-max gap-2.5"
-          style={{
-            paddingLeft: "max(12px, calc((100% - var(--mcol)) / 2))",
-            paddingRight: "max(12px, calc((100% - var(--mcol)) / 2))",
-          }}
-        >
-          {mobileColumns.map((column, index) => (
+      {/* Mobile: 2×2 grid, no scrolling */}
+      <div className="grid grid-cols-2 gap-2.5 sm:hidden">
+        {mobileColumns.map((column, index) => (
+          <div key={index} className={`min-w-0 ${column.offset}`}>
             <div
-              key={index}
-              data-mosaic-col
-              data-index={index}
-              className={`flex shrink-0 snap-center flex-col transition-opacity duration-300 ${column.offset} ${
-                index === activeColumn ? "" : "opacity-70"
-              }`}
-              style={{ width: "var(--mcol)" }}
+              ref={(el) => {
+                mobileColRefs.current[index] = el;
+              }}
+              className="flex flex-col gap-2.5 will-change-transform"
             >
-              <div
-                ref={(el) => {
-                  mobileColRefs.current[index] = el;
-                }}
-                className="flex flex-col gap-2.5 will-change-transform"
-              >
-                {column.cards.map((card) => (
-                  <Card key={card.title} card={card} />
-                ))}
-              </div>
+              {column.cards.map((card) => (
+                <Card key={card.title} card={card} />
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Mobile scroll indicator */}
-      <div className="mt-4 flex items-center justify-center gap-1.5 sm:hidden">
-        {mobileColumns.map((_, i) => (
-          <span
-            key={i}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === activeColumn ? "w-5 bg-white" : "w-1.5 bg-white/30"
-            }`}
-          />
+          </div>
         ))}
       </div>
 
