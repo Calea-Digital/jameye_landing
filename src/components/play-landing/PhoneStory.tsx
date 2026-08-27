@@ -1,17 +1,15 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import { Explosion } from "./Explosion";
 
-import explorer from "./assets/avatars/02-edge-score-explorer.svg?url";
 import customizable from "./assets/avatars/03-duel-customizable-fighter.svg?url";
 import rapidFighter from "./assets/avatars/04-rapid-duel-fighter.svg?url";
 import squadRival from "./assets/avatars/09-squad-row2-rival.svg?url";
 
-import { Button } from "./Button";
 import { CARDS, Card, type MarketCard } from "./MarketMosaic";
 
-const SCENES = [7600, 6000, 5400, 6200];
+const SCENES = [6000, 5400, 6200];
 
 const STORY_TITLES = [
   "Where will Enzo Fernandez transfer?",
@@ -34,244 +32,7 @@ function StepLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ---------------- scene 1 : subscribe ---------------- */
-
-const TIERS = [
-  {
-    price: "Free",
-    plan: "Free",
-    tag: "Try it",
-    accent: "#22C55E",
-    perks: ["2 500 JCoins / month", "1 free forecast / day", "Global leaderboard"],
-  },
-  {
-    price: "$4.90",
-    plan: "Starter",
-    tag: "Entry pass",
-    accent: "#6366F1",
-    perks: ["2 500 JCoins / month", "Daily forecasts", "Global leaderboard"],
-  },
-  {
-    price: "$9.90",
-    plan: "Pro",
-    tag: "Full access",
-    accent: "#EC4899",
-    perks: [
-      "2 500 JCoins / month",
-      "All game modes + Rapid Fire",
-      "Cash prizes, merch & partner drops",
-    ],
-  },
-];
-
-function SceneSubscribe({ onComplete }: { onComplete: () => void }) {
-  const [tier, setTier] = useState(0);
-  const [locked, setLocked] = useState(false);
-  const pointerStart = useRef<{ x: number; y: number } | null>(null);
-  const didSwipe = useRef(false);
-
-  const changeTier = (next: number) => {
-    if (locked) return;
-    setLocked(true);
-    setTier(next);
-    setTimeout(() => setLocked(false), 420);
-  };
-
-  const handleNext = () => {
-    if (locked) return;
-    if (tier >= TIERS.length - 1) {
-      setLocked(true);
-      onComplete();
-      return;
-    }
-    changeTier(tier + 1);
-  };
-
-  const handlePrev = () => {
-    if (locked || tier <= 0) return;
-    changeTier(tier - 1);
-  };
-
-  const wheelAccum = useRef(0);
-  const handlersRef = useRef({ handleNext, handlePrev, locked, tier });
-  handlersRef.current = { handleNext, handlePrev, locked, tier };
-  const rootRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const el = rootRef.current;
-    if (!el) return;
-    const onWheel = (e: WheelEvent) => {
-      const { handleNext: next, handlePrev: prev, locked: isLocked } =
-        handlersRef.current;
-      if (isLocked) return;
-      const modeScale = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1;
-      const delta = (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * modeScale;
-      wheelAccum.current += delta;
-      if (Math.abs(wheelAccum.current) < 60) return;
-      const dir = wheelAccum.current;
-      wheelAccum.current = 0;
-      if (dir > 0) next();
-      else prev();
-    };
-    // passive: never block the page from scrolling
-    el.addEventListener("wheel", onWheel, { passive: true });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, []);
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    pointerStart.current = { x: e.clientX, y: e.clientY };
-    didSwipe.current = false;
-  };
-
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (pointerStart.current == null || locked) return;
-    const deltaX = pointerStart.current.x - e.clientX;
-    const deltaY = pointerStart.current.y - e.clientY;
-    const delta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
-    pointerStart.current = null;
-    if (Math.abs(delta) < 36) return;
-    didSwipe.current = true;
-    if (delta > 0) handleNext();
-    else handlePrev();
-  };
-
-  const handleSurfaceClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (didSwipe.current) {
-      didSwipe.current = false;
-      return;
-    }
-    if ((e.target as HTMLElement).closest("button")) return;
-    handleNext();
-  };
-
-
-  const t = TIERS[tier];
-
-  return (
-    <div
-      ref={rootRef}
-      className="flex h-full cursor-pointer touch-pan-y flex-col items-center justify-between gap-2 overflow-hidden px-5 py-1"
-      onClick={handleSurfaceClick}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={() => {
-        pointerStart.current = null;
-      }}
-    >
-
-      <StepLabel>01 — Join</StepLabel>
-
-      <div className="flex w-full min-h-0 flex-1 flex-col justify-center gap-3">
-        <div className="flex justify-center gap-1.5">
-          {TIERS.map((x, i) => (
-            <span
-              key={x.plan}
-              className={`h-[3px] w-8 transition-all duration-300 ${
-                i === tier ? "bg-[#EC4899]" : "bg-white/20"
-              }`}
-            />
-          ))}
-        </div>
-
-        <div className="relative w-full">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={t.plan}
-              initial={{ opacity: 0, y: 18, scale: 0.94 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -14, scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 210, damping: 20 }}
-              className="relative w-full overflow-hidden rounded-[1.35rem] border border-white/15 bg-[#090A18] p-4 text-left shadow-[0_30px_75px_-30px_rgba(0,0,0,0.9)]"
-            >
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -inset-[28%] opacity-35"
-                style={{
-                  backgroundImage: `linear-gradient(90deg,${t.accent},#6366F1)`,
-                  transform: "rotate(-18deg) scale(1.18)",
-                }}
-              />
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(5,7,20,0.14)_0%,rgba(7,8,22,0.55)_46%,rgba(5,5,17,0.94)_100%)]"
-              />
-              <div className="relative">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="text-[0.58rem] font-bold uppercase tracking-[0.2em] text-white/50">
-                      Jameye membership
-                    </p>
-                    <p className="mt-1 font-heavy text-[1.05rem] uppercase leading-none tracking-[0.06em] text-white">
-                      {t.plan}
-                    </p>
-                  </div>
-                  <span
-                    className="shrink-0 skew-x-[-12deg] px-2.5 py-1 text-[0.55rem] font-bold uppercase tracking-[0.16em] text-white"
-                    style={{ backgroundColor: t.accent }}
-                  >
-                    <span className="block skew-x-[12deg] whitespace-nowrap">
-                      {t.tag}
-                    </span>
-                  </span>
-                </div>
-
-                <p className="mt-3 font-heavy text-[2.2rem] leading-none text-white">
-                  {t.price}
-                  {t.price !== "Free" && (
-                    <span className="ml-1.5 align-middle text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/55">
-                      / mo
-                    </span>
-                  )}
-                </p>
-
-                <div className="mt-3.5 space-y-2">
-                  {t.perks.map((p, i) => (
-                    <motion.p
-                      key={p}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.25 + i * 0.16 }}
-                      className="flex items-start gap-2 text-[0.74rem] font-semibold leading-snug text-white/80"
-                    >
-                      <span
-                        className="mt-[0.42rem] h-1.5 w-1.5 shrink-0 rounded-full"
-                        style={{ backgroundColor: t.accent }}
-                      />
-                      <span className="min-w-0">{p}</span>
-                    </motion.p>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-        </div>
-      </div>
-
-      <motion.div
-        initial={{ y: 18, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.6, type: "spring", stiffness: 200, damping: 18 }}
-        className="pb-1"
-      >
-        <Button
-          type="button"
-          variant="tactical"
-          className="cta-blink h-auto px-8 py-3 text-[0.9rem]"
-          disabled={locked}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleNext();
-          }}
-        >
-          {tier === TIERS.length - 1 ? "Continue" : "Next plan"}
-        </Button>
-      </motion.div>
-    </div>
-  );
-}
-
-/* ---------------- scene 2 : market cards ---------------- */
+/* ---------------- scene 1 : market cards ---------------- */
 
 function SceneMarkets({ onDone }: { onDone: () => void }) {
   const [index, setIndex] = useState(0);
@@ -297,7 +58,7 @@ function SceneMarkets({ onDone }: { onDone: () => void }) {
       className="flex h-full cursor-pointer flex-col justify-center gap-3 overflow-hidden px-4"
       onClick={handleTap}
     >
-      <StepLabel>02 — Forecast</StepLabel>
+      <StepLabel>01 — Forecast</StepLabel>
       <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
@@ -321,14 +82,14 @@ function SceneMarkets({ onDone }: { onDone: () => void }) {
 
 
 
-/* ---------------- scene 3 : duel + explosion ---------------- */
+/* ---------------- scene 2 : duel + explosion ---------------- */
 
 const BOOM = 2.3;
 
 function SceneDuel() {
   return (
     <div className="relative flex h-full flex-col px-5 py-2">
-      <StepLabel>03 — Compete</StepLabel>
+      <StepLabel>02 — Compete</StepLabel>
 
       <div className="relative mt-6 flex-1">
         <div className="relative flex w-full items-end justify-between pt-10">
@@ -386,14 +147,14 @@ function SceneDuel() {
   );
 }
 
-/* ---------------- scene 4 : podium ---------------- */
+/* ---------------- scene 3 : podium ---------------- */
 
 import { PrizePodium } from "./PrizePodium";
 
 function ScenePodium() {
   return (
     <div className="relative flex h-full flex-col items-center px-4 py-2">
-      <StepLabel>04 — Win</StepLabel>
+      <StepLabel>03 — Win</StepLabel>
       <PrizePodium className="mt-1 h-full" />
     </div>
   );
@@ -425,13 +186,12 @@ export function PhoneStory({ className }: { className?: string }) {
               exit={{ opacity: 0, scale: 1.01 }}
               transition={{ duration: 0.35 }}
               className="absolute inset-0 pt-9 pb-7"
-              onClick={scene === 2 || scene === 3 ? next : undefined}
-              style={scene === 2 || scene === 3 ? { cursor: "pointer" } : undefined}
+              onClick={scene === 1 || scene === 2 ? next : undefined}
+              style={scene === 1 || scene === 2 ? { cursor: "pointer" } : undefined}
             >
-              {scene === 0 ? <SceneSubscribe onComplete={next} /> : null}
-              {scene === 1 ? <SceneMarkets onDone={next} /> : null}
-              {scene === 2 ? <SceneDuel /> : null}
-              {scene === 3 ? <ScenePodium /> : null}
+              {scene === 0 ? <SceneMarkets onDone={next} /> : null}
+              {scene === 1 ? <SceneDuel /> : null}
+              {scene === 2 ? <ScenePodium /> : null}
             </motion.div>
           </AnimatePresence>
 
