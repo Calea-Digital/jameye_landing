@@ -4,19 +4,15 @@
 // page (hero + Open Graph tags) instead of a "Redirecting to /en" stub. The
 // `canonicalUrl` is pinned to the /en core for both so search engines
 // consolidate on a single URL (no duplicate-content split).
+//
+// The page itself is a 1:1 port of the "Play Jameye" mockup
+// (github.com/homanpanahi-beep/exact-copy-maker-97): full-screen snap
+// sections rendered by the React island in src/components/play-landing. The
+// only intentional deviation is the sticky bottom CTA — "PLAY NOW" became
+// "JOIN THE WAITLIST" and opens the existing waitlist modal via
+// [data-open-waitlist].
 import Layout from '~/layouts/Layout.astro';
-import Header from '~/components/common/Header.astro';
-import Footer from '~/components/common/Footer.astro';
-import Hero from '~/components/sections/Hero.astro';
-import Roster from '~/components/sections/Roster.astro';
-import BattleUniversities from '~/components/sections/BattleUniversities.astro';
-import VideoShowcase from '~/components/sections/VideoShowcase.astro';
-import HowItWorks from '~/components/sections/HowItWorks.astro';
-import Calibration from '~/components/sections/Calibration.astro';
-import TournamentFormats from '~/components/sections/TournamentFormats.astro';
-import WinCash from '~/components/sections/WinCash.astro';
-// import Tournaments from '~/components/sections/Tournaments.astro'; // Temporarily hidden — superseded by WinCash; keep for potential reuse
-import CtaFinal from '~/components/sections/CtaFinal.astro';
+import PlayLanding from '~/components/play-landing/PlayLanding';
 import WaitlistModal from '~/components/common/WaitlistModal.astro';
 import { t, type Locale } from '~/utils/i18n';
 
@@ -31,33 +27,6 @@ const meta = { ...t<{ title: string; description: string }>(locale, 'meta'), can
 ---
 
 <Layout metadata={meta} locale={locale}>
-  <Header locale={locale} />
-  <main id="top">
-    <Hero locale={locale} />
-    <VideoShowcase locale={locale} />
-    <HowItWorks locale={locale} />
-    <Calibration locale={locale} />
-    <TournamentFormats locale={locale} />
-    <WinCash locale={locale} />
-    <Roster locale={locale} />
-    <BattleUniversities locale={locale} />
-    <CtaFinal locale={locale} />
-  </main>
-  <Footer locale={locale} />
+  <PlayLanding client:load />
   <WaitlistModal locale={locale} />
 </Layout>
-
-<script>
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-  );
-  document.querySelectorAll('[data-scroll]').forEach((el) => observer.observe(el));
-</script>
