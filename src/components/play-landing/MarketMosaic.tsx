@@ -161,7 +161,7 @@ export function Card({ card, pick = null }: { card: MarketCard; pick?: number | 
   return (
     <div className="relative flex min-h-[260px] w-full flex-col overflow-hidden rounded-[1.25rem] border border-white/55 bg-white/45 p-2 pb-2.5 text-left shadow-[0_10px_30px_-10px_rgba(0,0,0,0.35)] backdrop-blur-md sm:h-[400px] sm:min-h-0 sm:rounded-[2rem] sm:p-3 sm:pb-4">
       {/* Large, fixed image area like the game-section cards */}
-      <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl ring-1 ring-black/10 sm:aspect-[16/10]">
+      <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl ring-1 ring-black/10 sm:aspect-auto sm:min-h-[140px] sm:flex-1 sm:shrink">
         {card.image ? (
           <img src={card.image} alt="" className="h-full w-full object-cover" loading="lazy" />
         ) : (

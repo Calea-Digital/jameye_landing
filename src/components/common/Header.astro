@@ -8,99 +8,26 @@ export interface Props {
 
 const { locale } = Astro.props;
 
-const nav = t<{
-  links: { text: string; href: string; active?: boolean }[];
-  cta: { primary: string };
-  languageAriaLabel: string;
-  mobileMenuOpen: string;
-  mobileMenuClose: string;
-}>(locale, 'nav');
-
-// Active state + cross-page anchor resolution (so anchors work from /leaderboard).
-const here = (Astro.url.pathname.replace(/\/+$/, '') || '/');
-const home = ((localePath(locale, '/') || '/').replace(/\/+$/, '') || '/');
-const onHome = here === home;
-const resolveHref = (href: string) => {
-  if (!href.startsWith('#')) return href;
-  return onHome ? href : `${home === '/' ? '' : home}${href}`;
-};
-const isActive = (href: string) => {
-  if (href.startsWith('#')) return false; // anchor links are highlighted client-side via scroll-spy
-  const path = (href.split('#')[0] || '/').replace(/\/+$/, '') || '/';
-  return here === path;
-};
+const nav = t<{ cta: { primary: string } }>(locale, 'nav');
 ---
 
-<!-- v5 mockup — sticky 64px glass header. -->
+<!-- Minimal sticky glass header for the sub-pages (legal, about, leaderboard…):
+     just the wordmark linking home and the waitlist CTA. The old section nav
+     (How it works / Tournaments / …) pointed at anchors that no longer exist on
+     the play landing, so it was removed. -->
 <header id="header" class="sticky top-0 z-50 w-full glass-header h-16">
   <div class="max-w-[1280px] mx-auto h-full px-5 md:px-8 flex items-center justify-between gap-3 sm:gap-6">
-    <a href={localePath(locale, '/')} class="flex items-center shrink-0">
+    <a href={localePath(locale, '/')} class="flex items-center shrink-0" aria-label="Jameye home">
       <Logo size="md" />
     </a>
 
-    <nav class="hidden lg:flex items-center gap-7" aria-label="Main">
-      {
-        nav.links.map((link) => (
-          <a href={resolveHref(link.href)} class:list={['nav-link', isActive(link.href) && 'is-active']}>
-            {link.text}
-          </a>
-        ))
-      }
-    </nav>
-
-    <!-- Right cluster — Get early access stays visible on every breakpoint,
-         with the mobile menu toggle sitting to its right on small screens. -->
-    <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
-      <button
-        type="button"
-        class="btn-primary max-sm:px-3 max-sm:text-[0.6rem] max-sm:tracking-[0.06em]"
-        data-open-waitlist
-      >
-        {nav.cta.primary}
-      </button>
-
-      <button
-        type="button"
-        class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/[0.04] text-white/75 shrink-0"
-        data-mobile-toggle
-        data-aria-open={nav.mobileMenuOpen}
-        data-aria-close={nav.mobileMenuClose}
-        aria-label={nav.mobileMenuOpen}
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-      >
-        <svg data-mobile-icon-open width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-        <svg data-mobile-icon-close class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- Mobile menu drawer -->
-  <div
-    id="mobile-menu"
-    class="lg:hidden absolute left-0 right-0 top-16 px-4"
-    data-mobile-menu
-    hidden
-  >
-    <div class="rounded-2xl border border-white/10 bg-[#0a0c14]/95 backdrop-blur-xl p-3 shadow-[0_24px_56px_-12px_rgba(0,0,0,0.7)]">
-      <nav class="flex flex-col" aria-label="Mobile">
-        {
-          nav.links.map((link) => (
-            <a
-              href={resolveHref(link.href)}
-              class:list={['nav-link block py-3 px-3 rounded-lg hover:bg-white/[0.04]', isActive(link.href) && 'is-active']}
-              data-mobile-link
-            >
-              {link.text}
-            </a>
-          ))
-        }
-      </nav>
-    </div>
+    <button
+      type="button"
+      class="btn-primary max-sm:px-3 max-sm:text-[0.6rem] max-sm:tracking-[0.06em] shrink-0"
+      data-open-waitlist
+    >
+      {nav.cta.primary}
+    </button>
   </div>
 </header>
 
@@ -109,55 +36,8 @@ const isActive = (href: string) => {
   const header = document.getElementById('header');
   function handleScroll() {
     if (!header) return;
-    if (window.scrollY > SCROLL_THRESHOLD) header.classList.add('scroll');
-    else header.classList.remove('scroll');
+    header.classList.toggle('scroll', window.scrollY > SCROLL_THRESHOLD);
   }
   window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();
-
-  // Scroll-spy — highlight the nav link whose section is currently in view.
-  const navLinks = Array.from(document.querySelectorAll('#header .nav-link'));
-  const spy = navLinks
-    .map((a) => {
-      const href = a.getAttribute('href') || '';
-      const hash = href.includes('#') ? href.slice(href.indexOf('#') + 1) : '';
-      const el = hash ? document.getElementById(hash) : null;
-      return el ? { a, el } : null;
-    })
-    .filter((s): s is { a: Element; el: HTMLElement } => s !== null);
-
-  function updateSpy() {
-    if (!spy.length) return;
-    let cur = spy[0];
-    for (const s of spy) {
-      if (s.el.getBoundingClientRect().top <= 140) cur = s;
-    }
-    navLinks.forEach((a) => {
-      const inSpy = spy.some((s) => s.a === a);
-      if (inSpy) a.classList.toggle('is-active', !!cur && cur.a === a);
-    });
-  }
-  window.addEventListener('scroll', updateSpy, { passive: true });
-  window.addEventListener('resize', updateSpy);
-  updateSpy();
-
-  // Mobile menu
-  const mToggle = document.querySelector('[data-mobile-toggle]') as HTMLButtonElement | null;
-  const mMenu = document.querySelector('[data-mobile-menu]') as HTMLElement | null;
-  const iOpen = document.querySelector('[data-mobile-icon-open]') as HTMLElement | null;
-  const iClose = document.querySelector('[data-mobile-icon-close]') as HTMLElement | null;
-  const setMobileOpen = (open: boolean) => {
-    if (!mMenu || !mToggle) return;
-    mMenu.hidden = !open;
-    mToggle.setAttribute('aria-expanded', String(open));
-    const lblOpen = mToggle.getAttribute('data-aria-open') || 'Open menu';
-    const lblClose = mToggle.getAttribute('data-aria-close') || 'Close menu';
-    mToggle.setAttribute('aria-label', open ? lblClose : lblOpen);
-    iOpen?.classList.toggle('hidden', open);
-    iClose?.classList.toggle('hidden', !open);
-  };
-  mToggle?.addEventListener('click', () => setMobileOpen(mMenu?.hidden ?? true));
-  document.querySelectorAll('[data-mobile-link]').forEach((a) => a.addEventListener('click', () => setMobileOpen(false)));
-  const mq = window.matchMedia('(min-width: 1024px)');
-  mq.addEventListener('change', () => { if (mq.matches) setMobileOpen(false); });
 </script>

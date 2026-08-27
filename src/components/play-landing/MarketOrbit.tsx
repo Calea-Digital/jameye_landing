@@ -21,7 +21,7 @@ export function MarketOrbit({
 
   return (
     <div
-      className={`relative w-full [--orbit-r:70px] [--orbit-s:0.3] sm:[--orbit-r:320px] sm:[--orbit-s:0.62] ${className || ""}`}
+      className={`relative w-full [--orbit-r:70px] [--orbit-s:0.3] sm:[--orbit-r:340px] sm:[--orbit-s:0.72] ${className || ""}`}
       style={style}
     >
       {/* orbit layer */}
@@ -38,7 +38,7 @@ export function MarketOrbit({
               style={{ transform: `rotate(${angle}deg) translateY(calc(-1 * var(--orbit-r)))` }}
             >
               <div
-                className="w-[290px] -translate-x-1/2 -translate-y-1/2 opacity-75 [&_*]:!shadow-none [&>div]:!h-[423px] [&>div]:!min-h-0"
+                className="w-[290px] -translate-x-1/2 -translate-y-1/2 opacity-75 [&_*]:!shadow-none [&>div]:!h-auto [&>div]:!min-h-0 sm:[&>div]:!h-[400px]"
                 style={{ transform: `translate(-50%,-50%) scale(var(--orbit-s))` }}
               >
                 <Card card={card} />

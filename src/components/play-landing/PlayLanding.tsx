@@ -110,37 +110,61 @@ const HERO_VIDEO = "/video/hero-video.mp4";
 
 /* ---------------- hero intro ---------------- */
 
-/** Wordmark pops in over the video, holds, then fades to reveal the hero. */
-const INTRO_HOLD_MS = 1000; // wordmark on screen for ~1s
-const INTRO_FADE_MS = 350; // quick fade-out; hero reveal starts as it ends
+/**
+ * Intro: a solid brand gradient with the JAMEYE® wordmark. The wordmark fades
+ * away first, then the gradient dissolves to reveal the video underneath, and
+ * only then does the hero copy rise in.
+ */
+const INTRO_MARK_IN_MS = 700; // wordmark fades/scales in
+const INTRO_HOLD_MS = 900; // wordmark holds
+const INTRO_MARK_OUT_MS = 600; // wordmark fades out (gradient still up)
+const INTRO_BG_OUT_MS = 1100; // gradient dissolves → video
+const INTRO_REVEAL_LEAD_MS = 450; // hero copy starts rising this long before the dissolve ends
 
-function HeroIntro({ onDone }: { onDone: () => void }) {
-  const [leaving, setLeaving] = useState(false);
+type IntroPhase = "in" | "hold" | "markOut" | "bgOut";
+
+function HeroIntro({ onReveal, onDone }: { onReveal: () => void; onDone: () => void }) {
+  const [phase, setPhase] = useState<IntroPhase>("in");
 
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      onReveal();
       onDone();
       return;
     }
-    const t1 = window.setTimeout(() => setLeaving(true), INTRO_HOLD_MS);
-    const t2 = window.setTimeout(onDone, INTRO_HOLD_MS + INTRO_FADE_MS);
-    return () => {
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
-    };
-  }, [onDone]);
+    const t: number[] = [];
+    const at = (ms: number, fn: () => void) => t.push(window.setTimeout(fn, ms));
+    const tHold = INTRO_MARK_IN_MS;
+    const tMarkOut = tHold + INTRO_HOLD_MS;
+    const tBgOut = tMarkOut + INTRO_MARK_OUT_MS;
+    const tEnd = tBgOut + INTRO_BG_OUT_MS;
+    at(tHold, () => setPhase("hold"));
+    at(tMarkOut, () => setPhase("markOut"));
+    at(tBgOut, () => setPhase("bgOut"));
+    at(tEnd - INTRO_REVEAL_LEAD_MS, onReveal);
+    at(tEnd, onDone);
+    return () => t.forEach((id) => window.clearTimeout(id));
+  }, [onReveal, onDone]);
 
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none absolute inset-0 z-30 flex items-center justify-center px-4 ${
-        leaving ? "animate-intro-out" : ""
+      className={`pointer-events-none absolute inset-0 z-30 flex items-center justify-center overflow-hidden px-4 ${
+        phase === "bgOut" ? "animate-intro-out" : ""
       }`}
     >
+      {/* solid brand gradient — hides the video until the dissolve */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#EC4899] via-[#6366F1] to-[#22D3EE]" />
+      <div
+        className="absolute inset-0 animate-intro-sheen opacity-70 mix-blend-soft-light"
+        style={{
+          background:
+            "radial-gradient(90% 70% at 20% 15%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 60%), radial-gradient(80% 60% at 85% 90%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)",
+        }}
+      />
       <span
-        className={`jameye-wordmark whitespace-nowrap text-[clamp(3.6rem,17vw,15rem)] drop-shadow-[0_12px_50px_rgba(5,6,15,0.7)] ${
-          leaving ? "animate-intro-mark-out" : "animate-intro-mark-in"
+        className={`jameye-wordmark relative whitespace-nowrap text-[clamp(3.6rem,17vw,15rem)] drop-shadow-[0_12px_50px_rgba(5,6,15,0.35)] ${
+          phase === "markOut" || phase === "bgOut" ? "animate-intro-mark-out" : "animate-intro-mark-in"
         }`}
       >
         JAMEYE<sup className="reg">®</sup>
@@ -152,24 +176,28 @@ function HeroIntro({ onDone }: { onDone: () => void }) {
 /* ---------------- page ---------------- */
 
 export function PlayLanding() {
+  // `introRevealed` releases the hero copy (slightly before the dissolve ends);
+  // `introDone` unmounts the overlay once it is fully transparent.
+  const [introRevealed, setIntroRevealed] = useState(false);
   const [introDone, setIntroDone] = useState(false);
+  const revealHero = React.useCallback(() => setIntroRevealed(true), []);
   const finishIntro = React.useCallback(() => setIntroDone(true), []);
 
   return (
     <main className="play-landing relative h-screen snap-y snap-mandatory overflow-y-scroll overflow-x-hidden scroll-smooth">
       {/* ---------------- HERO ---------------- */}
-      <Section gate={introDone}>
+      <Section gate={introRevealed}>
         <GradientCard
           videoBackground={HERO_VIDEO}
           layout="split"
-          decor={introDone ? null : <HeroIntro onDone={finishIntro} />}
+          decor={introDone ? null : <HeroIntro onReveal={revealHero} onDone={finishIntro} />}
           left={
             <>
               <Heading text="EXPLORE THE GLOBAL FORECASTING CHAMPIONSHIP!" className="lg:text-left" />
               {/* Held back with the heading until the JAMEYE® intro has cleared. */}
-              <Reveal delay={0.5}>
+              <Reveal delay={0.35}>
                 <Body
-                  delay={0.5}
+                  delay={0.35}
                   className="mx-auto text-center lg:mx-0 lg:text-left"
                   text="Predict anything from the next World Cup winner to tomorrow's biggest news. Challenge forecasters around the globe."
                 />
@@ -178,7 +206,7 @@ export function PlayLanding() {
             </>
           }
           right={
-            <Reveal delay={0.9} className="w-full">
+            <Reveal delay={0.6} className="w-full">
               <MarketReel />
             </Reveal>
           }
@@ -359,8 +387,8 @@ export function PlayLanding() {
 
       {/* ---------------- STICKY BOTTOM PLAY BAR ---------------- */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 border-t border-white/20 bg-white/10 px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md transition-opacity duration-500 sm:px-4 sm:py-5 ${
-          introDone ? "opacity-100" : "pointer-events-none opacity-0"
+        className={`fixed bottom-0 left-0 right-0 z-50 border-t border-white/20 bg-white/10 px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md transition-opacity duration-1000 ease-out sm:px-4 sm:py-5 ${
+          introRevealed ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-4">
@@ -398,7 +426,7 @@ function Section({
   /** When false, the section's reveal animations are held back (used by the hero intro). */
   gate?: boolean;
 }) {
-  const { ref, inView } = useInView<HTMLElement>(0.35);
+  const { ref, inView } = useInView<HTMLElement>(0.2);
   return (
     <section
       ref={ref}
@@ -516,7 +544,12 @@ function GradientCard({
       />
       {decor}
 
-      <div className={`relative z-10 w-full ${isSplit ? "max-w-7xl px-2 sm:px-10" : "max-w-3xl"}`}>
+      {/* Whole card content eases out/in as the section scrolls away/back. */}
+      <div
+        className={`relative z-10 w-full transition-[opacity,transform] duration-700 ease-out ${
+          isSplit ? "max-w-7xl px-2 sm:px-10" : "max-w-3xl"
+        } ${inView ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}`}
+      >
         {badge ? (
           <div
             className={`inline-flex max-w-full items-center rounded-full bg-white/20 px-2.5 py-1 text-[0.65rem] font-bold uppercase leading-tight tracking-wider text-white backdrop-blur-sm sm:px-3 sm:text-xs ${
@@ -588,6 +621,117 @@ function ModeCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inView = useSectionInView();
 
+  const goTo = React.useCallback((i: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  }, []);
+
+  /* Scroll-lock: while this section is the one on screen, vertical wheel /
+     swipe steps through the mode cards instead of moving the page. Once the
+     last (or first) card is showing, the gesture falls through and the page
+     scrolls on as usual. */
+  const activeRef = useRef(0);
+  activeRef.current = active;
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const section = el.closest("section");
+    const scroller = el.closest(".play-landing") as HTMLElement | null;
+    if (!section || !scroller) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const COUNT = 3;
+    let lockedUntil = 0;
+    let wheelAccum = 0;
+
+    const settled = () => Math.abs(section.getBoundingClientRect().top) < 40;
+    const leaveSection = (dir: 1 | -1) => {
+      const sib = dir === 1 ? section.nextElementSibling : section.previousElementSibling;
+      const target = sib instanceof HTMLElement ? sib : null;
+      if (!target) return;
+      scroller.scrollTo({ top: target.offsetTop, behavior: "smooth" });
+    };
+    /** Returns true if the gesture was consumed by the carousel. */
+    const step = (dir: 1 | -1) => {
+      const cur = activeRef.current;
+      const next = cur + dir;
+      if (next < 0 || next >= COUNT) return false;
+      const now = performance.now();
+      if (now < lockedUntil) return true; // still animating — swallow, don't advance
+      lockedUntil = now + 750;
+      goTo(next);
+      return true;
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (!settled()) return;
+      const modeScale = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1;
+      const dy = e.deltaY * modeScale;
+      if (Math.abs(dy) < Math.abs(e.deltaX)) return; // horizontal → native carousel scroll
+      const dir: 1 | -1 = dy > 0 ? 1 : -1;
+      const cur = activeRef.current;
+      const hasNext = dir === 1 ? cur < COUNT - 1 : cur > 0;
+      e.preventDefault();
+      if (!hasNext) {
+        // Edge card: hand over to the page. Done by hand because a wheel over
+        // the horizontal carousel latches to it in Chrome and never chains up.
+        if (performance.now() < lockedUntil) return; // inertia from the last step
+        wheelAccum += dy;
+        if (Math.abs(wheelAccum) < 24) return;
+        wheelAccum = 0;
+        lockedUntil = performance.now() + 900;
+        leaveSection(dir);
+        return;
+      }
+      wheelAccum += dy;
+      if (Math.abs(wheelAccum) < 24) return;
+      wheelAccum = 0;
+      step(dir);
+    };
+
+    let touchY: number | null = null;
+    let touchX: number | null = null;
+    let touchConsumed = false;
+    const onTouchStart = (e: TouchEvent) => {
+      touchY = e.touches[0].clientY;
+      touchX = e.touches[0].clientX;
+      touchConsumed = false;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (touchY == null || touchX == null || !settled()) return;
+      const dy = touchY - e.touches[0].clientY;
+      const dx = touchX - e.touches[0].clientX;
+      if (Math.abs(dx) > Math.abs(dy)) return; // horizontal swipe → native carousel
+      const dir: 1 | -1 = dy > 0 ? 1 : -1;
+      const cur = activeRef.current;
+      const hasNext = dir === 1 ? cur < COUNT - 1 : cur > 0;
+      if (!hasNext && !touchConsumed) return;
+      e.preventDefault();
+      if (touchConsumed) return;
+      if (Math.abs(dy) < 28) return;
+      touchConsumed = true;
+      step(dir);
+    };
+    const onTouchEnd = () => {
+      touchY = null;
+      touchX = null;
+    };
+
+    scroller.addEventListener("wheel", onWheel, { passive: false });
+    section.addEventListener("touchstart", onTouchStart, { passive: true });
+    section.addEventListener("touchmove", onTouchMove, { passive: false });
+    section.addEventListener("touchend", onTouchEnd, { passive: true });
+    section.addEventListener("touchcancel", onTouchEnd, { passive: true });
+    return () => {
+      scroller.removeEventListener("wheel", onWheel);
+      section.removeEventListener("touchstart", onTouchStart);
+      section.removeEventListener("touchmove", onTouchMove);
+      section.removeEventListener("touchend", onTouchEnd);
+      section.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [goTo]);
+
   const cards = [
     {
       avatars: [explorer, squadTrader, squadRival],
@@ -618,6 +762,7 @@ function ModeCarousel() {
             Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth),
           )
         }
+        data-mode-carousel
         className="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto"
       >
         {cards.map((card, i) => (
@@ -658,11 +803,7 @@ function ModeCarousel() {
           <button
             key={i}
             aria-label={`Go to card ${i + 1}`}
-            onClick={() => {
-              const el = scrollRef.current;
-              if (el)
-                el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
-            }}
+            onClick={() => goTo(i)}
             className={`h-2 rounded-full transition-all duration-300 ${
               i === active ? "w-6 bg-white" : "w-2 bg-white/40"
             }`}
