@@ -91,6 +91,14 @@ function SceneMarkets({ onDone }: { onDone: () => void }) {
 const BOOM = 2.3;
 
 function SceneDuel() {
+  /* Mount the explosion only at impact — its keyframe elements (rings, ground
+     wave) would otherwise sit visible in the centre before the boom. */
+  const [boomed, setBoomed] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setBoomed(true), BOOM * 1000);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div className="relative flex h-full flex-col px-5 py-2">
       <StepLabel>02 — Compete</StepLabel>
@@ -110,9 +118,9 @@ function SceneDuel() {
             initial={{ scaleX: 0, opacity: 0 }}
             animate={{ scaleX: [0, 1, 1, 0], opacity: [0, 1, 1, 0] }}
             transition={{ times: [0, 0.12, 0.44, 0.5], duration: 4.8 }}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 skew-x-[-12deg] bg-gradient-to-r from-[#EC4899] to-[#6366F1] px-3 py-1 font-heavy text-[0.75rem] tracking-[0.2em] text-white"
+            className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-br from-[#EC4899] to-[#6366F1] font-heavy text-[0.7rem] tracking-[0.12em] text-white shadow-[0_8px_24px_-6px_rgba(236,72,153,0.8)]"
           >
-            <span className="block">VS</span>
+            <span className="block leading-none">VS</span>
           </motion.span>
           <motion.img
             src={squadRival}
@@ -125,14 +133,14 @@ function SceneDuel() {
           />
         </div>
 
-        <Explosion delay={BOOM} />
+        {boomed ? <Explosion delay={0} /> : null}
 
         {/* winner */}
         <motion.div
           initial={{ scale: 0.5, opacity: 0, y: 24 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           transition={{ delay: 3.05, type: "spring", stiffness: 190, damping: 15 }}
-          className="absolute inset-x-0 top-0 bottom-0 z-20 flex flex-col items-center justify-center gap-3"
+          className="absolute inset-x-0 top-0 bottom-0 z-20 flex flex-col items-center justify-end gap-3 pb-6"
         >
           <img
             src={customizable}

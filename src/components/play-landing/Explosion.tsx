@@ -44,7 +44,7 @@ export function Explosion({
         initial={{ opacity: 0 }}
         animate={{ opacity: [0, 1, 0.25, 0] }}
         transition={{ delay: BOOM, duration: 0.7, ease: "easeOut" }}
-        className="absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,rgba(255,255,255,1),rgba(236,72,153,0.55)_38%,rgba(99,102,241,0.3)_60%,transparent_78%)]"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,rgba(255,255,255,1),rgba(236,72,153,0.55)_38%,rgba(99,102,241,0.3)_50%,transparent_62%)]"
         style={{ willChange: "opacity" }}
       />
 
@@ -286,10 +286,10 @@ export function Explosion({
           times: [0, 0.09, 0.16, 0.24, 0.85, 1],
           ease: "easeOut",
         }}
-        className="absolute left-1/2 top-[44%]"
+        className="absolute left-1/2 top-[28%] w-full"
         style={{ ...GPU, x: "-50%", y: "-50%" }}
       >
-        <span className="relative block w-full max-w-[95%] skew-x-[-10deg] text-center font-heavy text-[2.8rem] leading-[0.9] tracking-tighter whitespace-normal sm:text-[6rem]">
+        <span className="relative mx-auto block w-fit max-w-full skew-x-[-10deg] text-center font-heavy text-[1.9rem] leading-[0.9] tracking-tighter whitespace-normal sm:text-[2.3rem]">
           {[
             { c: "text-[#312E81]", x: 7, y: 7, blur: "blur-[2px]" },
             { c: "text-[#6366F1]", x: 5, y: 5, blur: "" },
@@ -472,14 +472,6 @@ export function Explosion({
         />
       ))}
 
-      {/* vignette pulse */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 0.85, 0.3, 0] }}
-        transition={{ delay: BOOM, duration: 1.1, ease: "easeOut" }}
-        className="absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,transparent_38%,rgba(49,46,129,0.65)_100%)]"
-        style={{ willChange: "opacity" }}
-      />
     </motion.div>
   );
 }

@@ -83,15 +83,10 @@ const CONFETTI = Array.from({ length: 24 }).map((_, i) => {
   };
 });
 
-function fmtUsd(n: number) {
-  return `$${Math.round(n).toLocaleString("en-US")}`;
-}
-
 export function PrizePodium({
   playerAvatar = customizable,
   playerName = "YOU",
   prizeShare,
-  prizePool = 500,
   leftOpponent = { name: "Nova", avatar: explorer, prize: "" },
   rightOpponent = { name: "Rio", avatar: rapidFighter, prize: "" },
   label = "TOURNAMENT PAYOUT",
@@ -103,7 +98,6 @@ export function PrizePodium({
   playerAvatar?: string;
   playerName?: string;
   prizeShare?: string;
-  prizePool?: number;
   leftOpponent?: PodiumOpponent;
   rightOpponent?: PodiumOpponent;
   label?: string;
@@ -112,9 +106,9 @@ export function PrizePodium({
   align?: "bottom" | "center";
   className?: string;
 }) {
-  const first = prizeShare ?? fmtUsd(prizePool * 0.5);
-  const second = fmtUsd(prizePool * 0.3);
-  const third = fmtUsd(prizePool * 0.2);
+  const first = prizeShare ?? "$$$";
+  const second = "$$";
+  const third = "$";
 
   const podium: PodiumItem[] = [
     {
