@@ -387,16 +387,16 @@ export function PlayLanding() {
 
       {/* ---------------- STICKY BOTTOM PLAY BAR ---------------- */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 border-t border-white/20 bg-white/10 px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md transition-opacity duration-1000 ease-out sm:px-4 sm:py-5 ${
+        className={`fixed bottom-0 left-0 right-0 z-50 border-t border-white/20 bg-white/10 px-4 pt-4 pb-[max(1.1rem,calc(env(safe-area-inset-bottom)+0.6rem))] backdrop-blur-md transition-opacity duration-1000 ease-out sm:px-4 sm:py-5 ${
           introRevealed ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
-        <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-4">
+        <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between sm:gap-4">
           <div className="min-w-0">
-            <p className="truncate font-display text-[0.8rem] font-black uppercase leading-tight tracking-wide text-white sm:text-xl">
+            <p className="truncate font-display text-[0.95rem] font-black uppercase leading-tight tracking-wide text-white sm:text-xl">
               JOIN THE CHAMPIONSHIP!
             </p>
-            <p className="truncate text-[0.68rem] text-white/80 sm:text-sm">
+            <p className="mt-0.5 truncate text-[0.78rem] text-white/80 sm:mt-0 sm:text-sm">
               <span className="sm:hidden">Free to play · No download</span>
               <span className="hidden sm:inline">Free to play. No download required.</span>
             </p>
@@ -404,7 +404,7 @@ export function PlayLanding() {
           <button
             type="button"
             data-open-waitlist
-            className="tactical-cta shrink-0 justify-center px-4 py-2.5 text-[0.8rem] sm:px-9 sm:py-4 sm:text-base"
+            className="tactical-cta shrink-0 justify-center px-5 py-3.5 text-[0.85rem] sm:px-9 sm:py-4 sm:text-base"
           >
             <span className="tactical-cta-inner font-extrabold">JOIN THE WAITLIST</span>
           </button>

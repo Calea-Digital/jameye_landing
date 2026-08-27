@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Explosion } from "./Explosion";
 
@@ -38,25 +38,29 @@ function SceneMarkets({ onDone }: { onDone: () => void }) {
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState(false);
 
-  const handleTap = () => {
-    if (!picked) {
-      setPicked(true);
-      return;
-    }
-    if (index < STORY_CARDS.length - 1) {
-      setIndex((i) => i + 1);
-      setPicked(false);
-      return;
-    }
-    onDone();
-  };
+  /* Auto-play: card slides in → outcome gets picked → next card → hand over. */
+  useEffect(() => {
+    const t = setTimeout(
+      () => {
+        if (!picked) {
+          setPicked(true);
+        } else if (index < STORY_CARDS.length - 1) {
+          setIndex((i) => i + 1);
+          setPicked(false);
+        } else {
+          onDone();
+        }
+      },
+      picked ? 1400 : 1900,
+    );
+    return () => clearTimeout(t);
+  }, [index, picked, onDone]);
 
   const card = STORY_CARDS[index];
 
   return (
     <div
-      className="flex h-full cursor-pointer flex-col justify-center gap-3 overflow-hidden px-4"
-      onClick={handleTap}
+      className="flex h-full flex-col justify-center gap-3 overflow-hidden px-4"
     >
       <StepLabel>01 — Forecast</StepLabel>
       <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
@@ -166,6 +170,14 @@ export function PhoneStory({ className }: { className?: string }) {
   const [scene, setScene] = useState(0);
   const next = () => setScene((s) => (s + 1) % SCENES.length);
 
+  /* Duel and podium scenes advance on their own after their SCENES duration;
+     the forecast scene (0) drives itself and calls `next` when its cards are done. */
+  useEffect(() => {
+    if (scene === 0) return;
+    const t = setTimeout(next, SCENES[scene]);
+    return () => clearTimeout(t);
+  }, [scene]);
+
   return (
     <div className={`relative mx-auto -mt-6 w-[min(340px,88vw)] shrink-0 sm:mt-0 sm:w-[372px] ${className ?? ""}`}>
       <div
@@ -186,8 +198,6 @@ export function PhoneStory({ className }: { className?: string }) {
               exit={{ opacity: 0, scale: 1.01 }}
               transition={{ duration: 0.35 }}
               className="absolute inset-0 pt-9 pb-7"
-              onClick={scene === 1 || scene === 2 ? next : undefined}
-              style={scene === 1 || scene === 2 ? { cursor: "pointer" } : undefined}
             >
               {scene === 0 ? <SceneMarkets onDone={next} /> : null}
               {scene === 1 ? <SceneDuel /> : null}
