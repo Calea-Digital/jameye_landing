@@ -227,7 +227,7 @@ export function WaitlistLeaderboard() {
 
   return (
     <div className="mx-auto w-full max-w-2xl text-left">
-      {/* perks + prizes */}
+      {/* perks */}
       <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
         {L.perks.map((p) => (
           <span
@@ -237,25 +237,6 @@ export function WaitlistLeaderboard() {
             {p.label}
           </span>
         ))}
-      </div>
-      <div className="mt-3 flex flex-col items-center gap-2 rounded-2xl border border-[#FACC15]/40 bg-[#FACC15]/10 px-3 py-2.5 text-center sm:mt-4 sm:px-4 sm:py-3">
-        <p className="text-[0.8rem] font-bold leading-snug text-white sm:text-sm">
-          🎁 {L.prizes.heading} <span className="font-medium text-white/80">{L.prizes.sub}</span>
-        </p>
-        <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
-          {L.prizes.tiers.map((t) => (
-            <span
-              key={t.place}
-              className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[0.7rem] font-black text-white sm:text-xs"
-            >
-              <span>{t.medal}</span>
-              <span className="uppercase tracking-[0.1em] text-white/70">{t.place}</span>
-              <span className="text-[#FDE68A]" style={{ fontVariantNumeric: "tabular-nums" }}>
-                {t.amount}
-              </span>
-            </span>
-          ))}
-        </div>
       </div>
 
       {/* board */}

@@ -184,7 +184,7 @@ export function PlayLanding() {
   const finishIntro = React.useCallback(() => setIntroDone(true), []);
 
   return (
-    <main className="play-landing relative h-screen snap-y snap-mandatory overflow-y-scroll overflow-x-hidden scroll-smooth">
+    <main className="play-landing relative h-screen overflow-y-scroll overflow-x-hidden scroll-smooth">
       {/* ---------------- HERO ---------------- */}
       <Section gate={introRevealed}>
         <GradientCard
@@ -317,7 +317,7 @@ export function PlayLanding() {
               <Body
                 delay={0.5}
                 className="mx-auto hidden text-center lg:mx-0 lg:block lg:text-left"
-                text="Subscribe, forecast, duel your rivals and climb the podium — pure skill, real prizes."
+                text="Forecast, duel your rivals and climb the podium — pure skill, real prizes."
               />
             </>
           }
@@ -387,16 +387,16 @@ export function PlayLanding() {
 
       {/* ---------------- STICKY BOTTOM PLAY BAR ---------------- */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 border-t border-white/20 bg-white/10 px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md transition-opacity duration-1000 ease-out sm:px-4 sm:py-5 ${
+        className={`fixed bottom-0 left-0 right-0 z-50 border-t border-white/20 bg-white/10 px-4 pt-4 pb-[max(1.1rem,calc(env(safe-area-inset-bottom)+0.6rem))] backdrop-blur-md transition-opacity duration-1000 ease-out sm:px-4 sm:py-5 ${
           introRevealed ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
-        <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-4">
+        <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between sm:gap-4">
           <div className="min-w-0">
-            <p className="truncate font-display text-[0.8rem] font-black uppercase leading-tight tracking-wide text-white sm:text-xl">
+            <p className="truncate font-display text-[0.95rem] font-black uppercase leading-tight tracking-wide text-white sm:text-xl">
               JOIN THE CHAMPIONSHIP!
             </p>
-            <p className="truncate text-[0.68rem] text-white/80 sm:text-sm">
+            <p className="mt-0.5 truncate text-[0.78rem] text-white/80 sm:mt-0 sm:text-sm">
               <span className="sm:hidden">Free to play · No download</span>
               <span className="hidden sm:inline">Free to play. No download required.</span>
             </p>
@@ -404,7 +404,7 @@ export function PlayLanding() {
           <button
             type="button"
             data-open-waitlist
-            className="tactical-cta shrink-0 justify-center px-4 py-2.5 text-[0.8rem] sm:px-9 sm:py-4 sm:text-base"
+            className="tactical-cta shrink-0 justify-center px-5 py-3.5 text-[0.85rem] sm:px-9 sm:py-4 sm:text-base"
           >
             <span className="tactical-cta-inner font-extrabold">JOIN THE WAITLIST</span>
           </button>
@@ -430,7 +430,7 @@ function Section({
   return (
     <section
       ref={ref}
-      className={`relative flex min-h-[100svh] w-full snap-start flex-col items-center justify-center text-center ${className ?? ""}`}
+      className={`relative flex min-h-[100svh] w-full flex-col items-center justify-center text-center ${className ?? ""}`}
     >
       <InViewContext.Provider value={inView && gate}>{children}</InViewContext.Provider>
     </section>
@@ -627,128 +627,6 @@ function ModeCarousel() {
     el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
   }, []);
 
-  /* Scroll-lock: while this section is the one on screen, vertical wheel /
-     swipe steps through the mode cards instead of moving the page. Once the
-     last (or first) card is showing, the gesture falls through and the page
-     scrolls on as usual. */
-  const activeRef = useRef(0);
-  activeRef.current = active;
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const section = el.closest("section");
-    const scroller = el.closest(".play-landing") as HTMLElement | null;
-    if (!section || !scroller) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const COUNT = 3;
-    const ARM_MS = 800; // page must rest on the section this long before wheel steps cards
-    let lockedUntil = 0;
-    let wheelAccum = 0;
-    let settledAt = 0;
-
-    const settled = () => Math.abs(section.getBoundingClientRect().top) < 40;
-    // Track when the page came to rest on this section, so the inertia of the
-    // scroll that *brought* us here can't flip straight to the second card.
-    const onScroll = () => {
-      settledAt = settled() ? settledAt || performance.now() : 0;
-    };
-    onScroll();
-    const leaveSection = (dir: 1 | -1) => {
-      const sib = dir === 1 ? section.nextElementSibling : section.previousElementSibling;
-      const target = sib instanceof HTMLElement ? sib : null;
-      if (!target) return;
-      scroller.scrollTo({ top: target.offsetTop, behavior: "smooth" });
-    };
-    /** Returns true if the gesture was consumed by the carousel. */
-    const step = (dir: 1 | -1) => {
-      const cur = activeRef.current;
-      const next = cur + dir;
-      if (next < 0 || next >= COUNT) return false;
-      const now = performance.now();
-      if (now < lockedUntil) return true; // still animating — swallow, don't advance
-      lockedUntil = now + 750;
-      goTo(next);
-      return true;
-    };
-
-    const onWheel = (e: WheelEvent) => {
-      if (!settled()) return;
-      const now = performance.now();
-      if (!settledAt) settledAt = now;
-      if (now - settledAt < ARM_MS) {
-        // Arming: absorb leftover inertia, hold the page on this section.
-        e.preventDefault();
-        wheelAccum = 0;
-        return;
-      }
-      const modeScale = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1;
-      const dy = e.deltaY * modeScale;
-      if (Math.abs(dy) < Math.abs(e.deltaX)) return; // horizontal → native carousel scroll
-      const dir: 1 | -1 = dy > 0 ? 1 : -1;
-      const cur = activeRef.current;
-      const hasNext = dir === 1 ? cur < COUNT - 1 : cur > 0;
-      e.preventDefault();
-      if (!hasNext) {
-        // Edge card: hand over to the page. Done by hand because a wheel over
-        // the horizontal carousel latches to it in Chrome and never chains up.
-        if (performance.now() < lockedUntil) return; // inertia from the last step
-        wheelAccum += dy;
-        if (Math.abs(wheelAccum) < 24) return;
-        wheelAccum = 0;
-        lockedUntil = performance.now() + 900;
-        leaveSection(dir);
-        return;
-      }
-      wheelAccum += dy;
-      if (Math.abs(wheelAccum) < 60) return; // a deliberate notch, not a stray tick
-      wheelAccum = 0;
-      step(dir);
-    };
-
-    let touchY: number | null = null;
-    let touchX: number | null = null;
-    let touchConsumed = false;
-    const onTouchStart = (e: TouchEvent) => {
-      touchY = e.touches[0].clientY;
-      touchX = e.touches[0].clientX;
-      touchConsumed = false;
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      if (touchY == null || touchX == null || !settled()) return;
-      const dy = touchY - e.touches[0].clientY;
-      const dx = touchX - e.touches[0].clientX;
-      if (Math.abs(dx) > Math.abs(dy)) return; // horizontal swipe → native carousel
-      const dir: 1 | -1 = dy > 0 ? 1 : -1;
-      const cur = activeRef.current;
-      const hasNext = dir === 1 ? cur < COUNT - 1 : cur > 0;
-      if (!hasNext && !touchConsumed) return;
-      e.preventDefault();
-      if (touchConsumed) return;
-      if (Math.abs(dy) < 28) return;
-      touchConsumed = true;
-      step(dir);
-    };
-    const onTouchEnd = () => {
-      touchY = null;
-      touchX = null;
-    };
-
-    scroller.addEventListener("scroll", onScroll, { passive: true });
-    scroller.addEventListener("wheel", onWheel, { passive: false });
-    section.addEventListener("touchstart", onTouchStart, { passive: true });
-    section.addEventListener("touchmove", onTouchMove, { passive: false });
-    section.addEventListener("touchend", onTouchEnd, { passive: true });
-    section.addEventListener("touchcancel", onTouchEnd, { passive: true });
-    return () => {
-      scroller.removeEventListener("scroll", onScroll);
-      scroller.removeEventListener("wheel", onWheel);
-      section.removeEventListener("touchstart", onTouchStart);
-      section.removeEventListener("touchmove", onTouchMove);
-      section.removeEventListener("touchend", onTouchEnd);
-      section.removeEventListener("touchcancel", onTouchEnd);
-    };
-  }, [goTo]);
 
   const cards = [
     {
@@ -761,7 +639,7 @@ function ModeCarousel() {
       avatars: [rapidFighter, customizable, squadRival],
       act: "animate-avatar-punch",
       title: "Tournaments",
-      body: "Jump into themed tournaments running all the time. Every tournament starts your FIQ at zero. Make predictions, climb the leaderboard, and top FIQs share the prizes.",
+      body: "Join themed tournaments. Make predictions. Climb the leaderboard. The top FIQs take the prizes.",
     },
     {
       avatars: [squadCustom, squadTrader, explorer],
