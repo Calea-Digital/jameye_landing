@@ -394,7 +394,7 @@ export function PlayLanding() {
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between sm:gap-4">
           <div className="min-w-0">
             <p className="truncate font-display text-[0.95rem] font-black uppercase leading-tight tracking-wide text-white sm:text-xl">
-              JOIN THE CHAMPIONSHIP!
+              NO BETS. NO GAMBLING.
             </p>
             <p className="mt-0.5 truncate text-[0.78rem] text-white/80 sm:mt-0 sm:text-sm">
               <span className="sm:hidden">Free to play · No download</span>

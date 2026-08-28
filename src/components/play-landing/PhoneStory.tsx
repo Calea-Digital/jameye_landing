@@ -187,13 +187,13 @@ export function PhoneStory({ className }: { className?: string }) {
   }, [scene]);
 
   return (
-    <div className={`relative mx-auto -mt-6 w-[min(340px,88vw)] shrink-0 sm:mt-0 sm:w-[372px] ${className ?? ""}`}>
+    <div className={`relative mx-auto -mt-6 w-[min(340px,88vw)] shrink-0 sm:mt-0 sm:w-[clamp(197px,calc((100svh_-_21rem)*0.547),372px)] ${className ?? ""}`}>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -inset-8 rounded-[3.5rem] bg-[radial-gradient(circle_at_50%_30%,rgba(236,72,153,0.35),rgba(99,102,241,0.18)_55%,transparent_75%)] blur-2xl"
       />
       <div className="relative rounded-[2.75rem] border border-white/20 bg-[#05060F] p-2.5 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)]">
-        <div className="relative h-[430px] overflow-hidden sm:h-[680px] rounded-[2.25rem] bg-[#070818]">
+        <div className="relative h-[430px] overflow-hidden sm:h-[clamp(360px,calc(100svh_-_21rem),680px)] rounded-[2.25rem] bg-[#070818]">
           <div aria-hidden="true" className="tactical-grid" />
           <div aria-hidden="true" className="tactical-top-line" />
           <div className="absolute left-1/2 top-2.5 z-20 h-4 w-20 -translate-x-1/2 rounded-full bg-black/85" />

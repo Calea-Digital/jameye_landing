@@ -1,12 +1,12 @@
 import React from "react";
 
-import img196 from "./assets/markets/market-196.png?url";
-import img197 from "./assets/markets/market-197.png?url";
+import img196 from "./assets/markets/market-196.webp?url";
+import img197 from "./assets/markets/market-197.webp?url";
 import img198 from "./assets/markets/market-198.png?url";
-import img199 from "./assets/markets/market-199.png?url";
-import img200 from "./assets/markets/market-200.png?url";
-import img201 from "./assets/markets/market-201.png?url";
-import img202 from "./assets/markets/market-202.png?url";
+import img199 from "./assets/markets/market-199.webp?url";
+import img200 from "./assets/markets/market-200.webp?url";
+import img201 from "./assets/markets/market-201.webp?url";
+import img202 from "./assets/markets/market-202.webp?url";
 import img203 from "./assets/markets/market-203.png?url";
 import img204 from "./assets/markets/market-204.png?url";
 import img205 from "./assets/markets/market-205.png?url";
@@ -163,7 +163,7 @@ export function Card({ card, pick = null }: { card: MarketCard; pick?: number | 
       {/* Large, fixed image area like the game-section cards */}
       <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl ring-1 ring-black/10 sm:aspect-auto sm:min-h-[140px] sm:flex-1 sm:shrink">
         {card.image ? (
-          <img src={card.image} alt="" className="h-full w-full object-cover" loading="lazy" />
+          <img src={card.image} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
         ) : (
           <div
             className="flex h-full w-full items-center justify-center text-[3rem] sm:text-[5rem]"
