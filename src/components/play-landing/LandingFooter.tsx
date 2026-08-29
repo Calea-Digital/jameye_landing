@@ -4,7 +4,7 @@ import { CONTACT_EMAIL, TELEGRAM_URL } from "../../config";
 /** Site footer for the play landing: oversized wordmark + legal links. */
 export function LandingFooter() {
   return (
-    <footer className="play-footer relative w-full snap-start overflow-hidden bg-[#05060F] px-5 pt-12 pb-[calc(8.5rem+env(safe-area-inset-bottom))] text-center sm:px-8 sm:pt-16 sm:pb-[calc(9.5rem+env(safe-area-inset-bottom))]">
+    <footer className="play-footer relative w-full snap-start overflow-hidden bg-[#05060F] px-5 pt-12 pb-[calc(var(--play-bar-h,5.5rem)+2.25rem)] text-center sm:px-8 sm:pt-16 sm:pb-[calc(var(--play-bar-h,5.5rem)+3rem)]">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
