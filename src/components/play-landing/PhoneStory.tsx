@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Explosion } from "./Explosion";
 
@@ -34,12 +34,20 @@ function StepLabel({ children }: { children: React.ReactNode }) {
 
 /* ---------------- scene 1 : market cards ---------------- */
 
-function SceneMarkets({ onDone }: { onDone: () => void }) {
+function SceneMarkets({ onDone, running }: { onDone: () => void; running: boolean }) {
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState(false);
 
+  /* Rewind whenever the story is parked, so it always replays from card one. */
+  useEffect(() => {
+    if (running) return;
+    setIndex(0);
+    setPicked(false);
+  }, [running]);
+
   /* Auto-play: card slides in → outcome gets picked → next card → hand over. */
   useEffect(() => {
+    if (!running) return;
     const t = setTimeout(
       () => {
         if (!picked) {
@@ -54,7 +62,7 @@ function SceneMarkets({ onDone }: { onDone: () => void }) {
       picked ? 1400 : 1900,
     );
     return () => clearTimeout(t);
-  }, [index, picked, onDone]);
+  }, [index, picked, onDone, running]);
 
   const card = STORY_CARDS[index];
 
@@ -176,18 +184,39 @@ function ScenePodium() {
 
 export function PhoneStory({ className }: { className?: string }) {
   const [scene, setScene] = useState(0);
-  const next = () => setScene((s) => (s + 1) % SCENES.length);
+  const next = useCallback(() => setScene((s) => (s + 1) % SCENES.length), []);
+
+  /* The story is a loop, but it only runs while the phone is on screen: the
+     whole landing mounts at once, so without this gate the three scenes had
+     already played themselves out by the time you scrolled down here — which
+     is what made it look dead on mobile. Leaving the section parks it back on
+     scene 01 so the next visit replays the process from the top. */
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [running, setRunning] = useState(false);
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setRunning(entry.isIntersecting),
+      { threshold: 0.25 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!running) setScene(0);
+  }, [running]);
 
   /* Duel and podium scenes advance on their own after their SCENES duration;
      the forecast scene (0) drives itself and calls `next` when its cards are done. */
   useEffect(() => {
-    if (scene === 0) return;
+    if (!running || scene === 0) return;
     const t = setTimeout(next, SCENES[scene]);
     return () => clearTimeout(t);
-  }, [scene]);
+  }, [scene, running, next]);
 
   return (
-    <div className={`relative mx-auto -mt-6 w-[min(340px,88vw)] shrink-0 sm:mt-0 sm:w-[clamp(197px,calc((100svh_-_21rem)*0.547),372px)] ${className ?? ""}`}>
+    <div ref={rootRef} className={`relative mx-auto -mt-6 w-[min(340px,88vw)] shrink-0 sm:mt-0 sm:w-[clamp(197px,calc((100svh_-_21rem)*0.547),372px)] ${className ?? ""}`}>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -inset-8 rounded-[3.5rem] bg-[radial-gradient(circle_at_50%_30%,rgba(236,72,153,0.35),rgba(99,102,241,0.18)_55%,transparent_75%)] blur-2xl"
@@ -207,7 +236,7 @@ export function PhoneStory({ className }: { className?: string }) {
               transition={{ duration: 0.35 }}
               className="absolute inset-0 pt-9 pb-7"
             >
-              {scene === 0 ? <SceneMarkets onDone={next} /> : null}
+              {scene === 0 ? <SceneMarkets onDone={next} running={running} /> : null}
               {scene === 1 ? <SceneDuel /> : null}
               {scene === 2 ? <ScenePodium /> : null}
             </motion.div>

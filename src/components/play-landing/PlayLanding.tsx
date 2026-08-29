@@ -183,8 +183,27 @@ export function PlayLanding() {
   const revealHero = React.useCallback(() => setIntroRevealed(true), []);
   const finishIntro = React.useCallback(() => setIntroDone(true), []);
 
+  // The sticky play bar overlays the bottom of every section. Publishing its
+  // real height as `--play-bar-h` lets each card reserve exactly that much
+  // extra bottom padding, so the visible gap above and below the content is
+  // the same on every screen (see GradientCard).
+  const barRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = barRef.current;
+    if (!el) return;
+    const publish = () => {
+      el.closest("main")?.style.setProperty("--play-bar-h", `${el.offsetHeight}px`);
+    };
+    publish();
+    const ro = new ResizeObserver(publish);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <main className="play-landing relative h-screen overflow-y-scroll overflow-x-hidden scroll-smooth">
+    // `h-[100svh]`, not `h-screen`: on mobile the 100vh scroll box runs under
+    // the browser chrome, which pushed every section's bottom out of sight.
+    <main className="play-landing relative h-[100svh] overflow-y-scroll overflow-x-hidden scroll-smooth">
       {/* ---------------- HERO ---------------- */}
       <Section gate={introRevealed}>
         <GradientCard
@@ -387,16 +406,20 @@ export function PlayLanding() {
 
       {/* ---------------- STICKY BOTTOM PLAY BAR ---------------- */}
       <div
+        ref={barRef}
         className={`fixed bottom-0 left-0 right-0 z-50 border-t border-white/20 bg-white/10 px-4 pt-4 pb-[max(1.1rem,calc(env(safe-area-inset-bottom)+0.6rem))] backdrop-blur-md transition-opacity duration-1000 ease-out sm:px-4 sm:py-5 ${
           introRevealed ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between sm:gap-4">
           <div className="min-w-0">
-            <p className="truncate font-display text-[0.95rem] font-black uppercase leading-tight tracking-wide text-white sm:text-xl">
-              NO BETS. NO GAMBLING.
-            </p>
-            <p className="mt-0.5 truncate text-[0.78rem] text-white/80 sm:mt-0 sm:text-sm">
+            <span
+              aria-label="Jameye"
+              className="jameye-wordmark block whitespace-nowrap text-[1.3rem] sm:text-[1.75rem]"
+            >
+              JAMEYE<sup className="reg">®</sup>
+            </span>
+            <p className="mt-1 truncate text-[0.78rem] text-white/80 sm:text-sm">
               <span className="sm:hidden">Free to play · No download</span>
               <span className="hidden sm:inline">Free to play. No download required.</span>
             </p>
@@ -472,7 +495,11 @@ function GradientCard({
   return (
 
     <div
-      className={`relative flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-5 pb-[calc(9.5rem+env(safe-area-inset-bottom))] sm:px-8 sm:py-28 ${videoBackground ? "pt-20 sm:pt-28" : "pt-14"} ${gradient}`}
+      /* Mobile: the top gap and the gap left under the sticky play bar are the
+         same 2.25rem, so every section's content reads as vertically centred
+         in the space you can actually see. `--play-bar-h` is measured live in
+         PlayLanding; the literal is the fallback for the first paint. */
+      className={`relative flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-5 pt-9 pb-[calc(var(--play-bar-h,5.5rem)+2.25rem)] sm:px-8 sm:py-28 ${gradient}`}
     >
       {videoBackground ? (
         <>

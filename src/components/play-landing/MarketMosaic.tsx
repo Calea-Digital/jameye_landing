@@ -7,7 +7,6 @@ import img199 from "./assets/markets/market-199.webp?url";
 import img200 from "./assets/markets/market-200.webp?url";
 import img201 from "./assets/markets/market-201.webp?url";
 import img202 from "./assets/markets/market-202.webp?url";
-import img203 from "./assets/markets/market-203.png?url";
 import img204 from "./assets/markets/market-204.png?url";
 import img205 from "./assets/markets/market-205.png?url";
 import img206 from "./assets/markets/market-206.png?url";
@@ -91,9 +90,10 @@ export const CARDS: MarketCard[] = [
     bar: "linear-gradient(90deg,#3B82F6,#EC4899)",
   },
   {
+    // No photo: the only asset on hand was an unrelated, low-resolution portrait,
+    // so this one falls back to the branded gradient + emoji tile.
     title: "Anthropic IPO by ___?",
     emoji: "🤖",
-    image: img203,
     count: "3 outcomes",
     outcomes: [
       { label: "December 31, 2026", pct: 89 },
@@ -163,7 +163,15 @@ export function Card({ card, pick = null }: { card: MarketCard; pick?: number | 
       {/* Large, fixed image area like the game-section cards */}
       <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl ring-1 ring-black/10 sm:aspect-auto sm:min-h-[140px] sm:flex-1 sm:shrink">
         {card.image ? (
-          <img src={card.image} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+          /* Scaled up a touch: several source photos ship with a thin black
+             letterbox edge, and the overflow-hidden parent crops it away. */
+          <img
+            src={card.image}
+            alt=""
+            className="h-full w-full scale-[1.06] object-cover"
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
           <div
             className="flex h-full w-full items-center justify-center text-[3rem] sm:text-[5rem]"
