@@ -31,11 +31,8 @@ const { creators } = Astro.props;
       {
         [0, 1].map(() =>
           creators.cards.map((card) => (
-            <article
-              class:list={['fx-creator', 'fx-toon-card', card.founding && 'fx-creator--founding']}
-              style={`--tone:${toneColor(card.tone)};`}
-            >
-              <span class="fx-toon-art"><img src={card.avatar} alt="" loading="lazy" /></span>
+            <article class:list={['fx-creator', card.founding && 'fx-creator--founding']}>
+              <img src={card.image} alt="" loading="lazy" />
               <span class="fx-creator__scrim"></span>
               {card.founding && <span class="fx-creator__flag">FOUNDING CREATOR</span>}
               <span class="fx-creator__rank" style={`color:${toneColor(card.tone)};`}>{card.rank.toUpperCase()}</span>

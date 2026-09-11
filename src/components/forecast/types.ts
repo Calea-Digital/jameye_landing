@@ -2,8 +2,8 @@
 export interface NavLink { label: string; href: string }
 
 export interface FanCard {
-  /** Illustrated persona from public/avatar — never a photo of a real person. */
-  avatar: string;
+  /** AI-generated portrait from public/images/creators — not a real person. */
+  image: string;
   meta: string;
   tone: string;
   name: string;
@@ -16,8 +16,8 @@ export interface FanCard {
 export interface TickerItem { label: string; value: string; up: boolean }
 
 export interface CreatorCard {
-  /** Illustrated persona from public/avatar — never a photo of a real person. */
-  avatar: string;
+  /** AI-generated portrait from public/images/creators — not a real person. */
+  image: string;
   rank: string;
   tone: string;
   name: string;

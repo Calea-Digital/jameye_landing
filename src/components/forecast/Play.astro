@@ -28,7 +28,7 @@ const tone = toneColor(m.tone);
         <span class="fx-stack">
           {
             play.ridersFaces.map((face) => (
-              <span class="fx-stack__face fx-toon-face">
+              <span class="fx-stack__face">
                 <img src={face} alt="" loading="lazy" />
               </span>
             ))
@@ -51,7 +51,7 @@ const tone = toneColor(m.tone);
           <span class="fx-chip">{m.watching}</span>
         </div>
         <div class="fx-caller">
-          <span class="fx-caller__face fx-toon-face"><img src={m.callerFace} alt="" loading="lazy" /></span>
+          <span class="fx-caller__face"><img src={m.callerFace} alt="" loading="lazy" /></span>
           <span>{m.callerName} <span style={`color:${tone};`}>· {m.callerSide}</span></span>
         </div>
       </div>

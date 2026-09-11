@@ -39,7 +39,7 @@ const { fiq } = Astro.props;
         fiq.rows.map((row) => (
           <div class:list={['fx-row', row.you && 'fx-row--you', row.pos === 1 && 'fx-row--top']}>
             <span class="fx-row__pos">{row.pos}</span>
-            <span class:list={['fx-row__face', row.face ? 'fx-toon-face' : 'fx-row__face--initial']}>
+            <span class:list={['fx-row__face', !row.face && 'fx-row__face--initial']}>
               {row.face ? <img src={row.face} alt="" loading="lazy" /> : <span>{row.name.slice(0, 1)}</span>}
             </span>
             <span class="fx-row__id">

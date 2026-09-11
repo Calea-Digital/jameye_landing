@@ -39,15 +39,15 @@
         "call": "Senate flips",
         "odds": "YES 71%",
         "lead": true,
-        "avatar": "/avatar/13-bonus-captain.svg"
+        "image": "/images/creators/thecaptain.webp"
       },
       {
         "meta": "Politics · 81%",
         "tone": "politics",
-        "name": "Idris Okafor",
+        "name": "Tom Keller",
         "call": "Ceasefire holds",
         "odds": "YES 58%",
-        "avatar": "/avatar/19-bonus-anchor.svg"
+        "image": "/images/creators/tom-keller.webp"
       },
       {
         "meta": "Economy · 74%",
@@ -55,7 +55,7 @@
         "name": "Nora Adeyemi",
         "call": "Fed cuts before Dec",
         "odds": "YES 58%",
-        "avatar": "/avatar/01-open-market-trader.svg"
+        "image": "/images/creators/nora-adeyemi.webp"
       },
       {
         "meta": "E-sport · 69%",
@@ -63,7 +63,7 @@
         "name": "Nova",
         "call": "NAVI takes the Major",
         "odds": "YES 64%",
-        "avatar": "/avatar/20-bonus-android.svg"
+        "image": "/images/creators/nova.webp"
       },
       {
         "meta": "Film · 72%",
@@ -72,7 +72,7 @@
         "call": "Dune 3 above $100M",
         "odds": "NO 54%",
         "down": true,
-        "avatar": "/avatar/12-bonus-dj.svg"
+        "image": "/images/creators/theo-marchand.webp"
       }
     ]
   },
@@ -113,17 +113,17 @@
     "title": "Pick a side. Lock your coins. See if you beat them.",
     "lead": "This is a live market. In the app you flick the puck with your thumb, turn the dial and slide to lock. Try it here.",
     "ridersFaces": [
-      "/avatar/13-bonus-captain.svg",
-      "/avatar/19-bonus-anchor.svg",
-      "/avatar/01-open-market-trader.svg"
+      "/images/creators/thecaptain.webp",
+      "/images/creators/tom-keller.webp",
+      "/images/creators/nora-adeyemi.webp"
     ],
     "ridersCount": "42 forecasters",
     "ridersRest": "are on YES",
     "market": {
       "image": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=1800&h=1000&q=80",
       "watching": "24,318 watching",
-      "callerFace": "/avatar/19-bonus-anchor.svg",
-      "callerName": "Idris is calling it",
+      "callerFace": "/images/creators/tom-keller.webp",
+      "callerName": "Tom is calling it",
       "callerSide": "YES",
       "vertical": "Politics · closes Nov 3",
       "tone": "politics",
@@ -171,7 +171,7 @@
         "call": "Senate flips",
         "odds": "YES 71%",
         "founding": true,
-        "avatar": "/avatar/13-bonus-captain.svg"
+        "image": "/images/creators/thecaptain.webp"
       },
       {
         "rank": "Sports · #2",
@@ -180,16 +180,16 @@
         "stats": "78% accuracy · 164K riders",
         "call": "Canelo by KO",
         "odds": "YES 71%",
-        "avatar": "/avatar/04-rapid-duel-fighter.svg"
+        "image": "/images/creators/luca-ferreira.webp"
       },
       {
         "rank": "Politics · #1",
         "tone": "politics",
-        "name": "Idris Okafor",
+        "name": "Tom Keller",
         "stats": "81% accuracy · 203K riders",
         "call": "Ceasefire holds",
         "odds": "YES 58%",
-        "avatar": "/avatar/19-bonus-anchor.svg"
+        "image": "/images/creators/tom-keller.webp"
       },
       {
         "rank": "Economy · #3",
@@ -198,7 +198,7 @@
         "stats": "74% accuracy · 128K riders",
         "call": "Fed cuts before Dec",
         "odds": "YES 58%",
-        "avatar": "/avatar/01-open-market-trader.svg"
+        "image": "/images/creators/nora-adeyemi.webp"
       },
       {
         "rank": "E-sport · #1",
@@ -207,7 +207,7 @@
         "stats": "69% accuracy · 412K riders",
         "call": "NAVI takes the Major",
         "odds": "YES 64%",
-        "avatar": "/avatar/20-bonus-android.svg"
+        "image": "/images/creators/nova.webp"
       },
       {
         "rank": "Film · #2",
@@ -217,10 +217,10 @@
         "call": "Dune 3 above $100M",
         "odds": "NO 54%",
         "down": true,
-        "avatar": "/avatar/12-bonus-dj.svg"
+        "image": "/images/creators/theo-marchand.webp"
       }
     ],
-    "note": "Sample creators. These are illustrative characters — the real founding creators are being signed now."
+    "note": "Sample creators. The portraits are AI-generated and the profiles are illustrative — the real founding creators are being signed now."
   },
   "markets": {
     "eyebrow": "248 open right now",
@@ -354,7 +354,7 @@
     "rows": [
       {
         "pos": 1,
-        "face": "/avatar/13-bonus-captain.svg",
+        "face": "/images/creators/thecaptain.webp",
         "name": "@thecaptain",
         "tag": "Sports",
         "score": "912"
@@ -369,21 +369,21 @@
       },
       {
         "pos": 3,
-        "face": "/avatar/19-bonus-anchor.svg",
-        "name": "Idris Okafor",
+        "face": "/images/creators/tom-keller.webp",
+        "name": "Tom Keller",
         "tag": "Politics",
         "score": "845"
       },
       {
         "pos": 4,
-        "face": "/avatar/01-open-market-trader.svg",
+        "face": "/images/creators/nora-adeyemi.webp",
         "name": "Nora Adeyemi",
         "tag": "Economy",
         "score": "803"
       },
       {
         "pos": 5,
-        "face": "/avatar/20-bonus-android.svg",
+        "face": "/images/creators/nova.webp",
         "name": "Nova",
         "tag": "E-sport",
         "score": "764"

@@ -180,43 +180,9 @@
 
 .fx-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-/* Character art · the creators on this page are illustrative personas drawn
-   from the app's avatar set (public/avatar), never photographs of real people.
-   `--tone` carries the vertical's hue so each card is lit in its own colour. */
-.fx-toon-card {
-  background:
-    radial-gradient(78% 52% at 50% 22%, color-mix(in srgb, var(--tone, #ffa9d6) 42%, transparent), transparent 74%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(21, 15, 33, 0.92));
-}
-.fx-toon-art {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 4%;
-  bottom: 30%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-.fx-toon-art img {
-  height: 100%;
-  width: auto;
-  max-width: 80%;
-  object-fit: contain;
-  filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.55));
-}
-/* Head-crop for the small round faces (the art is a full-body 120×140 figure). */
-.fx-toon-face {
-  background: radial-gradient(70% 70% at 50% 30%, rgba(255, 169, 214, 0.28), rgba(21, 15, 33, 0.9));
-}
-.fx-toon-face img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transform: scale(2.25);
-  transform-origin: 50% 22%;
-}
+/* Creator portraits · every face on this page is AI-generated (see
+   public/images/creators) — no photographs of real people, and the roster is
+   labelled as illustrative until real creators sign. */
 
 .fx-aurora {
   position: absolute;
@@ -383,7 +349,7 @@
   animation: fx-shuffle 20s ease-in-out infinite;
 }
 .fx-fan--lead { border-color: rgba(255, 169, 214, 0.45); }
-.fx-fan .fx-toon-art { top: 6%; bottom: 44%; }
+.fx-fan img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
 .fx-fan__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 42%, rgba(14, 10, 22, 0.96)); }
 .fx-fan__meta { position: relative; font-size: 9.5px; letter-spacing: 0.2em; }
 .fx-fan__name { position: relative; font-size: 20px; font-weight: 600; margin-top: 4px; }
@@ -459,7 +425,7 @@
   border: 2px solid var(--fx-bg);
   flex-shrink: 0;
 }
-.fx-stack__face img { width: 100%; height: 100%; object-fit: cover; }
+.fx-stack__face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; }
 .fx-stack__face { background: rgba(255, 255, 255, 0.08); }
 
 .fx-stage {
@@ -518,6 +484,7 @@
   font-weight: 600;
 }
 .fx-caller__face { width: 30px; height: 30px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+.fx-caller__face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; }
 
 .fx-stage__question {
   position: absolute;
@@ -617,7 +584,7 @@
   padding: 18px;
 }
 .fx-creator--founding { border-color: rgba(255, 169, 214, 0.4); box-shadow: 0 0 40px rgba(255, 169, 214, 0.12); }
-.fx-creator .fx-toon-art { top: 5%; bottom: 40%; }
+.fx-creator img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
 .fx-creator__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(14, 10, 22, 0.96)); }
 .fx-creator__flag {
   position: absolute;
@@ -809,7 +776,7 @@
 .fx-row__pos { width: 22px; font-size: 12px; font-weight: 600; color: var(--fx-ink-42); }
 .fx-row--top .fx-row__pos { color: var(--fx-pink); }
 .fx-row__face { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: rgba(255, 255, 255, 0.08); }
-.fx-row__face img { width: 100%; height: 100%; object-fit: cover; }
+.fx-row__face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; }
 /* No portrait (that's you, until you sign up) — initial on the brand sweep. */
 .fx-row__face--initial {
   background: var(--fx-grad);
