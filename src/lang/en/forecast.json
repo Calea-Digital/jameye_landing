@@ -1,0 +1,458 @@
+{
+  "nav": {
+    "links": [
+      {
+        "label": "Markets",
+        "href": "#markets"
+      },
+      {
+        "label": "Creators",
+        "href": "#creators"
+      },
+      {
+        "label": "FIQ",
+        "href": "#fiq"
+      },
+      {
+        "label": "How it works",
+        "href": "#how"
+      }
+    ],
+    "cta": "Join the waitlist"
+  },
+  "hero": {
+    "image": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=2400&h=1500&q=80",
+    "badge": "The world's forecasting championship",
+    "titleLines": [
+      "Forecast",
+      "the world."
+    ],
+    "titleAccent": "With them.",
+    "lead": "The creators you follow put a number on their calls. Ride with them or against them. One public score says who was right.",
+    "ctaPrimary": "Join the waitlist",
+    "ctaSecondary": "Try a market",
+    "fan": [
+      {
+        "meta": "Sports · 82%",
+        "tone": "sports",
+        "name": "@thecaptain",
+        "call": "Senate flips",
+        "odds": "YES 71%",
+        "lead": true,
+        "avatar": "/avatar/13-bonus-captain.svg"
+      },
+      {
+        "meta": "Politics · 81%",
+        "tone": "politics",
+        "name": "Idris Okafor",
+        "call": "Ceasefire holds",
+        "odds": "YES 58%",
+        "avatar": "/avatar/19-bonus-anchor.svg"
+      },
+      {
+        "meta": "Economy · 74%",
+        "tone": "economy",
+        "name": "Nora Adeyemi",
+        "call": "Fed cuts before Dec",
+        "odds": "YES 58%",
+        "avatar": "/avatar/01-open-market-trader.svg"
+      },
+      {
+        "meta": "E-sport · 69%",
+        "tone": "esport",
+        "name": "Nova",
+        "call": "NAVI takes the Major",
+        "odds": "YES 64%",
+        "avatar": "/avatar/20-bonus-android.svg"
+      },
+      {
+        "meta": "Film · 72%",
+        "tone": "film",
+        "name": "Théo Marchand",
+        "call": "Dune 3 above $100M",
+        "odds": "NO 54%",
+        "down": true,
+        "avatar": "/avatar/12-bonus-dj.svg"
+      }
+    ]
+  },
+  "ticker": [
+    {
+      "label": "Senate flips",
+      "value": "71%",
+      "up": true
+    },
+    {
+      "label": "Celtics sweep",
+      "value": "34%",
+      "up": false
+    },
+    {
+      "label": "Fed cuts before Dec",
+      "value": "58%",
+      "up": true
+    },
+    {
+      "label": "NAVI takes the Major",
+      "value": "64%",
+      "up": true
+    },
+    {
+      "label": "Dune 3 opens above $100M",
+      "value": "46%",
+      "up": false
+    },
+    {
+      "label": "Djokovic reaches final",
+      "value": "58%",
+      "up": true
+    }
+  ],
+  "play": {
+    "eyebrow": "Forecast amongst the best",
+    "title": "Pick a side. Lock your coins. See if you beat them.",
+    "lead": "This is a live market. In the app you flick the puck with your thumb, turn the dial and slide to lock. Try it here.",
+    "ridersFaces": [
+      "/avatar/13-bonus-captain.svg",
+      "/avatar/19-bonus-anchor.svg",
+      "/avatar/01-open-market-trader.svg"
+    ],
+    "ridersCount": "42 forecasters",
+    "ridersRest": "are on YES",
+    "market": {
+      "image": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=1800&h=1000&q=80",
+      "watching": "24,318 watching",
+      "callerFace": "/avatar/19-bonus-anchor.svg",
+      "callerName": "Idris is calling it",
+      "callerSide": "YES",
+      "vertical": "Politics · closes Nov 3",
+      "tone": "politics",
+      "question": "Does the Senate flip in the midterms?",
+      "elapsed": "02:14",
+      "chartLabel": "Odds over time · 71% now",
+      "yes": 71,
+      "no": 29,
+      "forecasters": "24.3K forecasters in",
+      "balance": 1300
+    },
+    "control": {
+      "yourCall": "Your call",
+      "balanceLabel": "Balance",
+      "coins": "coins",
+      "step1": "Step 1 · pick a side",
+      "step2": "Step 2 · dial your coins",
+      "hint": "Click a side · in the app you flick it with your thumb",
+      "payoffLabel": "If right",
+      "quick": [
+        "100",
+        "250",
+        "500",
+        "ALL"
+      ],
+      "lockIdle": "Pick a side first",
+      "lockReady": "Slide to lock",
+      "lockedTitle": "Locked {amount} on {side}",
+      "lockedSub": "Riding with your squad · streak starts now · +{payoff} if you are right",
+      "keep": "Keep it · join the waitlist",
+      "again": "Again"
+    }
+  },
+  "creators": {
+    "titleAccent": "Creators",
+    "titleRest": "bring the crowd",
+    "lead": "The people you already watch debate the game now put a number on it. Public accuracy, open calls you can ride in one tap. When they are wrong, everyone sees it.",
+    "cta": "Become a founding creator",
+    "cards": [
+      {
+        "rank": "Sports · #1",
+        "tone": "sports",
+        "name": "@thecaptain",
+        "stats": "Ex-pro · 82% accuracy · 611K riders",
+        "call": "Senate flips",
+        "odds": "YES 71%",
+        "founding": true,
+        "avatar": "/avatar/13-bonus-captain.svg"
+      },
+      {
+        "rank": "Sports · #2",
+        "tone": "sports",
+        "name": "Luca Ferreira",
+        "stats": "78% accuracy · 164K riders",
+        "call": "Canelo by KO",
+        "odds": "YES 71%",
+        "avatar": "/avatar/04-rapid-duel-fighter.svg"
+      },
+      {
+        "rank": "Politics · #1",
+        "tone": "politics",
+        "name": "Idris Okafor",
+        "stats": "81% accuracy · 203K riders",
+        "call": "Ceasefire holds",
+        "odds": "YES 58%",
+        "avatar": "/avatar/19-bonus-anchor.svg"
+      },
+      {
+        "rank": "Economy · #3",
+        "tone": "economy",
+        "name": "Nora Adeyemi",
+        "stats": "74% accuracy · 128K riders",
+        "call": "Fed cuts before Dec",
+        "odds": "YES 58%",
+        "avatar": "/avatar/01-open-market-trader.svg"
+      },
+      {
+        "rank": "E-sport · #1",
+        "tone": "esport",
+        "name": "Nova",
+        "stats": "69% accuracy · 412K riders",
+        "call": "NAVI takes the Major",
+        "odds": "YES 64%",
+        "avatar": "/avatar/20-bonus-android.svg"
+      },
+      {
+        "rank": "Film · #2",
+        "tone": "film",
+        "name": "Théo Marchand",
+        "stats": "72% accuracy · 96K riders",
+        "call": "Dune 3 above $100M",
+        "odds": "NO 54%",
+        "down": true,
+        "avatar": "/avatar/12-bonus-dj.svg"
+      }
+    ],
+    "note": "Sample creators. These are illustrative characters — the real founding creators are being signed now."
+  },
+  "markets": {
+    "eyebrow": "248 open right now",
+    "titleLead": "Live markets.",
+    "titleEvery": "Every",
+    "titleVertical": "vertical.",
+    "legend": [
+      {
+        "label": "Sports",
+        "tone": "sports"
+      },
+      {
+        "label": "Politics",
+        "tone": "politics"
+      },
+      {
+        "label": "Economy",
+        "tone": "economy"
+      },
+      {
+        "label": "E-sport",
+        "tone": "esport"
+      },
+      {
+        "label": "Film",
+        "tone": "film"
+      }
+    ],
+    "cta": "See all 248 markets",
+    "cards": [
+      {
+        "image": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=400&h=500&q=75",
+        "tone": "sports",
+        "vertical": "Sports",
+        "in": "31.2K in",
+        "question": "Do the Celtics sweep the Finals?",
+        "pct": 34,
+        "side": "YES"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=400&h=500&q=75",
+        "tone": "politics",
+        "vertical": "Politics",
+        "in": "24.3K in",
+        "question": "Does the Senate flip in the midterms?",
+        "pct": 71,
+        "side": "YES"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=400&h=500&q=75",
+        "tone": "economy",
+        "vertical": "Economy",
+        "in": "18.9K in",
+        "question": "Fed cuts rates before December?",
+        "pct": 58,
+        "side": "YES"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&h=500&q=75",
+        "tone": "esport",
+        "vertical": "E-sport",
+        "in": "52K in",
+        "question": "Does NAVI take the CS2 Major?",
+        "pct": 64,
+        "side": "YES"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&h=500&q=75",
+        "tone": "film",
+        "vertical": "Film",
+        "in": "9.4K in",
+        "question": "Dune 3 opens above $100M?",
+        "pct": 46,
+        "side": "YES"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?auto=format&fit=crop&w=400&h=500&q=75",
+        "tone": "sports",
+        "vertical": "Sports",
+        "in": "12.7K in",
+        "question": "Where does Enzo Fernández transfer?",
+        "pct": 63,
+        "side": "Chelsea"
+      }
+    ]
+  },
+  "how": {
+    "eyebrow": "How it works",
+    "title": "Coins, calls and one honest score.",
+    "gestures": [
+      {
+        "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&h=800&q=70",
+        "icon": "up",
+        "tone": "politics",
+        "title": "Swipe up",
+        "body": "Next market. Full-screen photo, one question, live odds."
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&h=800&q=70",
+        "icon": "right",
+        "tone": "economy",
+        "title": "Flick the puck",
+        "body": "Left is NO, right is YES. You see the payoff before you commit."
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=800&h=800&q=70",
+        "icon": "check",
+        "tone": "accent",
+        "title": "Turn and lock",
+        "body": "Dial in your credits, slide to lock. Streak goes up when you are right."
+      }
+    ]
+  },
+  "fiq": {
+    "eyebrow": "Your skill score",
+    "title": "Build your FIQ",
+    "lead": "Forecasting IQ measures how accurate you are across many calls, so one lucky guess cannot carry you. It is public, it follows you everywhere, and the creators you ride with have one too.",
+    "stats": [
+      {
+        "value": "878",
+        "label": "Your FIQ",
+        "gradient": true
+      },
+      {
+        "value": "#2",
+        "label": "In your squad"
+      }
+    ],
+    "boardTitle": "Squad leaderboard",
+    "boardPeriod": "This week",
+    "rows": [
+      {
+        "pos": 1,
+        "face": "/avatar/13-bonus-captain.svg",
+        "name": "@thecaptain",
+        "tag": "Sports",
+        "score": "912"
+      },
+      {
+        "pos": 2,
+        "face": "",
+        "name": "You",
+        "tag": "Your squad",
+        "score": "878",
+        "you": true
+      },
+      {
+        "pos": 3,
+        "face": "/avatar/19-bonus-anchor.svg",
+        "name": "Idris Okafor",
+        "tag": "Politics",
+        "score": "845"
+      },
+      {
+        "pos": 4,
+        "face": "/avatar/01-open-market-trader.svg",
+        "name": "Nora Adeyemi",
+        "tag": "Economy",
+        "score": "803"
+      },
+      {
+        "pos": 5,
+        "face": "/avatar/20-bonus-android.svg",
+        "name": "Nova",
+        "tag": "E-sport",
+        "score": "764"
+      }
+    ]
+  },
+  "skill": {
+    "eyebrow": "Skill, not luck",
+    "title": "A global skill championship. Not gambling.",
+    "lead": "You play with Jameye Coins, never cash. Nothing to deposit, nothing to withdraw. What you build is a public record of how right you are.",
+    "steps": [
+      {
+        "n": "01",
+        "title": "Forecast",
+        "body": "Swipe a market, flick YES or NO, lock your coins."
+      },
+      {
+        "n": "02",
+        "title": "Get scored",
+        "body": "Every settled call moves your FIQ. Many calls, one honest number."
+      },
+      {
+        "n": "03",
+        "title": "Climb",
+        "body": "Beat the creators you follow. They will see it. So will everyone else."
+      }
+    ]
+  },
+  "waitlist": {
+    "eyebrow": "The future of forecasting",
+    "title": "Your forecasting journey starts before launch.",
+    "lead": "Secure your spot, invite your rivals and climb the waitlist leaderboard. Every referral is worth +5 points. Top spots unlock early access, founder perks and cash.",
+    "cardLabel": "Join the waitlist",
+    "nickname": "Nickname",
+    "referred": "Referred by",
+    "referredHint": "a creator's handle",
+    "squad": "Choose your character",
+    "cta": "Join waitlist",
+    "fineprint": "No money · coins only · 18+",
+    "characters": [
+      "/avatar/01-open-market-trader.svg",
+      "/avatar/02-edge-score-explorer.svg",
+      "/avatar/03-duel-customizable-fighter.svg",
+      "/avatar/04-rapid-duel-fighter.svg"
+    ]
+  },
+  "footer": {
+    "signature": "Jameye® · 2026 · Free to play, no download",
+    "links": [
+      {
+        "label": "Leaderboard",
+        "href": "/en/leaderboard"
+      },
+      {
+        "label": "About",
+        "href": "/en/about"
+      },
+      {
+        "label": "Terms",
+        "href": "/en/terms"
+      },
+      {
+        "label": "Privacy",
+        "href": "/en/privacy"
+      },
+      {
+        "label": "Cookies",
+        "href": "/en/cookies"
+      }
+    ]
+  }
+}

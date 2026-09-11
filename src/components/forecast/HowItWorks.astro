@@ -1,0 +1,49 @@
+---
+// The three gestures the app is built on, as photo tiles.
+import { toneColor } from './tones';
+import type { ForecastContent } from './types';
+
+export interface Props {
+  how: ForecastContent['how'];
+}
+
+const { how } = Astro.props;
+
+const PATHS: Record<string, string> = {
+  up: 'M12 19V5M5 12l7-7 7 7',
+  right: 'M5 12h14M13 6l6 6-6 6',
+  check: 'M5 13l4 4L19 7',
+};
+---
+
+<section class="fx-shell fx-section" id="how">
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <span class="fx-eyebrow">{how.eyebrow}</span>
+    <h2 class="fx-h2">{how.title}</h2>
+  </div>
+
+  <div class="fx-gestures">
+    {
+      how.gestures.map((g) => (
+        <article class:list={['fx-gesture', g.tone === 'accent' && 'fx-gesture--accent']}>
+          <img src={g.image} alt="" loading="lazy" />
+          <span class="fx-gesture__scrim"></span>
+          <span class="fx-gesture__body">
+            <span
+              class:list={['fx-gesture__icon', g.tone === 'accent' && 'fx-gesture__icon--grad']}
+              style={g.tone === 'accent'
+                ? undefined
+                : `color:${toneColor(g.tone)};box-shadow:0 0 30px color-mix(in srgb, ${toneColor(g.tone)} 25%, transparent);`}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width={g.tone === 'accent' ? '2.2' : '2'} stroke-linecap="round" stroke-linejoin="round">
+                <path d={PATHS[g.icon]}></path>
+              </svg>
+            </span>
+            <span class="fx-gesture__title">{g.title}</span>
+            <span class="fx-gesture__copy">{g.body}</span>
+          </span>
+        </article>
+      ))
+    }
+  </div>
+</section>

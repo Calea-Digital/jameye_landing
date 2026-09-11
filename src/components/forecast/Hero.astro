@@ -1,0 +1,68 @@
+---
+// Full-bleed hero: crowd photograph under a double scrim, headline on the left,
+// and a shuffling fan of creator cards on the right (5 cards on one 20s loop,
+// each offset by 4s so the deck is always mid-shuffle).
+import { toneColor } from './tones';
+import type { ForecastContent } from './types';
+
+export interface Props {
+  nav: ForecastContent['nav'];
+  hero: ForecastContent['hero'];
+}
+
+const { nav, hero } = Astro.props;
+---
+
+<header class="fx-hero">
+  <img class="fx-hero__img" src={hero.image} alt="" fetchpriority="high" />
+  <div class="fx-hero__scrim-v"></div>
+  <div class="fx-hero__scrim-h"></div>
+
+  <nav class="fx-shell fx-nav" aria-label="Primary">
+    <a href="/en" aria-label="Jameye home">
+      <span class="fx-wordmark" style="font-size:22px;">JAMEYE<sup class="reg">®</sup></span>
+    </a>
+    <div class="fx-nav__links">
+      {nav.links.map((link) => <a class="fx-nav__link" href={link.href}>{link.label}</a>)}
+      <button type="button" class="fx-nav__cta" data-open-waitlist>{nav.cta}</button>
+    </div>
+  </nav>
+
+  <div class="fx-shell fx-hero__grid">
+    <div class="fx-hero__copy">
+      <span class="fx-hero__badge"><span class="fx-dot"></span>{hero.badge}</span>
+
+      <h1 class="fx-hero__title">
+        {hero.titleLines.map((line) => <>{line}<br /></>)}
+        <span class="fx-grad-text">{hero.titleAccent}</span>
+      </h1>
+
+      <p class="fx-lead" style="font-size:16px;color:var(--fx-ink-72);">{hero.lead}</p>
+
+      <div class="fx-hero__actions">
+        <button type="button" class="fx-btn fx-btn--primary" data-open-waitlist>{hero.ctaPrimary}</button>
+        <a class="fx-btn fx-btn--ghost" href="#play">{hero.ctaSecondary}</a>
+      </div>
+    </div>
+
+    <div class="fx-hero__stage" aria-hidden="true">
+      {
+        hero.fan.map((card, i) => (
+          <div
+            class:list={['fx-fan', 'fx-toon-card', card.lead && 'fx-fan--lead']}
+            style={`animation-delay:-${i * 4}s;--tone:${toneColor(card.tone)};`}
+          >
+            <span class="fx-toon-art"><img src={card.avatar} alt="" loading="lazy" /></span>
+            <span class="fx-fan__scrim"></span>
+            <span class="fx-fan__meta" style={`color:${toneColor(card.tone)};`}>{card.meta}</span>
+            <span class="fx-fan__name">{card.name}</span>
+            <span class="fx-call">
+              <span class="fx-call__q">{card.call}</span>
+              <span class:list={['fx-call__odds', !card.down && 'fx-call__odds--yes']}>{card.odds}</span>
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</header>

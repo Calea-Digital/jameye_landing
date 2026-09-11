@@ -1,0 +1,30 @@
+---
+// The compliance beat: coins, not cash. Gradient slab with three numbered steps.
+import type { ForecastContent } from './types';
+
+export interface Props {
+  skill: ForecastContent['skill'];
+}
+
+const { skill } = Astro.props;
+---
+
+<section class="fx-shell" style="padding-top:72px;">
+  <div class="fx-skill">
+    <div class="fx-skill__head">
+      <span class="fx-eyebrow">{skill.eyebrow}</span>
+      <h2 class="fx-h2">{skill.title}</h2>
+      <p class="fx-lead" style="max-width:none;color:var(--fx-ink-72);">{skill.lead}</p>
+    </div>
+
+    {
+      skill.steps.map((step) => (
+        <div class="fx-skill__step">
+          <span class="fx-skill__n">{step.n}</span>
+          <span class="fx-skill__title">{step.title}</span>
+          <span class="fx-skill__copy">{step.body}</span>
+        </div>
+      ))
+    }
+  </div>
+</section>

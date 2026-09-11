@@ -1,0 +1,74 @@
+---
+// Live markets grid — one card per open market, colour-keyed to its vertical.
+import { toneColor } from './tones';
+import type { ForecastContent } from './types';
+
+export interface Props {
+  markets: ForecastContent['markets'];
+}
+
+const { markets } = Astro.props;
+---
+
+<section class="fx-markets" id="markets">
+  <div class="fx-shell fx-markets__inner">
+    <div class="fx-markets__head">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <span class="fx-eyebrow">{markets.eyebrow}</span>
+        <h2 class="fx-h2">
+          {markets.titleLead}
+          <span style="color:var(--fx-sports);">{markets.titleEvery}</span>
+          <span style="color:var(--fx-politics);">{markets.titleVertical}</span>
+        </h2>
+      </div>
+
+      <div class="fx-legend">
+        {
+          markets.legend.map((item) => (
+            <span class="fx-legend__item">
+              <span
+                class="fx-dot"
+                style={`background:${toneColor(item.tone)};box-shadow:0 0 8px ${toneColor(item.tone)};`}
+              ></span>
+              {item.label}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="fx-market-grid">
+      {
+        markets.cards.map((card) => (
+          <button type="button" class="fx-market" data-open-waitlist>
+            <span class="fx-market__shot">
+              <img src={card.image} alt="" loading="lazy" />
+              <span
+                class="fx-market__edge"
+                style={`background:${toneColor(card.tone)};box-shadow:0 0 12px ${toneColor(card.tone)};`}
+              ></span>
+            </span>
+            <span class="fx-market__body">
+              <span class="fx-market__top">
+                <span class="fx-market__vertical" style={`color:${toneColor(card.tone)};`}>
+                  <span class="fx-dot" style={`background:${toneColor(card.tone)};`}></span>
+                  {card.vertical.toUpperCase()}
+                </span>
+                <span class="fx-market__in">{card.in}</span>
+              </span>
+              <span class="fx-market__q">{card.question}</span>
+              <span class="fx-market__odds">
+                <span class="fx-meter"><span style={`width:${card.pct}%;`}></span></span>
+                <span class="fx-market__pct">{card.pct}% <small>{card.side}</small></span>
+              </span>
+            </span>
+          </button>
+        ))
+      }
+    </div>
+
+    <button type="button" class="fx-btn fx-btn--ghost fx-btn--sm" style="align-self:center;" data-open-waitlist>
+      {markets.cta}
+    </button>
+  </div>
+</section>

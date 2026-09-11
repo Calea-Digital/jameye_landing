@@ -1,0 +1,55 @@
+---
+// FIQ — the public skill score, paired with a floating squad leaderboard.
+import type { ForecastContent } from './types';
+
+export interface Props {
+  fiq: ForecastContent['fiq'];
+}
+
+const { fiq } = Astro.props;
+---
+
+<section class="fx-fiq" id="fiq">
+  <div class="fx-aurora"></div>
+
+  <div class="fx-shell fx-section fx-fiq__grid">
+    <div class="fx-fiq__copy">
+      <span class="fx-eyebrow">{fiq.eyebrow}</span>
+      <h2 class="fx-h2">{fiq.title}</h2>
+      <p class="fx-lead">{fiq.lead}</p>
+
+      <div class="fx-fiq__stats">
+        {
+          fiq.stats.map((stat) => (
+            <div class="fx-stat">
+              <span class:list={['fx-stat__value', stat.gradient && 'fx-grad-text']}>{stat.value}</span>
+              <span class="fx-stat__label">{stat.label.toUpperCase()}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="fx-board">
+      <div class="fx-board__head">
+        <span>{fiq.boardTitle.toUpperCase()}</span>
+        <span>{fiq.boardPeriod.toUpperCase()}</span>
+      </div>
+      {
+        fiq.rows.map((row) => (
+          <div class:list={['fx-row', row.you && 'fx-row--you', row.pos === 1 && 'fx-row--top']}>
+            <span class="fx-row__pos">{row.pos}</span>
+            <span class:list={['fx-row__face', row.face ? 'fx-toon-face' : 'fx-row__face--initial']}>
+              {row.face ? <img src={row.face} alt="" loading="lazy" /> : <span>{row.name.slice(0, 1)}</span>}
+            </span>
+            <span class="fx-row__id">
+              <span class="fx-row__name">{row.name}</span>
+              <span class="fx-row__tag">{row.tag.toUpperCase()}</span>
+            </span>
+            <span class="fx-row__score">{row.score}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

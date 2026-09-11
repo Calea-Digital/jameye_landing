@@ -1,0 +1,88 @@
+---
+// "Pick a side" — the playable market. Everything outside the control panel is
+// static (photo, live chrome, scrubber); the panel itself is the one React
+// island on the page.
+import MarketControl from './MarketControl';
+import { toneColor } from './tones';
+import type { ForecastContent } from './types';
+
+export interface Props {
+  play: ForecastContent['play'];
+}
+
+const { play } = Astro.props;
+const m = play.market;
+const tone = toneColor(m.tone);
+---
+
+<section class="fx-play" id="play">
+  <div class="fx-aurora"></div>
+
+  <div class="fx-shell fx-section fx-play__inner">
+    <div class="fx-play__head">
+      <span class="fx-eyebrow">{play.eyebrow}</span>
+      <h2 class="fx-h2">{play.title}</h2>
+      <p class="fx-lead" style="max-width:460px;">{play.lead}</p>
+
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="fx-stack">
+          {
+            play.ridersFaces.map((face) => (
+              <span class="fx-stack__face fx-toon-face">
+                <img src={face} alt="" loading="lazy" />
+              </span>
+            ))
+          }
+        </span>
+        <span style="font-size:12.5px;color:rgba(244,239,250,.75);">
+          <b>{play.ridersCount}</b> {play.ridersRest}
+        </span>
+      </div>
+    </div>
+
+    <div class="fx-stage">
+      <img class="fx-stage__img" src={m.image} alt="" loading="lazy" />
+      <div class="fx-stage__scrim-v"></div>
+      <div class="fx-stage__scrim-h"></div>
+
+      <div class="fx-stage__top">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="fx-live"><span class="fx-dot"></span>LIVE</span>
+          <span class="fx-chip">{m.watching}</span>
+        </div>
+        <div class="fx-caller">
+          <span class="fx-caller__face fx-toon-face"><img src={m.callerFace} alt="" loading="lazy" /></span>
+          <span>{m.callerName} <span style={`color:${tone};`}>· {m.callerSide}</span></span>
+        </div>
+      </div>
+
+      <div class="fx-stage__question">
+        <span class="fx-stage__vertical" style={`color:${tone};`}>
+          <span class="fx-dot" style={`width:6px;height:6px;background:${tone};box-shadow:0 0 8px ${tone};`}></span>
+          {m.vertical.toUpperCase()}
+        </span>
+        <span class="fx-stage__title">{m.question}</span>
+
+        <div class="fx-scrub">
+          <span class="fx-scrub__play" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+          </span>
+          <div class="fx-scrub__bar">
+            <div class="fx-scrub__rail">
+              <div class="fx-scrub__fill" style="width:38%;"></div>
+              <span class="fx-scrub__knob" style="left:38%;"></span>
+            </div>
+            <div class="fx-scrub__meta">
+              <span>{m.elapsed}</span>
+              <span>{m.chartLabel.toUpperCase()}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fx-stage__panel">
+        <MarketControl client:visible market={m} copy={play.control} />
+      </div>
+    </div>
+  </div>
+</section>
