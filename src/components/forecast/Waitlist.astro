@@ -1,0 +1,56 @@
+---
+// Closing waitlist panel. The fields are a preview of the real form — every
+// control opens the shared waitlist modal (WaitlistModal.astro), which owns the
+// actual submission, referral code and leaderboard.
+import type { ForecastContent } from './types';
+
+export interface Props {
+  waitlist: ForecastContent['waitlist'];
+}
+
+const { waitlist } = Astro.props;
+---
+
+<section class="fx-waitlist" id="waitlist">
+  <div class="fx-waitlist__aurora"></div>
+
+  <div class="fx-shell fx-waitlist__inner">
+    <div class="fx-waitlist__head">
+      <span class="fx-eyebrow">{waitlist.eyebrow}</span>
+      <h2 class="fx-waitlist__title">{waitlist.title}</h2>
+      <p class="fx-lead" style="max-width:none;">{waitlist.lead}</p>
+    </div>
+
+    <div class="fx-waitlist__card">
+      <span style="font-size:10.5px;letter-spacing:.22em;color:var(--fx-ink-42);">{waitlist.cardLabel.toUpperCase()}</span>
+
+      <button type="button" class="fx-field" data-open-waitlist>{waitlist.nickname}</button>
+      <button type="button" class="fx-field" data-open-waitlist>
+        {waitlist.referred} <b>{waitlist.referredHint}</b>
+      </button>
+
+      <div class="fx-squad">
+        <span>{waitlist.squad}</span>
+        <span class="fx-characters">
+          {
+            waitlist.characters.map((face, i) => (
+              <button type="button" class:list={['fx-character', i === 0 && 'is-selected']} data-open-waitlist>
+                <img src={face} alt="" loading="lazy" />
+              </button>
+            ))
+          }
+        </span>
+      </div>
+
+      <button type="button" class="fx-btn fx-btn--primary" style="width:100%;letter-spacing:.12em;" data-open-waitlist>
+        {waitlist.cta.toUpperCase()}
+      </button>
+
+      <span class="fx-fineprint">{waitlist.fineprint.toUpperCase()}</span>
+    </div>
+  </div>
+
+  <div class="fx-bigmark" aria-hidden="true">
+    <span class="fx-wordmark">JAMEYE<sup class="reg">®</sup></span>
+  </div>
+</section>

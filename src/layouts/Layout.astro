@@ -87,13 +87,15 @@ const ogImageUrl = new URL(ogImageSrc, Astro.site ?? Astro.url).href;
     <!-- Favicons -->
     <Favicons />
 
-    <!-- Fonts · Brand book §3.1 — Inter Tight (display @ 300), Space Grotesk (body),
-         JetBrains Mono (numerics, eyebrows), Instrument Serif (editorial italic flourish). -->
+    <!-- Fonts · Sora (display + body, the 2026 "Forecast" skin), Archivo Black
+         (JAMEYE® wordmark), JetBrains Mono (numerics, eyebrows), Instrument
+         Serif (editorial italic flourish). Inter Tight is kept for the legacy
+         sub-page components that still reference it. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter+Tight:wght@200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Sora:wght@300;400;500;600;700&family=Inter+Tight:wght@200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
     />
 
     <!-- SEO stuff -->
@@ -133,25 +135,25 @@ const ogImageUrl = new URL(ogImageSrc, Astro.site ?? Astro.url).href;
     <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
       <defs>
         <linearGradient id="jam-grad-brand-sweep" gradientUnits="userSpaceOnUse" x1="2" y1="3" x2="22" y2="21">
-          <stop offset="0%" stop-color="#2962ff" /><stop offset="55%" stop-color="#7e3bff" /><stop offset="100%" stop-color="#d83bff" />
+          <stop offset="0%" stop-color="#ffa9d6" /><stop offset="48%" stop-color="#c77be0" /><stop offset="100%" stop-color="#6c63ff" />
         </linearGradient>
         <linearGradient id="jam-grad-indigo-violet" gradientUnits="userSpaceOnUse" x1="2" y1="3" x2="22" y2="21">
-          <stop offset="0%" stop-color="#5b8dff" /><stop offset="100%" stop-color="#7e3bff" />
+          <stop offset="0%" stop-color="#6c63ff" /><stop offset="100%" stop-color="#c77be0" />
         </linearGradient>
         <linearGradient id="jam-grad-violet-magenta" gradientUnits="userSpaceOnUse" x1="2" y1="3" x2="22" y2="21">
-          <stop offset="0%" stop-color="#7e3bff" /><stop offset="100%" stop-color="#d83bff" />
+          <stop offset="0%" stop-color="#c77be0" /><stop offset="100%" stop-color="#ffa9d6" />
         </linearGradient>
         <linearGradient id="jam-grad-magenta-pink" gradientUnits="userSpaceOnUse" x1="2" y1="3" x2="22" y2="21">
-          <stop offset="0%" stop-color="#d83bff" /><stop offset="100%" stop-color="#ff3ba8" />
+          <stop offset="0%" stop-color="#ffa9d6" /><stop offset="100%" stop-color="#ff5cb8" />
         </linearGradient>
         <linearGradient id="jam-grad-gold-orange" gradientUnits="userSpaceOnUse" x1="2" y1="3" x2="22" y2="21">
-          <stop offset="0%" stop-color="#facc15" /><stop offset="100%" stop-color="#fb923c" />
+          <stop offset="0%" stop-color="#ffc24b" /><stop offset="100%" stop-color="#ff9d5c" />
         </linearGradient>
         <linearGradient id="jam-grad-emerald-blue" gradientUnits="userSpaceOnUse" x1="2" y1="3" x2="22" y2="21">
-          <stop offset="0%" stop-color="#10b981" /><stop offset="100%" stop-color="#2962ff" />
+          <stop offset="0%" stop-color="#7fe0b8" /><stop offset="100%" stop-color="#6c63ff" />
         </linearGradient>
         <linearGradient id="jam-grad-emerald-teal" gradientUnits="userSpaceOnUse" x1="2" y1="3" x2="22" y2="21">
-          <stop offset="0%" stop-color="#10b981" /><stop offset="100%" stop-color="#14b8a6" />
+          <stop offset="0%" stop-color="#7fe0b8" /><stop offset="100%" stop-color="#5fd8c4" />
         </linearGradient>
       </defs>
     </svg>

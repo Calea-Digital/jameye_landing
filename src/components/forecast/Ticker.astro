@@ -1,0 +1,25 @@
+---
+// Edge-to-edge odds ticker. The item list is rendered twice so the 40s
+// translateX(-50%) loop is seamless.
+import type { ForecastContent } from './types';
+
+export interface Props {
+  items: ForecastContent['ticker'];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="fx-ticker" aria-hidden="true">
+  <div class="fx-ticker__track">
+    {
+      [0, 1].map(() =>
+        items.map((item) => (
+          <span class="fx-ticker__item">
+            {item.label.toUpperCase()} <b class:list={[!item.up && 'is-down']}>{item.value} {item.up ? '▲' : '▼'}</b>
+          </span>
+        ))
+      )
+    }
+  </div>
+</div>

@@ -1,41 +1,44 @@
 @import 'tailwindcss';
 @import './play-landing.css';
+@import './forecast.css';
 @plugin '@tailwindcss/typography';
 
 /* ---------------------------------------------------------------------------
-   Jameye landing — Premium Brand Book v1 · 2026 + v5 mockup overlay.
-   Inter Tight (display/body) · JetBrains Mono (numerics, caps) · Fraunces
-   italic (editorial accent words on display headlines).
+   Jameye landing — "Forecast the world. With them." brand skin · 2026.
+   Sora (display/body) · JetBrains Mono (numerics, caps) · Instrument Serif
+   (editorial accent words). Canvas is aurora violet (#0e0a16) and the single
+   accent is the pink → orchid → indigo sweep; the landing's own component
+   layer lives in ./forecast.css.
    --------------------------------------------------------------------------- */
 :root {
   /* Brand family */
-  --brand-blue:       #2962ff;
-  --brand-sky:        #5b8dff;
-  --brand-purple:     #7e3bff;
-  --brand-lavender:   #a78bff;
-  --brand-magenta:    #d83bff;
-  --brand-pink:       #ff3ba8;
+  --brand-blue:       #6c63ff;
+  --brand-sky:        #8f88ff;
+  --brand-purple:     #c77be0;
+  --brand-lavender:   #d8a9ec;
+  --brand-magenta:    #ffa9d6;
+  --brand-pink:       #ff5cb8;
 
   /* Semantic accents */
-  --win-emerald:      #10b981;
-  --win-teal:         #14b8a6;
-  --prize-gold:       #facc15;
-  --heat-orange:      #fb923c;
-  --alert-rose:       #f43f5e;
+  --win-emerald:      #7fe0b8;
+  --win-teal:         #5fd8c4;
+  --prize-gold:       #ffc24b;
+  --heat-orange:      #ff9d5c;
+  --alert-rose:       #e5303e;
 
   /* Neutrals & glass */
   --ink:              #0f172a;
   --slate-deep:       #1e293b;
   --slate-mid:        #475569;
   --slate-body:       #64748b;
-  --cool-black:       #070f1c;
-  --glass-black:      #0a0c14;
+  --cool-black:       #0a0712;
+  --glass-black:      #150f21;
 
   /* Canvas / shell */
-  --background:       #000000;
-  --bg-deep:          #050508;
-  --bg-card:          #0c0c12;
-  --foreground:       #ffffff;
+  --background:       #0e0a16;
+  --bg-deep:          #0a0712;
+  --bg-card:          #150f21;
+  --foreground:       #f4effa;
   --ink-muted:        rgba(255, 255, 255, 0.65);
   --ink-faint:        rgba(255, 255, 255, 0.42);
   --ink-ghost:        rgba(255, 255, 255, 0.18);
@@ -63,28 +66,28 @@
   --accent-hot-pink:  var(--brand-pink);
 
   /* Brand gradients */
-  --gradient-brand-sweep:    linear-gradient(95deg,  #2962ff 0%, #7e3bff 55%, #d83bff 100%);
-  --gradient-indigo-violet:  linear-gradient(140deg, #5b8dff 0%, #7e3bff 100%);
-  --gradient-violet-magenta: linear-gradient(140deg, #7e3bff 0%, #d83bff 100%);
-  --gradient-magenta-pink:   linear-gradient(140deg, #d83bff 0%, #ff3ba8 100%);
-  --gradient-emerald-blue:   linear-gradient(140deg, #10b981 0%, #2962ff 100%);
-  --gradient-gold-orange:    linear-gradient(140deg, #facc15 0%, #fb923c 100%);
-  --gradient-emerald-teal:   linear-gradient(160deg, #10b981 0%, #14b8a6 100%);
-  --gradient-ital-sweep:     linear-gradient(120deg, #5b8dff 0%, #d83bff 50%, #ff3ba8 100%);
-  --gradient-ital-gold:      linear-gradient(120deg, #facc15 0%, #fb923c 100%);
+  --gradient-brand-sweep:    linear-gradient(95deg,  #ffa9d6 0%, #c77be0 48%, #6c63ff 100%);
+  --gradient-indigo-violet:  linear-gradient(140deg, #6c63ff 0%, #c77be0 100%);
+  --gradient-violet-magenta: linear-gradient(140deg, #c77be0 0%, #ffa9d6 100%);
+  --gradient-magenta-pink:   linear-gradient(140deg, #ffa9d6 0%, #ff5cb8 100%);
+  --gradient-emerald-blue:   linear-gradient(140deg, #7fe0b8 0%, #6c63ff 100%);
+  --gradient-gold-orange:    linear-gradient(140deg, #ffc24b 0%, #ff9d5c 100%);
+  --gradient-emerald-teal:   linear-gradient(160deg, #7fe0b8 0%, #5fd8c4 100%);
+  --gradient-ital-sweep:     linear-gradient(120deg, #ffa9d6 0%, #c77be0 50%, #6c63ff 100%);
+  --gradient-ital-gold:      linear-gradient(120deg, #ffc24b 0%, #ff9d5c 100%);
 
   --gradient-cta:       var(--gradient-brand-sweep);
   --gradient-highlight: var(--gradient-brand-sweep);
 
   /* Glass recipes */
-  --glass-header-bg:     rgba(0, 0, 0, 0.72);
-  --glass-panel-bg:      rgba(10, 12, 20, 0.96);
+  --glass-header-bg:     rgba(14, 10, 22, 0.72);
+  --glass-panel-bg:      rgba(21, 15, 33, 0.96);
   --glass-card-bg:       rgba(255, 255, 255, 0.035);
 
   /* Elevation */
   --shadow-soft-chrome: 0 28px 72px -20px rgba(0, 0, 0, 0.7),
                         0 4px 18px rgba(0, 0, 0, 0.5);
-  --shadow-brand-halo:  0 14px 36px -18px rgba(126, 59, 255, 0.45);
+  --shadow-brand-halo:  0 14px 36px -18px rgba(199, 123, 224, 0.45);
   --tile-inner-sheen:   inset 0 1px 0 rgba(255, 255, 255, 0.22),
                         0 0 0 1px rgba(255, 255, 255, 0.10);
 
@@ -98,8 +101,8 @@
                0 16px 32px -8px rgba(0, 0, 0, 0.6);
 
   /* Typography · Brand book §3.1 */
-  --font-sans:      'Inter Tight', 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-body:      'Space Grotesk', 'Inter Tight', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans:      'Sora', 'Inter Tight', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body:      'Sora', 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono:      'JetBrains Mono', ui-monospace, monospace;
   /* Aliases used by the ported app BoU promo band (matches the app's --j-font-* tokens). */
   --j-font-display: var(--font-sans);
@@ -184,8 +187,10 @@
 
   /* Each module fills a single viewport; content is centered so nothing
      bleeds between sections. Tall content (e.g. on short viewports) is
-     allowed to grow rather than be clipped. */
-  main > section {
+     allowed to grow rather than be clipped. Scoped to the sub-pages: the
+     forecast landing (main.fx-main) flows its own sections and must not have
+     every one of them stretched to a full viewport. */
+  main:not(.fx-main) > section {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -194,7 +199,7 @@
      leaves tall empty gaps when a module's content is short, so there we let
      each section size to its own content (its py padding handles spacing). */
   @media (min-width: 768px) {
-    main > section {
+    main:not(.fx-main) > section {
       /* Fill the viewport minus the 64px sticky header, so each module —
          including the hero with its bottom ticker — fits without scrolling. */
       min-height: calc(100dvh - 64px);

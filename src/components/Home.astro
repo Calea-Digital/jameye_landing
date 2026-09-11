@@ -5,14 +5,13 @@
 // `canonicalUrl` is pinned to the /en core for both so search engines
 // consolidate on a single URL (no duplicate-content split).
 //
-// The page itself is a 1:1 port of the "Play Jameye" mockup
-// (github.com/homanpanahi-beep/exact-copy-maker-97): full-screen snap
-// sections rendered by the React island in src/components/play-landing. The
-// only intentional deviation is the sticky bottom CTA — "PLAY NOW" became
-// "JOIN THE WAITLIST" and opens the existing waitlist modal via
-// [data-open-waitlist].
+// The page is the "Forecast the world. With them." design: an aurora-violet
+// landing built from src/components/forecast (copy and market data in
+// src/lang/<locale>/forecast.json, styling in src/styles/forecast.css). Every
+// call to action — nav, hero, market cards, the closing panel — opens the
+// shared waitlist modal via [data-open-waitlist].
 import Layout from '~/layouts/Layout.astro';
-import PlayLanding from '~/components/play-landing/PlayLanding';
+import ForecastLanding from '~/components/forecast/ForecastLanding.astro';
 import WaitlistModal from '~/components/common/WaitlistModal.astro';
 import { t, type Locale } from '~/utils/i18n';
 
@@ -27,6 +26,6 @@ const meta = { ...t<{ title: string; description: string }>(locale, 'meta'), can
 ---
 
 <Layout metadata={meta} locale={locale}>
-  <PlayLanding client:load />
+  <ForecastLanding locale={locale} />
   <WaitlistModal locale={locale} />
 </Layout>

@@ -1,0 +1,22 @@
+---
+// Hairline footer: signature line + legal/section links.
+import { CONTACT_EMAIL, TELEGRAM_URL } from '~/config';
+import type { ForecastContent } from './types';
+
+export interface Props {
+  footer: ForecastContent['footer'];
+}
+
+const { footer } = Astro.props;
+---
+
+<footer class="fx-footer">
+  <div class="fx-shell fx-footer__inner">
+    <span>{footer.signature}</span>
+    <nav class="fx-footer__links" aria-label="Footer">
+      {footer.links.map((link) => <a href={link.href}>{link.label}</a>)}
+      <a href={`mailto:${CONTACT_EMAIL}`}>Contact</a>
+      <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">Telegram</a>
+    </nav>
+  </div>
+</footer>

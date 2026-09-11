@@ -1,0 +1,51 @@
+---
+// Creator rail — an infinite marquee of portrait cards. The card list is
+// rendered twice inside the track so the -50% slide loops seamlessly; hovering
+// the rail pauses it.
+import { toneColor } from './tones';
+import type { ForecastContent } from './types';
+
+export interface Props {
+  creators: ForecastContent['creators'];
+}
+
+const { creators } = Astro.props;
+---
+
+<section class="fx-section" id="creators" style="display:flex;flex-direction:column;gap:28px;">
+  <div class="fx-shell fx-rail-head">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <h2 class="fx-h2">
+        <span class="fx-grad-text">{creators.titleAccent}</span> {creators.titleRest}
+      </h2>
+      <span style="font-size:14px;color:var(--fx-ink-60);max-width:560px;line-height:1.5;">{creators.lead}</span>
+    </div>
+    <div class="fx-rail-head__cta">
+      <button type="button" class="fx-btn fx-btn--ghost fx-btn--sm" data-open-waitlist>{creators.cta}</button>
+      <span class="fx-note">{creators.note}</span>
+    </div>
+  </div>
+
+  <div class="fx-rail">
+    <div class="fx-rail__track">
+      {
+        [0, 1].map(() =>
+          creators.cards.map((card) => (
+            <article class:list={['fx-creator', card.founding && 'fx-creator--founding']}>
+              <img src={card.image} alt="" loading="lazy" />
+              <span class="fx-creator__scrim"></span>
+              {card.founding && <span class="fx-creator__flag">FOUNDING CREATOR</span>}
+              <span class="fx-creator__rank" style={`color:${toneColor(card.tone)};`}>{card.rank.toUpperCase()}</span>
+              <span class="fx-creator__name">{card.name}</span>
+              <span class="fx-creator__stats">{card.stats}</span>
+              <span class="fx-call">
+                <span class="fx-call__q">{card.call}</span>
+                <span class:list={['fx-call__odds', !card.down && 'fx-call__odds--yes']}>{card.odds}</span>
+              </span>
+            </article>
+          ))
+        )
+      }
+    </div>
+  </div>
+</section>
