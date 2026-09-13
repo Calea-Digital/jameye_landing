@@ -113,15 +113,6 @@ export interface ForecastContent {
     market: PlayMarket;
     control: ControlCopy;
   };
-  film: {
-    eyebrow: string;
-    title: string;
-    lead: string;
-    /** Poster still, shown until someone presses play. */
-    poster: string;
-    video: string;
-    playLabel: string;
-  };
   creators: {
     titleAccent: string;
     titleRest: string;

@@ -157,14 +157,6 @@
       "again": "Again"
     }
   },
-  "film": {
-    "eyebrow": "Watch",
-    "title": "Everyone has an opinion. Jameye keeps the score.",
-    "lead": "Thirty seconds on how a call becomes a number, and a number becomes a reputation.",
-    "poster": "/images/film-poster.webp",
-    "video": "/videos/jameye-explainer_fey.mp4",
-    "playLabel": "Play the film"
-  },
   "creators": {
     "titleAccent": "Watch the match.",
     "titleRest": "Predict with your community.",
