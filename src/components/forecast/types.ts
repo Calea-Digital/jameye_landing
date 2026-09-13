@@ -2,7 +2,7 @@
 export interface NavLink { label: string; href: string }
 
 export interface FanCard {
-  /** AI-generated portrait from public/images/creators — not a real person. */
+  /** Market artwork — real photography, no portraits. */
   image: string;
   meta: string;
   tone: string;
@@ -16,7 +16,7 @@ export interface FanCard {
 export interface TickerItem { label: string; value: string; up: boolean }
 
 export interface CreatorCard {
-  /** AI-generated portrait from public/images/creators — not a real person. */
+  /** Jameye character from public/avatar — never a portrait of a person. */
   image: string;
   rank: string;
   tone: string;
@@ -64,7 +64,8 @@ export interface PlayMarket {
   vertical: string;
   tone: string;
   question: string;
-  elapsed: string;
+  /** Clip length in seconds — the scrubber's clock runs against it. */
+  duration: number;
   chartLabel: string;
   yes: number;
   no: number;
@@ -92,8 +93,10 @@ export interface ControlCopy {
 export interface ForecastContent {
   nav: { links: NavLink[]; cta: string };
   hero: {
+    /** Autoplaying brand film behind the headline. */
+    video: string;
+    /** Poster for the film, and the fallback when motion is turned down. */
     image: string;
-    badge: string;
     titleLines: string[];
     titleAccent: string;
     lead: string;
@@ -105,7 +108,8 @@ export interface ForecastContent {
   play: {
     eyebrow: string;
     title: string;
-    lead: string;
+    /** Accessible name for the scrubber's play/pause button. */
+    playLabel: string;
     ridersFaces: string[];
     ridersCount: string;
     ridersRest: string;
@@ -117,17 +121,17 @@ export interface ForecastContent {
     titleRest: string;
     lead: string;
     cta: string;
-    /** Standing disclaimer: the roster is illustrative until creators sign. */
-    note: string;
     cards: CreatorCard[];
   };
   markets: {
     eyebrow: string;
     titleLead: string;
-    titleEvery: string;
-    titleVertical: string;
+    titleAccent: string;
+    lead: string;
+    /** Fallback legend — the section derives it from the live feed when it has one. */
     legend: { label: string; tone: string }[];
     cta: string;
+    /** Fallback cards, used when the Polymarket feed is unavailable. */
     cards: MarketCard[];
   };
   how: { eyebrow: string; title: string; gestures: Gesture[] };

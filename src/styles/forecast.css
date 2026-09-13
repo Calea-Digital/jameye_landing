@@ -20,10 +20,11 @@
   --fx-indigo:      #6c63ff;
   --fx-on-accent:   #26082e;
 
-  /* Vertical coding */
+  /* Vertical coding — kept inside the pink → orchid → indigo brand sweep.
+     The original mint/gold pair sat outside it and was rejected in review. */
   --fx-sports:      #f2a6cc;
-  --fx-politics:    #7fe0b8;
-  --fx-economy:     #ffc24b;
+  --fx-politics:    #a58bff;
+  --fx-economy:     #6ec6ff;
   --fx-esport:      #ff5cb8;
   --fx-film:        #c77be0;
   --fx-live:        #e5303e;
@@ -180,9 +181,8 @@
 
 .fx-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-/* Creator portraits · every face on this page is AI-generated (see
-   public/images/creators) — no photographs of real people, and the roster is
-   labelled as illustrative until real creators sign. */
+/* Faces · every face on this page is a Jameye character (public/avatar) —
+   no photographs of people, real or generated. */
 
 .fx-aurora {
   position: absolute;
@@ -277,6 +277,15 @@
   object-fit: cover;
   object-position: 50% 40%;
 }
+/* The brand film, autoplaying muted behind the headline. The poster is the
+   same still, so a blocked or still-loading video is never a blank hero; the
+   still takes over outright when motion is turned down. */
+.fx-hero__img--video { object-position: 50% 50%; }
+.fx-hero__img--poster { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .fx-hero__img--video { display: none; }
+  .fx-hero__img--poster { display: block; }
+}
 
 .fx-hero__scrim-v {
   position: absolute;
@@ -301,22 +310,6 @@
 }
 
 .fx-hero__copy { display: flex; flex-direction: column; gap: 26px; }
-
-.fx-hero__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  width: max-content;
-  max-width: 100%;
-  padding: 9px 14px;
-  border-radius: 999px;
-  background: rgba(14, 10, 22, 0.55);
-  border: 1px solid rgba(244, 239, 250, 0.14);
-  font-size: 10.5px;
-  letter-spacing: 0.2em;
-  color: var(--fx-pink);
-}
-.fx-hero__badge .fx-dot { background: var(--fx-pink); box-shadow: 0 0 10px var(--fx-pink); animation: fx-pulse 2s infinite; }
 
 .fx-hero__title {
   margin: 0;
@@ -432,7 +425,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  min-height: 520px;
+  min-height: 580px;
   border-radius: 28px;
   overflow: hidden;
   border: 1px solid rgba(199, 123, 224, 0.35);
@@ -503,13 +496,20 @@
 .fx-scrub__play {
   width: 52px; height: 52px;
   border-radius: 50%;
+  border: 0;
+  padding: 0;
   background: var(--fx-ink);
   color: var(--fx-bg);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+.fx-scrub__play:hover { transform: scale(1.06); box-shadow: 0 10px 30px rgba(255, 169, 214, 0.35); }
+.fx-scrub__play:active { transform: scale(0.96); }
+.fx-scrub__rail { cursor: pointer; }
 .fx-scrub__bar { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .fx-scrub__rail { position: relative; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.2); }
 .fx-scrub__fill { position: absolute; inset-block: 0; left: 0; border-radius: 2px; background: linear-gradient(90deg, #ffa9d6, #c77be0); }
@@ -521,7 +521,7 @@
   right: 22px;
   bottom: 22px;
   top: 74px;
-  width: min(42%, 400px);
+  width: min(46%, 430px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -598,6 +598,22 @@
   font-weight: 700;
   letter-spacing: 0.2em;
 }
+/* Avatar card — the roster runs on the Jameye characters, not portraits, so
+   the art is contained on a brand wash rather than cropped edge to edge. */
+.fx-creator--avatar {
+  background:
+    radial-gradient(80% 60% at 50% 18%, rgba(255, 169, 214, 0.22), transparent 70%),
+    linear-gradient(180deg, rgba(108, 99, 255, 0.22), var(--fx-surface) 72%);
+}
+.fx-creator--avatar img {
+  inset: 4% 0 auto;
+  height: 50%;
+  object-fit: contain;
+  object-position: 50% 50%;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
+}
+.fx-creator--avatar .fx-creator__scrim { background: linear-gradient(180deg, transparent 42%, rgba(14, 10, 22, 0.9) 62%, rgba(14, 10, 22, 0.97)); }
+
 .fx-creator__rank { position: relative; font-size: 9px; letter-spacing: 0.2em; }
 .fx-creator__name { position: relative; font-size: 19px; font-weight: 600; margin-top: 4px; }
 .fx-creator__stats { position: relative; font-size: 12px; color: var(--fx-ink-60); margin-bottom: 12px; }
@@ -777,6 +793,17 @@
 .fx-row--top .fx-row__pos { color: var(--fx-pink); }
 .fx-row__face { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: rgba(255, 255, 255, 0.08); }
 .fx-row__face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; }
+/* The character art is full-body on a 120×140 canvas; a circular chip wants
+   just the head, so zoom in on the top of the frame. */
+.fx-face--avatar img,
+.fx-row__face--avatar img {
+  object-fit: cover;
+  object-position: 50% 6%;
+  transform: scale(1.7);
+  transform-origin: 50% 6%;
+}
+.fx-face--avatar,
+.fx-row__face--avatar { background: linear-gradient(160deg, rgba(255, 169, 214, 0.22), rgba(108, 99, 255, 0.24)); }
 /* No portrait (that's you, until you sign up) — initial on the brand sweep. */
 .fx-row__face--initial {
   background: var(--fx-grad);
@@ -804,8 +831,8 @@
   background: linear-gradient(120deg, rgba(255, 169, 214, 0.22), rgba(199, 123, 224, 0.18) 50%, rgba(108, 99, 255, 0.26));
   padding: 48px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 32px 28px;
   align-items: start;
 }
 @media (max-width: 640px) { .fx-skill { padding: 32px 24px; } }
@@ -950,10 +977,10 @@
   background: var(--fx-panel);
   border: 1px solid var(--fx-brand-line);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-  padding: 20px;
+  padding: 24px 22px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
   box-sizing: border-box;
   backdrop-filter: blur(12px);
 }
@@ -968,13 +995,14 @@
 .fx-ctl__meta b { color: var(--fx-ink); }
 .fx-ctl__step { font-size: 10.5px; letter-spacing: 0.22em; color: var(--fx-ink-42); }
 
-/* Sides — two half-round paddles with a thumb-puck between them. */
-.fx-sides { position: relative; height: 118px; }
+/* Sides — two flat paddles with a thumb-puck between them. (The original
+   half-round arcs were rejected in review.) */
+.fx-sides { position: relative; height: 104px; }
 .fx-side {
   position: absolute;
   bottom: 0;
-  width: calc(50% - 5px);
-  height: 118px;
+  width: calc(50% - 6px);
+  height: 104px;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--fx-line);
   display: flex;
@@ -987,10 +1015,10 @@
   font-family: inherit;
   color: inherit;
 }
-.fx-side--no  { left: 0;  border-radius: 118px 8px 0 0; }
-.fx-side--yes { right: 0; border-radius: 8px 118px 0 0; }
+.fx-side--no  { left: 0;  border-radius: 18px; }
+.fx-side--yes { right: 0; border-radius: 18px; }
 .fx-side__label { font-size: 11px; letter-spacing: 0.22em; color: var(--fx-ink-60); }
-.fx-side__pct { font-size: 34px; font-weight: 600; color: var(--fx-ink-60); }
+.fx-side__pct { font-size: 32px; font-weight: 600; color: var(--fx-ink-60); }
 .fx-side--yes .fx-side__label,
 .fx-side--yes .fx-side__pct { color: var(--fx-pink); }
 .fx-side.is-active {
@@ -1006,7 +1034,7 @@
 .fx-puck {
   position: absolute;
   left: 50%;
-  bottom: -10px;
+  bottom: -18px;
   transform: translateX(-50%);
   width: 56px;
   height: 56px;
@@ -1027,23 +1055,24 @@
 .fx-hint {
   text-align: center;
   font-size: 10px;
+  line-height: 1.6;
   letter-spacing: 0.2em;
   color: var(--fx-ink-42);
-  padding-top: 8px;
+  padding-top: 18px;
 }
 
 /* Stake dial */
 .fx-stake {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  opacity: 0.35;
+  gap: 18px;
+  opacity: 0.6;
   transition: opacity 0.3s ease;
 }
 .fx-stake.is-live { opacity: 1; }
 .fx-stake__row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .fx-stake__amount { display: flex; align-items: baseline; gap: 8px; }
-.fx-stake__value { font-size: 44px; font-weight: 600; line-height: 1; letter-spacing: -0.04em; }
+.fx-stake__value { font-size: 40px; font-weight: 600; line-height: 1; letter-spacing: -0.04em; }
 .fx-stake__unit { font-size: 11px; letter-spacing: 0.22em; color: var(--fx-ink-42); }
 .fx-stake__payoff { font-size: 12.5px; color: var(--fx-ink-60); white-space: nowrap; }
 .fx-stake__payoff b { color: var(--fx-pink); }
@@ -1058,7 +1087,7 @@
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.14);
   outline: none;
-  margin: 0;
+  cursor: pointer;
 }
 .fx-range::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -1081,10 +1110,10 @@
 }
 .fx-range:disabled::-webkit-slider-thumb { cursor: not-allowed; }
 
-.fx-quick { display: flex; gap: 8px; }
+.fx-quick { display: flex; gap: 10px; }
 .fx-quick button {
   flex: 1;
-  padding: 10px 0;
+  padding: 12px 0;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--fx-line);
@@ -1119,6 +1148,16 @@
   touch-action: pan-y;
 }
 .fx-lock:disabled { cursor: not-allowed; color: var(--fx-ink-42); }
+/* Nothing to lock until a side is picked — say so instead of going dead. */
+.fx-sides.is-nudged .fx-side:not(.is-active) {
+  animation: fx-nudge 0.45s ease;
+  border-color: rgba(255, 169, 214, 0.55);
+}
+@keyframes fx-nudge {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-5px); }
+  75%      { transform: translateX(5px); }
+}
 .fx-lock__knob {
   position: absolute;
   left: 5px;

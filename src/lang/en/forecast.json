@@ -21,79 +21,80 @@
     "cta": "Join the waitlist"
   },
   "hero": {
-    "image": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=2400&h=1500&q=80",
-    "badge": "The world's forecasting championship",
+    "video": "/videos/jameye-explainer_fey.mp4",
+    "image": "https://images.unsplash.com/photo-1577223625816-7546f13df25d?auto=format&fit=crop&w=2400&h=1500&q=80",
     "titleLines": [
-      "Forecast",
-      "the world."
+      "Forecast with",
+      "the voices"
     ],
-    "titleAccent": "With them.",
-    "lead": "The creators you follow put a number on their calls. Ride with them or against them. One public score says who was right.",
+    "titleAccent": "you love.",
+    "lead": "Join tournaments where your favorite creators make predictions and share their thinking through short-form video. Compete with them — and the community.",
     "ctaPrimary": "Join the waitlist",
     "ctaSecondary": "Try a market",
     "fan": [
       {
-        "meta": "Sports · 82%",
+        "meta": "Premier League · closes Sun",
         "tone": "sports",
-        "name": "@thecaptain",
-        "call": "Senate flips",
-        "odds": "YES 71%",
+        "name": "Man City beat Arsenal?",
+        "call": "31.2K in",
+        "odds": "YES 62%",
         "lead": true,
-        "image": "/images/creators/thecaptain.webp"
+        "image": "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=520&h=650&q=80"
       },
       {
-        "meta": "Politics · 81%",
-        "tone": "politics",
-        "name": "Tom Keller",
-        "call": "Ceasefire holds",
-        "odds": "YES 58%",
-        "image": "/images/creators/tom-keller.webp"
-      },
-      {
-        "meta": "Economy · 74%",
-        "tone": "economy",
-        "name": "Nora Adeyemi",
-        "call": "Fed cuts before Dec",
-        "odds": "YES 58%",
-        "image": "/images/creators/nora-adeyemi.webp"
-      },
-      {
-        "meta": "E-sport · 69%",
-        "tone": "esport",
-        "name": "Nova",
-        "call": "NAVI takes the Major",
-        "odds": "YES 64%",
-        "image": "/images/creators/nova.webp"
-      },
-      {
-        "meta": "Film · 72%",
-        "tone": "film",
-        "name": "Théo Marchand",
-        "call": "Dune 3 above $100M",
-        "odds": "NO 54%",
+        "meta": "NBA Finals · closes Jun 14",
+        "tone": "sports",
+        "name": "Celtics sweep the Finals?",
+        "call": "24.8K in",
+        "odds": "NO 66%",
         "down": true,
-        "image": "/images/creators/theo-marchand.webp"
+        "image": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=520&h=650&q=80"
+      },
+      {
+        "meta": "US Open · closes Sep 7",
+        "tone": "sports",
+        "name": "Alcaraz takes the title?",
+        "call": "18.4K in",
+        "odds": "YES 58%",
+        "image": "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=520&h=650&q=80"
+      },
+      {
+        "meta": "Boxing · closes Sat",
+        "tone": "sports",
+        "name": "Canelo wins by KO?",
+        "call": "12.1K in",
+        "odds": "YES 54%",
+        "image": "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=520&h=650&q=80"
+      },
+      {
+        "meta": "Transfers · closes Sep 1",
+        "tone": "sports",
+        "name": "Enzo Fernández to Madrid?",
+        "call": "9.6K in",
+        "odds": "NO 63%",
+        "down": true,
+        "image": "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=520&h=650&q=80"
       }
     ]
   },
   "ticker": [
     {
-      "label": "Senate flips",
-      "value": "71%",
+      "label": "Man City beat Arsenal",
+      "value": "62%",
       "up": true
     },
     {
-      "label": "Celtics sweep",
+      "label": "Celtics sweep the Finals",
       "value": "34%",
       "up": false
     },
     {
-      "label": "Fed cuts before Dec",
+      "label": "Alcaraz takes the US Open",
       "value": "58%",
       "up": true
     },
     {
-      "label": "NAVI takes the Major",
+      "label": "NAVI take the Major",
       "value": "64%",
       "up": true
     },
@@ -103,36 +104,36 @@
       "up": false
     },
     {
-      "label": "Djokovic reaches final",
-      "value": "58%",
+      "label": "Canelo wins by KO",
+      "value": "54%",
       "up": true
     }
   ],
   "play": {
     "eyebrow": "Forecast amongst the best",
-    "title": "Pick a side. Lock your coins. See if you beat them.",
-    "lead": "This is a live market. In the app you flick the puck with your thumb, turn the dial and slide to lock. Try it here.",
+    "title": "Make your call. Put your JC behind it. See if you can beat them.",
+    "playLabel": "Play the clip",
     "ridersFaces": [
-      "/images/creators/thecaptain.webp",
-      "/images/creators/tom-keller.webp",
-      "/images/creators/nora-adeyemi.webp"
+      "/avatar/13-bonus-captain.svg",
+      "/avatar/06-squad-row1-explorer.svg",
+      "/avatar/02-edge-score-explorer.svg"
     ],
     "ridersCount": "42 forecasters",
     "ridersRest": "are on YES",
     "market": {
-      "image": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=1800&h=1000&q=80",
-      "watching": "24,318 watching",
-      "callerFace": "/images/creators/tom-keller.webp",
-      "callerName": "Tom is calling it",
+      "image": "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=1800&h=1000&q=80",
+      "watching": "18,904 watching",
+      "callerFace": "/avatar/13-bonus-captain.svg",
+      "callerName": "The Captain is calling it",
       "callerSide": "YES",
-      "vertical": "Politics · closes Nov 3",
-      "tone": "politics",
-      "question": "Does the Senate flip in the midterms?",
-      "elapsed": "02:14",
-      "chartLabel": "Odds over time · 71% now",
-      "yes": 71,
-      "no": 29,
-      "forecasters": "24.3K forecasters in",
+      "vertical": "Premier League · closes Sun",
+      "tone": "sports",
+      "question": "Does Manchester City beat Arsenal?",
+      "duration": 214,
+      "chartLabel": "Odds over time · 62% now",
+      "yes": 62,
+      "no": 38,
+      "forecasters": "31.2K forecasters in",
       "balance": 1300
     },
     "control": {
@@ -158,8 +159,8 @@
     }
   },
   "creators": {
-    "titleAccent": "Creators",
-    "titleRest": "bring the crowd",
+    "titleAccent": "Watch the match.",
+    "titleRest": "Predict with your community.",
     "lead": "The people you already watch debate the game now put a number on it. Public accuracy, open calls you can ride in one tap. When they are wrong, everyone sees it.",
     "cta": "Become a founding creator",
     "cards": [
@@ -168,77 +169,68 @@
         "tone": "sports",
         "name": "@thecaptain",
         "stats": "Ex-pro · 82% accuracy · 611K riders",
-        "call": "Senate flips",
-        "odds": "YES 71%",
+        "call": "Man City beat Arsenal",
+        "odds": "YES 62%",
         "founding": true,
-        "image": "/images/creators/thecaptain.webp"
+        "image": "/avatar/13-bonus-captain.svg"
       },
       {
         "rank": "Sports · #2",
         "tone": "sports",
-        "name": "Luca Ferreira",
+        "name": "@lucaferreira",
         "stats": "78% accuracy · 164K riders",
-        "call": "Canelo by KO",
-        "odds": "YES 71%",
-        "image": "/images/creators/luca-ferreira.webp"
+        "call": "Canelo wins by KO",
+        "odds": "YES 54%",
+        "image": "/avatar/04-rapid-duel-fighter.svg"
       },
       {
-        "rank": "Politics · #1",
-        "tone": "politics",
-        "name": "Tom Keller",
+        "rank": "Tennis · #1",
+        "tone": "film",
+        "name": "@deuce",
         "stats": "81% accuracy · 203K riders",
-        "call": "Ceasefire holds",
+        "call": "Alcaraz takes the title",
         "odds": "YES 58%",
-        "image": "/images/creators/tom-keller.webp"
+        "image": "/avatar/18-bonus-skater.svg"
       },
       {
         "rank": "Economy · #3",
         "tone": "economy",
-        "name": "Nora Adeyemi",
+        "name": "@noraadeyemi",
         "stats": "74% accuracy · 128K riders",
         "call": "Fed cuts before Dec",
         "odds": "YES 58%",
-        "image": "/images/creators/nora-adeyemi.webp"
+        "image": "/avatar/11-bonus-scientist.svg"
       },
       {
         "rank": "E-sport · #1",
         "tone": "esport",
-        "name": "Nova",
+        "name": "@nova",
         "stats": "69% accuracy · 412K riders",
-        "call": "NAVI takes the Major",
+        "call": "NAVI take the Major",
         "odds": "YES 64%",
-        "image": "/images/creators/nova.webp"
+        "image": "/avatar/06-squad-row1-explorer.svg"
       },
       {
         "rank": "Film · #2",
-        "tone": "film",
-        "name": "Théo Marchand",
+        "tone": "politics",
+        "name": "@theomarchand",
         "stats": "72% accuracy · 96K riders",
         "call": "Dune 3 above $100M",
         "odds": "NO 54%",
         "down": true,
-        "image": "/images/creators/theo-marchand.webp"
+        "image": "/avatar/12-bonus-dj.svg"
       }
-    ],
-    "note": "Sample creators. The portraits are AI-generated and the profiles are illustrative — the real founding creators are being signed now."
+    ]
   },
   "markets": {
     "eyebrow": "248 open right now",
     "titleLead": "Live markets.",
-    "titleEvery": "Every",
-    "titleVertical": "vertical.",
+    "titleAccent": "Every match.",
+    "lead": "No war markets. Just action and fun.",
     "legend": [
       {
         "label": "Sports",
         "tone": "sports"
-      },
-      {
-        "label": "Politics",
-        "tone": "politics"
-      },
-      {
-        "label": "Economy",
-        "tone": "economy"
       },
       {
         "label": "E-sport",
@@ -247,6 +239,14 @@
       {
         "label": "Film",
         "tone": "film"
+      },
+      {
+        "label": "Tennis",
+        "tone": "politics"
+      },
+      {
+        "label": "Economy",
+        "tone": "economy"
       }
     ],
     "cta": "See all 248 markets",
@@ -261,20 +261,20 @@
         "side": "YES"
       },
       {
-        "image": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=400&h=500&q=75",
-        "tone": "politics",
-        "vertical": "Politics",
+        "image": "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=400&h=500&q=75",
+        "tone": "sports",
+        "vertical": "Sports",
         "in": "24.3K in",
-        "question": "Does the Senate flip in the midterms?",
-        "pct": 71,
+        "question": "Does Manchester City beat Arsenal?",
+        "pct": 62,
         "side": "YES"
       },
       {
-        "image": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=400&h=500&q=75",
-        "tone": "economy",
-        "vertical": "Economy",
+        "image": "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=400&h=500&q=75",
+        "tone": "politics",
+        "vertical": "Tennis",
         "in": "18.9K in",
-        "question": "Fed cuts rates before December?",
+        "question": "Does Alcaraz take the US Open?",
         "pct": 58,
         "side": "YES"
       },
@@ -297,13 +297,13 @@
         "side": "YES"
       },
       {
-        "image": "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?auto=format&fit=crop&w=400&h=500&q=75",
+        "image": "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=400&h=500&q=75",
         "tone": "sports",
         "vertical": "Sports",
         "in": "12.7K in",
         "question": "Where does Enzo Fernández transfer?",
         "pct": 63,
-        "side": "Chelsea"
+        "side": "Madrid"
       }
     ]
   },
@@ -312,7 +312,7 @@
     "title": "Coins, calls and one honest score.",
     "gestures": [
       {
-        "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&h=800&q=70",
+        "image": "https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&h=800&q=70",
         "icon": "up",
         "tone": "politics",
         "title": "Swipe up",
@@ -326,7 +326,7 @@
         "body": "Left is NO, right is YES. You see the payoff before you commit."
       },
       {
-        "image": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=800&h=800&q=70",
+        "image": "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=800&h=800&q=70",
         "icon": "check",
         "tone": "accent",
         "title": "Turn and lock",
@@ -354,7 +354,7 @@
     "rows": [
       {
         "pos": 1,
-        "face": "/images/creators/thecaptain.webp",
+        "face": "/avatar/13-bonus-captain.svg",
         "name": "@thecaptain",
         "tag": "Sports",
         "score": "912"
@@ -369,22 +369,22 @@
       },
       {
         "pos": 3,
-        "face": "/images/creators/tom-keller.webp",
-        "name": "Tom Keller",
-        "tag": "Politics",
+        "face": "/avatar/18-bonus-skater.svg",
+        "name": "@deuce",
+        "tag": "Tennis",
         "score": "845"
       },
       {
         "pos": 4,
-        "face": "/images/creators/nora-adeyemi.webp",
-        "name": "Nora Adeyemi",
+        "face": "/avatar/11-bonus-scientist.svg",
+        "name": "@noraadeyemi",
         "tag": "Economy",
         "score": "803"
       },
       {
         "pos": 5,
-        "face": "/images/creators/nova.webp",
-        "name": "Nova",
+        "face": "/avatar/06-squad-row1-explorer.svg",
+        "name": "@nova",
         "tag": "E-sport",
         "score": "764"
       }
@@ -393,7 +393,7 @@
   "skill": {
     "eyebrow": "Skill, not luck",
     "title": "A global skill championship. Not gambling.",
-    "lead": "You play with Jameye Coins, never cash. Nothing to deposit, nothing to withdraw. What you build is a public record of how right you are.",
+    "lead": "Play with Jameye Coins, never cash. Nothing to deposit. Nothing to withdraw. Just a public record of how good you are at forecasting. Win real prizes where local rules allow.",
     "steps": [
       {
         "n": "01",
@@ -409,6 +409,11 @@
         "n": "03",
         "title": "Climb",
         "body": "Beat the creators you follow. They will see it. So will everyone else."
+      },
+      {
+        "n": "04",
+        "title": "Win",
+        "body": "Win real prizes where local rules allow."
       }
     ]
   },

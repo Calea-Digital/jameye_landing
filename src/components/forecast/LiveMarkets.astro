@@ -1,13 +1,40 @@
 ---
-// Live markets grid — one card per open market, colour-keyed to its vertical.
+// Live markets grid — one card per open market, colour-keyed to its league.
+//
+// The cards come from Polymarket's sports tag at build time (real artwork,
+// real odds, head-to-head fixtures only — no elections, no war). If the API is
+// unreachable the curated cards in forecast.json take over, so the section
+// renders the same either way.
 import { toneColor } from './tones';
-import type { ForecastContent } from './types';
+import { getSportsFixtures } from '~/utils/polymarket';
+import type { ForecastContent, MarketCard } from './types';
 
 export interface Props {
   markets: ForecastContent['markets'];
 }
 
 const { markets } = Astro.props;
+
+// Colour keys, in order — the grid reads as a spectrum rather than one hue.
+const TONES = ['sports', 'esport', 'film', 'politics', 'economy', 'sports'];
+
+const live = await getSportsFixtures(6);
+
+const cards: MarketCard[] =
+  live.length >= 4
+    ? live.map((fixture, i) => ({
+        image: fixture.image,
+        tone: TONES[i % TONES.length],
+        vertical: fixture.league,
+        in: `${fixture.volume} in`,
+        question: fixture.question,
+        pct: fixture.pct,
+        side: fixture.side,
+      }))
+    : markets.cards;
+
+// The legend mirrors whatever is actually on the grid.
+const legend = [...new Map(cards.map((c) => [c.vertical, { label: c.vertical, tone: c.tone }])).values()];
 ---
 
 <section class="fx-markets" id="markets">
@@ -17,14 +44,14 @@ const { markets } = Astro.props;
         <span class="fx-eyebrow">{markets.eyebrow}</span>
         <h2 class="fx-h2">
           {markets.titleLead}
-          <span style="color:var(--fx-sports);">{markets.titleEvery}</span>
-          <span style="color:var(--fx-politics);">{markets.titleVertical}</span>
+          <span class="fx-grad-text">{markets.titleAccent}</span>
         </h2>
+        <p class="fx-lead">{markets.lead}</p>
       </div>
 
       <div class="fx-legend">
         {
-          markets.legend.map((item) => (
+          legend.map((item) => (
             <span class="fx-legend__item">
               <span
                 class="fx-dot"
@@ -39,7 +66,7 @@ const { markets } = Astro.props;
 
     <div class="fx-market-grid">
       {
-        markets.cards.map((card) => (
+        cards.map((card) => (
           <button type="button" class="fx-market" data-open-waitlist>
             <span class="fx-market__shot">
               <img src={card.image} alt="" loading="lazy" />
