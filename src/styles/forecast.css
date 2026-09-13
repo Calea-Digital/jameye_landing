@@ -101,6 +101,8 @@
 }
 
 .fx-page a { color: inherit; text-decoration: none; }
+.fx-page img,
+.fx-page video { max-width: 100%; }
 
 .fx-shell {
   position: relative;
@@ -277,15 +279,6 @@
   object-fit: cover;
   object-position: 50% 40%;
 }
-/* The brand film, autoplaying muted behind the headline. The poster is the
-   same still, so a blocked or still-loading video is never a blank hero; the
-   still takes over outright when motion is turned down. */
-.fx-hero__img--video { object-position: 50% 50%; }
-.fx-hero__img--poster { display: none; }
-@media (prefers-reduced-motion: reduce) {
-  .fx-hero__img--video { display: none; }
-  .fx-hero__img--poster { display: block; }
-}
 
 .fx-hero__scrim-v {
   position: absolute;
@@ -313,7 +306,7 @@
 
 .fx-hero__title {
   margin: 0;
-  font-size: clamp(44px, 5.8vw, 92px);
+  font-size: clamp(34px, 5.8vw, 92px);
   font-weight: 600;
   line-height: 0.95;
   letter-spacing: -0.045em;
@@ -364,6 +357,9 @@
 .fx-call__odds--yes { color: var(--fx-pink); }
 
 @media (max-width: 1000px) {
+  /* The headline stacks over the photo rather than beside it — darken it. */
+  .fx-hero__scrim-v { background: linear-gradient(180deg, rgba(14, 10, 22, 0.82), rgba(14, 10, 22, 0.7) 35%, rgba(14, 10, 22, 0.8) 65%, #0e0a16 96%); }
+  .fx-hero__scrim-h { background: linear-gradient(90deg, rgba(14, 10, 22, 0.8), rgba(14, 10, 22, 0.45)); }
   .fx-hero { min-height: auto; }
   .fx-hero__grid { grid-template-columns: minmax(0, 1fr); padding-bottom: 56px; }
   .fx-hero__stage { height: 460px; margin-inline: auto; max-width: 560px; }
@@ -493,6 +489,10 @@
 .fx-stage__title { font-size: clamp(22px, 2.6vw, 36px); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; }
 
 .fx-scrub { display: flex; align-items: center; gap: 14px; }
+@media (max-width: 480px) {
+  .fx-scrub { gap: 12px; }
+  .fx-scrub__play { width: 44px; height: 44px; }
+}
 .fx-scrub__play {
   width: 52px; height: 52px;
   border-radius: 50%;
@@ -514,7 +514,16 @@
 .fx-scrub__rail { position: relative; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.2); }
 .fx-scrub__fill { position: absolute; inset-block: 0; left: 0; border-radius: 2px; background: linear-gradient(90deg, #ffa9d6, #c77be0); }
 .fx-scrub__knob { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; border-radius: 50%; background: var(--fx-ink); }
-.fx-scrub__meta { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.14em; color: var(--fx-ink-60); }
+.fx-scrub__meta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--fx-ink-60);
+}
+.fx-scrub__meta span:last-child { margin-left: auto; }
 
 .fx-stage__panel {
   position: absolute;
@@ -543,6 +552,68 @@
 }
 
 /* --------------------------------------------------------------------------
+   The film
+   -------------------------------------------------------------------------- */
+.fx-film { display: flex; flex-direction: column; gap: 28px; }
+.fx-film__head { display: flex; flex-direction: column; gap: 14px; max-width: 720px; }
+
+.fx-film__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(199, 123, 224, 0.35);
+  background: var(--fx-surface);
+  box-shadow: 0 50px 120px rgba(0, 0, 0, 0.6);
+}
+.fx-film__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Overlay play affordance — replaced by the browser's own controls on play. */
+.fx-film__play {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border: 0;
+  padding: 0 20px;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(14, 10, 22, 0.35), rgba(14, 10, 22, 0.72));
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fx-ink);
+  cursor: pointer;
+  transition: background 0.25s ease, opacity 0.25s ease;
+}
+.fx-film__play svg {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  padding: 19px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: var(--fx-grad);
+  color: var(--fx-on-accent);
+  box-shadow: var(--fx-shadow-cta);
+  transition: transform 0.25s ease;
+}
+.fx-film__play:hover { background: radial-gradient(60% 60% at 50% 50%, rgba(14, 10, 22, 0.2), rgba(14, 10, 22, 0.6)); }
+.fx-film__play:hover svg { transform: scale(1.06); }
+.fx-film.is-playing .fx-film__play,
+.fx-film__frame.is-playing .fx-film__play { opacity: 0; pointer-events: none; }
+
+@media (max-width: 640px) {
+  .fx-film__frame { border-radius: 20px; }
+  .fx-film__play { gap: 12px; flex-direction: column; font-size: 10px; }
+  .fx-film__play svg { width: 54px; height: 54px; padding: 16px; }
+}
+
+/* --------------------------------------------------------------------------
    Creators rail
    -------------------------------------------------------------------------- */
 .fx-rail-head {
@@ -553,12 +624,9 @@
   flex-wrap: wrap;
 }
 
-/* Rail header CTA + the standing "these creators are illustrative" note. */
 .fx-rail-head__cta { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; max-width: 320px; }
-.fx-note { font-size: 11px; line-height: 1.5; color: var(--fx-ink-42); text-align: right; }
 @media (max-width: 720px) {
   .fx-rail-head__cta { align-items: flex-start; max-width: none; }
-  .fx-note { text-align: left; }
 }
 
 .fx-rail {
@@ -685,11 +753,25 @@
 .fx-market__vertical .fx-dot { width: 6px; height: 6px; }
 .fx-market__in { font-size: 10px; color: var(--fx-ink-42); white-space: nowrap; }
 .fx-market__q { font-size: 16px; font-weight: 600; line-height: 1.3; }
-.fx-market__odds { margin-top: auto; display: flex; align-items: center; gap: 12px; }
-.fx-meter { flex: 1; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.fx-market__odds { margin-top: auto; display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
+.fx-meter { flex: 1 1 72px; min-width: 72px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
 .fx-meter span { display: block; height: 100%; border-radius: 3px; background: var(--fx-grad); }
-.fx-market__pct { font-size: 15px; font-weight: 600; color: var(--fx-pink); white-space: nowrap; }
+.fx-market__pct {
+  flex-shrink: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--fx-pink);
+  white-space: nowrap;
+}
 .fx-market__pct small { font-size: 10px; color: var(--fx-ink-60); font-weight: 500; }
+@media (max-width: 640px) {
+  .fx-market { grid-template-columns: 96px minmax(0, 1fr); min-height: 132px; }
+  .fx-market__body { padding: 14px 14px 13px; gap: 8px; }
+  .fx-market__q { font-size: 15px; }
+}
 
 /* --------------------------------------------------------------------------
    How it works · gestures
@@ -815,9 +897,19 @@
   font-weight: 700;
 }
 .fx-row__id { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.fx-row__name,
+.fx-row__tag { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .fx-row__name { font-size: 14px; font-weight: 600; }
 .fx-row__tag { font-size: 9.5px; letter-spacing: 0.18em; color: var(--fx-ink-42); }
-.fx-row__score { font-size: 18px; font-weight: 600; }
+.fx-row__score { font-size: 18px; font-weight: 600; flex-shrink: 0; }
+@media (max-width: 480px) {
+  .fx-board { padding: 16px; border-radius: 22px; }
+  .fx-board__head { font-size: 9px; letter-spacing: 0.12em; gap: 12px; }
+  .fx-row { gap: 10px; padding: 10px; }
+  .fx-row__pos { width: 14px; }
+  .fx-row__face { width: 34px; height: 34px; }
+  .fx-row__tag { letter-spacing: 0.12em; }
+}
 .fx-row--top .fx-row__score { color: var(--fx-pink); }
 
 /* --------------------------------------------------------------------------
@@ -901,15 +993,15 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 18px;
-  height: 54px;
+  padding: 12px 18px;
+  min-height: 54px;
   border-radius: 999px;
   background: var(--fx-glass);
   border: 1px solid rgba(244, 239, 250, 0.16);
   font-size: 13px;
   color: var(--fx-ink-60);
 }
-.fx-field b { margin-left: auto; color: var(--fx-pink); font-weight: 600; }
+.fx-field b { margin-left: auto; color: var(--fx-pink); font-weight: 600; text-align: right; }
 .fx-squad { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--fx-ink-42); flex-wrap: wrap; }
 
 /* Preview of the character pick the waitlist modal owns — every tile opens it. */
@@ -988,7 +1080,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 4px 12px;
   font-size: 11px;
   color: var(--fx-ink-42);
 }
@@ -1070,7 +1163,7 @@
   transition: opacity 0.3s ease;
 }
 .fx-stake.is-live { opacity: 1; }
-.fx-stake__row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.fx-stake__row { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 10px; }
 .fx-stake__amount { display: flex; align-items: baseline; gap: 8px; }
 .fx-stake__value { font-size: 40px; font-weight: 600; line-height: 1; letter-spacing: -0.04em; }
 .fx-stake__unit { font-size: 11px; letter-spacing: 0.22em; color: var(--fx-ink-42); }
@@ -1175,6 +1268,24 @@
 .fx-lock:not(:disabled) .fx-lock__knob { cursor: grab; }
 .fx-lock.is-dragging .fx-lock__knob { cursor: grabbing; transition: none; }
 .fx-lock:not(.is-dragging) .fx-lock__knob { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+@media (max-width: 480px) {
+  .fx-ctl { padding: 18px 16px; gap: 16px; border-radius: 20px; }
+  .fx-ctl__meta { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .fx-sides { height: 92px; }
+  .fx-side { height: 92px; }
+  .fx-side__pct { font-size: 26px; }
+  .fx-puck { width: 48px; height: 48px; bottom: -15px; }
+  .fx-hint { padding-top: 16px; letter-spacing: 0.14em; }
+  .fx-stake { gap: 14px; }
+  .fx-stake__value { font-size: 34px; }
+  .fx-quick { gap: 6px; }
+  .fx-quick button { font-size: 11px; padding: 11px 0; }
+  /* The knob sits over the label once the track gets short — give it room. */
+  .fx-lock { padding-inline: 58px 14px; font-size: 11px; letter-spacing: 0.1em; }
+  .fx-locked__title { font-size: 21px; }
+  .fx-locked__actions { flex-direction: column; }
+}
 
 /* Locked confirmation */
 .fx-locked {

@@ -93,9 +93,6 @@ export interface ControlCopy {
 export interface ForecastContent {
   nav: { links: NavLink[]; cta: string };
   hero: {
-    /** Autoplaying brand film behind the headline. */
-    video: string;
-    /** Poster for the film, and the fallback when motion is turned down. */
     image: string;
     titleLines: string[];
     titleAccent: string;
@@ -115,6 +112,15 @@ export interface ForecastContent {
     ridersRest: string;
     market: PlayMarket;
     control: ControlCopy;
+  };
+  film: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    /** Poster still, shown until someone presses play. */
+    poster: string;
+    video: string;
+    playLabel: string;
   };
   creators: {
     titleAccent: string;

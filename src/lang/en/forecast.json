@@ -21,7 +21,6 @@
     "cta": "Join the waitlist"
   },
   "hero": {
-    "video": "/videos/jameye-explainer_fey.mp4",
     "image": "https://images.unsplash.com/photo-1577223625816-7546f13df25d?auto=format&fit=crop&w=2400&h=1500&q=80",
     "titleLines": [
       "Forecast with",
@@ -157,6 +156,14 @@
       "keep": "Keep it · join the waitlist",
       "again": "Again"
     }
+  },
+  "film": {
+    "eyebrow": "Watch",
+    "title": "Everyone has an opinion. Jameye keeps the score.",
+    "lead": "Thirty seconds on how a call becomes a number, and a number becomes a reputation.",
+    "poster": "/images/film-poster.webp",
+    "video": "/videos/jameye-explainer_fey.mp4",
+    "playLabel": "Play the film"
   },
   "creators": {
     "titleAccent": "Watch the match.",

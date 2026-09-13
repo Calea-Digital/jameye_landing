@@ -1,0 +1,65 @@
+---
+// The brand film, sitting directly under the playable market. Click-to-play
+// rather than autoplay: the poster carries the section until someone asks for
+// it, and native controls only appear once playback has started.
+import type { ForecastContent } from './types';
+
+export interface Props {
+  film: ForecastContent['film'];
+}
+
+const { film } = Astro.props;
+---
+
+<section class="fx-shell fx-section fx-film" id="film">
+  <div class="fx-film__head">
+    <span class="fx-eyebrow">{film.eyebrow}</span>
+    <h2 class="fx-h2">{film.title}</h2>
+    <p class="fx-lead">{film.lead}</p>
+  </div>
+
+  <div class="fx-film__frame" data-film>
+    <video
+      class="fx-film__video"
+      data-film-video
+      src={film.video}
+      poster={film.poster}
+      playsinline
+      preload="none"></video>
+
+    <button type="button" class="fx-film__play" data-film-play aria-label={film.playLabel}>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8 5v14l11-7z"></path>
+      </svg>
+      <span>{film.playLabel}</span>
+    </button>
+  </div>
+</section>
+
+<script>
+  /**
+   * Click-to-play for the brand film. The overlay hands off to the browser's
+   * own controls on first play, and comes back whenever the film is paused or
+   * runs out, so there is never a dead frame with no way to restart it.
+   */
+  document.querySelectorAll<HTMLElement>('[data-film]').forEach((frame) => {
+    const video = frame.querySelector<HTMLVideoElement>('[data-film-video]');
+    const play = frame.querySelector<HTMLButtonElement>('[data-film-play]');
+    if (!video || !play) return;
+
+    const show = (visible: boolean) => frame.classList.toggle('is-playing', !visible);
+
+    play.addEventListener('click', () => {
+      video.controls = true;
+      void video.play();
+    });
+
+    video.addEventListener('play', () => show(false));
+    video.addEventListener('pause', () => show(true));
+    video.addEventListener('ended', () => {
+      video.controls = false;
+      video.currentTime = 0;
+      show(true);
+    });
+  });
+</script>

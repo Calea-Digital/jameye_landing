@@ -8,6 +8,7 @@ import type { ForecastContent } from './types';
 import Hero from './Hero.astro';
 import Ticker from './Ticker.astro';
 import Play from './Play.astro';
+import Film from './Film.astro';
 import Creators from './Creators.astro';
 import LiveMarkets from './LiveMarkets.astro';
 import HowItWorks from './HowItWorks.astro';
@@ -29,6 +30,7 @@ const c = t<ForecastContent>(locale, 'forecast');
   <Ticker items={c.ticker} />
   <main class="fx-main">
     <Play play={c.play} />
+    <Film film={c.film} />
     <Creators creators={c.creators} />
     <LiveMarkets markets={c.markets} />
     <HowItWorks how={c.how} />
