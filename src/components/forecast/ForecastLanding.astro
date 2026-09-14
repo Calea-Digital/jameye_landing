@@ -5,12 +5,12 @@
 import { t, type Locale } from '~/utils/i18n';
 import type { ForecastContent } from './types';
 
+import Nav from './Nav.astro';
 import Hero from './Hero.astro';
 import Ticker from './Ticker.astro';
 import Play from './Play.astro';
 import Creators from './Creators.astro';
 import LiveMarkets from './LiveMarkets.astro';
-import HowItWorks from './HowItWorks.astro';
 import Fiq from './Fiq.astro';
 import SkillNotLuck from './SkillNotLuck.astro';
 import Waitlist from './Waitlist.astro';
@@ -25,13 +25,13 @@ const c = t<ForecastContent>(locale, 'forecast');
 ---
 
 <div class="fx-page">
-  <Hero nav={c.nav} hero={c.hero} />
+  <Nav nav={c.nav} />
+  <Hero hero={c.hero} />
   <Ticker items={c.ticker} />
   <main class="fx-main">
     <Play play={c.play} />
     <Creators creators={c.creators} />
     <LiveMarkets markets={c.markets} />
-    <HowItWorks how={c.how} />
     <Fiq fiq={c.fiq} />
     <SkillNotLuck skill={c.skill} />
     <Waitlist waitlist={c.waitlist} />

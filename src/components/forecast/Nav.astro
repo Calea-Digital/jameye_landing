@@ -1,0 +1,75 @@
+---
+// Fixed primary nav — always on screen, on every viewport. Desktop shows the
+// wordmark, section links and the waitlist CTA; below 900px it collapses to
+// wordmark + burger, and the links/CTA live in a dropdown sheet.
+import type { ForecastContent } from './types';
+
+export interface Props {
+  nav: ForecastContent['nav'];
+}
+
+const { nav } = Astro.props;
+---
+
+<div class="fx-navbar" data-navbar>
+  <nav class="fx-shell fx-nav" aria-label="Primary">
+    <a href="/en" aria-label="Jameye home" class="fx-nav__home">
+      <span class="fx-wordmark">JAMEYE<sup class="reg">®</sup></span>
+    </a>
+
+    <div class="fx-nav__links">
+      {nav.links.map((link) => <a class="fx-nav__link" href={link.href}>{link.label}</a>)}
+      <button type="button" class="fx-nav__cta" data-open-waitlist>{nav.cta}</button>
+    </div>
+
+    <button
+      type="button"
+      class="fx-nav__burger"
+      data-nav-toggle
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="fx-nav-menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <div class="fx-nav__menu" id="fx-nav-menu" data-nav-menu hidden>
+    <div class="fx-shell fx-nav__menu-inner">
+      {nav.links.map((link) => <a class="fx-nav__menu-link" href={link.href}>{link.label}</a>)}
+      <button type="button" class="fx-nav__cta fx-nav__cta--menu" data-open-waitlist>{nav.cta}</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-navbar]').forEach((bar) => {
+    const toggle = bar.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+    const menu = bar.querySelector<HTMLElement>('[data-nav-menu]');
+    if (!toggle || !menu) return;
+
+    const setOpen = (open: boolean) => {
+      bar.classList.toggle('is-open', open);
+      menu.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+
+    toggle.addEventListener('click', () => setOpen(menu.hidden));
+    // Any choice in the sheet (a section link or the waitlist CTA) closes it.
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a, button')) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.hidden) setOpen(false);
+    });
+
+    // Once the page scrolls past the hero's top edge the bar gets a solid
+    // ground so it stays legible over whatever is underneath.
+    const onScroll = () => bar.classList.toggle('is-scrolled', window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  });
+</script>

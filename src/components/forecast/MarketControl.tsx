@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { ControlCopy, PlayMarket } from './types';
 
 interface Props {
@@ -11,6 +11,8 @@ type Side = 'yes' | 'no' | null;
 /** Distance (as a fraction of the track) the knob must travel to commit. */
 const LOCK_THRESHOLD = 0.62;
 const KNOB = 46;
+/** Undecided band around the middle of the side picker (fraction of the track). */
+const SIDE_DEADZONE = 0.12;
 
 const Check = ({ size = 20, width = 2.2 }: { size?: number; width?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={width} strokeLinecap="round" strokeLinejoin="round">
@@ -25,17 +27,72 @@ const Thumb = () => (
 );
 
 /**
- * The interactive market control from the play section: pick a side, dial the
- * stake, then slide (or click) to lock. Mirrors the app's thumb gestures — the
- * puck slides to the chosen paddle and locking swaps the panel for the
- * confirmation state. The dial and the lock are always draggable; only the
- * payoff (and the commit itself) needs a side, and trying to lock without one
- * nudges the paddles rather than doing nothing.
+ * The interactive market control from the play section: slide the puck toward
+ * NO or YES, dial the stake, then slide (or click) to lock. Mirrors the app's
+ * thumb gestures — the side picker is one track with the puck resting in the
+ * middle until you drag (or tap) it toward a side, and locking swaps the panel
+ * for the confirmation state. The dial and the lock are always draggable; only
+ * the payoff (and the commit itself) needs a side, and trying to lock without
+ * one nudges the track rather than doing nothing.
  */
 export default function MarketControl({ market, copy }: Props) {
   const [side, setSide] = useState<Side>(null);
   const [amount, setAmount] = useState(250);
   const [locked, setLocked] = useState(false);
+
+  // Side picker: one track, puck at 0 (NO) … 0.5 (undecided) … 1 (YES). While
+  // dragging the puck follows the pointer; on release it snaps to the nearer
+  // end, or back to the middle if it never left the dead zone.
+  const sidesRef = useRef<HTMLDivElement | null>(null);
+  const puckRef = useRef<HTMLSpanElement | null>(null);
+  const [pos, setPos] = useState(0.5);
+  const [sideDrag, setSideDrag] = useState(false);
+
+  const settle = useCallback((p: number) => {
+    if (p < 0.5 - SIDE_DEADZONE) {
+      setPos(0);
+      setSide('no');
+    } else if (p > 0.5 + SIDE_DEADZONE) {
+      setPos(1);
+      setSide('yes');
+    } else {
+      setPos(0.5);
+      setSide(null);
+    }
+  }, []);
+
+  const pick = useCallback((next: Exclude<Side, null>) => {
+    setPos(next === 'no' ? 0 : 1);
+    setSide(next);
+  }, []);
+
+  useEffect(() => {
+    if (!sideDrag || locked) return;
+    const track = sidesRef.current;
+    if (!track) return;
+
+    // Puck diameter comes from CSS (--fx-puck) so the breakpoints own it.
+    const puck = puckRef.current?.offsetWidth ?? 56;
+    const ratio = (clientX: number) => {
+      const rect = track.getBoundingClientRect();
+      return Math.min(Math.max((clientX - rect.left - puck / 2) / (rect.width - puck), 0), 1);
+    };
+
+    const move = (e: PointerEvent) => setPos(ratio(e.clientX));
+    const end = (e: PointerEvent) => {
+      setSideDrag(false);
+      settle(ratio(e.clientX));
+    };
+
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
+    return () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', end);
+      window.removeEventListener('pointercancel', end);
+    };
+  }, [sideDrag, locked, settle]);
 
   const trackRef = useRef<HTMLButtonElement | null>(null);
   const [drag, setDrag] = useState<number | null>(null);
@@ -101,6 +158,7 @@ export default function MarketControl({ market, copy }: Props) {
 
   const reset = () => {
     setSide(null);
+    setPos(0.5);
     setAmount(250);
     setLocked(false);
     setDrag(null);
@@ -151,12 +209,20 @@ export default function MarketControl({ market, copy }: Props) {
         <span>{market.forecasters}</span>
       </div>
 
-      <div className={`fx-sides${nudge ? ' is-nudged' : ''}`}>
+      <div
+        ref={sidesRef}
+        className={`fx-sides${nudge ? ' is-nudged' : ''}${sideDrag ? ' is-dragging' : ''}${side ? ` is-${side}` : ''}`}
+      >
+        <span className="fx-sides__track" aria-hidden="true">
+          <span className="fx-sides__fill fx-sides__fill--no" style={{ width: `${Math.max(0, 0.5 - pos) * 100}%` }} />
+          <span className="fx-sides__fill fx-sides__fill--yes" style={{ width: `${Math.max(0, pos - 0.5) * 100}%` }} />
+        </span>
+
         <button
           type="button"
           className={`fx-side fx-side--no${side === 'no' ? ' is-active' : ''}`}
           aria-pressed={side === 'no'}
-          onClick={() => setSide('no')}
+          onClick={() => pick('no')}
         >
           <span className="fx-side__label">NO</span>
           <span className="fx-side__pct">{market.no}%</span>
@@ -165,12 +231,38 @@ export default function MarketControl({ market, copy }: Props) {
           type="button"
           className={`fx-side fx-side--yes${side === 'yes' ? ' is-active' : ''}`}
           aria-pressed={side === 'yes'}
-          onClick={() => setSide('yes')}
+          onClick={() => pick('yes')}
         >
           <span className="fx-side__label">YES</span>
           <span className="fx-side__pct">{market.yes}%</span>
         </button>
-        <span className={`fx-puck${side ? ` is-${side}` : ''}`} aria-hidden="true">
+
+        <span
+          ref={puckRef}
+          className="fx-puck"
+          role="slider"
+          tabIndex={0}
+          aria-label={copy.step1}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(pos * 100)}
+          aria-valuetext={side === 'no' ? 'NO' : side === 'yes' ? 'YES' : 'Undecided'}
+          style={{ '--fx-pos': pos } as CSSProperties}
+          onPointerDown={(e) => {
+            e.preventDefault();
+            (e.currentTarget as HTMLElement).focus();
+            setSideDrag(true);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') pick('no');
+            else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') pick('yes');
+            else if (e.key === 'Home' || e.key === 'Escape') {
+              setPos(0.5);
+              setSide(null);
+            } else return;
+            e.preventDefault();
+          }}
+        >
           <Thumb />
         </span>
       </div>
