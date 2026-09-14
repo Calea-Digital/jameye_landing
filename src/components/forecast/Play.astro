@@ -1,7 +1,7 @@
 ---
-// "Pick a side" — the playable market. Everything outside the control panel is
-// static (photo, live chrome, scrubber); the panel itself is the one React
-// island on the page.
+// "Make your call" — the playable market. The photo and live chrome are
+// static; the scrubber is driven by a small inline controller and the control
+// panel is the one React island on the page.
 import MarketControl from './MarketControl';
 import { toneColor } from './tones';
 import type { ForecastContent } from './types';
@@ -22,13 +22,12 @@ const tone = toneColor(m.tone);
     <div class="fx-play__head">
       <span class="fx-eyebrow">{play.eyebrow}</span>
       <h2 class="fx-h2">{play.title}</h2>
-      <p class="fx-lead" style="max-width:460px;">{play.lead}</p>
 
       <div style="display:flex;align-items:center;gap:10px;">
         <span class="fx-stack">
           {
             play.ridersFaces.map((face) => (
-              <span class="fx-stack__face">
+              <span class="fx-stack__face fx-face--avatar">
                 <img src={face} alt="" loading="lazy" />
               </span>
             ))
@@ -51,7 +50,7 @@ const tone = toneColor(m.tone);
           <span class="fx-chip">{m.watching}</span>
         </div>
         <div class="fx-caller">
-          <span class="fx-caller__face"><img src={m.callerFace} alt="" loading="lazy" /></span>
+          <span class="fx-caller__face fx-face--avatar"><img src={m.callerFace} alt="" loading="lazy" /></span>
           <span>{m.callerName} <span style={`color:${tone};`}>· {m.callerSide}</span></span>
         </div>
       </div>
@@ -63,17 +62,17 @@ const tone = toneColor(m.tone);
         </span>
         <span class="fx-stage__title">{m.question}</span>
 
-        <div class="fx-scrub">
-          <span class="fx-scrub__play" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
-          </span>
+        <div class="fx-scrub" data-scrub data-duration={m.duration}>
+          <button type="button" class="fx-scrub__play" data-scrub-toggle aria-label={play.playLabel} aria-pressed="false">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" data-scrub-icon><path d="M8 5v14l11-7z"></path></svg>
+          </button>
           <div class="fx-scrub__bar">
-            <div class="fx-scrub__rail">
-              <div class="fx-scrub__fill" style="width:38%;"></div>
-              <span class="fx-scrub__knob" style="left:38%;"></span>
+            <div class="fx-scrub__rail" data-scrub-rail>
+              <div class="fx-scrub__fill" data-scrub-fill style="width:0%;"></div>
+              <span class="fx-scrub__knob" data-scrub-knob style="left:0%;"></span>
             </div>
             <div class="fx-scrub__meta">
-              <span>{m.elapsed}</span>
+              <span data-scrub-time>0:00</span>
               <span>{m.chartLabel.toUpperCase()}</span>
             </div>
           </div>
@@ -86,3 +85,83 @@ const tone = toneColor(m.tone);
     </div>
   </div>
 </section>
+
+<script>
+  /**
+   * Scrubber for the market stage. The play button and the rail were both
+   * inert chrome — flagged in review — so they now drive a real playhead:
+   * toggle play/pause, scrub by clicking or dragging the rail, and loop at the
+   * end. There is no footage behind the still, so the clock is the source of
+   * truth rather than a <video> element.
+   */
+  const PLAY = 'M8 5v14l11-7z';
+  const PAUSE = 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z';
+
+  document.querySelectorAll<HTMLElement>('[data-scrub]').forEach((scrub) => {
+    const toggle = scrub.querySelector<HTMLButtonElement>('[data-scrub-toggle]');
+    const icon = scrub.querySelector<SVGPathElement>('[data-scrub-icon] path');
+    const rail = scrub.querySelector<HTMLElement>('[data-scrub-rail]');
+    const fill = scrub.querySelector<HTMLElement>('[data-scrub-fill]');
+    const knob = scrub.querySelector<HTMLElement>('[data-scrub-knob]');
+    const time = scrub.querySelector<HTMLElement>('[data-scrub-time]');
+    if (!toggle || !icon || !rail || !fill || !knob || !time) return;
+
+    const duration = Number(scrub.dataset.duration ?? 0) || 214;
+    let elapsed = 0;
+    let playing = false;
+    let last = 0;
+    let frame = 0;
+
+    const clock = (s: number) =>
+      `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+    const paint = () => {
+      const pct = (elapsed / duration) * 100;
+      fill.style.width = `${pct}%`;
+      knob.style.left = `${pct}%`;
+      time.textContent = clock(elapsed);
+    };
+
+    const tick = (now: number) => {
+      if (!playing) return;
+      elapsed = (elapsed + (now - last) / 1000) % duration;
+      last = now;
+      paint();
+      frame = requestAnimationFrame(tick);
+    };
+
+    const setPlaying = (next: boolean) => {
+      playing = next;
+      icon.setAttribute('d', next ? PAUSE : PLAY);
+      toggle.setAttribute('aria-pressed', String(next));
+      cancelAnimationFrame(frame);
+      if (!next) return;
+      last = performance.now();
+      frame = requestAnimationFrame(tick);
+    };
+
+    toggle.addEventListener('click', () => setPlaying(!playing));
+
+    const seek = (clientX: number) => {
+      const rect = rail.getBoundingClientRect();
+      const ratio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+      elapsed = ratio * duration;
+      last = performance.now();
+      paint();
+    };
+
+    rail.addEventListener('pointerdown', (e: PointerEvent) => {
+      rail.setPointerCapture(e.pointerId);
+      seek(e.clientX);
+      const move = (m: PointerEvent) => seek(m.clientX);
+      const up = () => {
+        rail.removeEventListener('pointermove', move);
+        rail.removeEventListener('pointerup', up);
+      };
+      rail.addEventListener('pointermove', move);
+      rail.addEventListener('pointerup', up);
+    });
+
+    paint();
+  });
+</script>

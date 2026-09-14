@@ -25,10 +25,12 @@ const Thumb = () => (
 );
 
 /**
- * The interactive market control from the hero-play section: pick a side, dial
- * the stake, then slide (or click) to lock. Mirrors the app's thumb gestures —
- * the puck slides to the chosen paddle, the stake dial only wakes up once a
- * side is picked, and locking swaps the panel for the confirmation state.
+ * The interactive market control from the play section: pick a side, dial the
+ * stake, then slide (or click) to lock. Mirrors the app's thumb gestures — the
+ * puck slides to the chosen paddle and locking swaps the panel for the
+ * confirmation state. The dial and the lock are always draggable; only the
+ * payoff (and the commit itself) needs a side, and trying to lock without one
+ * nudges the paddles rather than doing nothing.
  */
 export default function MarketControl({ market, copy }: Props) {
   const [side, setSide] = useState<Side>(null);
@@ -40,12 +42,24 @@ export default function MarketControl({ market, copy }: Props) {
   // Set as soon as a drag actually moves, so the click that follows pointerup
   // doesn't also commit (a short drag back must leave the call unlocked).
   const draggedRef = useRef(false);
+  // Review: the lock read as broken because it silently did nothing until a
+  // side was picked. It now nudges the paddles instead of going dead.
+  const [nudge, setNudge] = useState(false);
+
+  useEffect(() => {
+    if (!nudge) return;
+    const id = window.setTimeout(() => setNudge(false), 450);
+    return () => window.clearTimeout(id);
+  }, [nudge]);
 
   const odds = side === 'no' ? market.no : market.yes;
   const payoff = side ? Math.round(amount * (100 / odds - 1)) : 0;
 
   const commit = useCallback(() => {
-    if (!side) return;
+    if (!side) {
+      setNudge(true);
+      return;
+    }
     setLocked(true);
     setDrag(null);
   }, [side]);
@@ -53,7 +67,7 @@ export default function MarketControl({ market, copy }: Props) {
   // Pointer drag on the slide-to-lock knob. Committing past the threshold locks
   // the call; releasing short of it springs the knob back to the start.
   useEffect(() => {
-    if (drag === null || !side || locked) return;
+    if (drag === null || locked) return;
 
     const track = trackRef.current;
     if (!track) return;
@@ -70,6 +84,7 @@ export default function MarketControl({ market, copy }: Props) {
     const end = () => {
       setDrag((d) => {
         if (d !== null && d >= LOCK_THRESHOLD) commit();
+        else if (draggedRef.current && !side) setNudge(true);
         return null;
       });
     };
@@ -88,6 +103,7 @@ export default function MarketControl({ market, copy }: Props) {
     setSide(null);
     setAmount(250);
     setLocked(false);
+    setDrag(null);
   };
 
   if (locked) {
@@ -135,7 +151,7 @@ export default function MarketControl({ market, copy }: Props) {
         <span>{market.forecasters}</span>
       </div>
 
-      <div className="fx-sides">
+      <div className={`fx-sides${nudge ? ' is-nudged' : ''}`}>
         <button
           type="button"
           className={`fx-side fx-side--no${side === 'no' ? ' is-active' : ''}`}
@@ -179,7 +195,6 @@ export default function MarketControl({ market, copy }: Props) {
           max={market.balance}
           step={10}
           value={amount}
-          disabled={!side}
           aria-label={copy.step2}
           onChange={(e) => setAmount(Number(e.currentTarget.value))}
         />
@@ -191,7 +206,6 @@ export default function MarketControl({ market, copy }: Props) {
               <button
                 key={label}
                 type="button"
-                disabled={!side}
                 className={amount === value ? 'is-active' : undefined}
                 onClick={() => setAmount(value)}
               >
@@ -204,7 +218,6 @@ export default function MarketControl({ market, copy }: Props) {
         <button
           ref={trackRef}
           type="button"
-          disabled={!side}
           className={`fx-lock${drag !== null ? ' is-dragging' : ''}`}
           onClick={() => {
             if (draggedRef.current) {
@@ -219,7 +232,6 @@ export default function MarketControl({ market, copy }: Props) {
             className="fx-lock__knob"
             style={{ transform: `translateX(${knobX}px)` }}
             onPointerDown={(e) => {
-              if (!side) return;
               e.preventDefault();
               e.stopPropagation();
               draggedRef.current = false;

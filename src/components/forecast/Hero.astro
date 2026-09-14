@@ -1,7 +1,7 @@
 ---
-// Full-bleed hero: crowd photograph under a double scrim, headline on the left,
-// and a shuffling fan of creator cards on the right (5 cards on one 20s loop,
-// each offset by 4s so the deck is always mid-shuffle).
+// Full-bleed hero: a stadium photograph under a double scrim, headline on the
+// left, and a shuffling fan of live sports market cards on the right (5 cards
+// on one 20s loop, each offset by 4s so the deck is always mid-shuffle).
 import { toneColor } from './tones';
 import type { ForecastContent } from './types';
 
@@ -30,8 +30,6 @@ const { nav, hero } = Astro.props;
 
   <div class="fx-shell fx-hero__grid">
     <div class="fx-hero__copy">
-      <span class="fx-hero__badge"><span class="fx-dot"></span>{hero.badge}</span>
-
       <h1 class="fx-hero__title">
         {hero.titleLines.map((line) => <>{line}<br /></>)}
         <span class="fx-grad-text">{hero.titleAccent}</span>
