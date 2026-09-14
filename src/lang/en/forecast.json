@@ -12,10 +12,6 @@
       {
         "label": "FIQ",
         "href": "#fiq"
-      },
-      {
-        "label": "How it works",
-        "href": "#how"
       }
     ],
     "cta": "Join the waitlist"
@@ -24,55 +20,42 @@
     "image": "https://images.unsplash.com/photo-1577223625816-7546f13df25d?auto=format&fit=crop&w=2400&h=1500&q=80",
     "titleLines": [
       "Forecast with",
-      "the voices"
+      "the creators"
     ],
-    "titleAccent": "you love.",
+    "titleAccent": "you love",
     "lead": "Join tournaments where your favorite creators make predictions and share their thinking through short-form video. Compete with them — and the community.",
     "ctaPrimary": "Join the waitlist",
-    "ctaSecondary": "Try a market",
     "fan": [
       {
         "meta": "Premier League · closes Sun",
         "tone": "sports",
         "name": "Man City beat Arsenal?",
-        "call": "31.2K in",
-        "odds": "YES 62%",
         "lead": true,
-        "image": "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=520&h=650&q=80"
+        "image": "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?auto=format&fit=crop&w=520&h=650&q=80"
       },
       {
         "meta": "NBA Finals · closes Jun 14",
         "tone": "sports",
         "name": "Celtics sweep the Finals?",
-        "call": "24.8K in",
-        "odds": "NO 66%",
-        "down": true,
         "image": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=520&h=650&q=80"
       },
       {
         "meta": "US Open · closes Sep 7",
         "tone": "sports",
         "name": "Alcaraz takes the title?",
-        "call": "18.4K in",
-        "odds": "YES 58%",
-        "image": "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=520&h=650&q=80"
+        "image": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=520&h=650&q=80"
       },
       {
         "meta": "Boxing · closes Sat",
         "tone": "sports",
         "name": "Canelo wins by KO?",
-        "call": "12.1K in",
-        "odds": "YES 54%",
         "image": "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=520&h=650&q=80"
       },
       {
         "meta": "Transfers · closes Sep 1",
         "tone": "sports",
         "name": "Enzo Fernández to Madrid?",
-        "call": "9.6K in",
-        "odds": "NO 63%",
-        "down": true,
-        "image": "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=520&h=650&q=80"
+        "image": "https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=520&h=650&q=80"
       }
     ]
   },
@@ -111,7 +94,6 @@
   "play": {
     "eyebrow": "Forecast amongst the best",
     "title": "Make your call. Put your JC behind it. See if you can beat them.",
-    "playLabel": "Play the clip",
     "ridersFaces": [
       "/avatar/13-bonus-captain.svg",
       "/avatar/06-squad-row1-explorer.svg",
@@ -120,16 +102,13 @@
     "ridersCount": "42 forecasters",
     "ridersRest": "are on YES",
     "market": {
-      "image": "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=1800&h=1000&q=80",
-      "watching": "18,904 watching",
+      "image": "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?auto=format&fit=crop&w=1800&h=1000&q=80",
       "callerFace": "/avatar/13-bonus-captain.svg",
       "callerName": "The Captain is calling it",
       "callerSide": "YES",
       "vertical": "Premier League · closes Sun",
       "tone": "sports",
       "question": "Does Manchester City beat Arsenal?",
-      "duration": 214,
-      "chartLabel": "Odds over time · 62% now",
       "yes": 62,
       "no": 38,
       "forecasters": "31.2K forecasters in",
@@ -141,7 +120,7 @@
       "coins": "coins",
       "step1": "Step 1 · pick a side",
       "step2": "Step 2 · dial your coins",
-      "hint": "Click a side · in the app you flick it with your thumb",
+      "hint": "Slide toward a side · in the app you flick it with your thumb",
       "payoffLabel": "If right",
       "quick": [
         "100",
@@ -260,7 +239,7 @@
         "side": "YES"
       },
       {
-        "image": "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=400&h=500&q=75",
+        "image": "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?auto=format&fit=crop&w=400&h=500&q=75",
         "tone": "sports",
         "vertical": "Sports",
         "in": "24.3K in",
@@ -269,7 +248,7 @@
         "side": "YES"
       },
       {
-        "image": "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=400&h=500&q=75",
+        "image": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=400&h=500&q=75",
         "tone": "politics",
         "vertical": "Tennis",
         "in": "18.9K in",
@@ -296,40 +275,13 @@
         "side": "YES"
       },
       {
-        "image": "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=400&h=500&q=75",
+        "image": "https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=400&h=500&q=75",
         "tone": "sports",
         "vertical": "Sports",
         "in": "12.7K in",
         "question": "Where does Enzo Fernández transfer?",
         "pct": 63,
         "side": "Madrid"
-      }
-    ]
-  },
-  "how": {
-    "eyebrow": "How it works",
-    "title": "Coins, calls and one honest score.",
-    "gestures": [
-      {
-        "image": "https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&h=800&q=70",
-        "icon": "up",
-        "tone": "politics",
-        "title": "Swipe up",
-        "body": "Next market. Full-screen photo, one question, live odds."
-      },
-      {
-        "image": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&h=800&q=70",
-        "icon": "right",
-        "tone": "economy",
-        "title": "Flick the puck",
-        "body": "Left is NO, right is YES. You see the payoff before you commit."
-      },
-      {
-        "image": "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=800&h=800&q=70",
-        "icon": "check",
-        "tone": "accent",
-        "title": "Turn and lock",
-        "body": "Dial in your credits, slide to lock. Streak goes up when you are right."
       }
     ]
   },

@@ -2,15 +2,12 @@
 export interface NavLink { label: string; href: string }
 
 export interface FanCard {
-  /** Market artwork — real photography, no portraits. */
+  /** Market artwork — real photography of the subject (stadium, court, ring), no portraits. */
   image: string;
   meta: string;
   tone: string;
   name: string;
-  call: string;
-  odds: string;
   lead?: boolean;
-  down?: boolean;
 }
 
 export interface TickerItem { label: string; value: string; up: boolean }
@@ -38,14 +35,6 @@ export interface MarketCard {
   side: string;
 }
 
-export interface Gesture {
-  image: string;
-  icon: 'up' | 'right' | 'check';
-  tone: string;
-  title: string;
-  body: string;
-}
-
 export interface BoardRow {
   pos: number;
   face: string;
@@ -57,16 +46,12 @@ export interface BoardRow {
 
 export interface PlayMarket {
   image: string;
-  watching: string;
   callerFace: string;
   callerName: string;
   callerSide: string;
   vertical: string;
   tone: string;
   question: string;
-  /** Clip length in seconds — the scrubber's clock runs against it. */
-  duration: number;
-  chartLabel: string;
   yes: number;
   no: number;
   forecasters: string;
@@ -98,15 +83,12 @@ export interface ForecastContent {
     titleAccent: string;
     lead: string;
     ctaPrimary: string;
-    ctaSecondary: string;
     fan: FanCard[];
   };
   ticker: TickerItem[];
   play: {
     eyebrow: string;
     title: string;
-    /** Accessible name for the scrubber's play/pause button. */
-    playLabel: string;
     ridersFaces: string[];
     ridersCount: string;
     ridersRest: string;
@@ -131,7 +113,6 @@ export interface ForecastContent {
     /** Fallback cards, used when the Polymarket feed is unavailable. */
     cards: MarketCard[];
   };
-  how: { eyebrow: string; title: string; gestures: Gesture[] };
   fiq: {
     eyebrow: string;
     title: string;
