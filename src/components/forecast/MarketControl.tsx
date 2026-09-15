@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
 import type { ControlCopy, PlayMarket } from './types';
 
 interface Props {
@@ -47,6 +47,19 @@ export default function MarketControl({ market, copy }: Props) {
   const puckRef = useRef<HTMLSpanElement | null>(null);
   const [pos, setPos] = useState(0.5);
   const [sideDrag, setSideDrag] = useState(false);
+  // Set once a side drag actually moves, so the click the browser fires on the
+  // NO/YES paddle afterwards doesn't override where the puck settled.
+  const sideMovedRef = useRef(false);
+
+  /** Where along the track (0…1) a pointer is, measured from the puck's centre. */
+  const ratioAt = useCallback((clientX: number) => {
+    const track = sidesRef.current;
+    if (!track) return 0.5;
+    // Puck diameter comes from CSS (--fx-puck) so the breakpoints own it.
+    const puck = puckRef.current?.offsetWidth ?? 56;
+    const rect = track.getBoundingClientRect();
+    return Math.min(Math.max((clientX - rect.left - puck / 2) / (rect.width - puck), 0), 1);
+  }, []);
 
   const settle = useCallback((p: number) => {
     if (p < 0.5 - SIDE_DEADZONE) {
@@ -66,33 +79,47 @@ export default function MarketControl({ market, copy }: Props) {
     setSide(next);
   }, []);
 
+  // Starting a drag anywhere on the track (not just on the puck) matters on a
+  // phone, where a thumb swipe rarely lands on a 48px puck. Pressing the track
+  // brings the puck to the finger; pressing the puck itself just grabs it.
+  const beginSideDrag = (e: ReactPointerEvent<HTMLElement>) => {
+    if (locked) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    e.preventDefault();
+    sideMovedRef.current = false;
+    puckRef.current?.focus({ preventScroll: true });
+    if (!puckRef.current?.contains(e.target as Node)) setPos(ratioAt(e.clientX));
+    setSideDrag(true);
+  };
+
   useEffect(() => {
     if (!sideDrag || locked) return;
-    const track = sidesRef.current;
-    if (!track) return;
 
-    // Puck diameter comes from CSS (--fx-puck) so the breakpoints own it.
-    const puck = puckRef.current?.offsetWidth ?? 56;
-    const ratio = (clientX: number) => {
-      const rect = track.getBoundingClientRect();
-      return Math.min(Math.max((clientX - rect.left - puck / 2) / (rect.width - puck), 0), 1);
+    const move = (e: PointerEvent) => {
+      sideMovedRef.current = true;
+      setPos(ratioAt(e.clientX));
     };
-
-    const move = (e: PointerEvent) => setPos(ratio(e.clientX));
     const end = (e: PointerEvent) => {
       setSideDrag(false);
-      settle(ratio(e.clientX));
+      settle(ratioAt(e.clientX));
+    };
+    // The browser took the gesture (a scroll kicked in). Its cancel event has
+    // no usable coordinates, so fall back to the last settled state rather
+    // than reading clientX = 0 as a call for NO.
+    const cancel = () => {
+      setSideDrag(false);
+      setPos(side === 'no' ? 0 : side === 'yes' ? 1 : 0.5);
     };
 
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', end);
-    window.addEventListener('pointercancel', end);
+    window.addEventListener('pointercancel', cancel);
     return () => {
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', end);
-      window.removeEventListener('pointercancel', end);
+      window.removeEventListener('pointercancel', cancel);
     };
-  }, [sideDrag, locked, settle]);
+  }, [sideDrag, locked, side, settle, ratioAt]);
 
   const trackRef = useRef<HTMLButtonElement | null>(null);
   const [drag, setDrag] = useState<number | null>(null);
@@ -145,14 +172,16 @@ export default function MarketControl({ market, copy }: Props) {
         return null;
       });
     };
+    // Gesture taken over by the browser — spring back, never commit.
+    const cancel = () => setDrag(null);
 
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', end);
-    window.addEventListener('pointercancel', end);
+    window.addEventListener('pointercancel', cancel);
     return () => {
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', end);
-      window.removeEventListener('pointercancel', end);
+      window.removeEventListener('pointercancel', cancel);
     };
   }, [drag, side, locked, commit]);
 
@@ -212,6 +241,7 @@ export default function MarketControl({ market, copy }: Props) {
       <div
         ref={sidesRef}
         className={`fx-sides${nudge ? ' is-nudged' : ''}${sideDrag ? ' is-dragging' : ''}${side ? ` is-${side}` : ''}`}
+        onPointerDown={beginSideDrag}
       >
         <span className="fx-sides__track" aria-hidden="true">
           <span className="fx-sides__fill fx-sides__fill--no" style={{ width: `${Math.max(0, 0.5 - pos) * 100}%` }} />
@@ -222,7 +252,10 @@ export default function MarketControl({ market, copy }: Props) {
           type="button"
           className={`fx-side fx-side--no${side === 'no' ? ' is-active' : ''}`}
           aria-pressed={side === 'no'}
-          onClick={() => pick('no')}
+          onClick={() => {
+            if (sideMovedRef.current) return;
+            pick('no');
+          }}
         >
           <span className="fx-side__label">NO</span>
           <span className="fx-side__pct">{market.no}%</span>
@@ -231,7 +264,10 @@ export default function MarketControl({ market, copy }: Props) {
           type="button"
           className={`fx-side fx-side--yes${side === 'yes' ? ' is-active' : ''}`}
           aria-pressed={side === 'yes'}
-          onClick={() => pick('yes')}
+          onClick={() => {
+            if (sideMovedRef.current) return;
+            pick('yes');
+          }}
         >
           <span className="fx-side__label">YES</span>
           <span className="fx-side__pct">{market.yes}%</span>
@@ -248,11 +284,6 @@ export default function MarketControl({ market, copy }: Props) {
           aria-valuenow={Math.round(pos * 100)}
           aria-valuetext={side === 'no' ? 'NO' : side === 'yes' ? 'YES' : 'Undecided'}
           style={{ '--fx-pos': pos } as CSSProperties}
-          onPointerDown={(e) => {
-            e.preventDefault();
-            (e.currentTarget as HTMLElement).focus();
-            setSideDrag(true);
-          }}
           onKeyDown={(e) => {
             if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') pick('no');
             else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') pick('yes');

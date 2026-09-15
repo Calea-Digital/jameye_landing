@@ -1023,7 +1023,13 @@
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--fx-line);
-  touch-action: pan-y;
+  /* The whole track is a horizontal gesture surface on touch: the browser
+     must not turn a thumb swipe into a page scroll (which would cancel the
+     pointer stream), and a slow press must not raise the iOS text callout. */
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 .fx-sides.is-no,
@@ -1179,8 +1185,10 @@
   color: var(--fx-ink-72);
   cursor: pointer;
   overflow: hidden;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
   user-select: none;
-  touch-action: pan-y;
+  touch-action: none;
 }
 .fx-lock:disabled { cursor: not-allowed; color: var(--fx-ink-42); }
 /* Nothing to lock until a side is picked — say so instead of going dead. */
