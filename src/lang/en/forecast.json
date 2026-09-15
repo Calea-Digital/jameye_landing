@@ -376,15 +376,8 @@
     "nickname": "Nickname",
     "referred": "Referred by",
     "referredHint": "a creator's handle",
-    "squad": "Choose your character",
     "cta": "Join waitlist",
-    "fineprint": "No money · coins only · 18+",
-    "characters": [
-      "/avatar/01-open-market-trader.svg",
-      "/avatar/02-edge-score-explorer.svg",
-      "/avatar/03-duel-customizable-fighter.svg",
-      "/avatar/04-rapid-duel-fighter.svg"
-    ]
+    "fineprint": "No money · coins only · 18+"
   },
   "footer": {
     "signature": "Jameye® · 2026 · Free to play, no download",

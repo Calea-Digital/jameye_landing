@@ -29,19 +29,6 @@ const { waitlist } = Astro.props;
         {waitlist.referred} <b>{waitlist.referredHint}</b>
       </button>
 
-      <div class="fx-squad">
-        <span>{waitlist.squad}</span>
-        <span class="fx-characters">
-          {
-            waitlist.characters.map((face, i) => (
-              <button type="button" class:list={['fx-character', i === 0 && 'is-selected']} data-open-waitlist>
-                <img src={face} alt="" loading="lazy" />
-              </button>
-            ))
-          }
-        </span>
-      </div>
-
       <button type="button" class="fx-btn fx-btn--primary" style="width:100%;letter-spacing:.12em;" data-open-waitlist>
         {waitlist.cta.toUpperCase()}
       </button>
