@@ -923,26 +923,6 @@
   color: var(--fx-ink-60);
 }
 .fx-field b { margin-left: auto; color: var(--fx-pink); font-weight: 600; text-align: right; }
-.fx-squad { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--fx-ink-42); flex-wrap: wrap; }
-
-/* Preview of the character pick the waitlist modal owns — every tile opens it. */
-.fx-characters { display: flex; gap: 8px; margin-left: auto; }
-.fx-character {
-  width: 48px;
-  height: 48px;
-  padding: 2px;
-  border-radius: 14px;
-  border: 1px solid var(--fx-line);
-  background: rgba(255, 255, 255, 0.05);
-  cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-}
-.fx-character img { width: 100%; height: 100%; object-fit: contain; display: block; }
-.fx-character:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.1); }
-.fx-character.is-selected {
-  border-color: rgba(255, 169, 214, 0.55);
-  background: linear-gradient(160deg, rgba(255, 169, 214, 0.2), rgba(108, 99, 255, 0.2));
-}
 .fx-fineprint { text-align: center; font-size: 10px; letter-spacing: 0.2em; color: var(--fx-ink-42); }
 
 .fx-bigmark {
@@ -1227,6 +1207,9 @@
   .fx-puck { box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.6); }
   .fx-hint { letter-spacing: 0.14em; }
   .fx-stake { gap: 14px; }
+  /* Thumb + halo is 50px tall on a 4px track; with the tighter stack gap it
+     needs more of its own margin or it clips the amount and the quick picks. */
+  .fx-range { margin-block: 14px; }
   .fx-stake__value { font-size: 34px; }
   .fx-quick { gap: 6px; }
   .fx-quick button { font-size: 11px; padding: 11px 0; }

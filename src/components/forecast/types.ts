@@ -136,9 +136,6 @@ export interface ForecastContent {
     nickname: string;
     referred: string;
     referredHint: string;
-    squad: string;
-    /** The same four characters the waitlist modal offers. */
-    characters: string[];
     cta: string;
     fineprint: string;
   };
