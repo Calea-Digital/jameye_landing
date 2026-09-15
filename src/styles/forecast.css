@@ -1207,9 +1207,11 @@
   .fx-puck { box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.6); }
   .fx-hint { letter-spacing: 0.14em; }
   .fx-stake { gap: 14px; }
-  /* Thumb + halo is 50px tall on a 4px track; with the tighter stack gap it
-     needs more of its own margin or it clips the amount and the quick picks. */
-  .fx-range { margin-block: 14px; }
+  /* A smaller thumb and halo on phones so the dial doesn't crowd the amount
+     above it or the quick picks below. */
+  .fx-range { margin-block: 12px; }
+  .fx-range::-webkit-slider-thumb { width: 24px; height: 24px; box-shadow: 0 0 0 5px rgba(255, 169, 214, 0.16), 0 6px 18px rgba(0, 0, 0, 0.5); }
+  .fx-range::-moz-range-thumb { width: 24px; height: 24px; box-shadow: 0 0 0 5px rgba(255, 169, 214, 0.16); }
   .fx-stake__value { font-size: 34px; }
   .fx-quick { gap: 6px; }
   .fx-quick button { font-size: 11px; padding: 11px 0; }
