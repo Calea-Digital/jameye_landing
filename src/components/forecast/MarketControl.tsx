@@ -185,6 +185,34 @@ export default function MarketControl({ market, copy }: Props) {
   const [pos, setPos] = useState(0.5);
   const [sideDrag, setSideDrag] = useState(false);
 
+  // While the finger is down the puck is moved by writing --fx-pos straight to
+  // the track (one write per animation frame), never through React state: a
+  // re-render per touchmove is what made the drag stutter on phones. State
+  // only changes when the puck settles. Because React skips a style prop whose
+  // value didn't change, the settled value is also written imperatively — a
+  // drag that ends back where it started would otherwise leave the puck where
+  // the last frame put it.
+  const frame = useRef<number | null>(null);
+  const pendingPos = useRef(0.5);
+  const paintPos = useCallback((p: number) => {
+    sidesRef.current?.style.setProperty('--fx-pos', String(p));
+  }, []);
+  const queuePaint = useCallback((p: number) => {
+    pendingPos.current = p;
+    if (frame.current !== null) return;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = null;
+      paintPos(pendingPos.current);
+    });
+  }, [paintPos]);
+  const flushPaint = useCallback(() => {
+    if (frame.current !== null) {
+      cancelAnimationFrame(frame.current);
+      frame.current = null;
+    }
+  }, []);
+  useEffect(() => flushPaint, [flushPaint]);
+
   /** Where along the track (0…1) a pointer is, measured from the puck's centre. */
   const ratioAt = useCallback((clientX: number) => {
     const track = sidesRef.current;
@@ -195,23 +223,29 @@ export default function MarketControl({ market, copy }: Props) {
     return Math.min(Math.max((clientX - rect.left - puck / 2) / (rect.width - puck), 0), 1);
   }, []);
 
+  const place = useCallback((p: number) => {
+    flushPaint();
+    paintPos(p);
+    setPos(p);
+  }, [flushPaint, paintPos]);
+
   const settle = useCallback((p: number) => {
     if (p < 0.5 - SIDE_DEADZONE) {
-      setPos(0);
+      place(0);
       setSide('no');
     } else if (p > 0.5 + SIDE_DEADZONE) {
-      setPos(1);
+      place(1);
       setSide('yes');
     } else {
-      setPos(0.5);
+      place(0.5);
       setSide(null);
     }
-  }, []);
+  }, [place]);
 
   const pick = useCallback((next: Exclude<Side, null>) => {
-    setPos(next === 'no' ? 0 : 1);
+    place(next === 'no' ? 0 : 1);
     setSide(next);
-  }, []);
+  }, [place]);
 
   // Starting a drag anywhere on the track (not just on the puck) matters on a
   // phone, where a thumb swipe rarely lands on a 48px puck. Pressing the track
@@ -219,10 +253,10 @@ export default function MarketControl({ market, copy }: Props) {
   // tap (no travel) on a paddle picks that side outright.
   useSlideGesture(sidesRef, !locked, {
     onStart: (x, target) => {
-      if (!puckRef.current?.contains(target as Node)) setPos(ratioAt(x));
       setSideDrag(true);
+      if (!puckRef.current?.contains(target as Node)) queuePaint(ratioAt(x));
     },
-    onMove: (x) => setPos(ratioAt(x)),
+    onMove: (x) => queuePaint(ratioAt(x)),
     onEnd: (x, moved, target) => {
       setSideDrag(false);
       const paddle = (target as Element | null)?.closest?.('.fx-side');
@@ -233,12 +267,13 @@ export default function MarketControl({ market, copy }: Props) {
     // than reading a stray coordinate as a call.
     onCancel: () => {
       setSideDrag(false);
-      setPos(side === 'no' ? 0 : side === 'yes' ? 1 : 0.5);
+      place(side === 'no' ? 0 : side === 'yes' ? 1 : 0.5);
     },
   });
 
   const trackRef = useRef<HTMLButtonElement | null>(null);
-  const [drag, setDrag] = useState<number | null>(null);
+  const knobRef = useRef<HTMLSpanElement | null>(null);
+  const [lockDrag, setLockDrag] = useState(false);
   // Review: the lock read as broken because it silently did nothing until a
   // side was picked. It now nudges the paddles instead of going dead.
   const [nudge, setNudge] = useState(false);
@@ -266,37 +301,59 @@ export default function MarketControl({ market, copy }: Props) {
       return;
     }
     setLocked(true);
-    setDrag(null);
+    setLockDrag(false);
   }, [side]);
 
   // Slide-to-lock. The knob follows the finger relative to where the press
   // began (so grabbing it mid-track doesn't teleport it); committing past the
   // threshold locks the call, releasing short of it springs the knob back.
+  // Like the puck, the knob is moved by writing its transform directly, one
+  // frame at a time, with no state change until release.
   const lockStartX = useRef(0);
   const lockTravel = useRef(1);
   const lockFraction = useRef(0);
+  const knobFrame = useRef<number | null>(null);
+  const paintKnob = useCallback((f: number) => {
+    if (knobRef.current) knobRef.current.style.transform = `translateX(${f * lockTravel.current}px)`;
+  }, []);
+  const queueKnob = useCallback((f: number) => {
+    lockFraction.current = f;
+    if (knobFrame.current !== null) return;
+    knobFrame.current = requestAnimationFrame(() => {
+      knobFrame.current = null;
+      paintKnob(lockFraction.current);
+    });
+  }, [paintKnob]);
+  const releaseKnob = useCallback(() => {
+    if (knobFrame.current !== null) {
+      cancelAnimationFrame(knobFrame.current);
+      knobFrame.current = null;
+    }
+    paintKnob(0);
+    setLockDrag(false);
+  }, [paintKnob]);
+  useEffect(() => () => {
+    if (knobFrame.current !== null) cancelAnimationFrame(knobFrame.current);
+  }, []);
+
   useSlideGesture(trackRef, !locked, {
     onStart: (x) => {
       const track = trackRef.current;
       lockStartX.current = x;
       lockTravel.current = Math.max(1, (track?.offsetWidth ?? 0) - KNOB - 10);
       lockFraction.current = 0;
-      setDrag(0);
+      setLockDrag(true);
     },
-    onMove: (x) => {
-      const f = Math.min(Math.max((x - lockStartX.current) / lockTravel.current, 0), 1);
-      lockFraction.current = f;
-      setDrag(f);
-    },
+    onMove: (x) => queueKnob(Math.min(Math.max((x - lockStartX.current) / lockTravel.current, 0), 1)),
     onEnd: (_x, moved) => {
       const f = lockFraction.current;
-      setDrag(null);
+      releaseKnob();
       if (moved && f >= LOCK_THRESHOLD) commit();
       else if (!side) setNudge(true);
       else if (!moved) setHint(true);
     },
     // Gesture taken over by the browser — spring back, never commit.
-    onCancel: () => setDrag(null),
+    onCancel: releaseKnob,
   });
 
   const reset = () => {
@@ -304,7 +361,7 @@ export default function MarketControl({ market, copy }: Props) {
     setPos(0.5);
     setAmount(250);
     setLocked(false);
-    setDrag(null);
+    setLockDrag(false);
   };
 
   if (locked) {
@@ -335,10 +392,6 @@ export default function MarketControl({ market, copy }: Props) {
     );
   }
 
-  const knobX = drag !== null && trackRef.current
-    ? drag * (trackRef.current.offsetWidth - KNOB - 10)
-    : 0;
-
   return (
     <div className="fx-ctl">
       <div className="fx-ctl__meta">
@@ -355,10 +408,11 @@ export default function MarketControl({ market, copy }: Props) {
       <div
         ref={sidesRef}
         className={`fx-sides${nudge ? ' is-nudged' : ''}${sideDrag ? ' is-dragging' : ''}${side ? ` is-${side}` : ''}`}
+        style={{ '--fx-pos': pos } as CSSProperties}
       >
         <span className="fx-sides__track" aria-hidden="true">
-          <span className="fx-sides__fill fx-sides__fill--no" style={{ width: `${Math.max(0, 0.5 - pos) * 100}%` }} />
-          <span className="fx-sides__fill fx-sides__fill--yes" style={{ width: `${Math.max(0, pos - 0.5) * 100}%` }} />
+          <span className="fx-sides__fill fx-sides__fill--no" />
+          <span className="fx-sides__fill fx-sides__fill--yes" />
         </span>
 
         {/* Pointer taps are handled by the gesture (which swallows the
@@ -387,28 +441,29 @@ export default function MarketControl({ market, copy }: Props) {
           <span className="fx-side__pct">{market.yes}%</span>
         </button>
 
-        <span
-          ref={puckRef}
-          className="fx-puck"
-          role="slider"
-          tabIndex={0}
-          aria-label={copy.step1}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={Math.round(pos * 100)}
-          aria-valuetext={side === 'no' ? 'NO' : side === 'yes' ? 'YES' : 'Undecided'}
-          style={{ '--fx-pos': pos } as CSSProperties}
-          onKeyDown={(e) => {
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') pick('no');
-            else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') pick('yes');
-            else if (e.key === 'Home' || e.key === 'Escape') {
-              setPos(0.5);
-              setSide(null);
-            } else return;
-            e.preventDefault();
-          }}
-        >
-          <Thumb />
+        <span className="fx-puck-slot">
+          <span
+            ref={puckRef}
+            className="fx-puck"
+            role="slider"
+            tabIndex={0}
+            aria-label={copy.step1}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(pos * 100)}
+            aria-valuetext={side === 'no' ? 'NO' : side === 'yes' ? 'YES' : 'Undecided'}
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') pick('no');
+              else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') pick('yes');
+              else if (e.key === 'Home' || e.key === 'Escape') {
+                place(0.5);
+                setSide(null);
+              } else return;
+              e.preventDefault();
+            }}
+          >
+            <Thumb />
+          </span>
         </span>
       </div>
 
@@ -455,7 +510,7 @@ export default function MarketControl({ market, copy }: Props) {
         <button
           ref={trackRef}
           type="button"
-          className={`fx-lock${drag !== null ? ' is-dragging' : ''}${hint ? ' is-hinting' : ''}`}
+          className={`fx-lock${lockDrag ? ' is-dragging' : ''}${hint ? ' is-hinting' : ''}`}
           aria-label={(side ? copy.lockReady : copy.lockIdle)}
           onKeyDown={(e) => {
             // Keyboard users can't slide; Enter / Space commit directly.
@@ -470,7 +525,7 @@ export default function MarketControl({ market, copy }: Props) {
           }}
         >
           {(side ? copy.lockReady : copy.lockIdle).toUpperCase()}
-          <span className="fx-lock__knob" style={{ transform: `translateX(${knobX}px)` }}>
+          <span ref={knobRef} className="fx-lock__knob">
             <Check />
           </span>
         </button>

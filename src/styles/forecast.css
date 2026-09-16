@@ -203,7 +203,15 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .fx-fan { position: static; }
+  /* The hero deck is layout, not decoration: with its animation collapsed to
+     a single frame every card lands on the same spot and the fan reads as one
+     static card. Keep the loop, but step between poses instead of tweening —
+     the deck still reorders every 4s, with no continuous motion. */
+  .fx-page .fx-fan {
+    animation-duration: 20s !important;
+    animation-iteration-count: infinite !important;
+    animation-timing-function: steps(1, end) !important;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -1000,6 +1008,12 @@
   box-sizing: border-box;
   backdrop-filter: blur(12px);
 }
+@media (pointer: coarse) {
+  /* The glass blur makes every repaint inside the panel re-blur the whole
+     panel on iOS — the bulk of the drag lag. The panel is 82% opaque, so the
+     blur is barely visible there anyway. */
+  .fx-ctl { backdrop-filter: none; }
+}
 .fx-ctl__meta {
   display: flex;
   justify-content: space-between;
@@ -1035,10 +1049,10 @@
 .fx-sides.is-no,
 .fx-sides.is-yes { border-color: rgba(255, 169, 214, 0.45); box-shadow: 0 0 40px rgba(255, 169, 214, 0.15); }
 .fx-sides__track { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; }
-.fx-sides__fill { position: absolute; top: 0; bottom: 0; width: 0; }
-.fx-sides__fill--no  { right: 50%; background: linear-gradient(270deg, rgba(108, 99, 255, 0.34), rgba(108, 99, 255, 0.08)); }
-.fx-sides__fill--yes { left: 50%;  background: linear-gradient(90deg, rgba(255, 169, 214, 0.34), rgba(255, 169, 214, 0.08)); }
-.fx-sides:not(.is-dragging) .fx-sides__fill { transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.fx-sides__fill { position: absolute; top: 0; bottom: 0; width: 50%; will-change: transform; }
+.fx-sides__fill--no  { right: 50%; transform-origin: 100% 50%; transform: scaleX(max(0, calc((0.5 - var(--fx-pos, 0.5)) * 2))); background: linear-gradient(270deg, rgba(108, 99, 255, 0.34), rgba(108, 99, 255, 0.08)); }
+.fx-sides__fill--yes { left: 50%;  transform-origin: 0 50%;    transform: scaleX(max(0, calc((var(--fx-pos, 0.5) - 0.5) * 2))); background: linear-gradient(90deg, rgba(255, 169, 214, 0.34), rgba(255, 169, 214, 0.08)); }
+.fx-sides:not(.is-dragging) .fx-sides__fill { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
 .fx-side {
   position: absolute;
@@ -1074,12 +1088,29 @@
 .fx-side--yes.is-active .fx-side__label,
 .fx-side--yes.is-active .fx-side__pct { color: var(--fx-pink); }
 
-.fx-puck {
+.fx-puck-slot {
+  /* A zero-height rail as wide as the puck's travel; translating it by
+     --fx-pos × its own width moves the puck without any layout, so a finger
+     drag is compositor work only (setting `left` per frame relaid out the
+     track and re-blurred the glass panel on every move — the phone lag). */
   position: absolute;
   top: 50%;
-  /* --fx-pos is set inline by the island: 0 = NO, 0.5 = undecided, 1 = YES. */
-  left: calc(var(--fx-puck) / 2 + (100% - var(--fx-puck)) * var(--fx-pos, 0.5));
+  left: calc(var(--fx-puck) / 2);
+  width: calc(100% - var(--fx-puck));
+  height: 0;
+  /* --fx-pos is set on .fx-sides by the island: 0 = NO, 0.5 = undecided, 1 = YES. */
+  transform: translate3d(calc(var(--fx-pos, 0.5) * 100%), 0, 0);
+  will-change: transform;
+  pointer-events: none;
+  z-index: 2;
+}
+.fx-sides:not(.is-dragging) .fx-puck-slot { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.fx-puck {
+  position: absolute;
+  top: 0;
+  left: 0;
   transform: translate(-50%, -50%);
+  pointer-events: auto;
   width: var(--fx-puck);
   height: var(--fx-puck);
   border-radius: 50%;
@@ -1091,10 +1122,8 @@
   color: var(--fx-bg);
   cursor: grab;
   touch-action: none;
-  z-index: 2;
 }
 .fx-puck:focus-visible { outline: 2px solid var(--fx-pink); outline-offset: 4px; }
-.fx-sides:not(.is-dragging) .fx-puck { transition: left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .fx-sides.is-dragging .fx-puck { cursor: grabbing; box-shadow: 0 0 0 14px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(0, 0, 0, 0.6); }
 
 .fx-hint {
@@ -1240,6 +1269,7 @@
   color: var(--fx-on-accent);
   box-shadow: 0 8px 24px rgba(199, 123, 224, 0.4);
   touch-action: none;
+  will-change: transform;
 }
 .fx-lock:not(:disabled) .fx-lock__knob { cursor: grab; }
 .fx-lock.is-dragging .fx-lock__knob { cursor: grabbing; transition: none; }
