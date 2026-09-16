@@ -78,13 +78,16 @@
   100%     { transform: translate(0, 60px)      rotate(0)      scale(1);    z-index: 5; }
 }
 
+/* Phone deck. The horizontal spread is one --fx-fan-step per card so the fan
+   scales with the screen (set on .fx-hero__stage) instead of running off the
+   left edge of narrow phones. */
 @keyframes fx-shuffle-sm {
-  0%,  16% { transform: translate(0, 40px)      rotate(0)      scale(1);    z-index: 5; }
-  20%, 36% { transform: translate(-34px, 14px)  rotate(-5deg)  scale(0.97); z-index: 4; }
-  40%, 56% { transform: translate(-68px, 0)     rotate(-9deg)  scale(0.94); z-index: 3; }
-  60%, 76% { transform: translate(-102px, 20px) rotate(6deg)   scale(0.91); z-index: 2; }
-  80%, 96% { transform: translate(-136px, 52px) rotate(11deg)  scale(0.88); z-index: 1; }
-  100%     { transform: translate(0, 40px)      rotate(0)      scale(1);    z-index: 5; }
+  0%,  16% { transform: translate(0, 36px)                                    rotate(0)      scale(1);    z-index: 5; }
+  20%, 36% { transform: translate(calc(var(--fx-fan-step, 34px) * -1), 12px) rotate(-5deg)  scale(0.97); z-index: 4; }
+  40%, 56% { transform: translate(calc(var(--fx-fan-step, 34px) * -2), 0)    rotate(-9deg)  scale(0.94); z-index: 3; }
+  60%, 76% { transform: translate(calc(var(--fx-fan-step, 34px) * -3), 18px) rotate(6deg)   scale(0.91); z-index: 2; }
+  80%, 96% { transform: translate(calc(var(--fx-fan-step, 34px) * -4), 46px) rotate(11deg)  scale(0.88); z-index: 1; }
+  100%     { transform: translate(0, 36px)                                    rotate(0)      scale(1);    z-index: 5; }
 }
 
 /* --------------------------------------------------------------------------
@@ -453,16 +456,24 @@
   .fx-fan { right: auto; left: 50%; margin-left: 60px; }
 }
 @media (max-width: 700px) {
-  .fx-hero__stage { height: 340px; }
+  .fx-hero__stage {
+    /* Card width and per-card spread both track the viewport, so the whole
+       fan (card + 4 steps) always fits inside the stage on 320px phones too. */
+    --fx-fan-w: min(160px, 40vw);
+    --fx-fan-step: min(32px, 8vw);
+    height: 270px;
+  }
   .fx-fan {
-    width: min(180px, 46vw);
+    width: var(--fx-fan-w);
     left: auto;
-    right: 0;
+    /* Centre the deck's footprint in the stage rather than pinning it right. */
+    right: max(0px, calc((100% - var(--fx-fan-w) - 4 * var(--fx-fan-step)) / 2));
     margin-left: 0;
     padding: 14px;
+    border-radius: 20px;
     animation-name: fx-shuffle-sm;
   }
-  .fx-fan__name { font-size: 17px; }
+  .fx-fan__name { font-size: 16px; }
 }
 
 /* --------------------------------------------------------------------------
