@@ -1,0 +1,238 @@
+---
+// Showreel — the portrait product video, framed like a phone, between the
+// ticker and the play section. The 11MB mp4 is never fetched up front: the
+// source is attached when the section nears the viewport, it autoplays muted
+// (looping, inline) while on screen and pauses when scrolled away. Controls:
+// mute toggle top-right, and a bottom bar with play/pause, restart, a
+// seekable progress bar and the time; tapping the picture toggles playback.
+// With reduced motion requested nothing autoplays — the viewer presses play.
+import type { ForecastContent } from './types';
+
+export interface Props {
+  video: ForecastContent['video'];
+}
+
+const { video } = Astro.props;
+const stroke = 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+---
+
+<section class="fx-reel" id="reel">
+  <div class="fx-aurora"></div>
+
+  <div class="fx-shell fx-reel__inner">
+    <div class="fx-reel__copy">
+      <span class="fx-eyebrow">{video.eyebrow}</span>
+      <h2 class="fx-h2">
+        <span class="fx-grad-text">{video.titleAccent}</span> {video.titleRest}
+      </h2>
+      <p class="fx-lead">{video.lead}</p>
+    </div>
+
+    <div class="fx-reel__stage">
+      <div class="fx-reel__glow" aria-hidden="true"></div>
+      <figure
+        class="fx-phone"
+        data-reel
+        data-src={video.src}
+        data-label-sound-on={video.soundOn}
+        data-label-sound-off={video.soundOff}
+        data-label-play={video.play}
+        data-label-pause={video.pause}
+      >
+        <video
+          class="fx-phone__video"
+          poster={video.poster}
+          muted
+          loop
+          playsinline
+          preload="none"
+          width="480"
+          height="848"
+          aria-label={`${video.titleAccent} ${video.titleRest}`}
+        ></video>
+
+        <!-- Tap the picture to play / pause; a big glyph shows while paused. -->
+        <button type="button" class="fx-phone__tap" data-reel-tap aria-label={video.play} tabindex="-1">
+          <span class="fx-phone__big" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+          </span>
+        </button>
+
+        <!-- Sound, top-right -->
+        <button type="button" class="fx-phone__mute" data-reel-mute aria-label={video.soundOn} aria-pressed="false">
+          <svg class="fx-phone__ico fx-phone__ico--muted" width="18" height="18" viewBox="0 0 24 24" set:html={`<g ${stroke}><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></g>`} aria-hidden="true" />
+          <svg class="fx-phone__ico fx-phone__ico--sound" width="18" height="18" viewBox="0 0 24 24" set:html={`<g ${stroke}><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></g>`} aria-hidden="true" />
+        </button>
+
+        <!-- Transport bar, bottom -->
+        <div class="fx-phone__bar">
+          <button type="button" class="fx-phone__btn" data-reel-play aria-label={video.play}>
+            <svg class="fx-phone__ico fx-phone__ico--play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+            <svg class="fx-phone__ico fx-phone__ico--pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+          </button>
+          <button type="button" class="fx-phone__btn" data-reel-restart aria-label={video.restart}>
+            <svg width="16" height="16" viewBox="0 0 24 24" set:html={`<g ${stroke}><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></g>`} aria-hidden="true" />
+          </button>
+          <input
+            class="fx-phone__seek"
+            type="range"
+            min="0"
+            max="1000"
+            step="1"
+            value="0"
+            aria-label={video.seek}
+            data-reel-seek
+            style="--p: 0%"
+          />
+          <span class="fx-phone__time" data-reel-time aria-hidden="true">0:00</span>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<script>
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmt = (t: number) => {
+    const s = Math.max(0, Math.floor(t));
+    return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-reel]').forEach((reel) => {
+    const video = reel.querySelector<HTMLVideoElement>('video');
+    const tap = reel.querySelector<HTMLButtonElement>('[data-reel-tap]');
+    const muteBtn = reel.querySelector<HTMLButtonElement>('[data-reel-mute]');
+    const playBtn = reel.querySelector<HTMLButtonElement>('[data-reel-play]');
+    const restartBtn = reel.querySelector<HTMLButtonElement>('[data-reel-restart]');
+    const seek = reel.querySelector<HTMLInputElement>('[data-reel-seek]');
+    const time = reel.querySelector<HTMLElement>('[data-reel-time]');
+    if (!video || !tap || !muteBtn || !playBtn || !restartBtn || !seek || !time) return;
+
+    const L = {
+      soundOn: reel.dataset.labelSoundOn ?? 'Sound on',
+      soundOff: reel.dataset.labelSoundOff ?? 'Mute',
+      play: reel.dataset.labelPlay ?? 'Play',
+      pause: reel.dataset.labelPause ?? 'Pause',
+    };
+
+    let loaded = false;
+    const load = () => {
+      if (loaded) return;
+      loaded = true;
+      video.src = reel.dataset.src ?? '';
+      video.load();
+    };
+
+    // --- state → UI ---------------------------------------------------------
+    const setSound = (on: boolean) => {
+      video.muted = !on;
+      reel.classList.toggle('is-sound', on);
+      muteBtn.setAttribute('aria-pressed', String(on));
+      muteBtn.setAttribute('aria-label', on ? L.soundOff : L.soundOn);
+    };
+    const reflectPlaying = () => {
+      const playing = !video.paused && !video.ended;
+      reel.classList.toggle('is-playing', playing);
+      playBtn.setAttribute('aria-label', playing ? L.pause : L.play);
+      tap.setAttribute('aria-label', playing ? L.pause : L.play);
+    };
+    let scrubbing = false;
+    const reflectTime = () => {
+      const d = video.duration;
+      if (!isFinite(d) || d <= 0) return;
+      const frac = video.currentTime / d;
+      if (!scrubbing) {
+        seek.value = String(Math.round(frac * 1000));
+        seek.style.setProperty('--p', `${(frac * 100).toFixed(2)}%`);
+      }
+      time.textContent = fmt(video.currentTime);
+    };
+    video.addEventListener('play', reflectPlaying);
+    video.addEventListener('pause', reflectPlaying);
+    video.addEventListener('ended', reflectPlaying);
+    video.addEventListener('timeupdate', reflectTime);
+    video.addEventListener('loadedmetadata', reflectTime);
+    video.addEventListener('seeked', reflectTime);
+
+    // --- actions --------------------------------------------------------------
+    // Playback was explicitly stopped by the viewer: don't auto-resume on scroll.
+    let userPaused = false;
+    const tryPlay = () => {
+      load();
+      return video.play().catch(() => {
+        /* autoplay refused — the play button is right there */
+      });
+    };
+    const toggle = () => {
+      if (video.paused) {
+        userPaused = false;
+        tryPlay();
+      } else {
+        userPaused = true;
+        video.pause();
+      }
+    };
+    tap.addEventListener('click', toggle);
+    playBtn.addEventListener('click', toggle);
+    restartBtn.addEventListener('click', () => {
+      load();
+      video.currentTime = 0;
+      userPaused = false;
+      tryPlay();
+    });
+    muteBtn.addEventListener('click', () => {
+      load();
+      setSound(video.muted);
+      if (video.paused && !userPaused) tryPlay();
+    });
+
+    // Scrubbing: the thumb drives the time while held; the loop keeps running.
+    const seekTo = () => {
+      const d = video.duration;
+      if (!isFinite(d) || d <= 0) return;
+      const frac = Number(seek.value) / 1000;
+      seek.style.setProperty('--p', `${(frac * 100).toFixed(2)}%`);
+      video.currentTime = frac * d;
+      time.textContent = fmt(video.currentTime);
+    };
+    seek.addEventListener('pointerdown', () => { scrubbing = true; load(); });
+    seek.addEventListener('input', seekTo);
+    const endScrub = () => { scrubbing = false; seekTo(); };
+    seek.addEventListener('pointerup', endScrub);
+    seek.addEventListener('pointercancel', endScrub);
+    seek.addEventListener('change', endScrub);
+    seek.addEventListener('keydown', (e) => {
+      // Left / right nudge 5s; the browser's default step is too fine.
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      load();
+      video.currentTime = Math.max(0, Math.min(video.duration || 0, video.currentTime + (e.key === 'ArrowLeft' ? -5 : 5)));
+    });
+
+    // --- viewport behaviour -------------------------------------------------
+    // Fetch a little ahead of the viewport.
+    const near = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        load();
+        near.disconnect();
+      }
+    }, { rootMargin: '600px 0px' });
+    near.observe(reel);
+
+    // Play only while actually on screen (never automatically under reduced
+    // motion); leaving the section pauses it and drops the sound.
+    const onScreen = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          if (!reduced && !userPaused) tryPlay();
+        } else {
+          video.pause();
+          if (!video.muted) setSound(false);
+        }
+      });
+    }, { threshold: 0.35 });
+    onScreen.observe(reel);
+
+    reflectPlaying();
+  });
+</script>

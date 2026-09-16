@@ -91,6 +91,20 @@
       "up": true
     }
   ],
+  "video": {
+    "eyebrow": "Jameye, in motion",
+    "titleAccent": "See the loop.",
+    "titleRest": "Forecast, get scored, climb.",
+    "lead": "One minute of how it feels to play: creators put a number on the game, you put yours next to it, and the leaderboard keeps the score.",
+    "src": "/video/hero-video.mp4",
+    "poster": "/video/hero-video-poster.jpg",
+    "soundOn": "Sound on",
+    "soundOff": "Mute",
+    "play": "Play",
+    "pause": "Pause",
+    "restart": "Restart",
+    "seek": "Seek"
+  },
   "play": {
     "eyebrow": "Forecast amongst the best",
     "title": "Make your call. Put your JC behind it. See if you can beat them.",

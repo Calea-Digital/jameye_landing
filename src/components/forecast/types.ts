@@ -86,6 +86,22 @@ export interface ForecastContent {
     fan: FanCard[];
   };
   ticker: TickerItem[];
+  /** The showreel between the ticker and the play section (Showreel.astro). */
+  video: {
+    eyebrow: string;
+    titleAccent: string;
+    titleRest: string;
+    lead: string;
+    /** Portrait mp4 under public/video, with a poster frame beside it. */
+    src: string;
+    poster: string;
+    soundOn: string;
+    soundOff: string;
+    play: string;
+    pause: string;
+    restart: string;
+    seek: string;
+  };
   play: {
     eyebrow: string;
     title: string;
