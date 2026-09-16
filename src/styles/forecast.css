@@ -335,10 +335,18 @@
 .fx-bigmark .reg { font-size: 0.16em; vertical-align: super; }
 
 @media (max-width: 900px) {
+  /* Thinner bar on phones; the hero reads --fx-navh for its top padding, so
+     the headline moves up with it. */
+  :root { --fx-navh: 58px; }
+  .fx-nav { padding-block: 6px; }
+  .fx-nav__home .fx-wordmark { font-size: 19px; }
   .fx-nav__links { display: none; }
   .fx-nav__burger { display: flex; }
   .fx-navbar.is-open .fx-nav__menu { display: block; }
 }
+/* The waitlist dialog's overlay is translucent glass; without this the burger
+   shows through it right at the panel's top-right corner. */
+body.wl-open .fx-navbar { visibility: hidden; }
 
 /* --------------------------------------------------------------------------
    Hero
@@ -456,6 +464,9 @@
   .fx-fan { right: auto; left: 50%; margin-left: 60px; }
 }
 @media (max-width: 700px) {
+  /* Everything sits higher on phones so the deck clears the fold. */
+  .fx-hero__grid { padding-block: 4px 28px; gap: 8px; }
+  .fx-hero__copy { gap: 20px; }
   .fx-hero__stage {
     /* Card width and per-card spread both track the viewport, so the whole
        fan (card + 4 steps) always fits inside the stage on 320px phones too. */

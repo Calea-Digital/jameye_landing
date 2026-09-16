@@ -84,7 +84,9 @@ const CFG = {
         </div>
         </div>
 
-        <div class="wl-field">
+        <!-- Avatar picker hidden for now: everyone gets avatar_1 via the hidden
+             input below; the markup and script stay so it can be re-enabled. -->
+        <div class="wl-field wl-field--avatar" hidden>
           <label class="wl-label">{w.fields.avatar}</label>
           <div class="wl-avatars" role="radiogroup" aria-label={w.fields.avatar}>
             {AVATARS.map((a, i) => (
@@ -368,6 +370,7 @@ const CFG = {
   .wl-status.checking { color: var(--fx-ink-42); }
 
   /* Character picker — dark tiles; the chosen one takes the brand sweep. */
+  .wl-field--avatar[hidden] { display: none; }
   .wl-avatars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
   .wl-avatar {
     aspect-ratio: 1;
@@ -593,7 +596,8 @@ const CFG = {
     const normalizeAvatars = () => {
       if (avatarsNormalized) return;
       const svgs = Array.from(overlay.querySelectorAll('[data-avatar-opt] svg'));
-      if (!svgs.length) return;
+      // Nothing to frame while the picker is hidden (getBBox would read 0).
+      if (!svgs.length || !svgs[0].getClientRects().length) return;
       let allOk = true;
       svgs.forEach((svg) => {
         if (svg.dataset.normalized === 'true') return;
@@ -616,6 +620,7 @@ const CFG = {
       lastFocused = document.activeElement;
       overlay.hidden = false;
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('wl-open');
       requestAnimationFrame(() => {
         overlay.classList.add('is-open');
         normalizeAvatars();
@@ -625,6 +630,7 @@ const CFG = {
     const close = () => {
       overlay.classList.remove('is-open');
       document.body.style.overflow = '';
+      document.body.classList.remove('wl-open');
       setTimeout(() => { overlay.hidden = true; }, 220);
       lastFocused?.focus?.();
     };
