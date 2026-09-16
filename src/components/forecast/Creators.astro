@@ -1,7 +1,10 @@
 ---
 // Creator rail — an infinite marquee of character cards. The card list is
-// rendered twice inside the track so the -50% slide loops seamlessly; hovering
-// the rail pauses it. The faces are Jameye characters, not portraits.
+// rendered twice inside the track so the -50% slide loops seamlessly (the
+// second copy is decorative: aria-hidden, and dropped under reduced motion,
+// where the rail turns into a finger-scrollable strip instead). A real cursor
+// pauses it on hover; touch never does, since :hover sticks after a tap. The
+// faces are Jameye characters, not portraits.
 import { toneColor } from './tones';
 import type { ForecastContent } from './types';
 
@@ -28,9 +31,12 @@ const { creators } = Astro.props;
   <div class="fx-rail">
     <div class="fx-rail__track">
       {
-        [0, 1].map(() =>
+        [0, 1].map((copy) =>
           creators.cards.map((card) => (
-            <article class:list={['fx-creator', 'fx-creator--avatar', card.founding && 'fx-creator--founding']}>
+            <article
+              class:list={['fx-creator', 'fx-creator--avatar', card.founding && 'fx-creator--founding', copy === 1 && 'fx-creator--dup']}
+              aria-hidden={copy === 1 ? 'true' : undefined}
+            >
               <img src={card.image} alt="" loading="lazy" />
               <span class="fx-creator__scrim"></span>
               {card.founding && <span class="fx-creator__flag">FOUNDING CREATOR</span>}

@@ -598,7 +598,26 @@
   padding-inline-start: max(var(--fx-gutter), calc((100% - var(--fx-max)) / 2 + var(--fx-gutter)));
 }
 .fx-rail__track { display: flex; gap: 16px; flex-shrink: 0; animation: fx-slide 42s linear infinite; }
-.fx-rail:hover .fx-rail__track { animation-play-state: paused; }
+/* Pause under a real cursor only. On touch screens :hover sticks to whatever
+   was last tapped, so the same rule froze the rail after the first tap. */
+@media (hover: hover) and (pointer: fine) {
+  .fx-rail:hover .fx-rail__track { animation-play-state: paused; }
+}
+/* Reduced motion: no marquee, but the rail must not go dead — it becomes a
+   finger-scrollable strip and the looping duplicate cards are dropped. */
+@media (prefers-reduced-motion: reduce) {
+  .fx-rail {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-inline-end: var(--fx-gutter);
+  }
+  .fx-rail::-webkit-scrollbar { display: none; }
+  .fx-rail__track { animation: none; }
+  .fx-rail .fx-creator { scroll-snap-align: start; }
+  .fx-rail .fx-creator--dup { display: none; }
+}
 
 .fx-creator {
   position: relative;
@@ -1008,6 +1027,7 @@
      pointer stream), and a slow press must not raise the iOS text callout. */
   touch-action: none;
   -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
@@ -1036,6 +1056,10 @@
   cursor: pointer;
   font-family: inherit;
   color: inherit;
+  /* The paddles are where a thumb actually lands, so they must declare the
+     gesture too — Safari reads touch-action off the hit-tested element. */
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
 }
 /* Each label sits between the puck's resting spot (middle) and its settled
    spot (that end) so the puck never covers the number it just picked. */
@@ -1099,21 +1123,39 @@
 .fx-stake__payoff b { color: var(--fx-pink); }
 
 .fx-range {
-  /* The 34px thumb overhangs the 4px track, so the dial needs its own room. */
-  margin-block: 8px;
+  /* The input box is the touch target — a 4px-tall box is unhittable with a
+     thumb (iOS hit-tests the element, not the drawn thumb), so the box is as
+     tall as the thumb + halo and stays transparent; the 4px track is drawn by
+     the ::-*-track pseudo-elements. */
+  --fx-range-thumb: 34px;
+  --fx-range-track: 4px;
+  margin: 0;
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 4px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.14);
+  height: 52px;
+  background: transparent;
   outline: none;
   cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.fx-range::-webkit-slider-runnable-track {
+  height: var(--fx-range-track);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.14);
+}
+.fx-range::-moz-range-track {
+  height: var(--fx-range-track);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.14);
 }
 .fx-range::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 34px;
-  height: 34px;
+  width: var(--fx-range-thumb);
+  height: var(--fx-range-thumb);
+  /* WebKit lays the thumb on the track's top edge; pull it up to centre. */
+  margin-top: calc((var(--fx-range-track) - var(--fx-range-thumb)) / 2);
   border-radius: 50%;
   background: var(--fx-ink);
   border: 0;
@@ -1121,14 +1163,16 @@
   cursor: grab;
 }
 .fx-range::-moz-range-thumb {
-  width: 34px;
-  height: 34px;
+  width: var(--fx-range-thumb);
+  height: var(--fx-range-thumb);
   border-radius: 50%;
   background: var(--fx-ink);
   border: 0;
   box-shadow: 0 0 0 8px rgba(255, 169, 214, 0.16);
   cursor: grab;
 }
+.fx-range:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--fx-pink); outline-offset: 4px; }
+.fx-range:focus-visible::-moz-range-thumb { outline: 2px solid var(--fx-pink); outline-offset: 4px; }
 .fx-range:disabled::-webkit-slider-thumb { cursor: not-allowed; }
 
 .fx-quick { display: flex; gap: 10px; }
@@ -1166,6 +1210,7 @@
   cursor: pointer;
   overflow: hidden;
   -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
   touch-action: none;
@@ -1194,10 +1239,17 @@
   justify-content: center;
   color: var(--fx-on-accent);
   box-shadow: 0 8px 24px rgba(199, 123, 224, 0.4);
+  touch-action: none;
 }
 .fx-lock:not(:disabled) .fx-lock__knob { cursor: grab; }
 .fx-lock.is-dragging .fx-lock__knob { cursor: grabbing; transition: none; }
 .fx-lock:not(.is-dragging) .fx-lock__knob { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+/* A tap on the lock isn't a commit — the knob wiggles to show it wants a slide. */
+.fx-lock.is-hinting .fx-lock__knob { animation: fx-knob-hint 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes fx-knob-hint {
+  0%, 100% { transform: translateX(0); }
+  40%      { transform: translateX(22px); }
+}
 
 @media (max-width: 480px) {
   .fx-ctl { padding: 18px 16px; gap: 16px; border-radius: 20px; }
@@ -1209,9 +1261,9 @@
   .fx-stake { gap: 14px; }
   /* A smaller thumb and halo on phones so the dial doesn't crowd the amount
      above it or the quick picks below. */
-  .fx-range { margin-block: 12px; }
-  .fx-range::-webkit-slider-thumb { width: 24px; height: 24px; box-shadow: 0 0 0 5px rgba(255, 169, 214, 0.16), 0 6px 18px rgba(0, 0, 0, 0.5); }
-  .fx-range::-moz-range-thumb { width: 24px; height: 24px; box-shadow: 0 0 0 5px rgba(255, 169, 214, 0.16); }
+  .fx-range { --fx-range-thumb: 26px; height: 48px; }
+  .fx-range::-webkit-slider-thumb { box-shadow: 0 0 0 5px rgba(255, 169, 214, 0.16), 0 6px 18px rgba(0, 0, 0, 0.5); }
+  .fx-range::-moz-range-thumb { box-shadow: 0 0 0 5px rgba(255, 169, 214, 0.16); }
   .fx-stake__value { font-size: 34px; }
   .fx-quick { gap: 6px; }
   .fx-quick button { font-size: 11px; padding: 11px 0; }
