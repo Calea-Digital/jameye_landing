@@ -334,7 +334,17 @@
   line-height: 1;
 }
 .fx-wordmark .reg { font-size: 0.38em; vertical-align: super; letter-spacing: 0; }
-.fx-bigmark .reg { font-size: 0.16em; vertical-align: super; }
+/* The footer mark is the nav wordmark at ~8× scale, so `super` (a fixed
+   fraction of the line) no longer lands the ® at the cap line the way it
+   does at nav size. Pin it there explicitly: baseline-aligned, then lifted
+   with relative positioning so the line box (and the mask) don't move. */
+.fx-bigmark .reg {
+  font-size: 0.16em;
+  vertical-align: baseline;
+  position: relative;
+  top: -3.7em;
+  margin-left: 0.15em;
+}
 
 @media (max-width: 900px) {
   /* Thinner bar on phones; the hero reads --fx-navh for its top padding, so
