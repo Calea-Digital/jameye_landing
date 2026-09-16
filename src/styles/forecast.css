@@ -57,7 +57,9 @@
 @media (max-width: 640px) {
   :root {
     --fx-gutter:  20px;
-    --fx-section: 64px;
+    /* Sections stack on phones, so they need more air between them than the
+       side-by-side desktop layout does. */
+    --fx-section: 88px;
   }
 }
 
@@ -899,7 +901,13 @@ body.wl-open .fx-navbar { visibility: hidden; }
   gap: 32px 28px;
   align-items: start;
 }
-@media (max-width: 640px) { .fx-skill { padding: 32px 24px; } }
+/* The skill section's own top gap: matches the desktop rhythm, and follows
+   --fx-section on phones like every other section. */
+.fx-skill-wrap { padding-top: 72px; }
+@media (max-width: 640px) {
+  .fx-skill { padding: 32px 24px; }
+  .fx-skill-wrap { padding-top: var(--fx-section); }
+}
 .fx-skill__head { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 12px; max-width: 680px; }
 .fx-skill__step {
   display: flex;
@@ -983,6 +991,10 @@ body.wl-open .fx-navbar { visibility: hidden; }
   display: flex;
   justify-content: center;
   line-height: 0.8;
+}
+@media (max-width: 640px) {
+  /* Breathing room between the faded wordmark and the footer rule. */
+  .fx-bigmark { padding-bottom: 36px; }
 }
 .fx-bigmark span {
   display: block;
