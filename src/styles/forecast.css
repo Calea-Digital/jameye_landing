@@ -453,14 +453,16 @@
   .fx-fan { right: auto; left: 50%; margin-left: 60px; }
 }
 @media (max-width: 700px) {
-  .fx-hero__stage { height: 380px; }
+  .fx-hero__stage { height: 340px; }
   .fx-fan {
-    width: min(210px, 54vw);
+    width: min(180px, 46vw);
     left: auto;
     right: 0;
     margin-left: 0;
+    padding: 14px;
     animation-name: fx-shuffle-sm;
   }
+  .fx-fan__name { font-size: 17px; }
 }
 
 /* --------------------------------------------------------------------------
