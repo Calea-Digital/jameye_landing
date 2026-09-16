@@ -1004,7 +1004,6 @@ body.wl-open .fx-navbar { visibility: hidden; }
   inset: 0;
   background: linear-gradient(90deg, transparent 60%, rgba(21, 15, 33, 0.9));
 }
-.fx-market__edge { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; z-index: 1; }
 .fx-market__body { display: flex; flex-direction: column; gap: 10px; padding: 18px 18px 16px; min-width: 0; }
 .fx-market__top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .fx-market__vertical { display: flex; align-items: center; gap: 6px; font-size: 9px; letter-spacing: 0.2em; }

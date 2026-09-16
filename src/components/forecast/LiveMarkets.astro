@@ -70,10 +70,6 @@ const legend = [...new Map(cards.map((c) => [c.vertical, { label: c.vertical, to
           <button type="button" class="fx-market" data-open-waitlist>
             <span class="fx-market__shot">
               <img src={card.image} alt="" loading="lazy" />
-              <span
-                class="fx-market__edge"
-                style={`background:${toneColor(card.tone)};box-shadow:0 0 12px ${toneColor(card.tone)};`}
-              ></span>
             </span>
             <span class="fx-market__body">
               <span class="fx-market__top">
