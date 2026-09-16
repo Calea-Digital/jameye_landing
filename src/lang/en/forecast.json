@@ -25,37 +25,99 @@
     "titleAccent": "you love",
     "lead": "Join tournaments where your favorite creators make predictions and share their thinking through short-form video. Compete with them — and the community.",
     "ctaPrimary": "Join the waitlist",
+    "picked": "You picked",
+    "win": "Win",
     "fan": [
       {
         "meta": "Premier League · closes Sun",
         "tone": "sports",
         "name": "Man City beat Arsenal?",
         "lead": true,
-        "image": "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?auto=format&fit=crop&w=520&h=650&q=80"
+        "image": "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?auto=format&fit=crop&w=520&h=650&q=80",
+        "outcomes": [
+          {
+            "label": "Yes",
+            "pct": 62,
+            "picked": true
+          },
+          {
+            "label": "No",
+            "pct": 38
+          }
+        ],
+        "win": "1.61×"
       },
       {
         "meta": "NBA Finals · closes Jun 14",
         "tone": "sports",
         "name": "Celtics sweep the Finals?",
-        "image": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=520&h=650&q=80"
+        "image": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=520&h=650&q=80",
+        "outcomes": [
+          {
+            "label": "Yes",
+            "pct": 27
+          },
+          {
+            "label": "No",
+            "pct": 73,
+            "picked": true
+          }
+        ],
+        "win": "1.37×"
       },
       {
         "meta": "US Open · closes Sep 7",
         "tone": "sports",
         "name": "Alcaraz takes the title?",
-        "image": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=520&h=650&q=80"
+        "image": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=520&h=650&q=80",
+        "outcomes": [
+          {
+            "label": "Yes",
+            "pct": 54,
+            "picked": true
+          },
+          {
+            "label": "No",
+            "pct": 46
+          }
+        ],
+        "win": "1.85×"
       },
       {
         "meta": "Boxing · closes Sat",
         "tone": "sports",
         "name": "Canelo wins by KO?",
-        "image": "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=520&h=650&q=80"
+        "image": "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=520&h=650&q=80",
+        "outcomes": [
+          {
+            "label": "Yes",
+            "pct": 41
+          },
+          {
+            "label": "No",
+            "pct": 59,
+            "picked": true
+          }
+        ],
+        "win": "1.69×"
       },
       {
         "meta": "Transfers · closes Sep 1",
         "tone": "sports",
         "name": "Enzo Fernández to Madrid?",
-        "image": "https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=520&h=650&q=80"
+        "image": "https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=520&h=650&q=80",
+        "outcomes": [
+          {
+            "label": "Yes",
+            "pct": 18,
+            "picked": true
+          },
+          {
+            "label": "No",
+            "pct": 82
+          }
+        ],
+        "win": "5.5×"
       }
     ]
   },
@@ -92,10 +154,10 @@
     }
   ],
   "video": {
-    "eyebrow": "Jameye, in motion",
-    "titleAccent": "See the loop.",
-    "titleRest": "Forecast, get scored, climb.",
-    "lead": "One minute of how it feels to play: creators put a number on the game, you put yours next to it, and the leaderboard keeps the score.",
+    "eyebrow": "Jameye, creator-led championship",
+    "titleAccent": "Creators. Fans.",
+    "titleRest": "Community and championships.",
+    "lead": "Not betting. Not gambling.",
     "src": "/video/hero-video.mp4",
     "poster": "/video/hero-video-poster.jpg",
     "soundOn": "Sound on",

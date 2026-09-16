@@ -1,6 +1,13 @@
 /** Shape of src/lang/<locale>/forecast.json — the landing's whole content tree. */
 export interface NavLink { label: string; href: string }
 
+export interface FanOutcome {
+  label: string;
+  pct: number;
+  /** The outcome the demo player backed — rendered as the highlighted row. */
+  picked?: boolean;
+}
+
 export interface FanCard {
   /** Market artwork — real photography of the subject (stadium, court, ring), no portraits. */
   image: string;
@@ -8,6 +15,9 @@ export interface FanCard {
   tone: string;
   name: string;
   lead?: boolean;
+  outcomes: FanOutcome[];
+  /** Payout multiplier shown on the picked row, e.g. "1.61×". */
+  win: string;
 }
 
 export interface TickerItem { label: string; value: string; up: boolean }
@@ -83,6 +93,9 @@ export interface ForecastContent {
     titleAccent: string;
     lead: string;
     ctaPrimary: string;
+    /** Labels on the hero cards' highlighted row: "You picked" · "Win 1.61×". */
+    picked: string;
+    win: string;
     fan: FanCard[];
   };
   ticker: TickerItem[];

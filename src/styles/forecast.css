@@ -428,6 +428,9 @@ body.wl-open .fx-navbar { visibility: hidden; }
 .fx-hero__stage { position: relative; height: 520px; min-width: 0; width: 100%; }
 
 .fx-fan {
+  /* A market card: photo (question over it) on top, outcome rows below, in a
+     glass frame. --fx-fan-pad scales the whole card's inner spacing. */
+  --fx-fan-pad: 8px;
   position: absolute;
   right: 0;
   top: 0;
@@ -435,20 +438,53 @@ body.wl-open .fx-navbar { visibility: hidden; }
   aspect-ratio: 4 / 5;
   border-radius: 24px;
   overflow: hidden;
-  background: var(--fx-surface);
+  background: rgba(21, 15, 33, 0.94);
   border: 1px solid var(--fx-line);
-  box-shadow: var(--fx-shadow-card);
+  box-shadow: var(--fx-shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 18px;
+  gap: var(--fx-fan-pad);
+  padding: var(--fx-fan-pad);
   animation: fx-shuffle 20s ease-in-out infinite;
 }
 .fx-fan--lead { border-color: rgba(255, 169, 214, 0.45); }
+.fx-fan__shot {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  border-radius: calc(24px - var(--fx-fan-pad));
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  background: var(--fx-surface);
+}
 .fx-fan img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
-.fx-fan__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 42%, rgba(14, 10, 22, 0.96)); }
-.fx-fan__meta { position: relative; font-size: 9.5px; letter-spacing: 0.2em; }
-.fx-fan__name { position: relative; font-size: 21px; font-weight: 600; line-height: 1.15; margin-top: 6px; }
+.fx-fan__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, rgba(14, 10, 22, 0.94)); }
+.fx-fan__caption { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 12px; }
+.fx-fan__name { font-size: 15px; font-weight: 600; line-height: 1.2; text-wrap: balance; }
+.fx-fan__meta { font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.fx-fan__rows { display: flex; flex-direction: column; gap: 6px; flex: 0 0 auto; }
+.fx-fan__row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--fx-line);
+}
+.fx-fan__row-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 10.5px; }
+.fx-fan__row-label { font-weight: 600; letter-spacing: 0.02em; }
+.fx-fan__row-val { font-weight: 600; white-space: nowrap; color: var(--fx-ink-72); }
+.fx-fan__row-meter { display: block; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
+.fx-fan__row-meter i { display: block; height: 100%; border-radius: inherit; background: var(--fx-grad); }
+/* The backed outcome wears the brand sweep, like the mockup's "You picked". */
+.fx-fan__row.is-picked { background: var(--fx-grad); border-color: transparent; color: var(--fx-on-accent); }
+.fx-fan__row.is-picked .fx-fan__row-label { text-transform: uppercase; letter-spacing: 0.12em; font-size: 9px; }
+.fx-fan__row.is-picked .fx-fan__row-val { color: inherit; }
+.fx-fan__row.is-picked .fx-fan__row-meter { background: rgba(14, 10, 22, 0.22); }
+.fx-fan__row.is-picked .fx-fan__row-meter i { background: rgba(255, 255, 255, 0.92); }
 
 .fx-call {
   position: relative;
@@ -492,11 +528,19 @@ body.wl-open .fx-navbar { visibility: hidden; }
     /* Centre the deck's footprint in the stage rather than pinning it right. */
     right: max(0px, calc((100% - var(--fx-fan-w) - 4 * var(--fx-fan-step)) / 2));
     margin-left: 0;
-    padding: 14px;
-    border-radius: 20px;
+    --fx-fan-pad: 6px;
+    border-radius: 18px;
     animation-name: fx-shuffle-sm;
   }
-  .fx-fan__name { font-size: 16px; }
+  .fx-fan__shot { border-radius: calc(18px - var(--fx-fan-pad)); }
+  .fx-fan__caption { padding: 8px; gap: 2px; }
+  .fx-fan__name { font-size: 11.5px; }
+  .fx-fan__meta { font-size: 7px; letter-spacing: 0.14em; }
+  .fx-fan__rows { gap: 4px; }
+  .fx-fan__row { gap: 4px; padding: 5px 7px; border-radius: 9px; }
+  .fx-fan__row-top { font-size: 8.5px; }
+  .fx-fan__row.is-picked .fx-fan__row-label { font-size: 7px; letter-spacing: 0.08em; }
+  .fx-fan__row-meter { height: 2px; }
 }
 
 /* --------------------------------------------------------------------------
@@ -717,9 +761,7 @@ body.wl-open .fx-navbar { visibility: hidden; }
   .fx-phone { height: min(100%, 560px); max-width: 78vw; }
 }
 @media (max-width: 900px) and (max-height: 760px) {
-  /* On shorter phones the lead would leave the video a thumbnail; the
-     headline carries the section on its own there. */
-  .fx-reel .fx-lead { display: none; }
+  /* Shorter phones: a tighter headline leaves the video more room. */
   .fx-reel .fx-h2 { font-size: clamp(24px, 7vw, 32px); }
 }
 @media (max-width: 480px) {
@@ -1563,8 +1605,14 @@ body.wl-open .fx-navbar { visibility: hidden; }
 @media (max-width: 480px) {
   .fx-ctl { padding: 18px 16px; gap: 16px; border-radius: 20px; }
   .fx-ctl__meta { flex-direction: column; align-items: flex-start; gap: 2px; }
-  .fx-sides { --fx-puck: 48px; height: 92px; }
-  .fx-side__pct { font-size: 24px; }
+  /* The track bleeds into the panel padding so it's as wide as it can be. */
+  .fx-sides { --fx-puck: 40px; height: 88px; margin-inline: -6px; }
+  /* NO / YES sit as far from the resting puck as the geometry allows: each
+     label block is anchored to its outer end, just past the zone the puck
+     occupies once it settles there, so the puck never covers the number. */
+  .fx-side--no  { align-items: flex-start; padding-left: calc(var(--fx-puck) + 6px);  padding-right: 0; }
+  .fx-side--yes { align-items: flex-end;   padding-right: calc(var(--fx-puck) + 6px); padding-left: 0; }
+  .fx-side__pct { font-size: 22px; }
   .fx-puck { box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.6); }
   .fx-hint { letter-spacing: 0.14em; }
   .fx-stake { gap: 14px; }

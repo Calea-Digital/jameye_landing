@@ -1,7 +1,9 @@
 ---
 // Full-bleed hero: a stadium photograph under a double scrim, headline on the
 // left, and a shuffling fan of live sports market cards on the right (5 cards
-// on one 20s loop, each offset by 4s so the deck is always mid-shuffle).
+// on one 20s loop, each offset by 4s so the deck is always mid-shuffle). Each
+// card is a market: photo with the question over it, then the outcome rows —
+// the one the demo player backed is the highlighted "You picked · Win ×" row.
 // The fixed primary nav lives in Nav.astro; the hero pads for it.
 import { toneColor } from './tones';
 import type { ForecastContent } from './types';
@@ -39,10 +41,27 @@ const { hero } = Astro.props;
             class:list={['fx-fan', card.lead && 'fx-fan--lead']}
             style={`animation-delay:-${i * 4}s;`}
           >
-            <img src={card.image} alt="" loading="lazy" />
-            <span class="fx-fan__scrim"></span>
-            <span class="fx-fan__meta" style={`color:${toneColor(card.tone)};`}>{card.meta}</span>
-            <span class="fx-fan__name">{card.name}</span>
+            <span class="fx-fan__shot">
+              <img src={card.image} alt="" loading="lazy" />
+              <span class="fx-fan__scrim"></span>
+              <span class="fx-fan__caption">
+                <span class="fx-fan__name">{card.name}</span>
+                <span class="fx-fan__meta" style={`color:${toneColor(card.tone)};`}>{card.meta}</span>
+              </span>
+            </span>
+            <span class="fx-fan__rows">
+              {card.outcomes.map((o) => (
+                <span class:list={['fx-fan__row', o.picked && 'is-picked']}>
+                  <span class="fx-fan__row-top">
+                    <span class="fx-fan__row-label">
+                      {o.picked ? `${hero.picked} · ${o.label}` : o.label}
+                    </span>
+                    <span class="fx-fan__row-val">{o.picked ? `${hero.win} ${card.win}` : `${o.pct}%`}</span>
+                  </span>
+                  <span class="fx-fan__row-meter"><i style={`width:${o.pct}%;`}></i></span>
+                </span>
+              ))}
+            </span>
           </div>
         ))
       }
