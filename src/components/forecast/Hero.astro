@@ -1,9 +1,14 @@
 ---
 // Full-bleed hero: a stadium photograph under a double scrim, headline on the
 // left, and a shuffling fan of live sports market cards on the right (5 cards
-// on one 20s loop, each offset by 4s so the deck is always mid-shuffle). Each
-// card is a market: photo with the question over it, then the outcome rows —
-// the one the demo player backed is the highlighted "You picked · Win ×" row.
+// on one 25s loop, each offset by 5s so the deck is always mid-shuffle). Each
+// card is a market: photo with the question over it, then the outcome rows.
+// While a card is at the front the demo player "plays" it: the rows are open
+// (Yes 62% / No 38%), a highlight hesitates between them, then the backed row
+// locks in and lights up as "You picked · Win ×". It stays lit as the card
+// shuffles back, resets out of sight, and the next card gets its turn. The
+// whole sequence is CSS keyframes keyed off --fx-fan-delay (see forecast.css);
+// both text variants are in the DOM and the animation cross-fades them.
 // The fixed primary nav lives in Nav.astro; the hero pads for it.
 import { toneColor } from './tones';
 import type { ForecastContent } from './types';
@@ -39,7 +44,7 @@ const { hero } = Astro.props;
         hero.fan.map((card, i) => (
           <div
             class:list={['fx-fan', card.lead && 'fx-fan--lead']}
-            style={`animation-delay:-${i * 4}s;`}
+            style={`--fx-fan-delay:-${i * 5}s;`}
           >
             <span class="fx-fan__shot">
               <img src={card.image} alt="" loading="lazy" />
@@ -54,9 +59,13 @@ const { hero } = Astro.props;
                 <span class:list={['fx-fan__row', o.picked && 'is-picked']}>
                   <span class="fx-fan__row-top">
                     <span class="fx-fan__row-label">
-                      {o.picked ? `${hero.picked} · ${o.label}` : o.label}
+                      <span class="fx-fan__txt fx-fan__txt--open">{o.label}</span>
+                      {o.picked && <span class="fx-fan__txt fx-fan__txt--picked">{hero.picked} · {o.label}</span>}
                     </span>
-                    <span class="fx-fan__row-val">{o.picked ? `${hero.win} ${card.win}` : `${o.pct}%`}</span>
+                    <span class="fx-fan__row-val">
+                      <span class="fx-fan__txt fx-fan__txt--open">{o.pct}%</span>
+                      {o.picked && <span class="fx-fan__txt fx-fan__txt--picked">{hero.win} {card.win}</span>}
+                    </span>
                   </span>
                   <span class="fx-fan__row-meter"><i style={`width:${o.pct}%;`}></i></span>
                 </span>

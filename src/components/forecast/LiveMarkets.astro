@@ -1,12 +1,12 @@
 ---
-// Live markets grid — one card per open market, colour-keyed to its league.
+// Live markets grid — one card per open market, colour-keyed to its vertical.
 //
-// The cards come from Polymarket's sports tag at build time (real artwork,
-// real odds, head-to-head fixtures only — no elections, no war). If the API is
-// unreachable the curated cards in forecast.json take over, so the section
-// renders the same either way.
+// The cards are curated in forecast.json: a deliberate spread across sports
+// and beyond (El Clásico, F1, the NBA Finals, the Masters, Bitcoin, the Fed's
+// December decision) with real photography, sourced like the hero cards (Unsplash).
+// They are showcase markets, not a live feed — the Polymarket fetch this
+// section used to make lives on in utils/polymarket.ts for HowItWorks.
 import { toneColor } from './tones';
-import { getSportsFixtures } from '~/utils/polymarket';
 import type { ForecastContent, MarketCard } from './types';
 
 export interface Props {
@@ -14,24 +14,7 @@ export interface Props {
 }
 
 const { markets } = Astro.props;
-
-// Colour keys, in order — the grid reads as a spectrum rather than one hue.
-const TONES = ['sports', 'esport', 'film', 'politics', 'economy', 'sports'];
-
-const live = await getSportsFixtures(6);
-
-const cards: MarketCard[] =
-  live.length >= 4
-    ? live.map((fixture, i) => ({
-        image: fixture.image,
-        tone: TONES[i % TONES.length],
-        vertical: fixture.league,
-        in: `${fixture.volume} in`,
-        question: fixture.question,
-        pct: fixture.pct,
-        side: fixture.side,
-      }))
-    : markets.cards;
+const cards: MarketCard[] = markets.cards;
 
 // The legend mirrors whatever is actually on the grid.
 const legend = [...new Map(cards.map((c) => [c.vertical, { label: c.vertical, tone: c.tone }])).values()];
@@ -69,7 +52,7 @@ const legend = [...new Map(cards.map((c) => [c.vertical, { label: c.vertical, to
         cards.map((card) => (
           <button type="button" class="fx-market" data-open-waitlist>
             <span class="fx-market__shot">
-              <img src={card.image} alt="" loading="lazy" />
+              <img src={card.image} alt="" loading="lazy" style={card.focus ? `object-position:${card.focus};` : undefined} />
             </span>
             <span class="fx-market__body">
               <span class="fx-market__top">

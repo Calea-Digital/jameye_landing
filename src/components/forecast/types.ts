@@ -37,6 +37,8 @@ export interface CreatorCard {
 
 export interface MarketCard {
   image: string;
+  /** Optional CSS object-position for the photo, when the subject is off-centre (e.g. "20% 75%"). */
+  focus?: string;
   tone: string;
   vertical: string;
   in: string;
@@ -127,7 +129,8 @@ export interface ForecastContent {
   creators: {
     titleAccent: string;
     titleRest: string;
-    lead: string;
+    /** One entry per paragraph under the heading. */
+    lead: string[];
     cta: string;
     cards: CreatorCard[];
   };
@@ -136,7 +139,7 @@ export interface ForecastContent {
     titleLead: string;
     titleAccent: string;
     lead: string;
-    /** Fallback legend — the section derives it from the live feed when it has one. */
+    /** Unused by LiveMarkets, which derives its legend from the cards; kept for older sections. */
     legend: { label: string; tone: string }[];
     cta: string;
     /** Fallback cards, used when the Polymarket feed is unavailable. */

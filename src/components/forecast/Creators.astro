@@ -21,7 +21,9 @@ const { creators } = Astro.props;
       <h2 class="fx-h2">
         <span class="fx-grad-text">{creators.titleAccent}</span> {creators.titleRest}
       </h2>
-      <span style="font-size:14px;color:var(--fx-ink-60);max-width:560px;line-height:1.5;">{creators.lead}</span>
+      <div class="fx-rail-head__lead">
+        {creators.lead.map((para) => <p>{para}</p>)}
+      </div>
     </div>
     <div class="fx-rail-head__cta">
       <button type="button" class="fx-btn fx-btn--ghost fx-btn--sm" data-open-waitlist>{creators.cta}</button>

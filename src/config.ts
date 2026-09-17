@@ -21,7 +21,7 @@ export const CONTACT_EMAIL = 'hello@jameye.com';
 export const SITE = (): SiteConfig => {
   return {
     title: 'Jameye — The prediction market tournament',
-    description: 'Forecast with the creators you love',
+    description: 'Compete with the creators you love',
     author: 'Jameye',
     siteUrl: 'https://jameye.com/',
     appUrl: APP_URL,

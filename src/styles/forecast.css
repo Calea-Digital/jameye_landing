@@ -213,10 +213,16 @@
      static card. Keep the loop, but step between poses instead of tweening —
      the deck still reorders every 4s, with no continuous motion. */
   .fx-page .fx-fan {
-    animation-duration: 20s !important;
+    animation-duration: 25s !important;
     animation-iteration-count: infinite !important;
     animation-timing-function: steps(1, end) !important;
   }
+  /* No hesitating highlight: the backed row is simply lit, like a still. */
+  .fx-page .fx-fan__row,
+  .fx-page .fx-fan__row::before,
+  .fx-page .fx-fan__row-meter,
+  .fx-page .fx-fan__row-meter i::after,
+  .fx-page .fx-fan__txt { animation: none !important; }
 }
 
 /* --------------------------------------------------------------------------
@@ -438,14 +444,16 @@ body.wl-open .fx-navbar { visibility: hidden; }
   aspect-ratio: 4 / 5;
   border-radius: 24px;
   overflow: hidden;
-  background: rgba(21, 15, 33, 0.94);
+  /* Solid: the lit row of the card behind must not ghost through an open row. */
+  background: rgb(21, 15, 33);
   border: 1px solid var(--fx-line);
   box-shadow: var(--fx-shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   gap: var(--fx-fan-pad);
   padding: var(--fx-fan-pad);
-  animation: fx-shuffle 20s ease-in-out infinite;
+  animation: fx-shuffle 25s ease-in-out infinite;
+  animation-delay: var(--fx-fan-delay, 0s);
 }
 .fx-fan--lead { border-color: rgba(255, 169, 214, 0.45); }
 .fx-fan__shot {
@@ -466,6 +474,7 @@ body.wl-open .fx-navbar { visibility: hidden; }
 
 .fx-fan__rows { display: flex; flex-direction: column; gap: 6px; flex: 0 0 auto; }
 .fx-fan__row {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -473,18 +482,93 @@ body.wl-open .fx-navbar { visibility: hidden; }
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--fx-line);
+  transform-origin: 50% 50%;
 }
-.fx-fan__row-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 10.5px; }
+/* The brand sweep lives on an overlay so it can fade (gradients don't tween). */
+.fx-fan__row::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: var(--fx-grad);
+  opacity: 0;
+  pointer-events: none;
+}
+.fx-fan__row-top { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 10.5px; }
 .fx-fan__row-label { font-weight: 600; letter-spacing: 0.02em; }
 .fx-fan__row-val { font-weight: 600; white-space: nowrap; color: var(--fx-ink-72); }
-.fx-fan__row-meter { display: block; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
-.fx-fan__row-meter i { display: block; height: 100%; border-radius: inherit; background: var(--fx-grad); }
-/* The backed outcome wears the brand sweep, like the mockup's "You picked". */
-.fx-fan__row.is-picked { background: var(--fx-grad); border-color: transparent; color: var(--fx-on-accent); }
-.fx-fan__row.is-picked .fx-fan__row-label { text-transform: uppercase; letter-spacing: 0.12em; font-size: 9px; }
+/* Open ("Yes · 62%") and picked ("You picked · Yes / Win 1.61×") texts share
+   one cell and cross-fade; unpicked rows only ever have the open text. */
+.fx-fan__row-label,
+.fx-fan__row-val { display: grid; }
+.fx-fan__txt { grid-area: 1 / 1; white-space: nowrap; }
+.fx-fan__row-val .fx-fan__txt { justify-self: end; }
+.fx-fan__txt--picked { text-transform: uppercase; letter-spacing: 0.12em; font-size: 9px; opacity: 0; }
+.fx-fan__row-val .fx-fan__txt--picked { text-transform: none; letter-spacing: 0.02em; font-size: inherit; }
+.fx-fan__row-meter { position: relative; display: block; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
+.fx-fan__row-meter i { position: relative; display: block; height: 100%; border-radius: inherit; background: var(--fx-grad); }
+.fx-fan__row-meter i::after { content: ''; position: absolute; inset: 0; background: rgba(255, 255, 255, 0.92); opacity: 0; }
+
+/* The play. Each card is at the front of the fan for the first 16% of the
+   25s loop (4s). In that window the demo player hesitates — the highlight
+   hops No → Yes → No → Yes — then locks the backed row, which pops and
+   lights up with the brand sweep and the "You picked · Win ×" text. It
+   stays lit while the card shuffles back (16–20%), resets once it's buried
+   (26–30%), and is open again by the time it returns. Every piece runs on
+   the card's --fx-fan-delay so the sequence stays glued to the shuffle. */
+.fx-fan__row,
+.fx-fan__row::before,
+.fx-fan__row-meter,
+.fx-fan__row-meter i::after,
+.fx-fan__txt {
+  animation-duration: 25s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-delay: var(--fx-fan-delay, 0s);
+}
+.fx-fan__row:not(.is-picked) { animation-name: fx-fan-consider; }
+.fx-fan__row.is-picked { animation-name: fx-fan-pick; color: var(--fx-on-accent); border-color: transparent; }
+.fx-fan__row.is-picked::before { animation-name: fx-fan-lit; opacity: 1; }
 .fx-fan__row.is-picked .fx-fan__row-val { color: inherit; }
-.fx-fan__row.is-picked .fx-fan__row-meter { background: rgba(14, 10, 22, 0.22); }
-.fx-fan__row.is-picked .fx-fan__row-meter i { background: rgba(255, 255, 255, 0.92); }
+.fx-fan__row.is-picked .fx-fan__txt--open { animation-name: fx-fan-txt-open; opacity: 0; }
+.fx-fan__row.is-picked .fx-fan__txt--picked { animation-name: fx-fan-lit; opacity: 1; }
+.fx-fan__row.is-picked .fx-fan__row-meter { animation-name: fx-fan-meter; background: rgba(14, 10, 22, 0.22); }
+.fx-fan__row.is-picked .fx-fan__row-meter i::after { animation-name: fx-fan-lit; opacity: 1; }
+
+/* Hesitation on the row that will NOT be picked: lit up twice, then dropped. */
+@keyframes fx-fan-consider {
+  0%, 2.4%      { background-color: rgba(255, 255, 255, 0.07); border-color: var(--fx-line); box-shadow: 0 0 0 0 rgba(255, 169, 214, 0); transform: scale(1); }
+  3.2%, 5.2%    { background-color: rgba(255, 255, 255, 0.16); border-color: rgba(255, 169, 214, 0.8); box-shadow: 0 0 0 3px rgba(255, 169, 214, 0.18); transform: scale(1.025); }
+  6%, 9.2%      { background-color: rgba(255, 255, 255, 0.07); border-color: var(--fx-line); box-shadow: 0 0 0 0 rgba(255, 169, 214, 0); transform: scale(1); }
+  10%, 11.2%    { background-color: rgba(255, 255, 255, 0.16); border-color: rgba(255, 169, 214, 0.8); box-shadow: 0 0 0 3px rgba(255, 169, 214, 0.18); transform: scale(1.025); }
+  12%, 100%     { background-color: rgba(255, 255, 255, 0.07); border-color: var(--fx-line); box-shadow: 0 0 0 0 rgba(255, 169, 214, 0); transform: scale(1); }
+}
+/* The row that IS picked: open → considered → considered → locked (pop) → reset. */
+@keyframes fx-fan-pick {
+  0%, 6%        { color: var(--fx-ink); border-color: var(--fx-line); box-shadow: 0 0 0 0 rgba(255, 169, 214, 0); transform: scale(1); }
+  6.8%, 8.4%    { color: var(--fx-ink); border-color: rgba(255, 169, 214, 0.8); box-shadow: 0 0 0 3px rgba(255, 169, 214, 0.18); transform: scale(1.025); }
+  9.2%, 11.2%   { color: var(--fx-ink); border-color: var(--fx-line); box-shadow: 0 0 0 0 rgba(255, 169, 214, 0); transform: scale(1); }
+  12%           { color: var(--fx-ink); border-color: rgba(255, 169, 214, 0.8); box-shadow: 0 0 0 3px rgba(255, 169, 214, 0.18); transform: scale(1.025); }
+  12.8%         { color: var(--fx-on-accent); border-color: transparent; box-shadow: 0 0 0 6px rgba(255, 169, 214, 0.28), 0 10px 26px rgba(199, 123, 224, 0.45); transform: scale(1.06); }
+  14%, 26%      { color: var(--fx-on-accent); border-color: transparent; box-shadow: 0 0 0 0 rgba(255, 169, 214, 0), 0 6px 18px rgba(199, 123, 224, 0.3); transform: scale(1); }
+  30%, 100%     { color: var(--fx-ink); border-color: var(--fx-line); box-shadow: 0 0 0 0 rgba(255, 169, 214, 0); transform: scale(1); }
+}
+/* Shared "on while locked" curve: the sweep overlay, the picked text, the white meter fill. */
+@keyframes fx-fan-lit {
+  0%, 12.2%   { opacity: 0; }
+  12.8%, 26%  { opacity: 1; }
+  30%, 100%   { opacity: 0; }
+}
+@keyframes fx-fan-txt-open {
+  0%, 12.2%   { opacity: 1; }
+  12.8%, 26%  { opacity: 0; }
+  30%, 100%   { opacity: 1; }
+}
+@keyframes fx-fan-meter {
+  0%, 12.2%   { background-color: rgba(255, 255, 255, 0.14); }
+  12.8%, 26%  { background-color: rgba(14, 10, 22, 0.22); }
+  30%, 100%   { background-color: rgba(255, 255, 255, 0.14); }
+}
 
 .fx-call {
   position: relative;
@@ -539,7 +623,7 @@ body.wl-open .fx-navbar { visibility: hidden; }
   .fx-fan__rows { gap: 4px; }
   .fx-fan__row { gap: 4px; padding: 5px 7px; border-radius: 9px; }
   .fx-fan__row-top { font-size: 8.5px; }
-  .fx-fan__row.is-picked .fx-fan__row-label { font-size: 7px; letter-spacing: 0.08em; }
+  .fx-fan__row-label .fx-fan__txt--picked { font-size: 7px; letter-spacing: 0.08em; }
   .fx-fan__row-meter { height: 2px; }
 }
 
@@ -696,6 +780,17 @@ body.wl-open .fx-navbar { visibility: hidden; }
   border: 1px solid rgba(244, 239, 250, 0.18);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+/* Playing: the bar slips away. A tap on the picture (is-controls, set by the
+   script for a few seconds), keyboard focus inside the bar, or a pause bring
+   it back. Opacity only — never visibility:hidden, which would also drop the
+   controls out of the tab order. */
+.fx-phone.is-playing:not(.is-controls) .fx-phone__bar:not(:has(:focus-visible)) {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 .fx-phone__btn { width: 34px; height: 34px; flex: 0 0 auto; background: rgba(255, 255, 255, 0.08); backdrop-filter: none; -webkit-backdrop-filter: none; }
 .fx-phone__time { flex: 0 0 auto; font-size: 11px; font-variant-numeric: tabular-nums; color: var(--fx-ink-72); letter-spacing: 0.04em; }
@@ -905,6 +1000,9 @@ body.wl-open .fx-navbar { visibility: hidden; }
   flex-wrap: wrap;
 }
 
+.fx-rail-head__lead { display: flex; flex-direction: column; gap: 10px; max-width: 560px; font-size: 14px; line-height: 1.5; color: var(--fx-ink-60); }
+.fx-rail-head__lead p { margin: 0; }
+.fx-rail-head__lead p:last-child { color: var(--fx-ink); font-weight: 500; }
 .fx-rail-head__cta { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; max-width: 320px; }
 @media (max-width: 720px) {
   .fx-rail-head__cta { align-items: flex-start; max-width: none; }

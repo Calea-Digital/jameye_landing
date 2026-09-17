@@ -4,7 +4,10 @@
 // source is attached when the section nears the viewport, it autoplays muted
 // (looping, inline) while on screen and pauses when scrolled away. Controls:
 // mute toggle top-right, and a bottom bar with play/pause, restart, a
-// seekable progress bar and the time; tapping the picture toggles playback.
+// seekable progress bar and the time. The bar hides itself while the video
+// plays: tapping the picture brings it back for a few seconds (tap again with
+// the bar showing to pause), and it stays put while paused, while a control
+// has keyboard focus (focus-visible), or while scrubbing.
 // With reduced motion requested nothing autoplays — the viewer presses play.
 import type { ForecastContent } from './types';
 
@@ -172,13 +175,57 @@ const stroke = 'fill="none" stroke="currentColor" stroke-width="2" stroke-lineca
         video.pause();
       }
     };
-    tap.addEventListener('click', toggle);
-    playBtn.addEventListener('click', toggle);
+
+    // --- transport bar visibility -------------------------------------------
+    // While playing the bar is hidden (is-controls off). Any tap on the picture
+    // or touch of a control shows it for CONTROLS_MS, then it slips away again.
+    const CONTROLS_MS = 3000;
+    let controlsTimer: number | undefined;
+    const controlsShown = () => reel.classList.contains('is-controls');
+    const hideControls = () => {
+      window.clearTimeout(controlsTimer);
+      controlsTimer = undefined;
+      reel.classList.remove('is-controls');
+    };
+    const showControls = () => {
+      reel.classList.add('is-controls');
+      window.clearTimeout(controlsTimer);
+      controlsTimer = window.setTimeout(() => {
+        // Never pull the bar away mid-scrub or from under the keyboard.
+        // (focus-visible, not focus-within: a mouse click leaves focus on the
+        // button too, and that must not pin the bar open.)
+        if (scrubbing || reel.querySelector('.fx-phone__bar :focus-visible')) {
+          showControls();
+          return;
+        }
+        hideControls();
+      }, CONTROLS_MS);
+    };
+    // Paused: the bar is always visible (CSS), so drop the timer.
+    video.addEventListener('pause', hideControls);
+    video.addEventListener('ended', hideControls);
+
+    // Tap the picture: with the bar hidden while playing, just reveal it; with
+    // it showing (or while paused) toggle playback like before.
+    tap.addEventListener('click', () => {
+      const playing = !video.paused && !video.ended;
+      if (playing && !controlsShown()) {
+        showControls();
+        return;
+      }
+      toggle();
+      if (!video.paused) showControls();
+    });
+    playBtn.addEventListener('click', () => {
+      toggle();
+      showControls();
+    });
     restartBtn.addEventListener('click', () => {
       load();
       video.currentTime = 0;
       userPaused = false;
       tryPlay();
+      showControls();
     });
     muteBtn.addEventListener('click', () => {
       load();
@@ -195,9 +242,9 @@ const stroke = 'fill="none" stroke="currentColor" stroke-width="2" stroke-lineca
       video.currentTime = frac * d;
       time.textContent = fmt(video.currentTime);
     };
-    seek.addEventListener('pointerdown', () => { scrubbing = true; load(); });
+    seek.addEventListener('pointerdown', () => { scrubbing = true; load(); showControls(); });
     seek.addEventListener('input', seekTo);
-    const endScrub = () => { scrubbing = false; seekTo(); };
+    const endScrub = () => { scrubbing = false; seekTo(); showControls(); };
     seek.addEventListener('pointerup', endScrub);
     seek.addEventListener('pointercancel', endScrub);
     seek.addEventListener('change', endScrub);
@@ -207,7 +254,10 @@ const stroke = 'fill="none" stroke="currentColor" stroke-width="2" stroke-lineca
       e.preventDefault();
       load();
       video.currentTime = Math.max(0, Math.min(video.duration || 0, video.currentTime + (e.key === 'ArrowLeft' ? -5 : 5)));
+      showControls();
     });
+    // Tabbing into the bar reveals it; it keeps showing while focus stays inside.
+    reel.querySelector('.fx-phone__bar')?.addEventListener('focusin', showControls);
 
     // --- viewport behaviour -------------------------------------------------
     // Fetch a little ahead of the viewport.
