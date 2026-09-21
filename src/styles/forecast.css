@@ -409,18 +409,21 @@ body.wl-open .fx-navbar { visibility: hidden; }
   align-items: center;
 }
 
-.fx-hero__copy { display: flex; flex-direction: column; gap: 26px; }
+.fx-hero__copy { display: flex; flex-direction: column; gap: 26px; container-type: inline-size; }
 
 /* Desktop keeps the original scale (5.8vw, capped at 92px); the floor is
-   raised so the headline reads big on phones. */
+   raised so the headline reads big on phones. The cqw term also caps the
+   size against the copy column so each fixed line ("Compete with") always
+   fits on a single row instead of wrapping mid-line. */
 .fx-hero__title {
   margin: 0;
-  font-size: clamp(46px, 5.8vw, 92px);
+  font-size: clamp(46px, min(5.8vw, 14.5cqw), 92px);
   font-weight: 600;
   line-height: 0.95;
   letter-spacing: -0.045em;
   text-wrap: pretty;
 }
+.fx-hero__title-line { white-space: nowrap; }
 @media (max-width: 700px) {
   /* Drop the fixed line breaks and let the larger type wrap on its own. */
   .fx-hero__title br { display: none; }

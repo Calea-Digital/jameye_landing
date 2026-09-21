@@ -28,7 +28,7 @@ const { hero } = Astro.props;
   <div class="fx-shell fx-hero__grid">
     <div class="fx-hero__copy">
       <h1 class="fx-hero__title">
-        {hero.titleLines.map((line) => <>{line}{' '}<br /></>)}
+        {hero.titleLines.map((line) => <><span class="fx-hero__title-line">{line}</span>{' '}<br /></>)}
         <span class="fx-grad-text">{hero.titleAccent}</span>
       </h1>
 
