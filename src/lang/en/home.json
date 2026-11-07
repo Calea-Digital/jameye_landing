@@ -8,7 +8,7 @@
     "secondary": "How it works",
     "note": "Try the beta at play.jameye.com.",
     "card": {
-      "image": "https://images.unsplash.com/photo-1598868116734-e99ebd8fc926?auto=format&fit=crop&w=800&h=800&q=80",
+      "image": "/images/forecasts/masked-singer.webp",
       "tag": "Masked Singer · Your forecast",
       "title": "Who’s hiding behind the mask?",
       "kicker": "Forecast the reveal",
@@ -30,13 +30,13 @@
   "community": {
     "eyebrow": "Real profiles. Independent forecasts. One community.",
     "profiles": [
-      { "name": "barjanne", "image": "" },
-      { "name": "Stäkarn", "image": "" },
-      { "name": "FEMMAN", "image": "" },
-      { "name": "Ramibooo", "image": "" },
-      { "name": "HypeHivE", "image": "" },
-      { "name": "ibra", "image": "" },
-      { "name": "Zorrokungen", "image": "" }
+      { "name": "barjanne", "image": "/images/community/barjanne.webp" },
+      { "name": "Stäkarn", "image": "/images/community/stakarn.webp" },
+      { "name": "FEMMAN", "image": "/images/community/femman.webp" },
+      { "name": "Ramibooo…", "image": "/images/community/ramibooo.webp" },
+      { "name": "HypeHivE", "image": "/images/community/hypehive.webp" },
+      { "name": "ibra", "image": "/images/community/ibra.webp" },
+      { "name": "Zorrokungen", "image": "/images/community/zorrokungen.webp" }
     ]
   },
   "explore": {
@@ -58,42 +58,42 @@
         "tag": "TV & mysteries",
         "title": "Who’s hiding behind the mask?",
         "body": "A familiar voice. A clue that doesn’t quite fit. What’s your Masked Singer theory?",
-        "image": "https://images.unsplash.com/photo-1598868116734-e99ebd8fc926?auto=format&fit=crop&w=900&h=520&q=80"
+        "image": "/images/forecasts/masked-singer.webp"
       },
       {
         "category": "entertainment",
         "tag": "Eurovision",
         "title": "Who will win Eurovision?",
         "body": "The strongest chorus, the best staging or an unexpected fan favorite? Talk us through your thinking.",
-        "image": "https://images.unsplash.com/photo-1603910234616-3b5f4a6be2b4?auto=format&fit=crop&w=900&h=520&q=80"
+        "image": "/images/forecasts/eurovision.webp"
       },
       {
         "category": "entertainment",
         "tag": "Film & pop culture",
         "title": "Who will be the next James Bond?",
         "body": "Classic elegance or a completely different 007? Who would you like to see, and why?",
-        "image": "https://images.unsplash.com/photo-1786467470421-d96a265fdf11?auto=format&fit=crop&w=900&h=520&q=80"
+        "image": "/images/forecasts/bond.webp"
       },
       {
         "category": "science",
         "tag": "Nobel Prizes",
         "title": "Who will be the next Nobel laureates?",
         "body": "From physics and chemistry to medicine, literature and peace. Which achievements will be recognised next?",
-        "image": "https://images.unsplash.com/photo-1665060221110-6dbe583fa329?auto=format&fit=crop&w=900&h=520&q=80"
+        "image": "/images/forecasts/nobel.webp"
       },
       {
         "category": "sport",
         "tag": "Champions League",
         "title": "Who will win the Champions League?",
         "body": "The biggest stars or the strongest team chemistry? Make the case for your theory.",
-        "image": "https://images.unsplash.com/photo-1613125479732-14543c793349?auto=format&fit=crop&w=900&h=520&q=80"
+        "image": "/images/forecasts/champions-league.webp"
       },
       {
         "category": "politics",
         "tag": "Politics & society",
         "title": "Who will be Sweden’s next prime minister?",
         "body": "The coalitions, the negotiations, the turning points. Who will lead Sweden’s next government?",
-        "image": "https://images.unsplash.com/photo-1771245680160-f84aabead58a?auto=format&fit=crop&w=900&h=520&q=80"
+        "image": "/images/forecasts/sweden-politics.webp"
       }
     ],
     "caption": "Illustrative forecast topics · Try the beta at play.jameye.com."
