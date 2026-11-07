@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Last updated: 24 June 2026**
+**Last updated: 7 November 2026**
 
 These Terms of Service ("Terms") govern your use of the Jameye landing site at jameye.com (the "Site"), operated by True Edge AB ("we", "us"). They apply only to the Site. They do not govern the Jameye platform or any product accessed behind a login, which will have separate terms at launch.
 
@@ -10,17 +10,17 @@ By accessing or using the Site, you agree to these Terms. If you do not agree, d
 
 ## 2. Eligibility
 
-You must be at least 18 years old to use the Site or join the waitlist.
+You must be at least 18 years old to use the Site or sign up for the beta.
 
-## 3. The Site and the waitlist
+## 3. The Site and the beta
 
-The Site is an informational page about an upcoming product. It lets you learn about the product and join a waitlist. Joining the waitlist:
+The Site is an informational page about Jameye, which is currently in beta. It lets you learn about the product and sign up for the beta. Signing up for the beta:
 
 - does not create any entitlement to access the future product;
 - does not guarantee the product will launch or launch in any particular form;
 - does not form a contract for the supply of any service.
 
-We may change, suspend, or discontinue the Site, the waitlist, or any associated feature at any time.
+We may change, suspend, or discontinue the Site, the beta sign-up, or any associated feature at any time.
 
 ## 4. Pre-launch information
 
@@ -28,7 +28,7 @@ Information on the Site about the future product, including any figures, prize p
 
 ## 5. Referrals and the public leaderboard
 
-The Site offers referral links and a public leaderboard. If you join the waitlist, your chosen handle, avatar, referral points, and ranking are displayed publicly on the leaderboard. Your email address is not shown. You agree not to game, automate, or manipulate referral counts or the leaderboard. We may correct, reset, or remove entries, points, or rankings at any time, including where we suspect manipulation. Referral points have no monetary value and confer no entitlement.
+The Site offers referral links and a public leaderboard. If you sign up for the beta, your chosen handle, avatar, referral points, and ranking are displayed publicly on the leaderboard. Your email address is not shown. You agree not to game, automate, or manipulate referral counts or the leaderboard. We may correct, reset, or remove entries, points, or rankings at any time, including where we suspect manipulation. Referral points have no monetary value and confer no entitlement.
 
 ## 6. Acceptable use
 

@@ -132,7 +132,7 @@ const CFG = {
     <!-- ===== Success view ===== -->
     <div class="wl-success" data-wl-success hidden>
       <div class="wl-success__check"><Icon name="tabler:circle-check" class="w-7 h-7" /></div>
-      <h2 class="wl-success__title text-white">{w.success.title}</h2>
+      <h2 class="wl-success__title">{w.success.title}</h2>
       <p class="wl-success__sub">{w.success.sub}</p>
 
       <div class="wl-cards">
@@ -166,9 +166,10 @@ const CFG = {
 </div>
 
 <style>
-  /* Styled to the "Forecast the world. With them." skin (src/styles/forecast.css):
-     aurora-violet panel, pill fields, the pink → orchid → indigo sweep on the
-     primary action. Behaviour/markup hooks (data-wl-*) are unchanged. */
+  /* Light skin: white card on a soft aubergine scrim, hairline borders,
+     --shadow-float, ink type and a dark ink pill for the primary action —
+     the same vocabulary as the homepage (src/styles/landing.css).
+     Behaviour/markup hooks (data-wl-*) are unchanged. */
   .wl-overlay {
     position: fixed;
     inset: 0;
@@ -179,15 +180,15 @@ const CFG = {
     align-items: flex-start;
     justify-content: center;
     padding: 1rem;
-    background: rgba(10, 7, 18, 0.78);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(35, 11, 49, 0.28);
+    backdrop-filter: blur(8px) saturate(120%);
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
     opacity: 0;
     transition: opacity 200ms ease;
     overflow-y: auto;
-    font-family: var(--fx-font, 'Sora', sans-serif);
+    font-family: var(--font-sans);
     font-weight: 400;
-    color: var(--fx-ink);
+    color: var(--ink);
   }
   .wl-overlay[hidden] { display: none; }
   .wl-overlay.is-open { opacity: 1; }
@@ -201,27 +202,27 @@ const CFG = {
     margin: auto;
     padding: 1.75rem 1.5rem;
     border-radius: 28px;
-    border: 1px solid var(--fx-brand-line);
-    background: linear-gradient(180deg, rgba(21, 15, 33, 0.97), rgba(14, 10, 22, 0.99));
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.65);
+    border: 1px solid var(--hairline);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-float);
     transform: translateY(24px) scale(0.96);
     transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  @media (min-width: 640px) { .wl-panel { padding: 2.25rem; } }
+  @media (min-width: 640px) { .wl-panel { padding: 2.5rem; } }
   .wl-overlay.is-open .wl-panel { transform: translateY(0) scale(1); }
-  /* The same aurora that lights the landing's closing panel, held behind the form. */
-  .wl-panel::before, .wl-panel::after {
+  /* A faint blush → lilac wash in the top corner, echoing the home panels. */
+  .wl-panel::before {
     content: '';
     position: absolute;
     z-index: -1;
-    width: 20rem; height: 20rem;
+    top: -9rem;
+    right: -8rem;
+    width: 22rem;
+    height: 22rem;
     border-radius: 9999px;
-    filter: blur(90px);
+    background: var(--gradient-glow);
     pointer-events: none;
-    animation: fx-aurora 16s ease-in-out infinite;
   }
-  .wl-panel::before { top: -8rem; right: -6rem; background: rgba(255, 169, 214, 0.28); }
-  .wl-panel::after  { bottom: -9rem; left: -7rem; background: rgba(108, 99, 255, 0.32); animation-delay: -6s; }
 
   .wl-close {
     position: absolute;
@@ -234,78 +235,84 @@ const CFG = {
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 9999px;
-    color: var(--fx-ink);
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid var(--fx-line);
+    color: var(--ink);
+    background: var(--bg-card);
+    border: 1px solid var(--hairline-strong);
     transition: background 150ms ease, transform 150ms ease, border-color 150ms ease;
   }
-  .wl-close:hover { background: rgba(255, 255, 255, 0.14); border-color: var(--fx-pink); transform: rotate(90deg); }
+  .wl-close:hover { background: var(--bg-deep); border-color: var(--ink-ghost); transform: rotate(90deg); }
 
   .wl-badge {
     display: inline-flex;
     align-items: center;
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--fx-line);
-    padding: 0.45rem 0.85rem;
-    font-size: 0.62rem;
+    gap: 0.6rem;
+    font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
     line-height: 1.2;
-    color: var(--fx-pink);
+    color: var(--ink);
+  }
+  .wl-badge::before {
+    content: '';
+    flex: none;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #c27ad6, #9a6ae6);
   }
   .wl-title {
     margin-top: 1rem;
+    padding-right: 2.5rem;
     font-weight: 600;
-    font-size: clamp(1.6rem, 5vw, 2.3rem);
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    color: var(--fx-ink);
+    font-size: clamp(1.75rem, 5vw, 2.4rem);
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+    color: var(--ink);
     text-wrap: balance;
   }
-  .wl-sub { margin-top: 0.7rem; font-size: 0.9rem; line-height: 1.6; color: var(--fx-ink-60); max-width: 34rem; }
+  .wl-sub { margin-top: 0.85rem; font-size: 0.95rem; line-height: 1.65; color: var(--ink-muted); max-width: 34rem; }
 
-  .wl-grid { display: grid; grid-template-columns: 1fr; gap: 1rem 1.25rem; align-items: start; }
+  .wl-grid { display: grid; grid-template-columns: 1fr; gap: 1.1rem 1.25rem; align-items: start; }
   @media (min-width: 480px) {
     .wl-grid { grid-template-columns: 1fr 1fr; }
     .wl-field--full { grid-column: 1 / -1; }
   }
-  .wl-field { display: flex; flex-direction: column; gap: 0.45rem; }
+  .wl-field { display: flex; flex-direction: column; gap: 0.5rem; }
   .wl-label {
-    font-size: 0.62rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--fx-ink-42);
+    color: var(--ink-soft);
   }
-  .wl-req { color: var(--fx-pink); margin-left: 0.2em; }
+  .wl-req { color: var(--brand-orchid); margin-left: 0.2em; }
 
-  /* Pill fields, matching the landing's closing panel. */
+  /* Pill fields on a faint lavender fill so they read on the white card. */
   .wl-overlay .waitlist-input {
     flex: 0 0 auto;
     height: 52px;
     padding: 0 1.15rem;
     border-radius: 999px;
-    border: 1px solid rgba(244, 239, 250, 0.16);
-    background: rgba(255, 255, 255, 0.07);
-    color: var(--fx-ink);
+    border: 1px solid var(--hairline-strong);
+    background: var(--background);
+    color: var(--ink);
     font-family: inherit;
     font-weight: 500;
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
   }
-  .wl-overlay .waitlist-input::placeholder { color: var(--fx-ink-42); font-weight: 400; }
+  .wl-overlay .waitlist-input::placeholder { color: var(--ink-faint); font-weight: 400; }
   .wl-overlay .waitlist-input:focus {
     outline: none;
-    border-color: var(--fx-pink);
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 4px rgba(255, 169, 214, 0.16);
+    border-color: var(--brand-violet);
+    background: var(--bg-card);
+    box-shadow: 0 0 0 4px rgba(138, 99, 234, 0.12);
   }
   .wl-overlay .waitlist-input:disabled { opacity: 0.6; }
 
-  /* Submit row — the brand-sweep pill (the global .tactical-cta skew is undone
-     here) with the Telegram shortcut beside it. */
+  /* Submit row — a dark ink pill (the global .tactical-cta skew and gradient
+     are undone here) with the Telegram shortcut beside it. */
   .wl-submit-row { display: flex; gap: 0.7rem; align-items: stretch; }
   .wl-overlay .tactical-cta,
   .wl-overlay .tactical-cta .tactical-cta-inner {
@@ -317,66 +324,66 @@ const CFG = {
     padding: 1.05rem 1.5rem;
     border: 0;
     border-radius: 999px;
-    background: var(--fx-grad);
-    color: var(--fx-on-accent);
+    background: var(--ink);
+    color: #fff;
     font-family: inherit;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    box-shadow: var(--fx-shadow-cta);
-    transition: transform 200ms ease, box-shadow 200ms ease;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.035em;
+    box-shadow: 0 18px 34px -20px rgba(35, 11, 49, 0.55);
+    transition: transform 200ms ease, background-color 200ms ease, box-shadow 200ms ease;
   }
   .wl-submit-btn .tactical-cta-inner {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    color: var(--fx-on-accent);
+    gap: 0.6rem;
+    font-weight: 600;
+    color: #fff;
   }
-  .wl-submit-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 18px 48px rgba(199, 123, 224, 0.5); }
+  .wl-submit-btn:hover:not(:disabled) { transform: translateY(-1px); background: var(--ink-soft); }
   .wl-submit-btn:disabled { opacity: 0.55; cursor: not-allowed; }
   .wl-telegram {
     flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 3.25rem;
+    width: 3.4rem;
     border-radius: 999px;
-    color: var(--fx-ink-72);
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--fx-line);
+    color: var(--ink-muted);
+    background: var(--bg-card);
+    border: 1px solid var(--hairline-strong);
     transition: background 150ms ease, transform 150ms ease, color 150ms ease, border-color 150ms ease;
   }
-  .wl-telegram:hover { background: rgba(255, 255, 255, 0.12); border-color: var(--fx-pink); color: var(--fx-pink); transform: translateY(-1px); }
-  .wl-help { font-size: 0.7rem; line-height: 1.45; color: var(--fx-ink-42); }
+  .wl-telegram:hover { background: var(--bg-deep); border-color: var(--brand-violet); color: var(--brand-violet); transform: translateY(-1px); }
+  .wl-help { font-size: 0.74rem; line-height: 1.5; color: var(--ink-muted); }
   .wl-error {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #ffd7de;
-    background: rgba(229, 48, 62, 0.18);
-    border: 1px solid rgba(229, 48, 62, 0.4);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--alert-rose);
+    background: rgba(210, 52, 71, 0.06);
+    border: 1px solid rgba(210, 52, 71, 0.25);
     border-radius: 999px;
     padding: 0.6rem 1rem;
   }
   .wl-error.hidden { display: none; }
 
   /* Live-validation feedback */
-  .wl-overlay .waitlist-input.is-valid { border-color: var(--fx-politics) !important; box-shadow: 0 0 0 4px rgba(127, 224, 184, 0.16); }
-  .wl-overlay .waitlist-input.is-invalid { border-color: #ff8fa3 !important; box-shadow: 0 0 0 4px rgba(255, 143, 163, 0.16); }
-  .wl-status { font-size: 0.7rem; font-weight: 600; line-height: 1.4; display: flex; align-items: center; gap: 0.3rem; }
-  .wl-status.ok { color: var(--fx-politics); }
-  .wl-status.bad { color: #ff8fa3; }
-  .wl-status.checking { color: var(--fx-ink-42); }
+  .wl-overlay .waitlist-input.is-valid { border-color: var(--win-emerald) !important; box-shadow: 0 0 0 4px rgba(31, 157, 116, 0.12); }
+  .wl-overlay .waitlist-input.is-invalid { border-color: var(--alert-rose) !important; box-shadow: 0 0 0 4px rgba(210, 52, 71, 0.1); }
+  .wl-status { font-size: 0.72rem; font-weight: 600; line-height: 1.4; display: flex; align-items: center; gap: 0.3rem; }
+  .wl-status.ok { color: var(--win-emerald); }
+  .wl-status.bad { color: var(--alert-rose); }
+  .wl-status.checking { color: var(--ink-muted); }
 
-  /* Character picker — dark tiles; the chosen one takes the brand sweep. */
+  /* Character picker — lavender tiles; the chosen one takes the soft panel wash. */
   .wl-field--avatar[hidden] { display: none; }
   .wl-avatars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
   .wl-avatar {
     aspect-ratio: 1;
     border-radius: 18px;
-    border: 1px solid var(--fx-line);
-    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--hairline);
+    background: var(--bg-deep);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -387,11 +394,11 @@ const CFG = {
   }
   .wl-avatar-art { display: block; width: 100%; height: 100%; }
   .wl-avatar-art svg { width: 100%; height: 100%; display: block; }
-  .wl-avatar:hover { transform: translateY(-3px); background: rgba(255, 255, 255, 0.09); }
+  .wl-avatar:hover { transform: translateY(-3px); border-color: var(--hairline-strong); }
   .wl-avatar.is-selected {
-    border-color: rgba(255, 169, 214, 0.55);
-    background: linear-gradient(160deg, rgba(255, 169, 214, 0.2), rgba(108, 99, 255, 0.2));
-    box-shadow: 0 0 0 1px rgba(255, 169, 214, 0.35), 0 14px 36px rgba(199, 123, 224, 0.3);
+    border-color: var(--brand-violet);
+    background: var(--gradient-panel);
+    box-shadow: var(--shadow-card);
     transform: translateY(-3px);
   }
 
@@ -402,16 +409,16 @@ const CFG = {
     width: 4.25rem; height: 4.25rem; margin: 0.25rem auto 1.25rem;
     display: flex; align-items: center; justify-content: center;
     border-radius: 9999px;
-    color: var(--fx-on-accent);
-    background: var(--fx-grad);
-    box-shadow: 0 0 0 14px rgba(255, 169, 214, 0.1), 0 20px 50px rgba(199, 123, 224, 0.4);
+    color: var(--ink);
+    background: var(--gradient-cta);
+    box-shadow: 0 0 0 12px rgba(201, 107, 179, 0.1), var(--shadow-brand-halo);
     animation: pop-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
   .wl-success__title {
     font-weight: 600;
-    font-size: clamp(1.6rem, 5vw, 2.3rem); letter-spacing: -0.03em; line-height: 1.05; color: var(--fx-ink);
+    font-size: clamp(1.75rem, 5vw, 2.4rem); letter-spacing: -0.045em; line-height: 1.04; color: var(--ink);
   }
-  .wl-success__sub { margin-top: 0.6rem; font-size: 0.9rem; color: var(--fx-ink-60); }
+  .wl-success__sub { margin-top: 0.7rem; font-size: 0.95rem; color: var(--ink-muted); }
 
   .wl-cards {
     display: grid; grid-template-columns: 1fr; gap: 0.75rem;
@@ -424,50 +431,51 @@ const CFG = {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem;
     padding: 1rem 1.25rem; min-width: 0;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--fx-line);
+    background: var(--gradient-panel);
+    border: 1px solid #e8d9ec;
   }
   .wl-handle[hidden] { display: none; }
   .wl-handle--pos .wl-handle__v { font-variant-numeric: tabular-nums; }
-  .wl-handle__k { font-size: 0.58rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fx-ink-42); }
+  .wl-handle__k { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted); }
   .wl-handle__v {
-    font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; color: var(--fx-ink);
+    font-size: 1.5rem; font-weight: 600; letter-spacing: -0.03em; color: var(--ink);
     text-align: center; overflow-wrap: anywhere;
   }
 
-  .wl-linkrow { display: flex; gap: 0.5rem; margin-top: 0.4rem; }
+  .wl-linkrow { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
   /* The fields above sit in column flex containers, so .waitlist-input is
      flex:0 0 auto there (it must not stretch vertically). In this row it has to
      shrink instead, or the Copy button is pushed out of the panel. */
   .wl-linkrow .wl-linkinput { flex: 1 1 0; width: auto; min-width: 0; font-family: var(--font-mono) !important; font-size: 0.78rem !important; }
   .wl-copy {
     flex: 0 0 auto;
-    padding: 0 1.25rem;
+    padding: 0 1.3rem;
     border: 0;
     border-radius: 999px;
-    background: var(--fx-grad);
-    color: var(--fx-on-accent);
+    background: var(--ink);
+    color: #fff;
     font-family: inherit;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    transition: background-color 150ms ease;
   }
-  .wl-copy .tactical-cta-inner { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--fx-on-accent); }
-  .wl-copy.is-copied { background: linear-gradient(120deg, #7fe0b8, #5fd8c4); }
+  .wl-copy:hover { background: var(--ink-soft); }
+  .wl-copy .tactical-cta-inner { display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 600; color: #fff; }
+  .wl-copy.is-copied { background: var(--win-teal); }
 
   .wl-done {
-    width: 100%; margin-top: 1.25rem; padding: 1rem 1.25rem;
-    border-radius: 999px; border: 1px solid var(--fx-line-strong);
-    background: transparent; color: var(--fx-ink-72);
-    font-family: inherit; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
-    transition: border-color 150ms ease, color 150ms ease;
+    width: 100%; margin-top: 1.5rem; padding: 1rem 1.25rem;
+    border-radius: 999px; border: 1px solid var(--hairline-strong);
+    background: var(--bg-card); color: var(--ink);
+    font-family: inherit; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.03em;
+    transition: background-color 150ms ease, border-color 150ms ease;
   }
-  .wl-done:hover { border-color: var(--fx-pink); color: var(--fx-pink); }
+  .wl-done:hover { background: var(--bg-deep); border-color: var(--ink-ghost); }
 
   @media (prefers-reduced-motion: reduce) {
     .wl-overlay, .wl-panel, .wl-avatar, .wl-close { transition: none; }
-    .wl-panel::before, .wl-panel::after, .wl-success__check { animation: none; }
+    .wl-success__check { animation: none; }
   }
 </style>
 

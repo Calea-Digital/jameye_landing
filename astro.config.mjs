@@ -35,5 +35,11 @@ export default defineConfig({
     '/cookies': '/en/cookies',
   },
 
-  integrations: [icon(), sitemap(), mdx(), react()],
+  integrations: [
+    icon(),
+    // Unlisted pages (noindex) stay reachable but out of the sitemap.
+    sitemap({ filter: (page) => !/\/en\/(bou|leaderboard)\/?$/.test(page) }),
+    mdx(),
+    react(),
+  ],
 });

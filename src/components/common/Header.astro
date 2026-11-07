@@ -1,43 +1,95 @@
 ---
+// Site header shared by every page: JAMEYE® wordmark, the three section links
+// and the dark "Try the beta" pill. On the homepage the links are in-page
+// anchors; on sub-pages they point back to the matching homepage section.
+// Below 900px the links fold into a small disclosure menu.
 import Logo from '~/components/common/Logo.astro';
 import { t, localePath, type Locale } from '~/utils/i18n';
+import { BETA_URL } from '~/config';
 
 export interface Props {
   locale: Locale;
+  /** True on the homepage, where the nav links scroll in place. */
+  onHome?: boolean;
 }
 
-const { locale } = Astro.props;
+const { locale, onHome = false } = Astro.props;
 
-const nav = t<{ cta: { primary: string } }>(locale, 'nav');
+const nav = t<{
+  links: { text: string; href: string }[];
+  cta: string;
+  homeAriaLabel: string;
+  mobileMenuOpen: string;
+  mobileMenuClose: string;
+}>(locale, 'nav');
+
+const home = localePath(locale, '/');
+const links = nav.links.map((link) => ({
+  ...link,
+  href: link.href.startsWith('#') && !onHome ? `${home}${link.href}` : link.href,
+}));
 ---
 
-<!-- Minimal sticky glass header for the sub-pages (legal, about, leaderboard…):
-     just the wordmark linking home and the waitlist CTA. The old section nav
-     (How it works / Tournaments / …) pointed at anchors that no longer exist on
-     the play landing, so it was removed. -->
-<header id="header" class="sticky top-0 z-50 w-full glass-header h-16">
-  <div class="max-w-[1280px] mx-auto h-full px-5 md:px-8 flex items-center justify-between gap-3 sm:gap-6">
-    <a href={localePath(locale, '/')} class="flex items-center shrink-0" aria-label="Jameye home">
-      <Logo size="md" />
-    </a>
+<header id="header" class="jm-header" data-open="false">
+  <div class="jm-header__bar">
+    <div class="jm-header__inner">
+      <a href={home} class="jm-header__brand" aria-label={nav.homeAriaLabel}>
+        <Logo size="md" />
+      </a>
 
-    <button
-      type="button"
-      class="btn-primary max-sm:px-3 max-sm:text-[0.6rem] max-sm:tracking-[0.06em] shrink-0"
-      data-open-waitlist
-    >
-      {nav.cta.primary}
-    </button>
+      <nav class="jm-header__nav" aria-label="Primary">
+        {links.map((link) => <a href={link.href} class="jm-header__link">{link.text}</a>)}
+      </nav>
+
+      <div class="jm-header__actions">
+        <a href={BETA_URL} class="jm-btn jm-btn--dark jm-header__cta" rel="noopener">
+          <span>{nav.cta}</span>
+          <svg class="jm-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" /></svg>
+        </a>
+        <button
+          type="button"
+          class="jm-header__toggle"
+          aria-expanded="false"
+          aria-controls="jm-mobile-nav"
+          data-label-open={nav.mobileMenuOpen}
+          data-label-close={nav.mobileMenuClose}
+          aria-label={nav.mobileMenuOpen}
+        >
+          <span class="jm-header__toggle-bar"></span>
+          <span class="jm-header__toggle-bar"></span>
+        </button>
+      </div>
+    </div>
   </div>
+
+  <nav id="jm-mobile-nav" class="jm-header__drawer" aria-label="Primary mobile">
+    {links.map((link) => <a href={link.href} class="jm-header__drawer-link">{link.text}</a>)}
+  </nav>
 </header>
 
 <script>
-  const SCROLL_THRESHOLD = 20;
   const header = document.getElementById('header');
-  function handleScroll() {
-    if (!header) return;
-    header.classList.toggle('scroll', window.scrollY > SCROLL_THRESHOLD);
+  const toggle = header?.querySelector<HTMLButtonElement>('.jm-header__toggle');
+
+  function setOpen(open: boolean) {
+    if (!header || !toggle) return;
+    header.dataset.open = String(open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', (open ? toggle.dataset.labelClose : toggle.dataset.labelOpen) ?? '');
   }
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  handleScroll();
+
+  toggle?.addEventListener('click', () => setOpen(header?.dataset.open !== 'true'));
+  header?.querySelectorAll('.jm-header__drawer-link').forEach((link) => link.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && header?.dataset.open === 'true') {
+      setOpen(false);
+      toggle?.focus();
+    }
+  });
+
+  function onScroll() {
+    header?.classList.toggle('is-scrolled', window.scrollY > 12);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 </script>

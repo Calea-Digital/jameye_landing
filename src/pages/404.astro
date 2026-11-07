@@ -16,18 +16,19 @@ const locale: Locale = 'en';
   }}
 >
   <Header locale={locale} />
-  <!-- Wrapped in <main> (z-index:1) so the content sits above the fixed
-       body::before / body::after background overlays — same as every other
-       page. Scoped styles keep the page self-contained even if the shared
-       Tailwind theme bundle fails to load. -->
   <main id="top">
     <section class="nf">
       <div class="nf__inner">
-        <p class="nf__eyebrow">Error 404</p>
-        <h1 class="nf__code">404</h1>
-        <p class="nf__title">Page not found</p>
-        <p class="nf__sub">Looks like you wandered off the leaderboard.</p>
-        <a href="/en" class="nf__cta">Back to home</a>
+        <p class="jm-eyebrow jm-eyebrow--dot">Error 404</p>
+        <h1 class="nf__title">
+          <span class="jm-block">This page</span>
+          <span class="jm-block jm-gradient-text">isn’t here.</span>
+        </h1>
+        <p class="nf__sub">The link may be old, or the page has moved. Let’s get you back to the big questions.</p>
+        <a href="/en" class="jm-btn jm-btn--dark jm-btn--lg">
+          <span>Back to home</span>
+          <svg class="jm-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" /></svg>
+        </a>
       </div>
     </section>
   </main>
@@ -36,57 +37,29 @@ const locale: Locale = 'en';
 
 <style>
   .nf {
-    min-height: 60vh;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4rem 1.5rem;
+    min-height: 62vh;
+    padding: clamp(4rem, 9vw, 7rem) var(--gutter);
     text-align: center;
+    overflow: hidden;
   }
-  .nf__inner {
-    max-width: 32rem;
+  .nf::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(45% 60% at 50% 70%, rgba(236, 166, 210, 0.28), rgba(166, 140, 242, 0.1) 55%, transparent 80%);
   }
-  .nf__eyebrow {
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #ffffff9e;
-    margin: 0 0 1rem;
-  }
-  .nf__code {
-    font-size: clamp(4.5rem, 14vw, 7rem);
-    line-height: 1;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: #fff;
-    margin: 0;
-  }
+  .nf__inner { display: flex; flex-direction: column; align-items: center; max-width: 36rem; }
   .nf__title {
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: #fff;
-    margin: 1rem 0 0;
-  }
-  .nf__sub {
-    font-size: 0.875rem;
-    color: #ffffff9e;
-    margin: 0.75rem 0 0;
-  }
-  .nf__cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 9999px;
-    background: #fff;
-    color: #000;
+    margin: 0;
+    font-size: clamp(2.6rem, 6vw, 4.5rem);
     font-weight: 600;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
+    line-height: 1;
+    letter-spacing: -0.05em;
   }
-  .nf__cta:hover {
-    opacity: 0.85;
-  }
+  .nf__sub { margin: 1.75rem 0 2.4rem; font-size: 1.05rem; line-height: 1.7; color: var(--ink-muted); }
 </style>

@@ -1,118 +1,134 @@
 @import 'tailwindcss';
 @import './play-landing.css';
-@import './forecast.css';
+@import './landing.css';
 @plugin '@tailwindcss/typography';
 
 /* ---------------------------------------------------------------------------
-   Jameye landing — "Forecast the world. With them." brand skin · 2026.
-   Sora (display/body) · JetBrains Mono (numerics, caps) · Instrument Serif
-   (editorial accent words). Canvas is aurora violet (#0e0a16) and the single
-   accent is the pink → orchid → indigo sweep; the landing's own component
-   layer lives in ./forecast.css.
+   Jameye — "Forecast what's next. Together." · creator-driven social
+   forecasting · 2026 skin.
+
+   A light, airy lavender canvas (#fcf9fd) with deep aubergine ink (#230b31).
+   The single accent is a soft orchid → violet sweep, used for one display
+   word per screen and for the primary "Try the beta" pill. Sora carries both
+   display and body; Archivo Black is reserved for the JAMEYE® wordmark;
+   Instrument Serif italic appears as a rare editorial flourish.
+
+   The homepage component layer lives in ./landing.css (prefix .jm-).
    --------------------------------------------------------------------------- */
 :root {
-  /* Brand family */
-  --brand-blue:       #6c63ff;
-  --brand-sky:        #8f88ff;
-  --brand-purple:     #c77be0;
-  --brand-lavender:   #d8a9ec;
-  --brand-magenta:    #ffa9d6;
-  --brand-pink:       #ff5cb8;
+  /* Ink & canvas */
+  --ink:              #230b31;   /* headings, primary text, dark pill */
+  --ink-soft:         #3b2448;
+  --ink-muted:        #6e6479;   /* body copy */
+  --ink-faint:        #9a90a4;   /* captions, meta */
+  --ink-ghost:        #cfc6d6;
+  --background:       #fcf9fd;
+  --bg-deep:          #f6f1f9;
+  --bg-card:          #ffffff;
+  --foreground:       var(--ink);
+  --hairline:         #ece4f0;
+  --hairline-strong:  #ddd1e5;
+
+  /* Brand family — soft orchid / lilac / violet */
+  --brand-orchid:     #c96bb3;
+  --brand-violet:     #8a63ea;
+  --brand-lilac:      #a68cf2;
+  --brand-blush:      #eba5d2;
+  --brand-number:     #b0699f;   /* step numerals ("01", "02"…) */
+
+  /* Legacy brand names, re-tuned for a light canvas so older pages keep
+     resolving to on-palette colours. */
+  --brand-blue:       #6c5ce7;
+  --brand-sky:        #8a63ea;
+  --brand-purple:     #9c5fd0;
+  --brand-lavender:   #8a63ea;
+  --brand-magenta:    #c96bb3;
+  --brand-pink:       #d9539f;
 
   /* Semantic accents */
-  --win-emerald:      #7fe0b8;
-  --win-teal:         #5fd8c4;
-  --prize-gold:       #ffc24b;
-  --heat-orange:      #ff9d5c;
-  --alert-rose:       #e5303e;
+  --win-emerald:      #1f9d74;
+  --win-teal:         #138a7e;
+  --prize-gold:       #c58a12;
+  --heat-orange:      #d9682a;
+  --alert-rose:       #d23447;
 
-  /* Neutrals & glass */
-  --ink:              #0f172a;
-  --slate-deep:       #1e293b;
-  --slate-mid:        #475569;
-  --slate-body:       #64748b;
-  --cool-black:       #0a0712;
-  --glass-black:      #150f21;
+  /* Neutrals kept for legacy references */
+  --slate-deep:       #3b2448;
+  --slate-mid:        #6e6479;
+  --slate-body:       #6e6479;
+  --cool-black:       #230b31;
+  --glass-black:      #2b1238;
 
-  /* Canvas / shell */
-  --background:       #0e0a16;
-  --bg-deep:          #0a0712;
-  --bg-card:          #150f21;
-  --foreground:       #f4effa;
-  --ink-muted:        rgba(255, 255, 255, 0.65);
-  --ink-faint:        rgba(255, 255, 255, 0.42);
-  --ink-ghost:        rgba(255, 255, 255, 0.18);
-  --hairline:         rgba(255, 255, 255, 0.08);
-  --hairline-strong:  rgba(255, 255, 255, 0.16);
+  /* Legacy bridges (Tailwind semantic colours) */
+  --card:             #ffffff;
+  --card-foreground:  var(--ink);
+  --muted:            #f4eef7;
+  --muted-foreground: var(--ink-muted);
+  --border:           var(--hairline);
+  --input:            #ffffff;
 
-  /* Legacy bridges (kept for existing Tailwind classes). */
-  --card:             rgba(255, 255, 255, 0.035);
-  --card-foreground:  var(--foreground);
-  --muted:            rgba(255, 255, 255, 0.04);
-  --muted-foreground: rgba(255, 255, 255, 0.62);
-  --border:           rgba(255, 255, 255, 0.10);
-  --input:            rgba(255, 255, 255, 0.06);
+  --primary:               var(--ink);
+  --primary-foreground:    #ffffff;
+  --secondary:             var(--brand-violet);
+  --secondary-foreground:  #ffffff;
+  --accent:                var(--brand-orchid);
+  --accent-foreground:     #ffffff;
 
-  --primary:               var(--brand-purple);
-  --primary-foreground:    var(--foreground);
-  --secondary:             var(--brand-blue);
-  --secondary-foreground:  var(--foreground);
-  --accent:                var(--brand-magenta);
-  --accent-foreground:     var(--foreground);
-
-  --accent-violet:    var(--brand-lavender);
-  --accent-sky:       var(--brand-sky);
+  --accent-violet:    var(--brand-violet);
+  --accent-sky:       var(--brand-lilac);
   --accent-mint:      var(--brand-blue);
   --accent-hot-pink:  var(--brand-pink);
 
-  /* Brand gradients */
-  --gradient-brand-sweep:    linear-gradient(95deg,  #ffa9d6 0%, #c77be0 48%, #6c63ff 100%);
-  --gradient-indigo-violet:  linear-gradient(140deg, #6c63ff 0%, #c77be0 100%);
-  --gradient-violet-magenta: linear-gradient(140deg, #c77be0 0%, #ffa9d6 100%);
-  --gradient-magenta-pink:   linear-gradient(140deg, #ffa9d6 0%, #ff5cb8 100%);
-  --gradient-emerald-blue:   linear-gradient(140deg, #7fe0b8 0%, #6c63ff 100%);
-  --gradient-gold-orange:    linear-gradient(140deg, #ffc24b 0%, #ff9d5c 100%);
-  --gradient-emerald-teal:   linear-gradient(160deg, #7fe0b8 0%, #5fd8c4 100%);
-  --gradient-ital-sweep:     linear-gradient(120deg, #ffa9d6 0%, #c77be0 50%, #6c63ff 100%);
-  --gradient-ital-gold:      linear-gradient(120deg, #ffc24b 0%, #ff9d5c 100%);
+  /* Gradients */
+  --gradient-text:    linear-gradient(92deg, #cd6db2 0%, #a96ad6 48%, #8a63ea 100%);
+  --gradient-cta:     linear-gradient(95deg, #eca6d2 0%, #c99be5 50%, #a18af4 100%);
+  --gradient-panel:   linear-gradient(118deg, #f9e8f2 0%, #f2e9f8 52%, #ebe8fb 100%);
+  --gradient-glow:    radial-gradient(closest-side, rgba(236, 166, 210, 0.35), rgba(161, 138, 244, 0.12) 60%, transparent);
 
-  --gradient-cta:       var(--gradient-brand-sweep);
-  --gradient-highlight: var(--gradient-brand-sweep);
+  --gradient-brand-sweep:    var(--gradient-text);
+  --gradient-indigo-violet:  linear-gradient(140deg, #8a63ea 0%, #c96bb3 100%);
+  --gradient-violet-magenta: linear-gradient(140deg, #a68cf2 0%, #eba5d2 100%);
+  --gradient-magenta-pink:   linear-gradient(140deg, #eba5d2 0%, #d9539f 100%);
+  --gradient-emerald-blue:   linear-gradient(140deg, #5cc9a0 0%, #8a63ea 100%);
+  --gradient-gold-orange:    linear-gradient(140deg, #f2b84b 0%, #e98a4f 100%);
+  --gradient-emerald-teal:   linear-gradient(160deg, #5cc9a0 0%, #3fb8a8 100%);
+  --gradient-ital-sweep:     var(--gradient-text);
+  --gradient-ital-gold:      linear-gradient(120deg, #e3a52b 0%, #e07a3e 100%);
+  --gradient-highlight:      var(--gradient-text);
 
   /* Glass recipes */
-  --glass-header-bg:     rgba(14, 10, 22, 0.72);
-  --glass-panel-bg:      rgba(21, 15, 33, 0.96);
-  --glass-card-bg:       rgba(255, 255, 255, 0.035);
+  --glass-header-bg:  rgba(252, 249, 253, 0.82);
+  --glass-panel-bg:   rgba(255, 255, 255, 0.96);
+  --glass-card-bg:    #ffffff;
 
-  /* Elevation */
-  --shadow-soft-chrome: 0 28px 72px -20px rgba(0, 0, 0, 0.7),
-                        0 4px 18px rgba(0, 0, 0, 0.5);
-  --shadow-brand-halo:  0 14px 36px -18px rgba(199, 123, 224, 0.45);
-  --tile-inner-sheen:   inset 0 1px 0 rgba(255, 255, 255, 0.22),
-                        0 0 0 1px rgba(255, 255, 255, 0.10);
+  /* Elevation — soft, violet-tinted, never grey */
+  --shadow-xs:   0 1px 2px rgba(35, 11, 49, 0.05);
+  --shadow-card: 0 1px 2px rgba(35, 11, 49, 0.04), 0 18px 40px -28px rgba(66, 28, 104, 0.28);
+  --shadow-lift: 0 2px 6px rgba(35, 11, 49, 0.05), 0 34px 60px -30px rgba(88, 44, 140, 0.42);
+  --shadow-float: 0 24px 50px -22px rgba(66, 28, 104, 0.35), 0 4px 12px -4px rgba(35, 11, 49, 0.08);
+  --shadow-soft-chrome: var(--shadow-float);
+  --shadow-brand-halo:  0 14px 30px -16px rgba(138, 99, 234, 0.55);
+  --tile-inner-sheen:   inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 0 0 1px var(--hairline);
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4),
-               0 2px 6px -2px rgba(0, 0, 0, 0.45);
-  --shadow:    0 2px 4px 0 rgba(0, 0, 0, 0.45),
-               0 4px 12px -2px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5),
-               0 8px 18px -4px rgba(0, 0, 0, 0.55);
-  --shadow-lg: 0 10px 16px -3px rgba(0, 0, 0, 0.55),
-               0 16px 32px -8px rgba(0, 0, 0, 0.6);
+  --shadow-sm: var(--shadow-xs);
+  --shadow:    var(--shadow-card);
+  --shadow-md: var(--shadow-card);
+  --shadow-lg: var(--shadow-lift);
 
-  /* Typography · Brand book §3.1 */
-  --font-sans:      'Sora', 'Inter Tight', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-body:      'Sora', 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Typography */
+  --font-sans:      'Sora', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body:      'Sora', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono:      'JetBrains Mono', ui-monospace, monospace;
-  /* Aliases used by the ported app BoU promo band (matches the app's --j-font-* tokens). */
   --j-font-display: var(--font-sans);
   --j-font-mono:    var(--font-mono);
   --font-editorial: 'Instrument Serif', Georgia, 'Times New Roman', serif;
-  /* Brand wordmark — JAMEYE® is set in Archivo Black (matches the app). */
   --font-logo:      'Archivo Black', 'Arial Black', sans-serif;
 
   /* Geometry */
-  --radius: 1rem;
+  --radius: 1.25rem;
+  --container: 1600px;
+  --gutter: clamp(1.25rem, 5vw, 6rem);
+  --header-h: clamp(76px, 6.85vw, 137px);
 }
 
 @theme inline {
@@ -138,6 +154,8 @@
   --color-brand-lavender: var(--brand-lavender);
   --color-brand-magenta: var(--brand-magenta);
   --color-brand-pink: var(--brand-pink);
+  --color-brand-orchid: var(--brand-orchid);
+  --color-brand-violet: var(--brand-violet);
 
   --color-win-emerald: var(--win-emerald);
   --color-win-teal: var(--win-teal);
@@ -155,16 +173,16 @@
   --font-mono: var(--font-mono);
   --font-editorial: var(--font-editorial);
 
-  --radius-sm:  calc(var(--radius) - 8px);
-  --radius-md:  calc(var(--radius) - 4px);
+  --radius-sm:  calc(var(--radius) - 10px);
+  --radius-md:  calc(var(--radius) - 6px);
   --radius-lg:  var(--radius);
   --radius-xl:  calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 16px);
 
-  --background-image-cta:             var(--gradient-brand-sweep);
-  --background-image-highlight:       var(--gradient-brand-sweep);
-  --background-image-brand-sweep:     var(--gradient-brand-sweep);
+  --background-image-cta:             var(--gradient-cta);
+  --background-image-highlight:       var(--gradient-text);
+  --background-image-brand-sweep:     var(--gradient-text);
   --background-image-indigo-violet:   var(--gradient-indigo-violet);
   --background-image-violet-magenta:  var(--gradient-violet-magenta);
   --background-image-magenta-pink:    var(--gradient-magenta-pink);
@@ -180,100 +198,57 @@
     scroll-behavior: smooth;
     background-color: var(--background);
     font-family: var(--font-body);
-    font-feature-settings: 'cv11', 'ss01', 'ss03';
-    /* Offset in-page anchor jumps for the 64px sticky header. */
-    scroll-padding-top: 64px;
-  }
-
-  /* Each module fills a single viewport; content is centered so nothing
-     bleeds between sections. Tall content (e.g. on short viewports) is
-     allowed to grow rather than be clipped. Scoped to the sub-pages: the
-     forecast landing (main.fx-main) flows its own sections and must not have
-     every one of them stretched to a full viewport. */
-  main:not(.fx-main) > section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  /* Full-viewport modules on tablet/desktop. On phones the fixed 100dvh
-     leaves tall empty gaps when a module's content is short, so there we let
-     each section size to its own content (its py padding handles spacing). */
-  @media (min-width: 768px) {
-    main:not(.fx-main) > section {
-      /* Fill the viewport minus the 64px sticky header, so each module —
-         including the hero with its bottom ticker — fits without scrolling. */
-      min-height: calc(100dvh - 64px);
-    }
+    /* Offset in-page anchor jumps for the sticky header. */
+    scroll-padding-top: calc(var(--header-h) + 12px);
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    color: var(--foreground);
+    color: var(--ink);
     background-color: var(--background);
     font-family: var(--font-body);
-    font-weight: 300;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     position: relative;
     overflow-x: hidden;
   }
 
-  /* Display headlines stay on Inter Tight (brand §3.3); body copy is Space Grotesk. */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-sans);
-    font-weight: 300;
+    font-weight: 600;
+    color: var(--ink);
+    text-wrap: balance;
   }
 
-  /* Dark canvas halos — v5 mockup style. */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(1100px circle at 50% -10%, rgba(126, 59, 255, 0.16), transparent 55%),
-      radial-gradient(900px circle at 100% 30%,  rgba(41, 98, 255, 0.10),  transparent 55%),
-      radial-gradient(800px circle at 0% 90%,    rgba(216, 59, 255, 0.08), transparent 60%),
-      linear-gradient(180deg, #000000 0%, #050508 100%);
-  }
-
-  /* Subtle grid overlay — adds editorial structure without dot pattern. */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
+  p { text-wrap: pretty; }
 
   main { position: relative; z-index: 1; }
 
   a, button { cursor: pointer; }
 
   ::selection {
-    background-color: rgba(126, 59, 255, 0.42);
-    color: var(--foreground);
+    background-color: rgba(201, 107, 179, 0.22);
+    color: var(--ink);
   }
 
-  /* Scrollbar · Brand book §2.10 */
-  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.18);
-    border-radius: 2px;
+    background: rgba(35, 11, 49, 0.14);
+    border-radius: 999px;
+    border: 2px solid var(--background);
   }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.32); }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(35, 11, 49, 0.26); }
 
-  /* Keyboard focus ring — brand book § Gaps (#2/#3): legacy CTAs shipped none. */
   a:focus-visible,
   button:focus-visible,
+  input:focus-visible,
   [tabindex]:focus-visible {
-    outline: 2px solid var(--brand-sky);
+    outline: 2px solid var(--brand-violet);
     outline-offset: 3px;
-    border-radius: 8px;
+    border-radius: 10px;
   }
 }
 
@@ -285,7 +260,7 @@
     font-weight: 400;
     letter-spacing: -0.025em;
     text-transform: uppercase;
-    color: #ffffff;
+    color: var(--ink);
     line-height: 1;
   }
   /* ® superscript — matches the app exactly: text-[9px] -top-3 ml-0.5 font-bold.
@@ -302,34 +277,33 @@
   /* ---------- Glass surfaces ---------- */
   .glass-header {
     background: var(--glass-header-bg);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
     border-bottom: 1px solid var(--hairline);
   }
 
   .glass-panel {
     background: var(--glass-panel-bg);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
-    border: 1px solid var(--hairline-strong);
-    box-shadow: var(--shadow-soft-chrome);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-float);
   }
 
   .glass-card,
   .card-surface {
-    background: var(--glass-card-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: var(--bg-card);
     border: 1px solid var(--hairline);
     border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card);
   }
 
   /* ---------- Display typography ---------- */
   /* Inter Tight display headline — thin + tight editorial voice (brand §8 don'ts). */
   .display-hero {
     font-family: var(--font-sans);
-    font-weight: 300;
-    letter-spacing: -0.04em;
+    font-weight: 600;
+    letter-spacing: -0.045em;
     line-height: 0.95;
   }
 
@@ -377,34 +351,31 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.6rem;
-    padding: 1rem 1.85rem;
+    gap: 0.75rem;
+    padding: 0.95rem 1.7rem;
     font-family: var(--font-sans);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #ffffff;
-    background-image: var(--gradient-brand-sweep);
-    border: 2px solid #0a1330;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--ink);
+    background-image: var(--gradient-cta);
+    border: 0;
     border-radius: 9999px;
-    box-shadow: 0 22px 48px -20px rgba(126, 59, 255, 0.85),
-                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    box-shadow: 0 18px 34px -18px rgba(138, 99, 234, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.45);
     transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
     position: relative;
     overflow: hidden;
   }
   .btn-cta-sm {
-    padding: 0.62rem 1.25rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
+    padding: 0.62rem 1.2rem;
+    font-size: 0.85rem;
   }
   .btn-superplayer::before,
   .cta-big::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(95deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%);
+    background: linear-gradient(95deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
     transform: translateX(-100%);
     transition: transform 600ms;
   }
@@ -423,20 +394,20 @@
   .waitlist-input {
     flex: 1 1 auto;
     min-width: 0;
-    padding: 1rem 1.4rem;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.04);
-    border: 2px solid rgba(255, 255, 255, 0.16);
+    padding: 0.95rem 1.3rem;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--hairline-strong);
     border-radius: 9999px;
     font-family: var(--font-body);
     font-size: 0.95rem;
-    transition: border-color 150ms ease, background 150ms ease;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
   }
-  .waitlist-input::placeholder { color: rgba(255, 255, 255, 0.4); }
+  .waitlist-input::placeholder { color: var(--ink-faint); }
   .waitlist-input:focus {
     outline: none;
-    border-color: var(--brand-purple);
-    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--brand-violet);
+    box-shadow: 0 0 0 4px rgba(138, 99, 234, 0.12);
   }
   .waitlist-input:disabled { opacity: 0.5; }
 
@@ -445,43 +416,38 @@
     align-items: center;
     justify-content: center;
     gap: 0.6rem;
-    padding: 1rem 1.65rem;
-    background: transparent;
-    color: var(--foreground);
+    padding: 0.95rem 1.6rem;
+    background: #fff;
+    color: var(--ink);
     border: 1px solid var(--hairline-strong);
     border-radius: 9999px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    font-size: 0.95rem;
+    font-weight: 500;
     transition: background 200ms ease, border-color 200ms ease;
   }
   .cta-ghost:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: var(--bg-deep);
+    border-color: var(--ink-ghost);
   }
 
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.4rem;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #ffffff;
-    background-image: var(--gradient-brand-sweep);
-    border: 2px solid #0a1330;
+    gap: 0.6rem;
+    padding: 0.7rem 1.35rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #fff;
+    background: var(--ink);
+    border: 0;
     border-radius: 9999px;
-    box-shadow: 0 14px 36px -18px rgba(126, 59, 255, 0.65),
-                inset 0 1px 0 rgba(255, 255, 255, 0.22);
-    transition: transform 150ms ease, filter 150ms ease;
+    transition: transform 150ms ease, background 150ms ease;
   }
   .btn-primary:hover {
-    transform: translateY(-0.5px);
-    filter: brightness(1.05);
+    transform: translateY(-1px);
+    background: var(--ink-soft);
   }
 
   .btn-soft {
@@ -489,69 +455,60 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.55rem 1.1rem;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.78);
-    background-color: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--hairline);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    background-color: #fff;
+    border: 1px solid var(--hairline-strong);
     border-radius: 9999px;
     transition: color 150ms ease, background-color 150ms ease;
   }
   .btn-soft:hover {
-    color: var(--foreground);
-    background-color: rgba(255, 255, 255, 0.07);
+    color: var(--ink);
+    background-color: var(--bg-deep);
   }
 
   /* ---------- Chips / eyebrows / meta ---------- */
   .chip {
     display: inline-flex;
     align-items: center;
-    padding: 0.42rem 0.95rem;
+    padding: 0.55rem 1.1rem;
     border-radius: 9999px;
-    border: 1px solid var(--hairline);
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.62);
-    background-color: transparent;
+    border: 1px solid var(--hairline-strong);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--ink-muted);
+    background-color: #fff;
     transition: color 150ms ease, background 150ms ease, border-color 150ms ease;
   }
-  .chip:hover { color: var(--foreground); }
+  .chip:hover { color: var(--ink); border-color: var(--ink-ghost); }
   .chip[data-active="true"],
   .chip.is-active {
-    color: var(--foreground);
-    background-image: var(--gradient-brand-sweep);
-    border-color: transparent;
-    box-shadow: var(--shadow-brand-halo);
+    color: #fff;
+    background: var(--ink);
+    border-color: var(--ink);
   }
 
   .eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.32rem 0.9rem;
-    border-radius: 9999px;
-    border: 1px solid rgba(126, 59, 255, 0.3);
-    background-image: linear-gradient(95deg, rgba(126, 59, 255, 0.18), rgba(216, 59, 255, 0.18));
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    font-weight: 700;
-    letter-spacing: 0.22em;
+    gap: 0.7rem;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--brand-lavender);
+    color: var(--ink);
   }
 
   .meta-label {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--ink-faint);
   }
 
   .num {
@@ -566,12 +523,13 @@
   }
   .section-title {
     font-family: var(--font-sans);
-    font-weight: 300;
-    font-size: clamp(2.5rem, 6.4vw, 4.75rem);
+    font-weight: 600;
+    font-size: clamp(2.2rem, 4.4vw, 3.5rem);
     line-height: 1.02;
-    letter-spacing: -0.035em;
-    margin-top: 1.25rem;
-    margin-bottom: 1.25rem;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    margin-top: 1.1rem;
+    margin-bottom: 1.1rem;
   }
   .section-sub {
     font-size: 1.05rem;
@@ -594,12 +552,8 @@
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 0.8rem;
-    background:
-      radial-gradient(125% 125% at 28% 18%, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.015) 60%),
-      rgba(12, 10, 24, 0.55);
-    box-shadow:
-      var(--tile-glow, 0 12px 30px -10px rgba(126, 59, 255, 0.6)),
-      inset 0 1px 0 rgba(255, 255, 255, 0.10);
+    background: linear-gradient(140deg, #fbf3f9, #f1ecfb);
+    box-shadow: var(--shadow-xs);
   }
   /* Gradient ring — a 1.4px gradient border that follows the rounded corners. */
   .gradient-tile::before {
@@ -638,10 +592,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 11px;
-    font-weight: 700;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    font-weight: 600;
     color: #fff;
   }
   .trust-avi:first-child { margin-left: 0; }
@@ -650,13 +603,13 @@
   .stat-float {
     position: absolute;
     z-index: 4;
-    background: rgba(0, 0, 0, 0.72);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--hairline-strong);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--hairline);
     border-radius: 0.875rem;
     padding: 0.7rem 1rem;
-    box-shadow: var(--shadow-soft-chrome);
+    box-shadow: var(--shadow-float);
     animation: float 5s ease-in-out infinite;
   }
   .stat-float .k {

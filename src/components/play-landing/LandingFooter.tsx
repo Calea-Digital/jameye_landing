@@ -29,14 +29,11 @@ export function LandingFooter() {
           aria-label="Legal"
           className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-white/65 sm:mt-8 sm:gap-x-6 sm:text-xs"
         >
-          {footer.legal.map((link) => (
+          {footer.links.map((link) => (
             <a key={link.href} href={link.href} className="transition-colors hover:text-white">
               {link.text}
             </a>
           ))}
-          <a href="/en/about" className="transition-colors hover:text-white">
-            About
-          </a>
           <a href={`mailto:${CONTACT_EMAIL}`} className="transition-colors hover:text-white">
             Contact
           </a>

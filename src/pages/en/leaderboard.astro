@@ -7,7 +7,9 @@ import WaitlistModal from '~/components/common/WaitlistModal.astro';
 import { t, type Locale } from '~/utils/i18n';
 
 const locale: Locale = 'en';
-const meta = t<{ meta: { title: string; description: string } }>(locale, 'leaderboard').meta;
+// Unlisted: kept live for existing referral links, but out of search and the
+// sitemap (see astro.config.mjs) — it predates the social-forecasting positioning.
+const meta = { ...t<{ meta: { title: string; description: string } }>(locale, 'leaderboard').meta, index: false };
 ---
 
 <Layout metadata={meta} locale={locale}>

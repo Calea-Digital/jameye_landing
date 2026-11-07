@@ -1,7 +1,9 @@
 ---
-import { Icon } from 'astro-icon/components';
-import { t, type Locale } from '~/utils/i18n';
-import { TELEGRAM_URL, CONTACT_EMAIL } from '~/config';
+// Site footer shared by every page: wordmark + signature, the legal links and
+// a two-line tagline.
+import Logo from '~/components/common/Logo.astro';
+import { t, localePath, type Locale } from '~/utils/i18n';
+import { CONTACT_EMAIL } from '~/config';
 
 export interface Props {
   locale: Locale;
@@ -11,58 +13,30 @@ const { locale } = Astro.props;
 
 const data = t<{
   signature: string;
-  legal: { text: string; href: string }[];
+  links: { text: string; href: string }[];
+  contact: string;
+  tagline: string[];
 }>(locale, 'footer');
 ---
 
-<footer class="relative z-10 border-t border-white/8 py-8 text-center">
-  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
-    <div class="meta-label flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
-      <span>{data.signature}</span>
-      <span class="opacity-40 hidden sm:inline">·</span>
-      <span class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-        {
-          data.legal.map((link, i) => (
-            <>
-              <a href={link.href} class="text-white/65 hover:text-white transition-colors normal-case tracking-[0.16em]">
-                {link.text}
-              </a>
-              {i < data.legal.length - 1 ? <span class="opacity-30">·</span> : null}
-            </>
-          ))
-        }
-        <span class="opacity-30">·</span>
-        <a
-          href={`mailto:${CONTACT_EMAIL}`}
-          class="text-white/65 hover:text-white transition-colors normal-case tracking-[0.16em]"
-        >
-          Contact
-        </a>
-        <span class="opacity-30">·</span>
-        <a
-          href={TELEGRAM_URL}
-          class="footer-telegram"
-          aria-label="Join our Telegram"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Icon name="tabler:brand-telegram" class="w-4 h-4" />
-        </a>
-      </span>
+<footer class="jm-footer">
+  <div class="jm-container">
+    <div class="jm-footer__inner">
+    <div class="jm-footer__brand">
+      <a href={localePath(locale, '/')} aria-label="Jameye home">
+        <Logo size="md" />
+      </a>
+      <p class="jm-footer__signature">{data.signature}</p>
+    </div>
+
+    <nav class="jm-footer__links" aria-label="Footer">
+      {data.links.map((link) => <a href={link.href}>{link.text}</a>)}
+      <a href={`mailto:${CONTACT_EMAIL}`}>{data.contact}</a>
+    </nav>
+
+    <p class="jm-footer__tagline">
+      {data.tagline.map((line) => <span>{line}</span>)}
+    </p>
     </div>
   </div>
 </footer>
-
-<style>
-  /* Small inline Telegram glyph, sitting alongside the legal links. */
-  .footer-telegram {
-    display: inline-flex;
-    align-items: center;
-    color: rgba(255, 255, 255, 0.65);
-    transition: color 150ms ease, transform 150ms ease;
-  }
-  .footer-telegram:hover {
-    color: #fff;
-    transform: translateY(-1px);
-  }
-</style>

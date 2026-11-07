@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 24 June 2026**
+**Last updated: 7 November 2026**
 
 This Privacy Policy explains how True Edge AB processes personal data through the Jameye landing site at jameye.com (the "Site"). It applies only to this Site. It does not cover the Jameye platform or any product accessed behind a login (planned at staging.jameye.com / the production app), which handles authentication and gameplay and will have its own policy.
 
@@ -16,7 +16,7 @@ We have not appointed a Data Protection Officer, as the Article 37 GDPR criteria
 
 ## 2. What data we collect
 
-**Data you provide (waitlist form).** When you join the waitlist you provide:
+**Data you provide (beta sign-up form).** When you sign up for the beta you provide:
 
 | Field | Required | Notes |
 |---|---|---|
@@ -35,7 +35,7 @@ The Site currently sets no cookies and uses no analytics or advertising trackers
 
 | Purpose | Data used | Lawful basis (GDPR) |
 |---|---|---|
-| Registering you on the waitlist and the uniqueness check | Email, nickname, referral, avatar | Consent, Art. 6(1)(a) |
+| Registering your beta sign-up and the uniqueness check | Email, nickname, referral, avatar | Consent, Art. 6(1)(a) |
 | Sending product updates and launch communications | Email | Consent, Art. 6(1)(a) |
 | Displaying your handle and avatar on the public leaderboard | Nickname, avatar, referral points | Consent, Art. 6(1)(a) |
 | Serving, delivering and securing the Site (incl. CDN/WAF, abuse prevention) | IP, user-agent, request metadata | Legitimate interests, Art. 6(1)(f) |
@@ -45,7 +45,7 @@ You may withdraw consent at any time (Section 7). Withdrawal does not affect pro
 
 ## 4. Public leaderboard
 
-The Site includes a public leaderboard at /leaderboard. If you join the waitlist, your chosen handle, avatar, referral points, and weekly movement are displayed publicly on that page. Your email address is not shown. If you do not want this information shown, do not join the waitlist, or contact us to be removed (Section 7).
+The Site includes a public leaderboard at /leaderboard. If you sign up for the beta, your chosen handle, avatar, referral points, and weekly movement are displayed publicly on that page. Your email address is not shown. If you do not want this information shown, do not sign up for the beta, or contact us to be removed (Section 7).
 
 ## 5. Recipients and processors
 
@@ -53,7 +53,7 @@ We share personal data only with processors acting on our instructions under an 
 
 | Recipient | Function | Role | Location |
 |---|---|---|---|
-| Cloudflare, Inc. | CDN, security/WAF, IP-level request handling, static site hosting, and waitlist storage | Processor | Data localised in the EU; Cloudflare, Inc. is US-based — see Section 6 |
+| Cloudflare, Inc. | CDN, security/WAF, IP-level request handling, static site hosting, and beta sign-up storage | Processor | Data localised in the EU; Cloudflare, Inc. is US-based — see Section 6 |
 
 We do not sell personal data. We may disclose data where required by law or to enforce our rights.
 
@@ -63,11 +63,11 @@ Cloudflare, Inc. is US-based and may process data outside the EEA. Where this oc
 
 ## 7. Retention
 
-Waitlist entries (email, handle, referral, avatar) are retained until you withdraw consent or ask to be removed, or until the platform launches or the waitlist is retired, whichever is earlier. Server and CDN logs containing IP data are retained for 90 days for security, then deleted or anonymised.
+Beta sign-up entries (email, handle, referral, avatar) are retained until you withdraw consent or ask to be removed, or until the platform launches or the beta sign-up is retired, whichever is earlier. Server and CDN logs containing IP data are retained for 90 days for security, then deleted or anonymised.
 
 ## 8. Your rights
 
-You have the right to: access; rectification; erasure; restriction; data portability; objection to processing based on legitimate interests; and withdrawal of consent at any time. Contact hello@jameye.com to exercise any of these, or to be removed from the waitlist and leaderboard. To stop emails, use the unsubscribe link in any message.
+You have the right to: access; rectification; erasure; restriction; data portability; objection to processing based on legitimate interests; and withdrawal of consent at any time. Contact hello@jameye.com to exercise any of these, or to have your beta sign-up and leaderboard entry removed. To stop emails, use the unsubscribe link in any message.
 
 You may lodge a complaint with a supervisory authority. Our lead authority is the Swedish Authority for Privacy Protection (Integritetsskyddsmyndigheten, IMY), imy.se. You may also complain to the authority in your own EU member state.
 

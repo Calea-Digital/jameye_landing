@@ -1,11 +1,11 @@
 {
   "meta": {
-    "title": "Our Story — Jameye",
-    "description": "Built in Stockholm by hedge fund quants, math Olympiads, MIT alumni and seasoned entrepreneurs. We turned a proven, trainable edge — forecasting — into a sport."
+    "title": "Our story — Jameye",
+    "description": "Jameye is a creator-driven social forecasting platform, built in Stockholm. Make your own forecasts, explain your thinking, and follow the outcome."
   },
   "hero": {
-    "eyebrow": "Our Story",
-    "title": { "lead": "Built in Stockholm.", "ital": "Engineered to find the sharpest minds." },
+    "eyebrow": "Our story",
+    "title": { "lead": "Built in Stockholm.", "ital": "Made for curious minds." },
     "body": "Jameye is built in Stockholm, Sweden by an international team of hedge fund quants, math Olympiads, MIT alumni and seasoned entrepreneurs.",
     "credentials": [
       { "icon": "tabler:chart-candle", "label": "Hedge fund quants" },
@@ -15,8 +15,8 @@
     ]
   },
   "research": {
-    "eyebrow": "The Research",
-    "title": { "lead": "Forecasting is a skill.", "ital": "Science and years of research has proven it." },
+    "eyebrow": "The research",
+    "title": { "lead": "Forecasting is a skill.", "ital": "Years of research have shown it." },
     "body": [
       "In a four-year tournament funded by the US intelligence community, researchers recruited tens of thousands of ordinary people and asked them to predict the world's biggest geopolitical events.",
       "The best of them — the superforecasters — were over 30% more accurate than intelligence analysts with access to classified information. Amateurs, working off the open internet, beat the professionals working off the world's most guarded secrets."
@@ -40,65 +40,65 @@
     }
   },
   "edge": {
-    "eyebrow": "The Edge",
+    "eyebrow": "The habit",
     "lead": "It wasn't luck.",
     "body": "The strongest predictor of becoming a superforecaster was the commitment to constantly update beliefs and improve.",
-    "pull": "A measurable, repeatable, trainable edge."
+    "pull": "A habit anyone can learn."
   },
   "sport": {
-    "eyebrow": "What We Built",
-    "title": { "lead": "We turned that edge into", "ital": "a sport." },
-    "body": "Jameye is a skill-based prediction markets game in tournament form. You forecast real-world events, and when the round closes, the sharpest minds take the prize.",
+    "eyebrow": "What we built",
+    "title": { "lead": "We turned that skill into", "ital": "a conversation." },
+    "body": "Jameye is a creator-driven social forecasting platform. Creators start the conversation on culture, entertainment, sport, science and society. You make your own call, explain why, and come back to see how it unfolds.",
     "steps": [
-      { "icon": "tabler:swords", "label": "Enter tournaments" },
-      { "icon": "tabler:flame", "label": "Dominate" },
-      { "icon": "tabler:medal", "label": "Stack the bragging rights" },
-      { "icon": "tabler:cash", "label": "Win real cash" }
+      { "icon": "tabler:compass", "label": "Explore the question" },
+      { "icon": "tabler:target-arrow", "label": "Make your forecast" },
+      { "icon": "tabler:message-circle", "label": "Explain your thinking" },
+      { "icon": "tabler:eye", "label": "Follow the outcome" }
     ]
   },
   "measure": {
-    "eyebrow": "What We Measure",
-    "title": { "lead": "Three things on every", "ital": "position you take." },
+    "eyebrow": "What makes a good forecast",
+    "title": { "lead": "Three things worth", "ital": "getting right." },
     "cards": [
       {
         "icon": "tabler:clock-bolt",
         "tone": "indigo-violet",
         "n": "01",
-        "title": "How early",
-        "body": "How early you saw it before the rest of the field caught on."
+        "title": "Timing",
+        "body": "Make your call before the outcome is known — before the reveal, result or announcement."
       },
       {
-        "icon": "tabler:target-arrow",
+        "icon": "tabler:message-circle",
         "tone": "violet-magenta",
         "n": "02",
-        "title": "Conviction",
-        "body": "How well the conviction you staked matched the outcome that landed."
+        "title": "Reasoning",
+        "body": "Be clear about why. Share the clues and arguments behind your forecast."
       },
       {
         "icon": "tabler:scale",
         "tone": "magenta-pink",
         "n": "03",
-        "title": "Calibration",
-        "body": "How honestly calibrated your probability was — no bluffing the odds."
+        "title": "Open-mindedness",
+        "body": "Consider different views and what could change your mind as events unfold."
       }
     ],
     "score": {
-      "label": "Edge Score",
-      "title": "Your last 30 positions become a single, durable number.",
-      "body": "It says how good you actually are at reading the future. It doesn't reset with a lucky streak. It's your track record.",
-      "window": "Rolling 30",
-      "windowLabel": "Positions scored"
+      "label": "Follow the outcome",
+      "title": "Come back when the answer is known.",
+      "body": "Compare it with your forecast, reflect on your reasoning, and learn for the next one.",
+      "window": "",
+      "windowLabel": ""
     }
   },
   "fair": {
-    "eyebrow": "The Rules",
-    "lines": ["No house.", "No edge for the rich."],
-    "body": "Just you, the future, and a fair fight to call it first."
+    "eyebrow": "What we believe",
+    "lines": ["Independent forecasts.", "Shared curiosity."],
+    "body": "Creators start the conversation. Everyone makes their own call — and explains why."
   },
   "closing": {
     "ghostWord": "JAMEYE",
-    "title": { "lead": "May the", "ital": "sharpest mind win." },
-    "body": "Get early access and start building your Edge Score before the first season opens.",
-    "cta": { "primary": "Get early access", "secondary": "See how it works" }
+    "title": { "lead": "What happens next?", "ital": "Make your forecast." },
+    "body": "Bring your curiosity. Make a call of your own. Try the Jameye beta at play.jameye.com.",
+    "cta": { "primary": "Try the beta", "secondary": "How it works" }
   }
 }

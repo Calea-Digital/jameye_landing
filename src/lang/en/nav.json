@@ -1,14 +1,11 @@
 {
   "links": [
-    { "text": "How it works", "href": "#why-skill" },
-    { "text": "About", "href": "/en/about" },
-    { "text": "Tournaments", "href": "/en/bou" },
-    { "text": "Leaderboard", "href": "/en/leaderboard" }
+    { "text": "Explore conversations", "href": "#explore" },
+    { "text": "Our community", "href": "#community" },
+    { "text": "How it works", "href": "#how-it-works" }
   ],
-  "cta": {
-    "primary": "Get early access"
-  },
-  "languageAriaLabel": "Change language",
+  "cta": "Try the beta",
+  "homeAriaLabel": "Jameye home",
   "mobileMenuOpen": "Open menu",
   "mobileMenuClose": "Close menu"
 }

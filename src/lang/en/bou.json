@@ -64,11 +64,11 @@
   },
   "dates": {
     "eyebrow": "Key dates",
-    "title": { "lead": "From waitlist to", "ital": "kickoff." },
+    "title": { "lead": "From beta sign-up to", "ital": "kickoff." },
     "items": [
-      { "when": "Now", "title": "Early access open", "body": "Join the waitlist, reserve your handle, and — if you're a student — line up the campus you'll represent.", "state": "active" },
+      { "when": "Now", "title": "Early access open", "body": "Sign up for the beta, reserve your handle, and — if you're a student — line up the campus you'll represent.", "state": "active" },
       { "when": "Soon", "title": "Jameye beta launches", "body": "The beta goes live for everyone. Anyone can register and play, with smaller open tournaments running for all forecasters — students or not.", "state": "upcoming" },
-      { "when": "After beta", "title": "Battle of Universities opens", "body": "The students-only event begins. Verify your university email, and your campus leaderboard starts counting. We'll announce the opening date to the waitlist first.", "state": "upcoming" },
+      { "when": "After beta", "title": "Battle of Universities opens", "body": "The students-only event begins. Verify your university email, and your campus leaderboard starts counting. We'll announce the opening date to beta sign-ups first.", "state": "upcoming" },
       { "when": "Event close", "title": "Winners paid out", "body": "The winning campus takes the title; its top 25 forecasters share the cash prize pool.", "state": "upcoming" }
     ]
   },

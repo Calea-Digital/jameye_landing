@@ -1,0 +1,27 @@
+---
+// Closing call to action, centred over a soft blush glow.
+import type { ClosingContent } from './types';
+import { BETA_URL } from '~/config';
+
+export interface Props {
+  closing: ClosingContent;
+}
+
+const { closing } = Astro.props;
+---
+
+<section class="jm-section jm-closing" aria-labelledby="jm-closing-title">
+  <div class="jm-container jm-closing__inner" data-scroll>
+    <p class="jm-eyebrow jm-eyebrow--dot">{closing.eyebrow}</p>
+    <h2 id="jm-closing-title" class="jm-closing__title">
+      {closing.titleLines.map((line) => <span class="jm-block">{line}</span>)}
+    </h2>
+    <p class="jm-closing__lead">
+      {closing.lead.map((line) => <span class="jm-block">{line}</span>)}
+    </p>
+    <a href={BETA_URL} class="jm-btn jm-btn--gradient jm-btn--lg" rel="noopener">
+      <span>{closing.cta}</span>
+      <svg class="jm-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" /></svg>
+    </a>
+  </div>
+</section>

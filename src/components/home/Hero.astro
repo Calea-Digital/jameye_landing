@@ -1,0 +1,81 @@
+---
+// Hero: eyebrow, the three-line display title (last line in the gradient),
+// lead, CTAs, and the product-concept visual — a tilted forecast card with a
+// quote card tucked over its corner, inside a soft arch. A numbered strip of
+// the three verbs closes the section.
+import type { HeroContent } from './types';
+import { BETA_URL } from '~/config';
+
+export interface Props {
+  hero: HeroContent;
+}
+
+const { hero } = Astro.props;
+---
+
+<section class="jm-hero" aria-labelledby="jm-hero-title">
+  <div class="jm-container">
+    <div class="jm-hero__grid">
+      <div class="jm-hero__copy">
+        <p class="jm-eyebrow jm-eyebrow--dot">{hero.eyebrow}</p>
+        <h1 id="jm-hero-title" class="jm-hero__title">
+          {hero.titleLines.map((line) => <span class="jm-hero__line">{line}</span>)}
+          <span class="jm-hero__line jm-gradient-text">{hero.titleAccent}</span>
+        </h1>
+        <p class="jm-hero__lead">{hero.lead}</p>
+        <div class="jm-hero__actions">
+          <a href={BETA_URL} class="jm-btn jm-btn--gradient jm-btn--lg" rel="noopener">
+            <span>{hero.cta}</span>
+            <svg class="jm-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" /></svg>
+          </a>
+          <a href="#how-it-works" class="jm-link-underline">
+            {hero.secondary}
+            <svg class="jm-arrow jm-arrow--down" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4" /></svg>
+          </a>
+        </div>
+        <p class="jm-hero__note">{hero.note}</p>
+      </div>
+
+      <div class="jm-hero__visual" aria-hidden="true">
+        <div class="jm-arch">
+          <svg class="jm-arch__spark" viewBox="0 0 48 48">
+            <path d="M24 4v40M4 24h40M9.9 9.9l28.2 28.2M38.1 9.9 9.9 38.1" />
+          </svg>
+
+          <div class="jm-concept">
+            <div class="jm-concept__media">
+              <img src={hero.card.image} alt="" width="800" height="800" loading="eager" fetchpriority="high" />
+              <span class="jm-concept__tag">{hero.card.tag}</span>
+              <p class="jm-concept__title">{hero.card.title}</p>
+            </div>
+            <div class="jm-concept__body">
+              <p class="jm-concept__kicker">{hero.card.kicker}</p>
+              <p class="jm-concept__question">{hero.card.question}</p>
+              <p class="jm-concept__cta">{hero.card.cta}</p>
+            </div>
+          </div>
+
+          <div class="jm-quote">
+            <p class="jm-quote__kicker">{hero.quote.kicker}</p>
+            <p class="jm-quote__text">
+              “{hero.quote.text} <em>{hero.quote.accent}</em>”
+            </p>
+          </div>
+
+          <p class="jm-arch__caption">{hero.caption}</p>
+        </div>
+      </div>
+    </div>
+
+    <ol class="jm-steps-strip">
+      {
+        hero.steps.map((step) => (
+          <li>
+            <span class="jm-num">{step.n}</span>
+            <span>{step.label}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

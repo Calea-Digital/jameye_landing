@@ -1,6 +1,6 @@
 # Cookie Policy
 
-**Last updated: 24 June 2026**
+**Last updated: 7 November 2026**
 
 This Cookie Policy explains how True Edge AB uses cookies and similar technologies on the Jameye landing site at jameye.com (the "Site"). Read it alongside the Privacy Policy.
 
@@ -27,7 +27,7 @@ Cookies are small text files placed on your device by a website. Similar technol
 
 ## 4. Referral links (not a cookie)
 
-The Site supports referral links of the form `jameye.com/?ref=<handle>`. The handle in the URL is read in your browser only, to pre-fill the "referred by" field in the waitlist form. It is not written to any cookie or storage. It is sent to our backend only if you complete the waitlist signup. See the Privacy Policy for how that data is handled.
+The Site supports referral links of the form `jameye.com/?ref=<handle>`. The handle in the URL is read in your browser only, to pre-fill the "referred by" field in the beta sign-up form. It is not written to any cookie or storage. It is sent to our backend only if you complete the beta sign-up. See the Privacy Policy for how that data is handled.
 
 ## 5. Future changes
 

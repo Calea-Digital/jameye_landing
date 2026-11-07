@@ -42,12 +42,12 @@ const CFG = {
 };
 ---
 
-<section class="py-12 md:py-16">
-  <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+<section class="lb-section">
+  <div class="jm-container">
     <!-- Big header banner -->
     <div class="lb-hero">
       <span class="eyebrow">{L.eyebrow}</span>
-      <h2 class="lb-hero__title text-white">
+      <h2 class="lb-hero__title">
         {L.title.lead} <span class="ital-grad">{L.title.ital}</span>
       </h2>
       <p class="lb-hero__sub">{L.sub}</p>
@@ -111,61 +111,68 @@ const CFG = {
 </section>
 
 <style is:global>
+  /* Light skin: ink type, white hairline cards with soft violet shadows,
+     pill controls — the homepage vocabulary from src/styles/landing.css. */
+  .lb-section { padding-block: clamp(3rem, 7vw, 6rem) clamp(4rem, 8vw, 6.5rem); }
+
   /* ---- Header banner ---- */
   .lb-hero { text-align: center; max-width: 46rem; margin: 0 auto; }
   .lb-hero__title {
-    font-family: var(--font-sans); font-weight: 300;
-    font-size: clamp(2.25rem, 5.6vw, 4rem); line-height: 1.04; letter-spacing: -0.035em;
-    margin: 1.1rem 0 1.1rem;
+    font-family: var(--font-sans); font-weight: 600;
+    font-size: clamp(2.5rem, 5.4vw, 4.4rem); line-height: 1.01; letter-spacing: -0.05em;
+    color: var(--ink);
+    margin: 1.25rem 0 1.4rem;
   }
-  .lb-hero__sub { font-size: 1.05rem; line-height: 1.55; color: var(--ink-muted); max-width: 36rem; margin: 0 auto; }
-  .lb-perks { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 1.5rem; }
+  .lb-hero__sub { font-size: clamp(1rem, 1.25vw, 1.1rem); line-height: 1.7; color: var(--ink-muted); max-width: 36rem; margin: 0 auto; }
+  .lb-perks { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 1.75rem; }
   .lb-perk {
-    display: inline-flex; align-items: center; gap: 0.45rem;
-    padding: 0.4rem 0.85rem; border-radius: 9999px;
-    font-family: var(--font-mono); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8); background: rgba(255, 255, 255, 0.04); border: 1px solid var(--hairline-strong);
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.55rem 1.05rem; border-radius: 9999px;
+    font-family: var(--font-sans); font-size: 0.82rem; font-weight: 500;
+    color: var(--ink-soft); background: var(--bg-card); border: 1px solid var(--hairline-strong);
+    box-shadow: var(--shadow-xs);
   }
-  .lb-perk svg { color: var(--prize-gold); }
+  .lb-perk svg { color: var(--brand-violet); }
 
   /* ---- Prize tiers ---- */
   .lb-prizes {
-    display: flex; flex-direction: column; align-items: center; gap: 0.9rem;
-    margin: 1.5rem auto 0; padding: 1.1rem 1.25rem; max-width: 32rem;
-    border-radius: 16px;
-    background: rgba(250, 204, 21, 0.05);
-    border: 1px solid rgba(250, 204, 21, 0.2);
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    margin: 2rem auto 0; padding: 1.4rem 1.5rem; max-width: 34rem;
+    border-radius: 1.5rem;
+    background: var(--gradient-panel);
+    border: 1px solid #e8d9ec;
   }
   .lb-prizes__lead {
     display: inline-flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
     font-size: 0.92rem; line-height: 1.4; color: var(--ink-muted); text-align: center;
   }
   .lb-prizes__lead svg { color: var(--prize-gold); flex: none; }
-  .lb-prizes__lead strong { color: #fff; font-weight: 600; }
+  .lb-prizes__lead strong { color: var(--ink); font-weight: 600; }
   .lb-prizes__tiers { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
   .lb-prize {
     display: inline-flex; align-items: center; gap: 0.4rem;
-    padding: 0.4rem 0.85rem; border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.04); border: 1px solid var(--hairline-strong);
+    padding: 0.45rem 0.95rem 0.45rem 0.7rem; border-radius: 9999px;
+    background: var(--bg-card); border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-xs);
   }
   .lb-prize__medal { font-size: 0.95rem; line-height: 1; }
   .lb-prize__place {
-    font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600;
-    letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.55);
+    font-family: var(--font-sans); font-size: 0.66rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted);
   }
   .lb-prize__amount {
-    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
-    font-size: 0.92rem; font-weight: 700; color: var(--prize-gold);
+    font-family: var(--font-sans); font-variant-numeric: tabular-nums;
+    font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink);
   }
 
   .lb-card {
-    background: var(--glass-card-bg);
+    max-width: 60rem;
+    margin-inline: auto;
+    background: var(--bg-card);
     border: 1px solid var(--hairline);
-    border-radius: 18px;
+    border-radius: 1.5rem;
     overflow: hidden;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: var(--shadow-soft-chrome);
+    box-shadow: var(--shadow-card);
   }
 
   /* ---- Search ---- */
@@ -174,41 +181,46 @@ const CFG = {
   .lb-search__field { position: relative; flex: 1 1 auto; min-width: 0; display: flex; align-items: center; }
   .lb-search__icon { position: absolute; left: 0.9rem; color: var(--ink-faint); pointer-events: none; }
   .lb-search__input {
-    width: 100%; padding: 0.72rem 2.4rem; color: #fff;
-    background: rgba(255, 255, 255, 0.04); border: 1px solid var(--hairline-strong); border-radius: 9999px;
-    font-family: var(--font-body); font-size: 0.92rem; transition: border-color 150ms ease, background 150ms ease;
+    width: 100%; padding: 0.78rem 2.4rem; color: var(--ink);
+    background: var(--background); border: 1px solid var(--hairline-strong); border-radius: 9999px;
+    font-family: var(--font-body); font-size: 0.92rem; transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
   }
-  .lb-search__input::placeholder { color: rgba(255, 255, 255, 0.4); }
-  .lb-search__input:focus { outline: none; border-color: var(--brand-purple); background: rgba(255, 255, 255, 0.06); }
+  .lb-search__input::placeholder { color: var(--ink-faint); }
+  .lb-search__input:focus { outline: none; border-color: var(--brand-violet); background: var(--bg-card); box-shadow: 0 0 0 4px rgba(138, 99, 234, 0.12); }
   .lb-search__clear {
     position: absolute; right: 0.65rem; display: inline-flex; align-items: center; justify-content: center;
-    width: 1.5rem; height: 1.5rem; border-radius: 9999px; color: rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.06);
+    width: 1.5rem; height: 1.5rem; border-radius: 9999px; color: var(--ink-muted);
+    background: var(--bg-deep);
   }
-  .lb-search__clear:hover { color: #fff; }
-  .lb-search__btn { flex: 0 0 auto; padding: 0.72rem 1.4rem; }
+  .lb-search__clear:hover { color: var(--ink); }
+  /* Dark ink pill, matching the header CTA. */
+  .lb-search__btn.btn-cta {
+    flex: 0 0 auto; padding: 0.78rem 1.5rem;
+    color: #fff; background: var(--ink); background-image: none; box-shadow: none;
+  }
+  .lb-search__btn.btn-cta:hover { background: var(--ink-soft); filter: none; transform: translateY(-1px); }
 
   .lb-search-result {
     display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
     padding: 0.9rem 1.5rem; border-bottom: 1px solid var(--hairline);
-    background: rgba(16, 185, 129, 0.06);
-    font-size: 0.9rem; color: #fff;
+    background: rgba(31, 157, 116, 0.06);
+    font-size: 0.9rem; color: var(--ink);
   }
-  .lb-search-result.notfound { background: rgba(244, 63, 94, 0.07); color: rgba(255, 255, 255, 0.75); }
-  .lb-search-result .lbr-rank { font-family: var(--font-mono); font-weight: 700; color: var(--win-emerald); }
+  .lb-search-result.notfound { background: rgba(210, 52, 71, 0.05); color: var(--ink-muted); }
+  .lb-search-result .lbr-rank { font-family: var(--font-sans); font-weight: 600; color: var(--win-emerald); }
   .lb-search-result .lbr-name { font-weight: 600; }
-  .lb-search-result .lbr-meta { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-muted); }
+  .lb-search-result .lbr-meta { font-family: var(--font-sans); font-size: 0.8rem; color: var(--ink-muted); }
   .lb-search-result .lbr-actions { margin-left: auto; display: flex; gap: 0.5rem; flex-wrap: wrap; }
   .lb-search-result .lbr-jump,
   .lb-search-result .lbr-btn {
-    font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-    border-radius: 9999px; padding: 0.35rem 0.85rem; background: transparent; transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+    font-family: var(--font-sans); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    border-radius: 9999px; padding: 0.42rem 0.95rem; background: var(--bg-card); transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
   }
-  .lb-search-result .lbr-jump { color: var(--brand-sky); border: 1px solid rgba(91, 141, 255, 0.4); }
-  .lb-search-result .lbr-jump:hover { background: rgba(91, 141, 255, 0.12); }
-  .lb-search-result .lbr-btn { color: var(--win-emerald); border: 1px solid rgba(16, 185, 129, 0.45); }
-  .lb-search-result .lbr-btn:hover { background: rgba(16, 185, 129, 0.12); }
-  .lb-search-result .lbr-btn.is-copied { color: #06281f; background-image: var(--gradient-emerald-teal); border-color: transparent; }
+  .lb-search-result .lbr-jump { color: var(--brand-violet); border: 1px solid rgba(138, 99, 234, 0.4); }
+  .lb-search-result .lbr-jump:hover { background: rgba(138, 99, 234, 0.08); }
+  .lb-search-result .lbr-btn { color: var(--win-emerald); border: 1px solid rgba(31, 157, 116, 0.45); }
+  .lb-search-result .lbr-btn:hover { background: rgba(31, 157, 116, 0.08); }
+  .lb-search-result .lbr-btn.is-copied { color: #fff; background: var(--win-teal); border-color: transparent; }
 
   .lb-row {
     display: grid;
@@ -222,45 +234,46 @@ const CFG = {
   }
   .lb-row + .lb-row { border-top: 1px solid var(--hairline); }
   .lb-head {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
+    font-family: var(--font-sans);
+    font-size: 0.66rem;
     font-weight: 600;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
-    background: rgba(255, 255, 255, 0.02);
+    color: var(--ink-muted);
+    background: var(--bg-deep);
   }
-  .lb-rank { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: rgba(255,255,255,0.55); }
+  .lb-rank { font-family: var(--font-sans); font-variant-numeric: tabular-nums; color: var(--ink-muted); }
   .lb-points, .lb-change { text-align: right; }
 
   .lb-entry { position: relative; transition: background 150ms ease; }
-  .lb-entry .lb-rank { font-size: 0.95rem; font-weight: 600; color: #fff; }
+  .lb-entry:hover { background: var(--background); }
+  .lb-entry .lb-rank { font-size: 0.95rem; font-weight: 600; color: var(--ink); }
 
   /* Top 10 — elite tint + accent. */
-  .lb-entry.elite { background: rgba(126, 59, 255, 0.06); }
+  .lb-entry.elite { background: rgba(138, 99, 234, 0.04); }
   .lb-entry.elite::before {
     content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
     background: var(--gradient-violet-magenta);
   }
 
   /* Top 3 — medal styling, strongest highlight. */
-  .lb-entry.top1, .lb-entry.top2, .lb-entry.top3 { background: rgba(250, 204, 21, 0.05); }
+  .lb-entry.top1, .lb-entry.top2, .lb-entry.top3 { background: rgba(242, 184, 75, 0.06); }
   .lb-entry.top1::before, .lb-entry.top2::before, .lb-entry.top3::before {
     content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
   }
-  .lb-entry.top1 { background: rgba(250, 204, 21, 0.1); }
-  .lb-entry.top1::before { background: var(--prize-gold); box-shadow: 0 0 16px rgba(250,204,21,0.8); }
-  .lb-entry.top2::before { background: #cbd5e1; }
+  .lb-entry.top1 { background: rgba(242, 184, 75, 0.1); }
+  .lb-entry.top1::before { background: var(--prize-gold); }
+  .lb-entry.top2::before { background: var(--ink-ghost); }
   .lb-entry.top3::before { background: var(--heat-orange); }
   .lb-entry.top1 .lb-rank { color: var(--prize-gold); }
-  .lb-entry.top2 .lb-rank { color: #cbd5e1; }
+  .lb-entry.top2 .lb-rank { color: var(--ink-faint); }
   .lb-entry.top3 .lb-rank { color: var(--heat-orange); }
   .lb-medal { font-size: 1rem; line-height: 1; }
 
   /* The searching user's own row. */
   .lb-entry.is-you {
-    background: rgba(16, 185, 129, 0.12);
-    box-shadow: inset 0 0 0 1px rgba(16, 185, 129, 0.4);
+    background: rgba(31, 157, 116, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(31, 157, 116, 0.35);
   }
   .lb-entry.is-you::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--win-emerald); }
 
@@ -272,7 +285,7 @@ const CFG = {
   .lb-avatar {
     width: 30px; height: 30px; flex: none;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--bg-deep);
     border: 1px solid var(--hairline);
     object-fit: contain;
     padding: 2px;
@@ -280,59 +293,65 @@ const CFG = {
   @media (min-width: 640px) { .lb-avatar { width: 38px; height: 38px; } }
   .lb-name {
     display: block;
-    font-weight: 500; color: #fff; letter-spacing: -0.01em;
+    font-weight: 500; color: var(--ink); letter-spacing: -0.01em;
     min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .lb-sub {
     display: block;
-    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em;
-    color: rgba(255,255,255,0.4); margin-top: 0.15rem;
+    font-family: var(--font-sans); font-size: 0.72rem; letter-spacing: 0.01em;
+    color: var(--ink-muted); margin-top: 0.15rem;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .lb-pts {
-    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
-    font-weight: 600; font-size: 0.9rem; color: #fff;
+    font-family: var(--font-sans); font-variant-numeric: tabular-nums;
+    font-weight: 600; font-size: 0.9rem; letter-spacing: -0.01em; color: var(--ink);
   }
   @media (min-width: 640px) { .lb-pts { font-size: 1.05rem; } }
-  .lb-pts span { font-size: 0.62rem; color: rgba(255,255,255,0.4); margin-left: 0.2rem; }
+  .lb-pts span { font-size: 0.62rem; font-weight: 500; color: var(--ink-muted); margin-left: 0.2rem; }
   @media (min-width: 640px) { .lb-pts span { font-size: 0.7rem; } }
 
   .lb-delta {
-    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    font-family: var(--font-sans); font-variant-numeric: tabular-nums;
     font-size: 0.8rem; font-weight: 600;
     display: inline-flex; align-items: center; gap: 0.2rem; justify-content: flex-end;
   }
   .lb-delta.up { color: var(--win-emerald); }
   .lb-delta.down { color: var(--alert-rose); }
-  .lb-delta.flat { color: rgba(255,255,255,0.3); }
+  .lb-delta.flat { color: var(--ink-faint); }
   .lb-delta.new {
-    font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--brand-sky); border: 1px solid rgba(91,141,255,0.4);
-    border-radius: 9999px; padding: 0.15rem 0.45rem;
+    font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--brand-violet); background: rgba(138, 99, 234, 0.06); border: 1px solid rgba(138, 99, 234, 0.35);
+    border-radius: 9999px; padding: 0.18rem 0.5rem;
   }
 
-  .lb-state { padding: 2.5rem 1.75rem; text-align: center; color: rgba(255,255,255,0.5); font-size: 0.95rem; }
+  .lb-state { padding: 3rem 1.75rem; text-align: center; color: var(--ink-muted); font-size: 0.95rem; }
 
   /* ---- Pager ---- */
   .lb-pager {
     display: flex; align-items: center; justify-content: center; gap: 0.35rem; flex-wrap: wrap;
-    padding: 1rem 1.5rem; border-top: 1px solid var(--hairline); background: rgba(255, 255, 255, 0.02);
+    padding: 1.1rem 1.5rem; border-top: 1px solid var(--hairline); background: var(--background);
   }
   .lb-pg {
     min-width: 2.1rem; height: 2.1rem; padding: 0 0.6rem;
     display: inline-flex; align-items: center; justify-content: center;
-    font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600;
-    color: rgba(255, 255, 255, 0.7); background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--hairline); border-radius: 0.6rem;
+    font-family: var(--font-sans); font-size: 0.82rem; font-weight: 500;
+    color: var(--ink-soft); background: var(--bg-card);
+    border: 1px solid var(--hairline-strong); border-radius: 9999px;
     transition: color 150ms ease, background 150ms ease, border-color 150ms ease;
   }
-  .lb-pg:hover:not(:disabled) { color: #fff; background: rgba(255, 255, 255, 0.08); }
-  .lb-pg:disabled { opacity: 0.35; cursor: default; }
+  .lb-pg:hover:not(:disabled) { color: var(--ink); border-color: var(--ink-ghost); }
+  .lb-pg:disabled { opacity: 0.4; cursor: default; }
   .lb-pg.is-current {
-    color: #fff; background-image: var(--gradient-brand-sweep);
-    border-color: transparent; box-shadow: var(--shadow-brand-halo);
+    color: #fff; background: var(--ink);
+    border-color: var(--ink);
   }
-  .lb-pg-ellipsis { color: var(--ink-faint); padding: 0 0.2rem; font-family: var(--font-mono); }
+  .lb-pg-ellipsis { color: var(--ink-faint); padding: 0 0.2rem; font-family: var(--font-sans); }
+
+  /* The script toggles Tailwind's `hidden`; these unlayered display rules
+     would otherwise beat it. */
+  .lb-search__clear.hidden,
+  .lb-search-result.hidden,
+  .lb-pager.hidden { display: none; }
 </style>
 
 <script define:vars={{ CFG, L, LOCALE: locale }}>

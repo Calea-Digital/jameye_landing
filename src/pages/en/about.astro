@@ -3,8 +3,8 @@ import { Icon } from 'astro-icon/components';
 import Layout from '~/layouts/Layout.astro';
 import Header from '~/components/common/Header.astro';
 import Footer from '~/components/common/Footer.astro';
-import WaitlistModal from '~/components/common/WaitlistModal.astro';
 import { t, localePath, type Locale } from '~/utils/i18n';
+import { BETA_URL } from '~/config';
 
 const locale: Locale = 'en';
 const home = localePath(locale, '/');
@@ -48,14 +48,14 @@ const meta = { ...data.meta, ogImagePath: undefined };
 
   <main id="top" class="about-page">
     <!-- ───────────────────────── Hero / intro ───────────────────────── -->
-    <section class="py-20 md:py-28">
-      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
-        <div class="max-w-[920px]" data-scroll>
-          <h1 class="display-hero text-white" style="font-size: clamp(2.75rem, 7vw, 5.5rem);">
+    <section class="about-hero">
+      <div class="jm-container">
+        <div class="max-w-[960px]" data-scroll>
+          <h1 class="about-display" style="font-size: clamp(2.75rem, 6.4vw, 5.4rem);">
             {data.hero.title.lead}<br />
-            <span class="grad-text">{data.hero.title.ital}</span>
+            <span class="jm-gradient-text">{data.hero.title.ital}</span>
           </h1>
-          <p class="mt-8 text-lg md:text-xl text-white/65 leading-relaxed max-w-[620px]">
+          <p class="about-lead mt-8 max-w-[620px]">
             {data.hero.body}
           </p>
 
@@ -74,17 +74,17 @@ const meta = { ...data.meta, ogImagePath: undefined };
     </section>
 
     <!-- ───────────────────────── The research ───────────────────────── -->
-    <section class="py-14 md:py-20">
-      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+    <section class="about-section">
+      <div class="jm-container">
         <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 items-start">
           <div data-scroll>
-            <h2 class="section-title text-white !text-left !mt-0" style="font-size: clamp(2.1rem, 5vw, 3.5rem);">
+            <h2 class="jm-h2 about-h2" style="font-size: clamp(2.1rem, 4.4vw, 3.5rem);">
               {data.research.title.lead}<br />
-              <span class="grad-text">{data.research.title.ital}</span>
+              <span class="jm-gradient-text">{data.research.title.ital}</span>
             </h2>
             {
               data.research.body.map((p) => (
-                <p class="mt-5 text-base md:text-lg text-white/65 leading-relaxed max-w-[560px]">{p}</p>
+                <p class="about-body mt-5 max-w-[560px]">{p}</p>
               ))
             }
 
@@ -102,8 +102,7 @@ const meta = { ...data.meta, ogImagePath: undefined };
                 data.research.source.links.map((link, i) => (
                   <>
                     {i > 0 && (i === data.research.source.links.length - 1 ? ' and ' : ', ')}
-                    <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
-                  </>
+                    <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a></>
                 ))
               }.
             </p>
@@ -111,7 +110,7 @@ const meta = { ...data.meta, ogImagePath: undefined };
 
           <!-- Big stat callout -->
           <aside class="stat-callout" data-scroll>
-            <div class="stat-callout__value grad-text">{data.research.stat.value}</div>
+            <div class="stat-callout__value jm-gradient-text">{data.research.stat.value}</div>
             <div class="stat-callout__label">{data.research.stat.label}</div>
             <p class="stat-callout__detail">{data.research.stat.detail}</p>
             <div class="stat-callout__bars" aria-hidden="true">
@@ -124,27 +123,28 @@ const meta = { ...data.meta, ogImagePath: undefined };
     </section>
 
     <!-- ───────────────────────── It wasn't luck ───────────────────────── -->
-    <section class="py-16 md:py-24">
-      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+    <section class="about-section">
+      <div class="jm-container">
         <div class="max-w-[860px] mx-auto text-center" data-scroll>
-          <p class="text-2xl md:text-3xl text-white/80 font-light leading-snug">
-            <span class="text-white">{data.edge.lead}</span> {data.edge.body}
+          <p class="edge-copy">
+            <span class="edge-copy__lead">{data.edge.lead}</span> {data.edge.body}
           </p>
           <blockquote class="pull-quote">
-            <span class="grad-text">{data.edge.pull}</span>
+            <span class="jm-gradient-text">{data.edge.pull}</span>
           </blockquote>
         </div>
       </div>
     </section>
 
     <!-- ───────────────────────── Turned it into a sport ───────────────────────── -->
-    <section class="py-16 md:py-24">
-      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
-        <div class="max-w-[760px] mx-auto text-center mb-12" data-scroll>
-          <h2 class="section-title text-white !mt-0" style="font-size: clamp(2.25rem, 5.5vw, 4rem);">
-            {data.sport.title.lead} <span class="grad-text">{data.sport.title.ital}</span>
+    <section class="about-section">
+      <div class="jm-container">
+        <div class="jm-panel sport-panel">
+        <div class="max-w-[760px] mx-auto text-center mb-10 md:mb-12" data-scroll>
+          <h2 class="jm-h2" style="font-size: clamp(2.25rem, 4.8vw, 3.75rem);">
+            {data.sport.title.lead} <span class="jm-gradient-text">{data.sport.title.ital}</span>
           </h2>
-          <p class="section-sub">{data.sport.body}</p>
+          <p class="section-sub mt-6">{data.sport.body}</p>
         </div>
 
         <ol class="sport-flow" data-scroll>
@@ -162,15 +162,16 @@ const meta = { ...data.meta, ogImagePath: undefined };
             ))
           }
         </ol>
+        </div>
       </div>
     </section>
 
     <!-- ───────────────────────── What we measure ───────────────────────── -->
-    <section class="py-16 md:py-24">
-      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full">
+    <section class="about-section">
+      <div class="jm-container">
         <div class="section-head" data-scroll>
-          <h2 class="section-title text-white !mt-0" style="font-size: clamp(2.25rem, 5.5vw, 4rem);">
-            {data.measure.title.lead} <span class="grad-text">{data.measure.title.ital}</span>
+          <h2 class="jm-h2" style="font-size: clamp(2.25rem, 4.8vw, 3.75rem);">
+            {data.measure.title.lead} <span class="jm-gradient-text">{data.measure.title.ital}</span>
           </h2>
         </div>
 
@@ -182,105 +183,142 @@ const meta = { ...data.meta, ogImagePath: undefined };
                   <span class="gradient-tile" data-tone={c.tone}>
                     <Icon name={c.icon} class="w-5 h-5" />
                   </span>
-                  <span class="measure-card__n num">{c.n}</span>
+                  <span class="measure-card__n jm-num">{c.n}</span>
                 </div>
-                <h3 class="measure-card__title text-white">{c.title}</h3>
+                <h3 class="measure-card__title">{c.title}</h3>
                 <p class="measure-card__body">{c.body}</p>
               </article>
             ))
           }
         </div>
 
-        <!-- Edge Score panel -->
-        <div class="score-panel" data-scroll>
+        <!-- Follow-the-outcome panel (the gauge only renders when a window value is set) -->
+        <div class:list={['score-panel', !data.measure.score.window && 'score-panel--copy-only']} data-scroll>
           <div class="score-panel__copy">
             <span class="meta-label">{data.measure.score.label}</span>
-            <h3 class="score-panel__title text-white">{data.measure.score.title}</h3>
+            <h3 class="score-panel__title">{data.measure.score.title}</h3>
             <p class="score-panel__body">{data.measure.score.body}</p>
           </div>
-          <div class="score-panel__gauge" aria-hidden="true">
-            <span class="score-panel__window meta-label">{data.measure.score.windowLabel}</span>
-            <span class="score-panel__num grad-text">{data.measure.score.window}</span>
-          </div>
+          {data.measure.score.window && (
+            <div class="score-panel__gauge" aria-hidden="true">
+              <span class="score-panel__window meta-label">{data.measure.score.windowLabel}</span>
+              <span class="score-panel__num jm-gradient-text">{data.measure.score.window}</span>
+            </div>
+          )}
         </div>
       </div>
     </section>
 
-    <!-- ───────────────────────── No house ───────────────────────── -->
-    <section class="py-20 md:py-28">
-      <div class="max-w-[1280px] mx-auto px-5 md:px-8 w-full text-center" data-scroll>
-        <h2 class="display-hero text-white" style="font-size: clamp(2.5rem, 7vw, 5rem);">
+    <!-- ───────────────────────── What we believe ───────────────────────── -->
+    <section class="about-section about-section--wide">
+      <div class="jm-container text-center" data-scroll>
+        <h2 class="about-display" style="font-size: clamp(2.5rem, 6.4vw, 5rem);">
           {data.fair.lines.map((line) => (<span class="block">{line}</span>))}
         </h2>
-        <p class="mt-8 text-lg md:text-2xl text-white/70 font-light max-w-[640px] mx-auto leading-snug">
+        <p class="about-lead mt-8 max-w-[640px] mx-auto">
           {data.fair.body}
         </p>
       </div>
     </section>
 
     <!-- ───────────────────────── Closing CTA ───────────────────────── -->
-    <section class="relative py-20 md:py-28 text-center overflow-hidden">
+    <section class="about-closing relative text-center overflow-hidden">
       <span
         aria-hidden="true"
         class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0"
-        style="font-size: clamp(14rem, 34vw, 32rem); line-height: 1; color: rgba(255,255,255,0.025); letter-spacing: -0.04em;"
+        style="font-size: clamp(14rem, 34vw, 32rem); line-height: 1; color: rgba(35, 11, 49, 0.035); letter-spacing: -0.04em;"
       >
         {data.closing.ghostWord}
       </span>
 
       <div class="relative z-10 max-w-[880px] mx-auto px-5 md:px-8 w-full" data-scroll>
-        <h2 class="display-hero text-white" style="font-size: clamp(3rem, 8vw, 6.5rem);">
-          {data.closing.title.lead} <span class="grad-text">{data.closing.title.ital}</span>
+        <h2 class="about-display" style="font-size: clamp(2.75rem, 6.4vw, 5.25rem);">
+          {data.closing.title.lead} <span class="jm-gradient-text">{data.closing.title.ital}</span>
         </h2>
-        <p class="mt-7 text-lg md:text-xl text-white/65 leading-relaxed max-w-[520px] mx-auto">
+        <p class="about-lead mt-7 max-w-[520px] mx-auto">
           {data.closing.body}
         </p>
-        <div class="mt-11 flex justify-center gap-4 flex-wrap">
-          <button type="button" class="cta-big" data-open-waitlist>
-            {data.closing.cta.primary}
-            <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
-          </button>
-          <a href={`${home}#why-skill`} class="cta-ghost">{data.closing.cta.secondary}</a>
+        <div class="mt-11 flex justify-center items-center gap-4 flex-wrap">
+          <a href={BETA_URL} class="jm-btn jm-btn--gradient jm-btn--lg" rel="noopener">
+            <span>{data.closing.cta.primary}</span>
+            <svg class="jm-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" /></svg>
+          </a>
+          <a href={`${home}#how-it-works`} class="cta-ghost">{data.closing.cta.secondary}</a>
         </div>
       </div>
     </section>
   </main>
 
   <Footer locale={locale} />
-  <WaitlistModal locale={locale} />
 </Layout>
 
 <style>
-  /* Each story section fills the viewport (inherits the global
-     main > section full-height + vertical-centering rule) for a calm,
-     one-screen-per-chapter read with no divider lines between them. */
+  /* Light "creator-driven social forecasting" skin. Sections flow naturally
+     with generous vertical padding; type, cards and pills follow the
+     homepage vocabulary in src/styles/landing.css (.jm-*). */
+
+  /* ---- Rhythm ---- */
+  .about-hero { padding-block: clamp(3rem, 7vw, 6.5rem) clamp(2.5rem, 5vw, 4rem); }
+  .about-section { padding-block: clamp(3.5rem, 7vw, 6rem); }
+  .about-section--wide { padding-block: clamp(4rem, 9vw, 7.5rem); }
+  .about-closing { padding-block: clamp(5rem, 10vw, 8.5rem); }
+  /* Soft blush glow under the closing CTA, as on the homepage. */
+  .about-closing::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(48% 62% at 50% 92%, rgba(236, 166, 210, 0.3), rgba(166, 140, 242, 0.12) 50%, transparent 78%);
+    pointer-events: none;
+  }
+
+  /* ---- Type ---- */
+  .about-display {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+    color: var(--ink);
+  }
+  .about-h2 { text-align: left; }
+  .about-lead {
+    font-size: clamp(1.02rem, 1.3vw, 1.2rem);
+    line-height: 1.65;
+    color: var(--ink-muted);
+  }
+  .about-body {
+    font-size: clamp(0.98rem, 1.15vw, 1.08rem);
+    line-height: 1.75;
+    color: var(--ink-muted);
+  }
 
   /* ---- Credential pills (hero) ---- */
   .cred-pill {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    gap: 0.55rem;
+    padding: 0.62rem 1.15rem;
     border-radius: 9999px;
     border: 1px solid var(--hairline-strong);
-    background: var(--glass-card-bg);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: rgba(255, 255, 255, 0.78);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-xs);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-soft);
   }
-  .cred-pill :global(svg) { color: var(--brand-lavender); }
+  .cred-pill :global(svg) { color: var(--brand-violet); }
 
   /* ---- Research people tags ---- */
   .person-tag {
     display: inline-flex;
     align-items: center;
-    padding: 0.32rem 0.85rem;
+    padding: 0.42rem 0.95rem;
     border-radius: 9999px;
     border: 1px dashed var(--hairline-strong);
     font-family: var(--font-body);
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     color: var(--ink-muted);
   }
 
@@ -288,149 +326,179 @@ const meta = { ...data.meta, ogImagePath: undefined };
   .research-source {
     margin-top: 1.5rem;
     font-size: 0.88rem;
-    line-height: 1.55;
-    color: var(--ink-faint);
+    line-height: 1.6;
+    color: var(--ink-muted);
     max-width: 560px;
   }
   .research-source a {
-    color: var(--ink-muted);
+    color: var(--ink);
     text-decoration: underline;
-    text-underline-offset: 2px;
+    text-underline-offset: 3px;
     text-decoration-color: var(--hairline-strong);
     transition: color 0.2s ease, text-decoration-color 0.2s ease;
   }
   .research-source a:hover {
-    color: #fff;
-    text-decoration-color: var(--brand-lavender);
+    color: var(--brand-violet);
+    text-decoration-color: var(--brand-violet);
   }
 
   /* ---- Stat callout ---- */
   .stat-callout {
-    background: var(--glass-card-bg);
+    background: var(--bg-card);
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-soft-chrome);
-    padding: clamp(1.6rem, 3vw, 2.25rem);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    border-radius: 1.6rem;
+    box-shadow: var(--shadow-card);
+    padding: clamp(1.75rem, 3vw, 2.5rem);
   }
   .stat-callout__value {
+    display: inline-block;
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: clamp(3.5rem, 8vw, 5rem);
     line-height: 1;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.05em;
   }
   .stat-callout__label {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
+    font-family: var(--font-sans);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--foreground);
-    margin-top: 0.75rem;
+    color: var(--ink);
+    margin-top: 0.9rem;
   }
   .stat-callout__detail {
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.92rem;
+    line-height: 1.6;
     color: var(--ink-muted);
     margin-top: 0.6rem;
   }
   .stat-callout__bars {
     margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--hairline);
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
+    gap: 0.75rem;
   }
   .stat-callout__bars .bar {
     position: relative;
-    height: 2.1rem;
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.05);
+    height: 2.25rem;
+    border-radius: 999px;
+    background: var(--bg-deep);
     overflow: hidden;
   }
   .stat-callout__bars .bar span {
     position: absolute;
     inset: 0 auto 0 0;
-    border-radius: 0.5rem;
+    border-radius: 999px;
     display: block;
   }
-  .stat-callout__bars .bar--pro span { background: rgba(255, 255, 255, 0.16); }
-  .stat-callout__bars .bar--super span { background-image: var(--gradient-brand-sweep); }
+  .stat-callout__bars .bar--pro span { background: var(--hairline-strong); }
+  .stat-callout__bars .bar--super span { background-image: var(--gradient-cta); }
   .stat-callout__bars .bar em {
     position: absolute;
-    left: 0.75rem;
+    left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-style: normal;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--ink);
     z-index: 1;
   }
+
+  /* ---- "It wasn't luck" ---- */
+  .edge-copy {
+    font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+    color: var(--ink-muted);
+  }
+  .edge-copy__lead { color: var(--ink); font-weight: 600; }
 
   /* ---- Pull quote ---- */
   .pull-quote {
     margin: 2.5rem auto 0;
     font-family: var(--font-sans);
-    font-weight: 300;
-    font-size: clamp(1.75rem, 4.5vw, 3rem);
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+    font-weight: 600;
+    font-size: clamp(1.9rem, 4.4vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
   }
 
   /* ---- Sport flow ---- */
+  .sport-panel { text-align: center; }
   .sport-flow {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem 1.25rem;
-    max-width: 56rem;
+    gap: 0.9rem 0.6rem;
+    max-width: 60rem;
     margin: 0 auto;
   }
+  /* Each step is a white pill (icon tile + label); the chevron sits in the
+     gap to its right. */
   .sport-step {
+    position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 0.85rem;
+    gap: 0.7rem;
+    padding: 0.4rem 1.2rem 0.4rem 0.4rem;
+    border-radius: 999px;
+    background: var(--bg-card);
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-xs);
   }
+  .sport-step:not(:last-child) { margin-right: 1.6rem; }
   .sport-step__label {
     font-family: var(--font-sans);
-    font-size: 1.05rem;
+    font-size: 0.98rem;
     font-weight: 500;
     letter-spacing: -0.01em;
-    color: #fff;
+    color: var(--ink);
+    white-space: nowrap;
   }
-  .sport-step__arrow { color: var(--ink-faint); margin-left: 0.4rem; }
+  .sport-step :global(.gradient-tile) { width: 2.3rem; height: 2.3rem; border-radius: 999px; }
+  .sport-step :global(.sport-step__arrow) {
+    position: absolute;
+    right: -1.45rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-faint);
+  }
   @media (max-width: 640px) {
     .sport-flow { flex-direction: column; align-items: center; }
-    .sport-step__arrow { display: none; }
+    .sport-step:not(:last-child) { margin-right: 0; }
+    .sport-step :global(.sport-step__arrow) { display: none; }
   }
 
   /* ---- Measure grid ---- */
   .measure-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-bottom: 1.25rem;
+    gap: clamp(1rem, 2.2vw, 1.5rem);
+    margin-bottom: clamp(1rem, 2.2vw, 1.5rem);
   }
   .measure-card {
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
-    padding: clamp(1.3rem, 2.5vw, 1.75rem);
-    border-radius: var(--radius-2xl);
-    background: var(--glass-card-bg);
+    gap: 0.8rem;
+    padding: clamp(1.5rem, 2.6vw, 2rem);
+    border-radius: 1.4rem;
+    background: var(--bg-card);
     border: 1px solid var(--hairline);
-    box-shadow: var(--shadow-soft-chrome);
+    box-shadow: var(--shadow-xs);
+    transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 320ms ease;
   }
-  .measure-card__top { display: flex; align-items: center; justify-content: space-between; }
-  .measure-card__n { font-size: 0.8rem; color: var(--ink-faint); letter-spacing: 0.1em; }
-  .measure-card__title { font-family: var(--font-sans); font-size: 1.35rem; font-weight: 500; letter-spacing: -0.02em; }
-  .measure-card__body { font-size: 0.92rem; line-height: 1.55; color: var(--ink-muted); }
+  .measure-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lift); }
+  .measure-card__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+  .measure-card__title { font-family: var(--font-sans); font-size: clamp(1.25rem, 1.75vw, 1.45rem); font-weight: 600; letter-spacing: -0.03em; color: var(--ink); }
+  .measure-card__body { font-size: 0.95rem; line-height: 1.7; color: var(--ink-muted); }
   @media (max-width: 720px) { .measure-grid { grid-template-columns: 1fr; } }
 
   /* ---- Edge Score panel ---- */
@@ -440,40 +508,43 @@ const meta = { ...data.meta, ogImagePath: undefined };
     justify-content: space-between;
     gap: 2rem;
     flex-wrap: wrap;
-    padding: clamp(1.6rem, 3.5vw, 2.5rem);
-    border-radius: var(--radius-2xl);
-    background:
-      radial-gradient(120% 140% at 100% 0%, rgba(126, 59, 255, 0.14), transparent 55%),
-      var(--glass-card-bg);
-    border: 1px solid var(--hairline-strong);
-    box-shadow: var(--shadow-soft-chrome);
+    padding: clamp(1.75rem, 4vw, 3rem);
+    border-radius: clamp(1.5rem, 2.6vw, 2.25rem);
+    background: var(--gradient-panel);
+    border: 1px solid #e8d9ec;
   }
   .score-panel__copy { flex: 1 1 22rem; }
+  .score-panel__copy :global(.meta-label) { color: var(--ink); letter-spacing: 0.24em; }
   .score-panel__title {
     font-family: var(--font-sans);
-    font-size: clamp(1.3rem, 3vw, 1.85rem);
-    font-weight: 400;
-    letter-spacing: -0.025em;
+    font-size: clamp(1.4rem, 2.8vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
     line-height: 1.15;
-    margin-top: 0.75rem;
-    margin-bottom: 0.6rem;
+    margin-top: 0.9rem;
+    margin-bottom: 0.75rem;
+    color: var(--ink);
   }
-  .score-panel__body { font-size: 0.95rem; line-height: 1.55; color: var(--ink-muted); max-width: 32rem; }
+  .score-panel__body { font-size: 0.98rem; line-height: 1.7; color: var(--ink-muted); max-width: 34rem; }
   .score-panel__gauge {
     flex: 0 0 auto;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-left: 1rem;
+    padding: 1.5rem 2rem;
+    border-radius: 1.4rem;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-card);
   }
-  .score-panel__window { color: var(--ink-faint); margin-bottom: 0.4rem; }
+  .score-panel__window { color: var(--ink-muted); margin-bottom: 0.5rem; }
   .score-panel__num {
     font-family: var(--font-sans);
     font-weight: 600;
-    font-size: clamp(2.75rem, 7vw, 4.25rem);
+    font-size: clamp(2.75rem, 6vw, 4rem);
     line-height: 1;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.05em;
   }
 
   /* ---------- Mobile (≤768px): every chapter reads centered ---------- */
@@ -492,11 +563,13 @@ const meta = { ...data.meta, ogImagePath: undefined };
 
     /* Edge Score panel — stack and center. */
     .score-panel { flex-direction: column; text-align: center; }
+    /* Column flex: the 22rem basis would become a height — let it size to content. */
+    .score-panel__copy { flex: 0 0 auto; }
     .score-panel__body { margin-left: auto; margin-right: auto; }
-    .score-panel__gauge { padding-left: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .stat-callout__bars .bar span { transition: none; }
+    .measure-card { transition: none; }
   }
 </style>

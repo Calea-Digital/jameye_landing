@@ -1,0 +1,78 @@
+---
+// "Big questions. Your next forecast." — topic filter chips over a grid of
+// forecast cards. Every card links to the beta. Filtering is progressive:
+// without JS all cards show and the chips are inert.
+import type { ExploreContent } from './types';
+import { BETA_URL } from '~/config';
+
+export interface Props {
+  explore: ExploreContent;
+}
+
+const { explore } = Astro.props;
+---
+
+<section id="explore" class="jm-section jm-explore" aria-labelledby="jm-explore-title">
+  <div class="jm-container">
+    <header class="jm-explore__head" data-scroll>
+      <div>
+        <p class="jm-eyebrow">{explore.eyebrow}</p>
+        <h2 id="jm-explore-title" class="jm-h2">
+          {explore.titleLines.map((line) => <span class="jm-block">{line}</span>)}
+        </h2>
+      </div>
+      <p class="jm-explore__lead">{explore.lead}</p>
+    </header>
+
+    <div class="jm-filters" role="group" aria-label={explore.filtersLabel} data-filters>
+      {
+        explore.filters.map((filter, i) => (
+          <button type="button" class="jm-chip" data-filter={filter.id} aria-pressed={i === 0 ? 'true' : 'false'}>
+            {filter.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <ul class="jm-cards" data-cards>
+      {
+        explore.cards.map((card) => (
+          <li class="jm-card" data-category={card.category}>
+            <a href={BETA_URL} class="jm-card__link" rel="noopener">
+              <div class="jm-card__media">
+                <img src={card.image} alt="" width="900" height="520" loading="lazy" decoding="async" />
+                <span class="jm-card__tag">{card.tag}</span>
+              </div>
+              <div class="jm-card__body">
+                <h3 class="jm-card__title">{card.title}</h3>
+                <p class="jm-card__text">{card.body}</p>
+                <span class="jm-card__cta">
+                  <span>{explore.cardCta}</span>
+                  <svg class="jm-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" /></svg>
+                </span>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="jm-caption">{explore.caption}</p>
+  </div>
+</section>
+
+<script>
+  const group = document.querySelector<HTMLElement>('[data-filters]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-cards] > [data-category]');
+
+  group?.addEventListener('click', (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
+    if (!button) return;
+    const filter = button.dataset.filter;
+
+    group.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+    cards.forEach((card) => {
+      card.hidden = filter !== 'all' && card.dataset.category !== filter;
+    });
+  });
+</script>

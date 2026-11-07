@@ -20,7 +20,7 @@
       { "place": "3rd", "amount": "$500", "medal": "🥉" }
     ]
   },
-  "cta": { "primary": "Get early access" },
+  "cta": { "primary": "Sign up for the beta" },
   "cols": { "rank": "#", "player": "Player", "points": "Points", "change": "7d" },
   "perReferral": "+5 pts / referral",
   "newBadge": "NEW",
@@ -36,7 +36,7 @@
     "jump": "Jump to my spot",
     "refLink": "Copy referral link",
     "copied": "Copied!",
-    "notFound": "We couldn't find that nickname. Make sure you've joined the waitlist."
+    "notFound": "We couldn't find that nickname. Make sure you've signed up for the beta."
   },
   "pager": { "prev": "Prev", "next": "Next", "page": "Page", "of": "of" },
   "states": {

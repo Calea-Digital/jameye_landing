@@ -1,0 +1,35 @@
+---
+// "Make a forecast. Give it a reason." — the four-step explainer, set in a
+// soft blush-to-lilac panel.
+import type { HowContent } from './types';
+
+export interface Props {
+  how: HowContent;
+}
+
+const { how } = Astro.props;
+---
+
+<section id="how-it-works" class="jm-section jm-how" aria-labelledby="jm-how-title">
+  <div class="jm-container">
+    <div class="jm-panel" data-scroll>
+      <p class="jm-eyebrow">{how.eyebrow}</p>
+      <h2 id="jm-how-title" class="jm-h2">
+        {how.titleLines.map((line) => <span class="jm-block">{line}</span>)}
+      </h2>
+      <p class="jm-panel__lead">{how.lead}</p>
+
+      <ol class="jm-how__steps">
+        {
+          how.steps.map((step) => (
+            <li class="jm-how__step">
+              <span class="jm-num">{step.n}</span>
+              <h3 class="jm-how__title">{step.title}</h3>
+              <p class="jm-how__body">{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>

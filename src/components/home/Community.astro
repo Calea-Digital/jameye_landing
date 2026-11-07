@@ -1,0 +1,38 @@
+---
+// "Real profiles" row: the creators already forecasting on Jameye. Each
+// profile shows its photo when one is set in home.json, otherwise a soft
+// monogram so the row never renders a broken image.
+import type { CommunityContent } from './types';
+
+export interface Props {
+  community: CommunityContent;
+}
+
+const { community } = Astro.props;
+
+// Rotate through a few on-palette washes so neighbouring monograms differ.
+const washes = ['wash-a', 'wash-b', 'wash-c', 'wash-d'];
+const initial = (name: string) => name.trim().charAt(0).toUpperCase();
+---
+
+<section id="community" class="jm-community" aria-labelledby="jm-community-title">
+  <div class="jm-container">
+    <h2 id="jm-community-title" class="jm-community__eyebrow">{community.eyebrow}</h2>
+    <ul class="jm-community__list" data-scroll>
+      {
+        community.profiles.map((profile, i) => (
+          <li class="jm-profile">
+            <span class:list={['jm-profile__avatar', !profile.image && washes[i % washes.length]]}>
+              {profile.image ? (
+                <img src={profile.image} alt="" width="96" height="96" loading="lazy" />
+              ) : (
+                <span aria-hidden="true">{initial(profile.name)}</span>
+              )}
+            </span>
+            <span class="jm-profile__name" title={profile.name}>{profile.name}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
