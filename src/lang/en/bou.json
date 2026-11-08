@@ -4,7 +4,6 @@
     "description": "Jameye launches with a campus showdown. Represent your university, forecast the real world, and out-think every other campus. Students only · coming soon. Up to $100K prize pool."
   },
   "hero": {
-    "eyebrow": ["Students only", "Coming soon"],
     "title": "Battle of Universities",
     "body": "Jameye launches with a campus showdown. Represent your university, forecast the real world, and out-think every other campus. The campus with the highest average Edge Score wins the title — and its top 25 forecasters win real cash.",
     "ctaPrimary": "Reserve your handle",
@@ -86,7 +85,6 @@
     ]
   },
   "finalCta": {
-    "eyebrow": "Coming soon",
     "title": { "lead": "Claim your", "ital": "campus." },
     "body": "Reserve your handle now, pick the university you'll forecast for, and get a head start before the Battle opens.",
     "ctaPrimary": "Reserve your handle",

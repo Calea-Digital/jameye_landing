@@ -1,16 +1,10 @@
 ---
-// Styled chrome for a legal/long-form page. Renders an eyebrow + a prose
-// container; the page passes the rendered markdown (<Content />) as the slot.
-export interface Props {
-  eyebrow?: string;
-}
-
-const { eyebrow = 'Legal' } = Astro.props;
+// Styled chrome for a legal/long-form page: a prose container; the page
+// passes the rendered markdown (<Content />) as the slot.
 ---
 
 <section class="legal-wrap">
   <div class="legal-inner">
-    <p class="jm-eyebrow jm-eyebrow--dot">{eyebrow}</p>
 
     <article class="legal-prose">
       <slot />

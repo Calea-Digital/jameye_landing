@@ -15,12 +15,9 @@ const { explore } = Astro.props;
 <section id="explore" class="jm-section jm-explore" aria-labelledby="jm-explore-title">
   <div class="jm-container">
     <header class="jm-explore__head" data-scroll>
-      <div>
-        <p class="jm-eyebrow">{explore.eyebrow}</p>
-        <h2 id="jm-explore-title" class="jm-h2">
-          {explore.titleLines.map((line) => <span class="jm-block">{line}</span>)}
-        </h2>
-      </div>
+      <h2 id="jm-explore-title" class="jm-h2">
+        {explore.titleLines.map((line) => <span class="jm-block">{line}</span>)}
+      </h2>
       <p class="jm-explore__lead">{explore.lead}</p>
     </header>
 

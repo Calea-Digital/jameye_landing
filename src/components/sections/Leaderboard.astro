@@ -9,7 +9,6 @@ export interface Props {
 const { locale } = Astro.props;
 
 const L = t<{
-  eyebrow: string;
   title: { lead: string; ital: string };
   sub: string;
   perks: { icon: string; label: string }[];
@@ -46,7 +45,6 @@ const CFG = {
   <div class="jm-container">
     <!-- Big header banner -->
     <div class="lb-hero">
-      <span class="eyebrow">{L.eyebrow}</span>
       <h2 class="lb-hero__title">
         {L.title.lead} <span class="ital-grad">{L.title.ital}</span>
       </h2>

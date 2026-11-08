@@ -12,7 +12,6 @@ const { closing } = Astro.props;
 
 <section class="jm-section jm-closing" aria-labelledby="jm-closing-title">
   <div class="jm-container jm-closing__inner" data-scroll>
-    <p class="jm-eyebrow jm-eyebrow--dot">{closing.eyebrow}</p>
     <h2 id="jm-closing-title" class="jm-closing__title">
       {closing.titleLines.map((line) => <span class="jm-block">{line}</span>)}
     </h2>

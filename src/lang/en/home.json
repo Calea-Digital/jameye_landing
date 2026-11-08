@@ -1,6 +1,5 @@
 {
   "hero": {
-    "eyebrow": "The creator-driven social forecasting platform",
     "titleLines": ["Forecast", "what’s next."],
     "titleAccent": "Together.",
     "lead": "Make your own forecasts on culture, entertainment, sport, science and society. Explore a creator’s take, share the outcome you expect, and explain your thinking. Then come back to see how it unfolds.",
@@ -28,7 +27,7 @@
     ]
   },
   "community": {
-    "eyebrow": "Real profiles. Independent forecasts. One community.",
+    "label": "Creators on Jameye",
     "profiles": [
       { "name": "barjanne", "image": "/images/community/barjanne.webp" },
       { "name": "Stäkarn", "image": "/images/community/stakarn.webp" },
@@ -40,7 +39,6 @@
     ]
   },
   "explore": {
-    "eyebrow": "What do you think happens next?",
     "titleLines": ["Big questions.", "Your next forecast."],
     "lead": "Who gets revealed? Who earns a Nobel Prize? Who leads Sweden next? Make a forecast, discuss the reasoning, and follow the outcome.",
     "filtersLabel": "Filter forecast topics",
@@ -99,7 +97,6 @@
     "caption": "Illustrative forecast topics · Try the beta at play.jameye.com."
   },
   "how": {
-    "eyebrow": "Creator-driven social forecasting",
     "titleLines": ["Make a forecast.", "Give it a reason."],
     "lead": "Forecasting means making a clear forecast before the outcome is known. Creators start the conversation. You make your own call, explain why, and revisit it as events unfold.",
     "steps": [
@@ -126,7 +123,6 @@
     ]
   },
   "closing": {
-    "eyebrow": "Forecast. Discuss. Follow the outcome.",
     "titleLines": ["What happens next?", "Make your forecast."],
     "lead": ["Bring your curiosity. Make a call of your own.", "Try the Jameye beta at play.jameye.com."],
     "cta": "Try the beta"

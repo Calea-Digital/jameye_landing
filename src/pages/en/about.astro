@@ -29,7 +29,7 @@ const data = t<{
     eyebrow: string;
     title: TitlePair;
     cards: { icon: string; tone: string; n: string; title: string; body: string }[];
-    score: { label: string; title: string; body: string; window: string; windowLabel: string };
+    score: { title: string; body: string; window: string; windowLabel: string };
   };
   fair: { eyebrow: string; lines: string[]; body: string };
   closing: {
@@ -195,7 +195,6 @@ const meta = { ...data.meta, ogImagePath: undefined };
         <!-- Follow-the-outcome panel (the gauge only renders when a window value is set) -->
         <div class:list={['score-panel', !data.measure.score.window && 'score-panel--copy-only']} data-scroll>
           <div class="score-panel__copy">
-            <span class="meta-label">{data.measure.score.label}</span>
             <h3 class="score-panel__title">{data.measure.score.title}</h3>
             <p class="score-panel__body">{data.measure.score.body}</p>
           </div>
@@ -514,7 +513,6 @@ const meta = { ...data.meta, ogImagePath: undefined };
     border: 1px solid #e8d9ec;
   }
   .score-panel__copy { flex: 1 1 22rem; }
-  .score-panel__copy :global(.meta-label) { color: var(--ink); letter-spacing: 0.24em; }
   .score-panel__title {
     font-family: var(--font-sans);
     font-size: clamp(1.4rem, 2.8vw, 2rem);

@@ -15,7 +15,6 @@ interface TitlePair { lead: string; ital: string }
 const data = t<{
   meta: { title: string; description: string };
   hero: {
-    eyebrow: string[];
     title: string;
     body: string;
     ctaPrimary: string;
@@ -49,7 +48,7 @@ const data = t<{
   };
   dates: { eyebrow: string; title: TitlePair; items: { when: string; title: string; body: string; state: string }[] };
   faq: { eyebrow: string; title: TitlePair; items: { q: string; a: string }[] };
-  finalCta: { eyebrow: string; title: TitlePair; body: string; ctaPrimary: string; ctaSecondary: string };
+  finalCta: { title: TitlePair; body: string; ctaPrimary: string; ctaSecondary: string };
 }>(locale, 'bou');
 
 // Unlisted: kept live for existing links, but out of search and the sitemap
@@ -64,11 +63,6 @@ const meta = { ...data.meta, ogImagePath: undefined, index: false };
     <!-- ===== Hero ===== -->
     <section id="hero" class="bou-hero">
       <div class="bou-wrap text-center">
-        <div class="eyebrow bou-hero__eyebrow" data-scroll>
-          <Icon name="tabler:sparkles" class="w-3.5 h-3.5" />
-          <span>{data.hero.eyebrow.join(' · ')}</span>
-        </div>
-
         <h1 class="bou-hero__title display-hero" data-scroll>
           Battle of <span class="ital-grad">Universities</span>
         </h1>
@@ -306,10 +300,6 @@ const meta = { ...data.meta, ogImagePath: undefined, index: false };
         class="bou-final__ghost"
       >BOU</span>
       <div class="bou-wrap text-center relative z-10">
-        <div class="eyebrow bou-final__eyebrow" data-scroll>
-          <Icon name="tabler:sparkles" class="w-3.5 h-3.5" />
-          <span>{data.finalCta.eyebrow}</span>
-        </div>
         <h2 class="bou-final__title display-hero" data-scroll>
           {data.finalCta.title.lead} <span class="ital-grad">{data.finalCta.title.ital}</span>
         </h2>
@@ -397,17 +387,8 @@ const meta = { ...data.meta, ogImagePath: undefined, index: false };
   }
   @keyframes bouSpin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-  .bou-hero__eyebrow,
-  .bou-final__eyebrow { margin-bottom: 1.5rem; }
   /* Keep the hero copy above the animated glow layers. */
   .bou-hero > .bou-wrap { position: relative; z-index: 1; }
-  @media (max-width: 480px) {
-    /* Keep the two-part eyebrow on one line on phones. */
-    .bou-hero__eyebrow,
-    .bou-final__eyebrow { font-size: 0.68rem; letter-spacing: 0.18em; gap: 0.5rem; }
-  }
-  .bou-hero__eyebrow :global(svg),
-  .bou-final__eyebrow :global(svg) { color: var(--brand-violet); }
   .bou-hero__title {
     position: relative;
     font-size: clamp(2.75rem, 8vw, 5.75rem);

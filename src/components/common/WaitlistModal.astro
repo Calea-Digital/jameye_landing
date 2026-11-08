@@ -10,7 +10,6 @@ export interface Props {
 const { locale } = Astro.props;
 
 const w = t<{
-  badge: string;
   title: string;
   subtitle: string;
   fields: { email: string; nickname: string; referred: string; avatar: string };
@@ -57,7 +56,6 @@ const CFG = {
 
     <!-- ===== Form view ===== -->
     <div data-wl-formview>
-      <span class="wl-badge">{w.badge}</span>
       <h2 id="wl-title" class="wl-title">{w.title}</h2>
       <p class="wl-sub">{w.subtitle}</p>
 
@@ -242,27 +240,8 @@ const CFG = {
   }
   .wl-close:hover { background: var(--bg-deep); border-color: var(--ink-ghost); transform: rotate(90deg); }
 
-  .wl-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    line-height: 1.2;
-    color: var(--ink);
-  }
-  .wl-badge::before {
-    content: '';
-    flex: none;
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #c27ad6, #9a6ae6);
-  }
   .wl-title {
-    margin-top: 1rem;
+    margin-top: 0;
     padding-right: 2.5rem;
     font-weight: 600;
     font-size: clamp(1.75rem, 5vw, 2.4rem);

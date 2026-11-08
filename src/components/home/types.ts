@@ -6,7 +6,6 @@ export interface Step {
 }
 
 export interface HeroContent {
-  eyebrow: string;
   /** Ink lines of the display title; `titleAccent` follows in the gradient. */
   titleLines: string[];
   titleAccent: string;
@@ -34,7 +33,8 @@ export interface Profile {
 }
 
 export interface CommunityContent {
-  eyebrow: string;
+  /** Accessible name for the row (not shown). */
+  label: string;
   profiles: Profile[];
 }
 
@@ -53,7 +53,6 @@ export interface ForecastCard {
 }
 
 export interface ExploreContent {
-  eyebrow: string;
   titleLines: string[];
   lead: string;
   filtersLabel: string;
@@ -64,14 +63,12 @@ export interface ExploreContent {
 }
 
 export interface HowContent {
-  eyebrow: string;
   titleLines: string[];
   lead: string;
   steps: { n: string; title: string; body: string }[];
 }
 
 export interface ClosingContent {
-  eyebrow: string;
   titleLines: string[];
   lead: string[];
   cta: string;

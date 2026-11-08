@@ -1,5 +1,5 @@
 ---
-// "Real profiles" row: the creators already forecasting on Jameye. Each
+// Community row: the creators already forecasting on Jameye. Each
 // profile shows its photo when one is set in home.json, otherwise a soft
 // monogram so the row never renders a broken image.
 import type { CommunityContent } from './types';
@@ -15,9 +15,8 @@ const washes = ['wash-a', 'wash-b', 'wash-c', 'wash-d'];
 const initial = (name: string) => name.trim().charAt(0).toUpperCase();
 ---
 
-<section id="community" class="jm-community" aria-labelledby="jm-community-title">
+<section id="community" class="jm-community" aria-label={community.label}>
   <div class="jm-container">
-    <h2 id="jm-community-title" class="jm-community__eyebrow">{community.eyebrow}</h2>
     <ul class="jm-community__list" data-scroll>
       {
         community.profiles.map((profile, i) => (

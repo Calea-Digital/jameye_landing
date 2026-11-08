@@ -1,5 +1,5 @@
 ---
-// Hero: eyebrow, the three-line display title (last line in the gradient),
+// Hero: the three-line display title (last line in the gradient),
 // lead, CTAs, and the product-concept visual — a tilted forecast card with a
 // quote card tucked over its corner, inside a soft arch. A numbered strip of
 // the three verbs closes the section.
@@ -17,7 +17,6 @@ const { hero } = Astro.props;
   <div class="jm-container">
     <div class="jm-hero__grid">
       <div class="jm-hero__copy">
-        <p class="jm-eyebrow jm-eyebrow--dot">{hero.eyebrow}</p>
         <h1 id="jm-hero-title" class="jm-hero__title">
           {hero.titleLines.map((line) => <span class="jm-hero__line">{line}</span>)}
           <span class="jm-hero__line jm-gradient-text">{hero.titleAccent}</span>
